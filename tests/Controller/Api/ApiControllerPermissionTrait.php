@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace Modules\tests\Admin\Controller\Api;
+namespace Modules\Admin\tests\Controller\Api;
 
 use phpOMS\Account\PermissionOwner;
 use phpOMS\Account\PermissionType;

@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace Modules\tests\Admin\Models;
+namespace Modules\Admin\tests\Models;
 
 use Modules\Admin\Models\Group;
 use Modules\Admin\Models\NullAccount;
