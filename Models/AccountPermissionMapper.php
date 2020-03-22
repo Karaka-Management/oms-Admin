@@ -46,6 +46,14 @@ final class AccountPermissionMapper extends DataMapperAbstract
     ];
 
     /**
+     * Model to use by the mapper.
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    protected static string $model = AccountPermission::class;
+
+    /**
      * Primary table.
      *
      * @var string
