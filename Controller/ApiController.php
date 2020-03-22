@@ -215,6 +215,16 @@ final class ApiController extends Controller
         $l11n->setDecimal($dataSettings['settings_decimal']);
         $l11n->setThousands($dataSettings['settings_thousands']);
 
+        $l11n->setPrecision(
+            [
+                'very_short' => $dataSettings['settings_precision_vs'],
+                'short'      => $dataSettings['settings_precision_s'],
+                'medium'     => $dataSettings['settings_precision_m'],
+                'long'       => $dataSettings['settings_precision_l'],
+                'very_long'  => $dataSettings['settings_precision_vl'],
+            ]
+        );
+
         $l11n->setWeight(
             [
                 'very_light' => $dataSettings['settings_weight_vl'],
