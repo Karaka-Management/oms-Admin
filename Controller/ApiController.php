@@ -28,11 +28,13 @@ use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 
 use Modules\Admin\Models\NullAccount;
+use Modules\Admin\Models\PermissionState;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
 use phpOMS\Account\PermissionAbstract;
 use phpOMS\Account\PermissionOwner;
+use phpOMS\Account\PermissionType;
 use phpOMS\Application\ApplicationManager;
 use phpOMS\Localization\Localization;
 use phpOMS\Message\Http\HttpRequest;
@@ -50,8 +52,6 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email;
 use phpOMS\Version\Version;
-use phpOMS\Account\PermissionType;
-use Modules\Admin\Models\PermissionState;
 
 /**
  * Admin controller class.
@@ -141,8 +141,8 @@ final class ApiController extends Controller
                             'content' => $content,
                             'module'  => $module,
                             'group'   => $group,
-                            'account' => $account
-                        ]
+                            'account' => $account,
+                        ],
                     ], true);
                 },
                 'settings'
