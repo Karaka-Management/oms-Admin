@@ -34,9 +34,6 @@ $isntalled = $this->getData('isntalled') ?? [];
                     <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                     <td><?= $this->getHtml('Version') ?>
                     <td><?= $this->getHtml('Status') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <tfoot>
-                <tr>
-                    <td colspan="4">
                         <tbody>
                         <?php $count = 0; foreach ($modules as $key => $module) : ++$count;
                         $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/module/settings?{?}&id=' . $module['name']['internal']);

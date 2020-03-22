@@ -24,6 +24,7 @@ use Modules\Admin\Models\Group;
 use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermission;
 use Modules\Admin\Models\GroupPermissionMapper;
+use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 
 use Modules\Admin\Models\NullAccount;
@@ -49,6 +50,8 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email;
 use phpOMS\Version\Version;
+use phpOMS\Account\PermissionType;
+use Modules\Admin\Models\PermissionState;
 
 /**
  * Admin controller class.
@@ -131,13 +134,145 @@ final class ApiController extends Controller
                 $this->app->appSettings->get($id, $name, $module, $group, $account),
                 $data,
                 function() use($id, $name, $content, $module, $group, $account) : void {
-                    $this->app->appSettings->set([['id' => $id, 'name' => $name, 'content' => $content, 'module' => $module, 'group' => $group, 'account' => $account]], true);
+                    $this->app->appSettings->set([
+                        [
+                            'id'      => $id,
+                            'name'    => $name,
+                            'content' => $content,
+                            'module'  => $module,
+                            'group'   => $group,
+                            'account' => $account
+                        ]
+                    ], true);
                 },
                 'settings'
             );
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Settigns', 'Settings successfully modified', $dataSettings);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Settings', 'Settings successfully modified', $dataSettings);
+    }
+
+    /**
+     * Api method for modifying account localization
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        $requestAccount = $request->getHeader()->getAccount();
+        $accountId      = (int) $request->getData('account_id');
+
+        if ($requestAccount !== $accountId
+            && !$this->app->accountManager->get($accountId)->hasPermission(
+                PermissionType::MODIFY, $this->app->orgId, $this->app->appName, self::MODULE_NAME, PermissionState::ACCOUNT_SETTINGS, $accountId)
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            return;
+        }
+
+        /** @var Localization #l11n */
+        $l11n = AccountMapper::get($accountId)->getL11n();
+
+        if ((bool) ($request->getData('load') ?? false)) {
+            $locale = \explode('_', $request->getData('localization_load'));
+            $l11n->loadFromLanguage($locale[0], $locale[1]);
+
+            LocalizationMapper::update($l11n);
+
+            $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $l11n);
+
+            return;
+        }
+
+        $dataSettings = $request->getLike('settings_(.*)');
+
+        $l11n->setCountry($dataSettings['settings_country']);
+        $l11n->setLanguage($dataSettings['settings_language']);
+        $l11n->setTemperature($dataSettings['settings_temperature']);
+
+        $l11n->setTimezone($dataSettings['settings_timezone']);
+        $l11n->setDatetime(
+            [
+                'very_short' => $dataSettings['settings_timeformat_vs'],
+                'short'      => $dataSettings['settings_timeformat_s'],
+                'medium'     => $dataSettings['settings_timeformat_m'],
+                'long'       => $dataSettings['settings_timeformat_l'],
+                'very_long'  => $dataSettings['settings_timeformat_vl'],
+            ]
+        );
+
+        $l11n->setCurrency($dataSettings['settings_currency']);
+        $l11n->setCurrencyFormat($dataSettings['settings_currencyformat']);
+
+        $l11n->setDecimal($dataSettings['settings_decimal']);
+        $l11n->setThousands($dataSettings['settings_thousands']);
+
+        $l11n->setWeight(
+            [
+                'very_light' => $dataSettings['settings_weight_vl'],
+                'light'      => $dataSettings['settings_weight_l'],
+                'medium'     => $dataSettings['settings_weight_m'],
+                'heavy'      => $dataSettings['settings_weight_h'],
+                'very_heavy' => $dataSettings['settings_weight_vh'],
+            ]
+        );
+
+        $l11n->setSpeed(
+            [
+                'very_slow' => $dataSettings['settings_speed_vs'],
+                'slow'      => $dataSettings['settings_speed_s'],
+                'medium'    => $dataSettings['settings_speed_m'],
+                'fast'      => $dataSettings['settings_speed_f'],
+                'very_fast' => $dataSettings['settings_speed_vf'],
+                'sea'       => $dataSettings['settings_speed_sea'],
+            ]
+        );
+
+        $l11n->setLength(
+            [
+                'very_short' => $dataSettings['settings_length_vs'],
+                'short'      => $dataSettings['settings_length_s'],
+                'medium'     => $dataSettings['settings_length_m'],
+                'long'       => $dataSettings['settings_length_l'],
+                'very_long'  => $dataSettings['settings_length_vl'],
+                'sea'        => $dataSettings['settings_length_sea'],
+            ]
+        );
+
+        $l11n->setArea(
+            [
+                'very_small' => $dataSettings['settings_area_vs'],
+                'small'      => $dataSettings['settings_area_s'],
+                'medium'     => $dataSettings['settings_area_m'],
+                'large'      => $dataSettings['settings_area_l'],
+                'very_large' => $dataSettings['settings_area_vl'],
+            ]
+        );
+
+        $l11n->setVolume(
+            [
+                'very_small' => $dataSettings['settings_volume_vs'],
+                'small'      => $dataSettings['settings_volume_s'],
+                'medium'     => $dataSettings['settings_volume_m'],
+                'large'      => $dataSettings['settings_volume_l'],
+                'very_large' => $dataSettings['settings_volume_vl'],
+                'tablespoon' => $dataSettings['settings_volume_tablespoon'],
+                'teaspoon'   => $dataSettings['settings_volume_teaspoon'],
+                'glass'      => $dataSettings['settings_volume_glass'],
+            ]
+        );
+
+        LocalizationMapper::update($l11n);
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $l11n);
     }
 
     /**

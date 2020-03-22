@@ -114,8 +114,12 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
-        $view->setData('list:elements', AccountMapper::getNewest(50, null, RelationType::NONE));
-        $view->setData('list:count', 1);
+
+        if ($request->getData('ptype') === '-') {
+            $view->setData('accounts', AccountMapper::getBeforePivot((int) ($request->getData('id') ?? 0), null, 25));
+        } else {
+            $view->setData('accounts', AccountMapper::getAfterPivot((int) ($request->getData('id') ?? 0), null, 25));
+        }
 
         return $view;
     }

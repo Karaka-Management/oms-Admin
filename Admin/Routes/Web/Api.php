@@ -6,7 +6,7 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/admin/settings.*$' => [
+    '^.*/admin/settings(\?.*|$)' => [
         [
             'dest' => '\Modules\Admin\Controller\ApiController:apiSettingsSet',
             'verb' => RouteVerb::SET,
@@ -66,7 +66,7 @@ return [
         ],
     ],
 
-    '^.*/admin/find/account.*$' => [
+    '^.*/admin/find/account(\?.*|$)' => [
         [
             'dest' => '\Modules\Admin\Controller\ApiController:apiAccountFind',
             'verb' => RouteVerb::GET,
@@ -100,7 +100,7 @@ return [
         ],
     ],
 
-    '^.*/admin/account$' => [
+    '^.*/admin/account(\?.*|$)' => [
         [
             'dest' => '\Modules\Admin\Controller\ApiController:apiAccountCreate',
             'verb' => RouteVerb::PUT,

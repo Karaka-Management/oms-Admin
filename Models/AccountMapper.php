@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
+use phpOMS\Account\AccountStatus;
 use phpOMS\Auth\LoginReturnType;
 use phpOMS\DataStorage\Database\DataMapperAbstract;
 use phpOMS\DataStorage\Database\Query\Builder;
@@ -115,7 +116,12 @@ final class AccountMapper extends DataMapperAbstract
     public static function getWithPermissions(int $id) : Account
     {
         $account          = self::get($id);
-        $groupPermissions = GroupPermissionMapper::getFor(\array_keys($account->getGroups()), 'group', RelationType::ALL, 2);
+        $groupPermissions = GroupPermissionMapper::getFor(
+            \array_keys($account->getGroups()),
+            'group',
+            RelationType::ALL,
+            2
+        );
 
         if (\is_array($groupPermissions)) {
             foreach ($groupPermissions as $permission) {
@@ -158,10 +164,11 @@ final class AccountMapper extends DataMapperAbstract
             $result = null;
 
             $query  = new Builder(self::$db);
-            $result = $query->select('account_id', 'account_login', 'account_password', 'account_password_temp', 'account_tries')
+            $result = $query->select('account_id', 'account_login', 'account_password', 'account_password_temp', 'account_tries', 'account_status')
                 ->from('account')
                 ->where('account_login', '=', $login)
-                ->execute()->fetchAll();
+                ->execute()
+                ->fetchAll();
 
             if (!isset($result[0])) {
                 return LoginReturnType::WRONG_USERNAME;
@@ -174,16 +181,33 @@ final class AccountMapper extends DataMapperAbstract
                 return LoginReturnType::WRONG_INPUT_EXCEEDED;
             }
 
+            if ($result['account_status'] !== AccountStatus::ACTIVE) {
+                return LoginReturnType::INACTIVE;
+            }
+
             if (empty($result['account_password'])) {
                 return LoginReturnType::EMPTY_PASSWORD;
             }
 
             if (\password_verify($password, $result['account_password'] ?? '')) {
+                $query->update('account')
+                    ->set(['account_lactive' => new \DateTime('now')])
+                    ->where('account_login', '=', $login)
+                    ->execute();
+
                 return $result['account_id'];
             }
 
-            if (!empty($result['account_password_temp']) && \password_verify($password, $result['account_password_temp'] ?? '')) {
-                $query->update('account')->set(['account_password_temp' => ''])->where('account_login', '=', $login)->execute();
+            if (!empty($result['account_password_temp'])
+                && \password_verify($password, $result['account_password_temp'] ?? '')
+            ) {
+                $query->update('account')
+                    ->set([
+                        'account_password_temp' => '',
+                        'account_lactive' => new \DateTime('now'),
+                    ])
+                    ->where('account_login', '=', $login)
+                    ->execute();
 
                 return $result['account_id'];
             }

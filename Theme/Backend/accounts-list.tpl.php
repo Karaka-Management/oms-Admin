@@ -12,12 +12,18 @@
  */
 declare(strict_types=1);
 
+use \phpOMS\Account\AccountStatus;
+use phpOMS\Uri\UriFactory;
 
- use \phpOMS\Account\AccountStatus;
-
- /**
- * @var \phpOMS\Views\View $this
+/**
+ * @var \phpOMS\Views\View              $this
+ * @var \Modules\Admin\Models\Account[] $accounts
  */
+$accounts = $this->getData('accounts') ?? [];
+
+$previous = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \reset($accounts)->getId() . '&ptype=-';
+$next     = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \end($accounts)->getId() . '&ptype=+';
+
 echo $this->getData('nav')->render(); ?>
 
 <div class="row">
@@ -32,10 +38,8 @@ echo $this->getData('nav')->render(); ?>
                     <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                     <td><?= $this->getHtml('Activity') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                     <td><?= $this->getHtml('Created') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <tfoot>
-                <tr><td colspan="5">
                         <tbody>
-                        <?php $c = 0; foreach ($this->getData('list:elements') as $key => $value) : ++$c;
+                        <?php $c = 0; foreach ($accounts as $key => $value) : ++$c;
                         $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
                         $color = 'darkred';
                         if ($value->getStatus() === AccountStatus::ACTIVE) { $color = 'green'; }
@@ -55,7 +59,10 @@ echo $this->getData('nav')->render(); ?>
                             <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                         <?php endif; ?>
             </table>
-            <div class="portlet-foot"></div>
+            <div class="portlet-foot">
+                <a class="button" href="<?= UriFactory::build($previous); ?>">Previous</a>
+                <a class="button" href="<?= UriFactory::build($next); ?>">Next</a>
+            </div>
         </div>
     </div>
 </div>
