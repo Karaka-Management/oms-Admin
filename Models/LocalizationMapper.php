@@ -78,6 +78,7 @@ final class LocalizationMapper extends DataMapperAbstract
         'l11n_volume_teaspoon'      => ['name' => 'l11n_volume_teaspoon',      'type' => 'string', 'internal' => 'volume/teaspoon'],
         'l11n_volume_tablespoon'    => ['name' => 'l11n_volume_tablespoon',    'type' => 'string', 'internal' => 'volume/tablespoon'],
         'l11n_volume_glass'         => ['name' => 'l11n_volume_glass',         'type' => 'string', 'internal' => 'volume/glass'],
+        'l11n_timezone'             => ['name' => 'l11n_timezone',             'type' => 'string', 'internal' => 'timezone'],
         'l11n_datetime_very_short'  => ['name' => 'l11n_datetime_very_short',  'type' => 'string', 'internal' => 'datetime/very_short'],
         'l11n_datetime_short'       => ['name' => 'l11n_datetime_short',       'type' => 'string', 'internal' => 'datetime/short'],
         'l11n_datetime_medium'      => ['name' => 'l11n_datetime_medium',      'type' => 'string', 'internal' => 'datetime/medium'],

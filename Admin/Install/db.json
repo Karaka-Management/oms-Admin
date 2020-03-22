@@ -411,6 +411,12 @@
                 "default": null,
                 "null": true
             },
+            "l11n_timezone": {
+                "name": "l11n_timezone",
+                "type": "VARCHAR(255)",
+                "default": null,
+                "null": true
+            },
             "l11n_datetime_very_short": {
                 "name": "l11n_datetime_very_short",
                 "type": "VARCHAR(20)",
