@@ -17,7 +17,7 @@ namespace Modules\Admin\tests\Models;
 use Modules\Admin\Models\GroupPermission;
 
 /**
- * @testdox Modules\tests\Admin\Models\GroupPermissionTest: Group permission
+ * @testdox Modules\Admin\tests\Models\GroupPermissionTest: Group permission
  *
  * @internal
  */

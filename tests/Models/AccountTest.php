@@ -17,7 +17,7 @@ namespace Modules\Admin\tests\Models;
 use Modules\Admin\Models\Account;
 
 /**
- * @testdox Modules\tests\Admin\Models\AccountTest: Account model
+ * @testdox Modules\Admin\tests\Models\AccountTest: Account model
  *
  * @internal
  */

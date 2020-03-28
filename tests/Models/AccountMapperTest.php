@@ -21,7 +21,7 @@ use phpOMS\Account\AccountType;
 use phpOMS\Auth\LoginReturnType;
 
 /**
- * @testdox Modules\tests\Admin\Models\LocalizationMapperTest: Account database mapper
+ * @testdox Modules\Admin\tests\Models\LocalizationMapperTest: Account database mapper
  *
  * @internal
  */

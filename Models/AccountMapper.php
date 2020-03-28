@@ -37,7 +37,7 @@ final class AccountMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'account_id'           => ['name' => 'account_id',           'type' => 'int',      'internal' => 'id',    'autocomplete' => true],
+        'account_id'           => ['name' => 'account_id',           'type' => 'int',      'internal' => 'id'],
         'account_status'       => ['name' => 'account_status',       'type' => 'int',      'internal' => 'status'],
         'account_type'         => ['name' => 'account_type',         'type' => 'int',      'internal' => 'type'],
         'account_login'        => ['name' => 'account_login',        'type' => 'string',   'internal' => 'login', 'autocomplete' => true],

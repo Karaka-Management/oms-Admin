@@ -17,7 +17,7 @@ namespace Modules\Admin\tests\Models;
 use Modules\Admin\Models\AccountPermission;
 
 /**
- * @testdox Modules\tests\Admin\Models\AccountPermissionTest: Account permission
+ * @testdox Modules\Admin\tests\Models\AccountPermissionTest: Account permission
  *
  * @internal
  */

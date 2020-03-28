@@ -14,17 +14,15 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Controller;
 
-require_once __DIR__ . '/../../tests/../Autoloader.php';
-
 use Model\CoreSettings;
 
 use Modules\Admin\Models\AccountPermission;
 
-use Modules\tests\Admin\Controller\Api\ApiControllerAccountTrait;
-use Modules\tests\Admin\Controller\Api\ApiControllerGroupTrait;
-use Modules\tests\Admin\Controller\Api\ApiControllerModuleTrait;
-use Modules\tests\Admin\Controller\Api\ApiControllerPermissionTrait;
-use Modules\tests\Admin\Controller\Api\ApiControllerSettingsTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerAccountTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerGroupTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerModuleTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerPermissionTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerSettingsTrait;
 
 use phpOMS\Account\Account;
 use phpOMS\Account\AccountManager;
@@ -38,7 +36,7 @@ use phpOMS\Router\WebRouter;
 use phpOMS\Utils\TestUtils;
 
 /**
- * @testdox Modules\tests\Admin\Controller\ApiControllerTest: Admin api controller
+ * @testdox Modules\Admin\tests\Controller\ApiControllerTest: Admin api controller
  *
  * @internal
  */

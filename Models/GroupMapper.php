@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\Admin\Models;
 
 use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\RelationType;
 
 /**
  * Group mapper class.
@@ -99,11 +100,12 @@ final class GroupMapper extends DataMapperAbstract
      */
     public static function getPermissionForModule(string $module) : array
     {
+        $depth = 3;
         $query = self::getQuery();
         $query->innerJoin(GroupPermissionMapper::getTable())
-            ->on(self::$table . '.group_id', '=', GroupPermissionMapper::getTable() . '.group_permission_group')
+            ->on(self::$table . '_' . $depth . '.group_id', '=', GroupPermissionMapper::getTable() . '.group_permission_group')
             ->where(GroupPermissionMapper::getTable() . '.group_permission_module', '=', $module);
 
-        return self::getAllByQuery($query);
+        return self::getAllByQuery($query, RelationType::ALL, $depth);
     }
 }

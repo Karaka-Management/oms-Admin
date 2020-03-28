@@ -18,7 +18,7 @@ use Modules\Admin\Models\Module;
 use phpOMS\Module\ModuleStatus;
 
 /**
- * @testdox Modules\tests\Admin\Models\ModuleTest: Module container
+ * @testdox Modules\Admin\tests\Models\ModuleTest: Module container
  *
  * @internal
  */

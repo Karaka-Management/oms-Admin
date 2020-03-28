@@ -18,7 +18,7 @@ use Modules\Admin\Models\Group;
 use Modules\Admin\Models\NullAccount;
 
 /**
- * @testdox Modules\tests\Admin\Models\GroupTest: Group model
+ * @testdox Modules\Admin\tests\Models\GroupTest: Group model
  *
  * @internal
  */

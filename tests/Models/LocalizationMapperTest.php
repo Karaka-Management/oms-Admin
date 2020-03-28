@@ -18,7 +18,7 @@ use Modules\Admin\Models\LocalizationMapper;
 use phpOMS\Localization\Localization;
 
 /**
- * @testdox Modules\tests\Admin\Models\LocalizationMapperTest: Localization database mapper
+ * @testdox Modules\Admin\tests\Models\LocalizationMapperTest: Localization database mapper
  *
  * @internal
  */

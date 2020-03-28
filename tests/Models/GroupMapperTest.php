@@ -20,7 +20,7 @@ use Modules\Admin\Models\GroupPermission;
 use Modules\Admin\Models\GroupPermissionMapper;
 
 /**
- * @testdox Modules\tests\Admin\Models\GroupMapperTest: Group mapper
+ * @testdox Modules\Admin\tests\Models\GroupMapperTest: Group mapper
  *
  * @internal
  */
