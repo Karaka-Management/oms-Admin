@@ -700,17 +700,19 @@ final class ApiController extends Controller
         $account->setEmail((string) ($request->getData('email') ?? ''));
         $account->generatePassword((string) ($request->getData('password') ?? ''));
 
-        if ($request->getData('lang') === null) {
+        if ($request->getData('locale') === null) {
             $account->setL11n(
                 Localization::fromJson(
                     $this->app->l11nServer === null ? $request->getHeader()->getL11n()->jsonSerialize() : $this->app->l11nServer->jsonSerialize()
                 )
             );
         } else {
+            $locale = \explode('_', $request->getData('locale') ?? '');
+
             $l11n = $account->getL11n();
             $l11n->loadFromLanguage(
-                (string) ($request->getData('lang')),
-                (string) ($request->getData('country') ?? $this->app->l11nServer->getCountry())
+                $locale[0] ?? $this->app->l11nServer->getLanguage(),
+                $locale[1] ?? $this->app->l11nServer->getCountry()
             );
         }
 
