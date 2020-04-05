@@ -194,7 +194,12 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
-        $view->setData('list:elements', GroupMapper::getAll(RelationType::NONE));
+
+        if ($request->getData('ptype') === '-') {
+            $view->setData('groups', GroupMapper::getBeforePivot((int) ($request->getData('id') ?? 0), null, 25));
+        } else {
+            $view->setData('groups', GroupMapper::getAfterPivot((int) ($request->getData('id') ?? 0), null, 25));
+        }
 
         return $view;
     }

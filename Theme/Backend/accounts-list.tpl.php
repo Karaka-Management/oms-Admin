@@ -60,8 +60,8 @@ echo $this->getData('nav')->render(); ?>
                         <?php endif; ?>
             </table>
             <div class="portlet-foot">
-                <a class="button" href="<?= UriFactory::build($previous); ?>">Previous</a>
-                <a class="button" href="<?= UriFactory::build($next); ?>">Next</a>
+                <a class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
+                <a class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
             </div>
         </div>
     </div>

@@ -100,10 +100,10 @@ echo $this->getData('nav')->render(); ?>
                                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                     <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                             <tbody>
-                                <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; ?>
-                                <tr>
+                                <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; $url = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId()); ?>
+                                <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId()) ?>"><?= $value->getName1(); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->getName1(); ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                 <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

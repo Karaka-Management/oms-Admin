@@ -12,10 +12,17 @@
  */
 declare(strict_types=1);
 
+use phpOMS\Uri\UriFactory;
 
 /**
- * @var \phpOMS\Views\View $this
+ * @var \phpOMS\Views\View            $this
+ * @var \Modules\Admin\Models\Group[] $groups
  */
+$groups = $this->getData('groups') ?? [];
+
+$previous = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \reset($groups)->getId() . '&ptype=-';
+$next     = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \end($groups)->getId() . '&ptype=+';
+
 echo $this->getData('nav')->render(); ?>
 
 <div class="row">
@@ -30,7 +37,7 @@ echo $this->getData('nav')->render(); ?>
                         <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <td><?= $this->getHtml('Members') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                 <tbody>
-                    <?php $c = 0; foreach ($this->getData('list:elements') as $key => $value) : ++$c;
+                    <?php $c = 0; foreach ($groups as $key => $value) : ++$c;
                         $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId());
                         $color = 'darkred';
                             if ($value->getStatus() === \phpOMS\Account\GroupStatus::ACTIVE) { $color = 'green'; }
@@ -46,7 +53,10 @@ echo $this->getData('nav')->render(); ?>
                     <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                     <?php endif; ?>
             </table>
-            <div class="portlet-foot"></div>
+            <div class="portlet-foot">
+                <a class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
+                <a class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
+            </div>
         </div>
     </div>
 </div>
