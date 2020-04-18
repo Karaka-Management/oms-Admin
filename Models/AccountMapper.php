@@ -119,6 +119,9 @@ final class AccountMapper extends DataMapperAbstract
      *
      * @return Account
      *
+     * @todo Orange-Management/oms-Admin#11
+     *  [AccountMapper] Create test for getWithPermission()
+     *
      * @since 1.0.0
      */
     public static function getWithPermissions(int $id) : Account

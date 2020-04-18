@@ -178,7 +178,7 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var Localization #l11n */
+        /** @var Localization $l11n */
         $l11n = AccountMapper::get($accountId)->getL11n();
 
         if ((bool) ($request->getData('load') ?? false)) {
