@@ -52,6 +52,8 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email;
 use phpOMS\Version\Version;
+use Modules\Media\Models\Collection;
+use Modules\Media\Models\CollectionMapper;
 
 /**
  * Admin controller class.
@@ -641,8 +643,18 @@ final class ApiController extends Controller
         }
 
         $account = $this->createAccountFromRequest($request);
+
         $this->createModel($request->getHeader()->getAccount(), $account, AccountMapper::class, 'account');
         $this->createProfileForAccount($account, $request);
+
+        $collection = new Collection();
+        $collection->setName((string) $account->getId());
+        $collection->setVirtualPath('/Accounts');
+        $collection->setPath('/Accounts');
+        $collection->setCreatedBy(new NullAccount($request->getHeader()->getAccount()));
+
+        CollectionMapper::create($collection);
+
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully created', $account);
     }
 
