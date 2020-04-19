@@ -29,6 +29,8 @@ use Modules\Admin\Models\ModuleStatusUpdateType;
 
 use Modules\Admin\Models\NullAccount;
 use Modules\Admin\Models\PermissionState;
+use Modules\Media\Models\Collection;
+use Modules\Media\Models\CollectionMapper;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
@@ -52,8 +54,6 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email;
 use phpOMS\Version\Version;
-use Modules\Media\Models\Collection;
-use Modules\Media\Models\CollectionMapper;
 
 /**
  * Admin controller class.
