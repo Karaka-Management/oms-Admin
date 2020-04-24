@@ -1,5 +1,5 @@
-# Table of Contents
+# User Content
 
-* [Settings]({%}&page=settings)
-* [Accounts]({%}&page=accounts)
-* [Groups]({%}&page=groups)
+* [Settings]({%}&page=Help/settings)
+* [Accounts]({%}&page=Help/accounts)
+* [Groups]({%}&page=Help/groups)
