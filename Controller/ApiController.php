@@ -309,7 +309,11 @@ final class ApiController extends Controller
             return;
         }
 
-        $appManager->install(__DIR__ . '/../../../' . $app, __DIR__ . '/../../../' . $request->getData('appDest') ?? '');
+        $appManager->install(
+            __DIR__ . '/../../../' . $app,
+            __DIR__ . '/../../../' . $request->getData('appDest') ?? '',
+            $request->getData('theme') ?? 'Default'
+        );
 
         $this->apiActivateTheme($request, $response);
     }
