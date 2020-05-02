@@ -380,6 +380,7 @@ final class ApiController extends Controller
      */
     public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var Group $old */
         $old = clone GroupMapper::get((int) $request->getData('id'));
         $new = $this->updateGroupFromRequest($request);
         $this->updateModel($request->getHeader()->getAccount(), $old, $new, GroupMapper::class, 'group');
@@ -533,6 +534,7 @@ final class ApiController extends Controller
      */
     public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var Account $account */
         $account = AccountMapper::get((int) $request->getData('id'));
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully returned', $account);
     }
@@ -576,9 +578,12 @@ final class ApiController extends Controller
      */
     public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var Account[] $accounts */
         $accounts = \array_values(AccountMapper::find((string) ($request->getData('search') ?? '')));
-        $groups   = \array_values(GroupMapper::find((string) ($request->getData('search') ?? '')));
-        $data     = [];
+
+        /** @var Group[] $groups */
+        $groups = \array_values(GroupMapper::find((string) ($request->getData('search') ?? '')));
+        $data   = [];
 
         foreach ($accounts as $account) {
             $temp                = $account->jsonSerialize();
@@ -750,6 +755,7 @@ final class ApiController extends Controller
      */
     public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var Account $account */
         $account = AccountMapper::get((int) ($request->getData('id')));
         $this->deleteModel($request->getHeader()->getAccount(), $account, AccountMapper::class, 'account');
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully deleted', $account);
@@ -770,6 +776,7 @@ final class ApiController extends Controller
      */
     public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var Account $old */
         $old = clone AccountMapper::get((int) $request->getData('id'));
         $new = $this->updateAccountFromRequest($request);
         $this->updateModel($request->getHeader()->getAccount(), $old, $new, AccountMapper::class, 'account');
@@ -793,6 +800,7 @@ final class ApiController extends Controller
      */
     private function updateAccountFromRequest(RequestAbstract $request, bool $allowPassword = false) : Account
     {
+        /** @var Account $account */
         $account = AccountMapper::get((int) ($request->getData('id')));
         $account->setName((string) ($request->getData('login') ?? $account->getName()));
         $account->setName1((string) ($request->getData('name1') ?? $account->getName1()));
@@ -885,6 +893,7 @@ final class ApiController extends Controller
      */
     public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var AccountPermission $account */
         $account = AccountPermissionMapper::get((int) $request->getData('id'));
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully returned', $account);
     }
@@ -904,8 +913,9 @@ final class ApiController extends Controller
      */
     public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $account = GroupPermissionMapper::get((int) $request->getData('id'));
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully returned', $account);
+        /** @var GroupPermission $group */
+        $group = GroupPermissionMapper::get((int) $request->getData('id'));
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully returned', $group);
     }
 
     /**
@@ -923,6 +933,7 @@ final class ApiController extends Controller
      */
     public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var GroupPermission $permission */
         $permission = GroupPermissionMapper::get((int) $request->getData('id'));
         $this->deleteModel($request->getHeader()->getAccount(), $permission, GroupPermissionMapper::class, 'group-permission');
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
@@ -943,6 +954,7 @@ final class ApiController extends Controller
      */
     public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get((int) $request->getData('id'));
         $this->deleteModel($request->getHeader()->getAccount(), $permission, AccountPermissionMapper::class, 'user-permission');
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
@@ -963,6 +975,7 @@ final class ApiController extends Controller
      */
     public function apiUserPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get((int) $request->getData('id'));
         $this->deleteModel($request->getHeader()->getAccount(), $permission, AccountPermissionMapper::class, 'user-permission');
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
@@ -1083,6 +1096,7 @@ final class ApiController extends Controller
      */
     public function createPermissionFromRequest(RequestAbstract $request) : PermissionAbstract
     {
+        /** @var AccountPermission||GroupPermission $permission */
         $permission = ((int) $request->getData('permissionowner')) === PermissionOwner::GROUP ? new GroupPermission((int) $request->getData('permissionref')) : new AccountPermission((int) $request->getData('permissionref'));
         $permission->setUnit(empty($request->getData('permissionunit')) ? null : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? null : (string) $request->getData('permissionapp'));
@@ -1116,7 +1130,10 @@ final class ApiController extends Controller
      */
     public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var AccountPermission $old */
         $old = clone AccountPermissionMapper::get((int) $request->getData('id'));
+
+        /** @var AccountPermission $new */
         $new = $this->updatePermissionFromRequest(AccountPermissionMapper::get((int) $request->getData('id')), $request);
 
         $this->updateModel($request->getHeader()->getAccount(), $old, $new, AccountPermissionMapper::class, 'account-permission');
@@ -1138,7 +1155,10 @@ final class ApiController extends Controller
      */
     public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var GroupPermission $old */
         $old = clone GroupPermissionMapper::get((int) $request->getData('id'));
+
+        /** @var GroupPermission $new */
         $new = $this->updatePermissionFromRequest(GroupPermissionMapper::get((int) $request->getData('id')), $request);
 
         $this->updateModel($request->getHeader()->getAccount(), $old, $new, GroupPermissionMapper::class, 'group-permission');
