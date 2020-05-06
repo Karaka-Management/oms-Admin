@@ -1096,7 +1096,7 @@ final class ApiController extends Controller
      */
     public function createPermissionFromRequest(RequestAbstract $request) : PermissionAbstract
     {
-        /** @var AccountPermission||GroupPermission $permission */
+        /** @var AccountPermission|GroupPermission $permission */
         $permission = ((int) $request->getData('permissionowner')) === PermissionOwner::GROUP ? new GroupPermission((int) $request->getData('permissionref')) : new AccountPermission((int) $request->getData('permissionref'));
         $permission->setUnit(empty($request->getData('permissionunit')) ? null : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? null : (string) $request->getData('permissionapp'));
