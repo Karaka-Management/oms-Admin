@@ -799,7 +799,7 @@
             },
             "settings_module": {
                 "name": "settings_module",
-                "type": "VARCHAR(255)",
+                "type": "VARCHAR(190)",
                 "default": null,
                 "null": true,
                 "foreignTable": "module",
