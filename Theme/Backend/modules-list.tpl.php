@@ -41,7 +41,7 @@ $isntalled = $this->getData('isntalled') ?? [];
                             elseif (isset($installed[$module['name']['internal']])) { $status = ModuleStatus::INACTIVE; }
                             else { $status = ModuleStatus::AVAILABLE; }
                         ?>
-                <tr data-href="<?= $url; ?>">
+                <tr tabindex="0" data-href="<?= $url; ?>">
                     <td data-label="<?= $this->getHtml('ID', '0', '0') ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['id']); ?></a>
                     <td data-label="<?= $this->getHtml('Name') ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['external']); ?></a>
                     <td data-label="<?= $this->getHtml('Version') ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['version']); ?></a>

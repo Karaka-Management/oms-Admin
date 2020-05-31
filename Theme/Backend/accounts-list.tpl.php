@@ -46,7 +46,7 @@ echo $this->getData('nav')->render(); ?>
                         elseif ($value->getStatus() === AccountStatus::INACTIVE) { $color = 'darkblue'; }
                         elseif ($value->getStatus() === AccountStatus::TIMEOUT) { $color = 'purple'; }
                         elseif ($value->getStatus() === AccountStatus::BANNED) { $color = 'red'; } ?>
-                <tr data-href="<?= $url; ?>">
+                <tr tabindex="0" data-href="<?= $url; ?>">
                     <td data-label="<?= $this->getHtml('ID', '0', '0') ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
                     <td data-label="<?= $this->getHtml('Status') ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status'. $value->getStatus()); ?></span></a>
                     <td data-label="<?= $this->getHtml('Name') ?>"><a href="<?= $url; ?>"><?= $this->printHtml(
