@@ -40,15 +40,15 @@ echo $this->getData('nav')->render(); ?>
                                     <option value="<?= $this->printHtml(\phpOMS\Account\AccountStatus::BANNED); ?>"><?= $this->getHtml('Banned'); ?>
                                 </select>
                         <tr><td><label for="iUsername"><?= $this->getHtml('Username'); ?></label>
-                        <tr><td><input id="iUsername" name="login" type="text" spellcheck="false" placeholder="&#xf007; Fred">
+                        <tr><td><input id="iUsername" name="login" type="text" autocomplete="off" spellcheck="false" placeholder="&#xf007; Fred">
                         <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
-                        <tr><td><input id="iName1" name="name1" type="text" spellcheck="false" placeholder="&#xf007; Donald" required>
+                        <tr><td><input id="iName1" name="name1" type="text" autocomplete="off" spellcheck="false" placeholder="&#xf007; Donald" required>
                         <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
-                        <tr><td><input id="iName2" name="name2" type="text" spellcheck="false" placeholder="&#xf007; Fauntleroy">
+                        <tr><td><input id="iName2" name="name2" type="text" autocomplete="off" spellcheck="false" placeholder="&#xf007; Fauntleroy">
                         <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
-                        <tr><td><input id="iName3" name="name3" type="text" spellcheck="false" placeholder="&#xf007; Duck">
+                        <tr><td><input id="iName3" name="name3" type="text" autocomplete="off" spellcheck="false" placeholder="&#xf007; Duck">
                         <tr><td><label for="iEmail"><?= $this->getHtml('Email'); ?></label>
-                        <tr><td><input id="iEmail" name="email" type="email" spellcheck="false" placeholder="&#xf0e0; d.duck@duckburg.com">
+                        <tr><td><input id="iEmail" name="email" type="email" autocomplete="off" spellcheck="false" placeholder="&#xf0e0; d.duck@duckburg.com">
                         <tr><td><label for="iPassword"><?= $this->getHtml('Name3'); ?></label>
                         <tr><td><input id="iPassword" name="password" type="password" placeholder="&#xf023; Pa55ssw0rd?">
                     </table>
