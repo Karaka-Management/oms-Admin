@@ -34,7 +34,7 @@ echo $this->getData('nav')->render(); ?>
                                     <option value="<?= $this->printHtml(\phpOMS\Account\GroupStatus::INACTIVE); ?>"><?= $this->getHtml('Inactive'); ?>
                                 </select>
                         <tr><td><label for="iGname"><?= $this->getHtml('Name'); ?></label>
-                        <tr><td><input id="iGname" name="name" type="text" placeholder="&#xf0c0; Guest" required>
+                        <tr><td><input id="iGname" name="name" type="text" spellcheck="false" autocomplete="false" placeholder="&#xf0c0; Guest" required>
                         <tr><td><?= $this->getData('editor')->render('group-editor'); ?>
                         <tr><td><?= $this->getData('editor')->getData('text')->render('group-editor', 'description', 'fGroupCreate'); ?>
                     </table>
