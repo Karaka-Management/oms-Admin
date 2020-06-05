@@ -66,31 +66,31 @@ echo $this->getData('nav')->render(); ?>
                         <tr><td>
                             <span class="input">
                                 <button type="button"><i class="fa fa-user"></i></button>
-                                <input id="iUsername" name="name" type="text" value="<?= $this->printHtml($account->getName()); ?>">
+                                <input id="iUsername" name="name" type="text" spellcheck="false" value="<?= $this->printHtml($account->getName()); ?>">
                             </span>
                         <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
                         <tr><td>
                             <span class="input">
                                 <button type="button"><i class="fa fa-user"></i></button>
-                                <input id="iName1" name="name1" type="text" value="<?= $this->printHtml($account->getName1()); ?>" required>
+                                <input id="iName1" name="name1" type="text" spellcheck="false" value="<?= $this->printHtml($account->getName1()); ?>" required>
                             </span>
                         <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
                         <tr><td>
                             <span class="input">
                                 <button type="button"><i class="fa fa-user"></i></button>
-                                <input id="iName2" name="name2" type="text" value="<?= $this->printHtml($account->getName2()); ?>">
+                                <input id="iName2" name="name2" type="text" spellcheck="false" value="<?= $this->printHtml($account->getName2()); ?>">
                             </span>
                         <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
                         <tr><td>
                             <span class="input">
                                 <button type="button"><i class="fa fa-user"></i></button>
-                                <input id="iName3" name="name3" type="text" value="<?= $this->printHtml($account->getName3()); ?>">
+                                <input id="iName3" name="name3" type="text" spellcheck="false" value="<?= $this->printHtml($account->getName3()); ?>">
                             </span>
                         <tr><td><label for="iEmail"><?= $this->getHtml('Email'); ?></label>
                         <tr><td>
                             <span class="input">
                                 <button type="button"><i class="fa fa-envelope-o"></i></button>
-                                <input id="iEmail" name="email" type="email" value="<?= $this->printHtml($account->getEmail()); ?>">
+                                <input id="iEmail" name="email" type="email" spellcheck="false" value="<?= $this->printHtml($account->getEmail()); ?>">
                             </span>
                         <tr><td><label for="iPassword"><?= $this->getHtml('Password'); ?></label>
                         <tr><td>
