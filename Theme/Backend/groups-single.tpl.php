@@ -68,7 +68,7 @@ echo $this->getData('nav')->render(); ?>
                                 <label for="iGid"><?= $this->getHtml('ID', '0', '0'); ?></label>
                                 <input id="iGid" name="id" type="text" value="<?= $this->printHtml($group->getId()); ?>" disabled>
                                 <label for="iGname"><?= $this->getHtml('Name'); ?></label>
-                                <input id="iGname" name="name" type="text" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->getName()); ?>">
+                                <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="false" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->getName()); ?>">
                                 <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
                                 <select id="iGstatus" name="status">
                                     <?php $status = \phpOMS\Account\GroupStatus::getConstants(); foreach ($status as $stat) : ?>
