@@ -14,9 +14,10 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Controller\Api;
 
+use Model\Settings;
+use phpOMS\Uri\HttpUri;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerSettingsTrait
 {
@@ -31,10 +32,10 @@ trait ApiControllerSettingsTrait
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->getHeader()->setAccount(1);
-        $request->setData('name', '1000000019');
+        $request->setData('name', Settings::PASSWORD_INTERVAL);
 
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('DE', $response->get('')['response']);
+        self::assertEquals('90', $response->get('')['response']);
     }
 
     /**
@@ -48,12 +49,12 @@ trait ApiControllerSettingsTrait
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->getHeader()->setAccount(1);
-        $request->setData('settings', \json_encode([['name' => '1000000019', 'content' => 'US']]));
+        $request->setData('settings', \json_encode([['name' => Settings::PASSWORD_INTERVAL, 'content' => '60']]));
         $this->module->apiSettingsSet($request, $response);
 
-        $request->setData('name', '1000000019');
+        $request->setData('name', Settings::PASSWORD_INTERVAL);
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('US', $response->get('')['response']);
+        self::assertEquals('60', $response->get('')['response']);
     }
 
     public function testApiAccountLocalizationLoadSet() : void
