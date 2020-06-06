@@ -20,7 +20,7 @@ use phpOMS\Uri\UriFactory;
 echo $this->getData('nav')->render(); ?>
 
 <div class="row">
-    <div class="col-xs-12 col-md-4">
+    <div class="col-xs-12 col-md-6">
         <div class="portlet">
             <form id="fAccount" action="<?= UriFactory::build('{/api}admin/account'); ?>" method="put">
                 <div class="portlet-head"><?= $this->getHtml('Account'); ?></div>
