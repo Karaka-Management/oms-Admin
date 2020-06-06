@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
+use Model\Settings;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
 use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermissionMapper;
+use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\NullAccountPermission;
 use Modules\Admin\Models\NullGroupPermission;
 
@@ -58,20 +60,15 @@ final class BackendController extends Controller
     public function viewSettingsGeneral(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         $view     = new View($this->app->l11nManager, $request, $response);
-        $settings = $this->app->appSettings->get([
-                1000000001, 1000000002, 1000000003, 1000000004, 1000000005, 1000000006, 1000000007, 1000000008, 1000000009,
-                1000000010, 1000000011, 1000000012, 1000000013, 1000000014, 1000000015, 1000000016, 1000000017, 1000000018, 1000000019,
-                1000000020, 1000000021, 1000000022, 1000000023, 1000000024, 1000000025, 1000000026, 1000000027, 1000000028, 1000000029,
-                1000001001, 1000001002, 1000001003, 1000001004, 1000001005,
-                1000002001, 1000002002, 1000002003, 1000002004, 1000002005, 1000002006,
-                1000003001, 1000003002, 1000003003, 1000003004, 1000003005, 1000003006,
-                1000004001, 1000004002, 1000004003, 1000004004, 1000004005,
-                1000005001, 1000005002, 1000005003, 1000005004, 1000005005, 1000005006, 1000005007, 1000005008,
+        $settings = $this->app->appSettings->get(null, [
+                Settings::PASSWORD_PATTERN, Settings::LOGIN_TIMEOUT, Settings::PASSWORD_INTERVAL, Settings::PASSWORD_HISTORY, Settings::LOGIN_TRIES, Settings::LOGGING_STATUS, Settings::LOGGING_PATH, Settings::DEFAULT_ORGANIZATION,
+                Settings::LOGIN_STATUS, Settings::DEFAULT_LOCALIZATION, Settings::ADMIN_MAIL
             ]);
 
         $view->setTemplate('/Modules/Admin/Theme/Backend/settings-general');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
         $view->setData('settings', $settings);
+        $view->setData('defaultlocalization', LocalizationMapper::get((int) $settings[Settings::DEFAULT_LOCALIZATION]));
 
         return $view;
     }
