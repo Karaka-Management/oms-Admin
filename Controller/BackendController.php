@@ -62,7 +62,7 @@ final class BackendController extends Controller
         $view     = new View($this->app->l11nManager, $request, $response);
         $settings = $this->app->appSettings->get(null, [
                 Settings::PASSWORD_PATTERN, Settings::LOGIN_TIMEOUT, Settings::PASSWORD_INTERVAL, Settings::PASSWORD_HISTORY, Settings::LOGIN_TRIES, Settings::LOGGING_STATUS, Settings::LOGGING_PATH, Settings::DEFAULT_ORGANIZATION,
-                Settings::LOGIN_STATUS, Settings::DEFAULT_LOCALIZATION, Settings::ADMIN_MAIL
+                Settings::LOGIN_STATUS, Settings::DEFAULT_LOCALIZATION, Settings::ADMIN_MAIL,
             ]);
 
         $view->setTemplate('/Modules/Admin/Theme/Backend/settings-general');
