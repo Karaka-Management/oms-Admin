@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace Modules\Admin\tests\Controller\Api;
 
 use Model\Settings;
-use phpOMS\Uri\HttpUri;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Uri\HttpUri;
 
 trait ApiControllerSettingsTrait
 {
