@@ -98,7 +98,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidStatus() : void
     {
-        self::expectException(\phpOMS\Stdlib\Base\Exception\InvalidEnumValue::class);
+        $this->expectException(\phpOMS\Stdlib\Base\Exception\InvalidEnumValue::class);
 
         $this->module->setStatus(9999);
     }

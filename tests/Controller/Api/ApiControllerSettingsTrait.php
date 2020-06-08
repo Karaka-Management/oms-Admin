@@ -55,6 +55,9 @@ trait ApiControllerSettingsTrait
         $request->setData('name', Settings::PASSWORD_INTERVAL);
         $this->module->apiSettingsGet($request, $response);
         self::assertEquals('60', $response->get('')['response']);
+
+        $request->setData('settings', \json_encode([['name' => Settings::PASSWORD_INTERVAL, 'content' => '90']]), true);
+        $this->module->apiSettingsSet($request, $response);
     }
 
     public function testApiAccountLocalizationLoadSet() : void
