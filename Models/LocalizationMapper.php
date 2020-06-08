@@ -41,7 +41,7 @@ final class LocalizationMapper extends DataMapperAbstract
     protected static array $columns = [
         'l11n_id'                   => ['name' => 'l11n_id',                   'type' => 'int',    'internal' => 'id'],
         'l11n_country'              => ['name' => 'l11n_country',              'type' => 'string', 'internal' => 'country'],
-        'l11n_language'             => ['name' => 'l11n_language',             'type' => 'string', 'internal' => 'language'],
+        'l11n_language'             => ['name' => 'l11n_language',             'type' => 'string', 'internal' => 'lang'],
         'l11n_currency'             => ['name' => 'l11n_currency',             'type' => 'string', 'internal' => 'currency'],
         'l11n_currency_format'      => ['name' => 'l11n_currency_format',      'type' => 'string', 'internal' => 'currencyFormat'],
         'l11n_number_thousand'      => ['name' => 'l11n_number_thousand',      'type' => 'string', 'internal' => 'thousands'],
@@ -104,7 +104,7 @@ final class LocalizationMapper extends DataMapperAbstract
             'by'     => 'code2',
             'column' => 'code2',
         ],
-        'language'    => [
+        'lang'    => [
             'mapper' => LanguageMapper::class,
             'self'   => 'l11n_language',
             'by'     => 'code2',
