@@ -56,7 +56,7 @@ trait ApiControllerPermissionTrait
 
         $this->module->apiGroupPermissionGet($request, $response);
 
-        self::assertEquals(1, $response->get('')['response']->getGroup());
+        self::assertGreaterThan(0, $response->get('')['response']->getGroup());
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
