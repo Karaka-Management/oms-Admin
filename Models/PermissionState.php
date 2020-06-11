@@ -34,4 +34,5 @@ abstract class PermissionState extends Enum
     public const ROUTE            = 6;
     public const APP              = 7;
     public const ACCOUNT_SETTINGS = 8;
+    public const SEARCH           = 9;
 }

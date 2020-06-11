@@ -73,7 +73,7 @@ return [
             'permission' => [
                 'module' => ApiController::MODULE_NAME,
                 'type'  => PermissionType::READ,
-                'state' => PermissionState::ACCOUNT,
+                'state' => PermissionState::SEARCH,
             ],
         ],
     ],
@@ -84,7 +84,7 @@ return [
             'permission' => [
                 'module' => ApiController::MODULE_NAME,
                 'type'  => PermissionType::READ,
-                'state' => PermissionState::ACCOUNT,
+                'state' => PermissionState::SEARCH,
             ],
         ],
     ],
@@ -95,7 +95,7 @@ return [
             'permission' => [
                 'module' => ApiController::MODULE_NAME,
                 'type'  => PermissionType::READ,
-                'state' => PermissionState::ACCOUNT,
+                'state' => PermissionState::SEARCH,
             ],
         ],
     ],
