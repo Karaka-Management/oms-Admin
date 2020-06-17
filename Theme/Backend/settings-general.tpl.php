@@ -51,10 +51,10 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <section class="box wf-100">
-                        <header><h1><?= $this->getHtml('Settings'); ?></h1></header>
-                        <div class="inner">
-                            <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                    <section class="portlet">
+                        <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                            <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
+                            <div class="portlet-body">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr><td><label for="iOname"><?= $this->getHtml('OrganizationName'); ?></label>
@@ -63,52 +63,52 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                                 <?php $unit = UnitMapper::get((int) $settings[1000000009]); ?>
                                                     <option value="<?= $this->printHtml($unit->getId()); ?>"><?= $this->printHtml($unit->getName()); ?>
                                             </select>
-                                        <tr><td><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
                                 </table>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>
+                        </form>
                     </section>
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <section class="box wf-100">
-                        <header><h1><?= $this->getHtml('Security'); ?></h1></header>
-                        <div class="inner">
-                            <form id="iSecuritySettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                    <section class="portlet">
+                        <form id="iSecuritySettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                            <div class="portlet-head"><?= $this->getHtml('Security'); ?></div>
+                            <div class="portlet-body">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr><td>
                                             <label for="iPassword"><?= $this->getHtml('PasswordRegex'); ?></label>
-                                            <i class="fa fa-info-circle tooltip"><i data-tooltip="<?= $this->getHtml('i:PasswordRegex') ?>"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex') ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($settings[1000000001]); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
                                         <tr><td>
                                             <label for="iLoginRetries"><?= $this->getHtml('LoginRetries'); ?></label>
-                                            <i class="fa fa-info-circle tooltip"><i data-tooltip="<?= $this->getHtml('i:LoginRetries') ?>"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries') ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($settings[1000000005]); ?>" min="-1">
                                         <tr><td>
                                             <label for="iTimeoutPeriod"><?= $this->getHtml('TimeoutPeriod'); ?></label>
-                                            <i class="fa fa-info-circle tooltip"><i data-tooltip="<?= $this->getHtml('i:TimeoutPeriod') ?>"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod') ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($settings[1000000002]); ?>">
                                         <tr><td>
                                             <label for="iPasswordChangeInterval"><?= $this->getHtml('PasswordChangeInterval'); ?></label>
-                                            <i class="fa fa-info-circle tooltip"><i data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval') ?>"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval') ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($settings[1000000003]); ?>">
                                         <tr><td>
                                             <label for="iPasswordHistory"><?= $this->getHtml('PasswordHistory'); ?></label>
-                                            <i class="fa fa-info-circle tooltip"><i data-tooltip="<?= $this->getHtml('i:PasswordHistory') ?>"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory') ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($settings[1000000004]); ?>">
-                                        <tr><td><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
                                 </table>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>
+                        </form>
                     </section>
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <section class="box wf-100">
-                        <header><h1><?= $this->getHtml('Logging'); ?></h1></header>
-                        <div class="inner">
-                            <form id="iLoggingSettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                    <section class="portlet">
+                        <form id="iLoggingSettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                            <div class="portlet-head"><?= $this->getHtml('Logging'); ?></div>
+                            <div class="portlet-body">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr><td>
@@ -118,10 +118,10 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                             </span>
                                         <tr><td><label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
                                         <tr><td><input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($settings[1000000007]); ?>" placeholder="&#xf023; asdf">
-                                        <tr><td><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
                                 </table>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>
+                        </form>
                     </section>
                 </div>
             </div>
