@@ -112,12 +112,13 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr><td>
-                                            <span class="checkbox">
-                                                <input id="iLog" name="settings_1000000006" type="checkbox" value="<?= $this->printHtml($settings[1000000006]); ?>">
-                                                <label for="iLog"><?= $this->getHtml('Log'); ?></label>
-                                            </span>
+                                            <label class="checkbox" for="iLog">
+                                                <input id="iLog" type="checkbox" name="settings_1000000006" value="1">
+                                                <span class="checkmark"></span>
+                                                <?= $this->getHtml('Log'); ?>
+                                            </label>
                                         <tr><td><label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
-                                        <tr><td><input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($settings[1000000007]); ?>" placeholder="&#xf023; asdf">
+                                        <tr><td><input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($settings[1000000007]); ?>" placeholder="&#xf023; /Logs">
                                 </table>
                             </div>
                             <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>
