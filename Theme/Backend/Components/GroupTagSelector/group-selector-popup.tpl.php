@@ -9,7 +9,7 @@
                     "key": 1, "listener": "keyup", "action": [
                         {"key": 1, "type": "utils.timer", "id": "iSearchGroup", "delay": 500, "resets": true},
                         {"key": 2, "type": "dom.table.clear", "id": "acc-table"},
-                        {"key": 3, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={#iSearchGroup}", "method": "GET", "request_type": "json"},
+                        {"key": 3, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={!#iSearchGroup}", "method": "GET", "request_type": "json"},
                         {"key": 4, "type": "dom.table.append", "id": "acc-table", "aniIn": "fadeIn", "data": [], "bindings": {"id": "id", "name": "name/0"}, "position": -1}
                     ]
                 }

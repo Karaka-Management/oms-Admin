@@ -18,14 +18,14 @@
                         {"key": 1, "type": "validate.keypress", "pressed": "!13!37!38!39!40"},
                         {"key": 2, "type": "utils.timer", "id": "<?= $this->printHtml($this->getId()); ?>", "delay": 500, "resets": true},
                         {"key": 3, "type": "dom.datalist.clear", "id": "<?= $this->printHtml($this->getId()); ?>-datalist"},
-                        {"key": 4, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={#<?= $this->printHtml($this->getId()); ?>}", "method": "GET", "request_type": "json"},
+                        {"key": 4, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={!#<?= $this->printHtml($this->getId()); ?>}", "method": "GET", "request_type": "json"},
                         {"key": 5, "type": "dom.datalist.append", "id": "<?= $this->printHtml($this->getId()); ?>-datalist", "value": "id", "text": "name"}
                     ]
                 },
                 {
                     "key": 2, "listener": "keydown", "action" : [
                         {"key": 1, "type": "validate.keypress", "pressed": "13|9"},
-                        {"key": 2, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={#<?= $this->printHtml($this->getId()); ?>}", "method": "GET", "request_type": "json"},
+                        {"key": 2, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={!#<?= $this->printHtml($this->getId()); ?>}", "method": "GET", "request_type": "json"},
                         {"key": 3, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->printHtml($this->getId()); ?>-idlist", "value": "{0/id}", "data": ""},
                         {"key": 4, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->printHtml($this->getId()); ?>-taglist", "value": "<span id=\"<?= $this->printHtml($this->getId()); ?>-taglist-{0/id}\" class=\"tag red\" data-id=\"{0/id}\"><i class=\"fa fa-times\"></i> {0/name}</span>", "data": ""},
                         {"key": 5, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->printHtml($this->getId()); ?>", "value": "", "data": ""}

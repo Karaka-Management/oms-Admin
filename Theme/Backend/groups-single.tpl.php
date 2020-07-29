@@ -12,6 +12,9 @@
  */
 declare(strict_types=1);
 
+use phpOMS\Account\PermissionType;
+use phpOMS\Account\GroupStatus;
+use phpOMS\Account\PermissionOwner;
 use phpOMS\Uri\UriFactory;
 
 /**
@@ -71,7 +74,7 @@ echo $this->getData('nav')->render(); ?>
                                 <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->getName()); ?>">
                                 <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
                                 <select id="iGstatus" name="status">
-                                    <?php $status = \phpOMS\Account\GroupStatus::getConstants(); foreach ($status as $stat) : ?>
+                                    <?php $status = GroupStatus::getConstants(); foreach ($status as $stat) : ?>
                                     <option value="<?= $stat; ?>"<?= $stat === $group->getStatus() ? ' selected' : ''; ?>><?= $this->getHtml('GroupStatus' . $stat); ?>
                                 <?php endforeach; ?>
                                     </select>
@@ -129,63 +132,64 @@ echo $this->getData('nav')->render(); ?>
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions') ?><i class="fa fa-download floatRight download btn"></i></div>
-                        <table id="groupPermissions" class="default" data-table-form="fGroupAddPermission">
-                            <thead>
-                                <tr>
-                                    <td>
-                                    <td>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('App'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('Module'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('Type'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('Ele'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('Comp'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td class="wf-100"><?= $this->getHtml('Perm'); ?>
-                            <tbody>
-                                <template>
+                        <div style="overflow-x:auto;">
+                            <table id="groupPermissions" class="default" data-table-form="fGroupAddPermission">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                        <td>
+                                        <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('App'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Module'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Type'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Ele'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Comp'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td class="wf-100"><?= $this->getHtml('Perm'); ?>
+                                <tbody>
+                                    <template>
+                                        <tr>
+                                            <td><a href="#"><i class="fa fa-times"></i></a>
+                                            <td><a href="#"><i class="fa fa-cogs"></i></a>
+                                            <td></td>
+                                            <td data-tpl-text="/unit" data-tpl-value="/unit" data-value=""></td>
+                                            <td data-tpl-text="/app" data-tpl-value="/app" data-value=""></td>
+                                            <td data-tpl-text="/module" data-tpl-value="/module" data-value=""></td>
+                                            <td data-tpl-text="/type" data-tpl-value="/type" data-value=""></td>
+                                            <td data-tpl-text="/ele" data-tpl-value="/ele" data-value=""></td>
+                                            <td data-tpl-text="/comp" data-tpl-value="/comp" data-value=""></td>
+                                            <td>
+                                                <span data-tpl-text="/perm/c" data-tpl-value="/perm/c" data-value=""><span>
+                                                <span data-tpl-text="/perm/r" data-tpl-value="/perm/r" data-value=""><span>
+                                                <span data-tpl-text="/perm/u" data-tpl-value="/perm/u" data-value=""><span>
+                                                <span data-tpl-text="/perm/d" data-tpl-value="/perm/d" data-value=""><span>
+                                                <span data-tpl-text="/perm/p" data-tpl-value="/perm/p" data-value=""><span>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <?php $c = 0; foreach ($permissions as $key => $value) : ++$c; $permission = $value->getPermission(); ?>
                                     <tr>
                                         <td><a href="#"><i class="fa fa-times"></i></a>
                                         <td><a href="#"><i class="fa fa-cogs"></i></a>
-                                        <td></td>
-                                        <td data-tpl-text="/unit" data-tpl-value="/unit" data-value=""></td>
-                                        <td data-tpl-text="/app" data-tpl-value="/app" data-value=""></td>
-                                        <td data-tpl-text="/module" data-tpl-value="/module" data-value=""></td>
-                                        <td data-tpl-text="/type" data-tpl-value="/type" data-value=""></td>
-                                        <td data-tpl-text="/ele" data-tpl-value="/ele" data-value=""></td>
-                                        <td data-tpl-text="/comp" data-tpl-value="/comp" data-value=""></td>
+                                        <td><?= $value->getId(); ?>
+                                        <td><?= $value->getUnit(); ?>
+                                        <td><?= $value->getApp(); ?>
+                                        <td><?= $value->getModule(); ?>
+                                        <td><?= $value->getType(); ?>
+                                        <td><?= $value->getElement(); ?>
+                                        <td><?= $value->getComponent(); ?>
                                         <td>
-                                            <span data-tpl-text="/perm/c" data-tpl-value="/perm/c" data-value=""><span>
-                                            <span data-tpl-text="/perm/r" data-tpl-value="/perm/r" data-value=""><span>
-                                            <span data-tpl-text="/perm/u" data-tpl-value="/perm/u" data-value=""><span>
-                                            <span data-tpl-text="/perm/d" data-tpl-value="/perm/d" data-value=""><span>
-                                            <span data-tpl-text="/perm/p" data-tpl-value="/perm/p" data-value=""><span>
-                                        </td>
-                                    </tr>
-                                </template>
-                                <?php $c = 0; foreach ($permissions as $key => $value) : ++$c; $permission = $value->getPermission(); ?>
-                                <tr>
-                                    <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="#"><i class="fa fa-cogs"></i></a>
-                                    <td><?= $value->getId(); ?>
-                                    <td><?= $value->getUnit(); ?>
-                                    <td><?= $value->getApp(); ?>
-                                    <td><?= $value->getModule(); ?>
-                                    <td><?= $value->getType(); ?>
-                                    <td><?= $value->getElement(); ?>
-                                    <td><?= $value->getComponent(); ?>
-                                    <td>
-                                        <?= (\phpOMS\Account\PermissionType::CREATE | $permission) === $permission ? 'C' : ''; ?>
-                                        <?= (\phpOMS\Account\PermissionType::READ | $permission) === $permission ? 'R' : ''; ?>
-                                        <?= (\phpOMS\Account\PermissionType::MODIFY | $permission) === $permission ? 'U' : ''; ?>
-                                        <?= (\phpOMS\Account\PermissionType::DELETE | $permission) === $permission ? 'D' : ''; ?>
-                                        <?= (\phpOMS\Account\PermissionType::PERMISSION | $permission) === $permission ? 'P' : ''; ?>
-                                <?php endforeach; ?>
-                                <?php if ($c === 0) : ?>
-                                <tr><td colspan="10" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                <?php endif; ?>
-                        </table>
-                        <div class="portlet-foot"></div>
+                                            <?= (PermissionType::CREATE | $permission) === $permission ? 'C' : ''; ?>
+                                            <?= (PermissionType::READ | $permission) === $permission ? 'R' : ''; ?>
+                                            <?= (PermissionType::MODIFY | $permission) === $permission ? 'U' : ''; ?>
+                                            <?= (PermissionType::DELETE | $permission) === $permission ? 'D' : ''; ?>
+                                            <?= (PermissionType::PERMISSION | $permission) === $permission ? 'P' : ''; ?>
+                                    <?php endforeach; ?>
+                                    <?php if ($c === 0) : ?>
+                                    <tr><td colspan="10" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                    <?php endif; ?>
+                            </table>
+                        </div>
                     </div>
 
 
@@ -210,30 +214,30 @@ echo $this->getData('nav')->render(); ?>
                                     <tr><td><label><?= $this->getHtml('Permission'); ?></label>
                                     <tr><td>
                                         <span class="checkbox">
-                                            <input id="iPermissionCreate" name="permissioncreate" type="checkbox" value="<?= \phpOMS\Account\PermissionType::CREATE ?>" data-tpl-text="/perm/c" data-tpl-value="/perm/c">
+                                            <input id="iPermissionCreate" name="permissioncreate" type="checkbox" value="<?= PermissionType::CREATE ?>" data-tpl-text="/perm/c" data-tpl-value="/perm/c">
                                             <label for="iPermissionCreate"><?= $this->getHtml('Create') ?></label>
                                         </span>
                                         <span class="checkbox">
-                                            <input id="iPermissionRead" name="permissionread" type="checkbox" value="<?= \phpOMS\Account\PermissionType::READ ?>" data-tpl-text="/perm/r" data-tpl-value="/perm/r">
+                                            <input id="iPermissionRead" name="permissionread" type="checkbox" value="<?= PermissionType::READ ?>" data-tpl-text="/perm/r" data-tpl-value="/perm/r">
                                             <label for="iPermissionRead"><?= $this->getHtml('Read') ?></label>
                                         </span>
                                         <span class="checkbox">
-                                            <input id="iPermissionUpdate" name="permissionupdate" type="checkbox" value="<?= \phpOMS\Account\PermissionType::MODIFY ?>" data-tpl-text="/perm/u" data-tpl-value="/perm/u">
+                                            <input id="iPermissionUpdate" name="permissionupdate" type="checkbox" value="<?= PermissionType::MODIFY ?>" data-tpl-text="/perm/u" data-tpl-value="/perm/u">
                                             <label for="iPermissionUpdate"><?= $this->getHtml('Update') ?></label>
                                         </span>
                                         <span class="checkbox">
-                                            <input id="iPermissionDelete" name="permissiondelete" type="checkbox" value="<?= \phpOMS\Account\PermissionType::DELETE ?>" data-tpl-text="/perm/d" data-tpl-value="/perm/d">
+                                            <input id="iPermissionDelete" name="permissiondelete" type="checkbox" value="<?= PermissionType::DELETE ?>" data-tpl-text="/perm/d" data-tpl-value="/perm/d">
                                             <label for="iPermissionDelete"><?= $this->getHtml('Delete') ?></label>
                                         </span>
                                         <span class="checkbox">
-                                            <input id="iPermissionPermission" name="permissionpermission" type="checkbox" value="<?= \phpOMS\Account\PermissionType::PERMISSION ?>" data-tpl-text="/perm/p" data-tpl-value="/perm/p">
+                                            <input id="iPermissionPermission" name="permissionpermission" type="checkbox" value="<?= PermissionType::PERMISSION ?>" data-tpl-text="/perm/p" data-tpl-value="/perm/p">
                                             <label for="iPermissionPermission"><?= $this->getHtml('Permission') ?></label>
                                         </span>
                                 </table>
                             </div>
                             <div class="portlet-foot">
                                 <input type="hidden" name="permissionref" value="<?= $this->printHtml($group->getId()); ?>">
-                                <input type="hidden" name="permissionowner" value="<?= \phpOMS\Account\PermissionOwner::GROUP ?>">
+                                <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP ?>">
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
                         </form>
