@@ -39,7 +39,7 @@ use phpOMS\Uri\UriFactory;
  */
 $account     = $this->getData('account');
 $permissions = $this->getData('permissions');
-$audits      = $this->getData('auditlogs');
+$audits      = $this->getData('auditlogs') ?? [];
 
 $previous = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/account/settings?id={?id}#{\#}' : '{/prefix}admin/account/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
 $next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/account/settings?id={?id}#{\#}' : '{/prefix}admin/account/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
@@ -285,7 +285,7 @@ echo $this->getData('nav')->render(); ?>
                             <colgroup>
                                 <col style="width: 100px">
                                 <col style="width: 150px">
-                                <col style="width: 75px">
+                                <col style="width: 100px">
                                 <col style="width: 75px">
                                 <col>
                                 <col>
@@ -306,7 +306,7 @@ echo $this->getData('nav')->render(); ?>
                                 <td ><?= $this->getHtml('Date', 'Auditor') ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                            $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
+                            $url = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->getId(); ?>
                                     <td><?= $this->printHtml($audit->getModule()); ?>

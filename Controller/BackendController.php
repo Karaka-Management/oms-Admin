@@ -29,6 +29,7 @@ use phpOMS\DataStorage\Database\RelationType;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Module\ModuleInfo;
+use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
 
 /**
@@ -249,6 +250,27 @@ final class BackendController extends Controller
         $editor = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
         $view->addData('editor', $editor);
 
+        // audit log
+        if ($request->getData('ptype') === 'p') {
+            $view->setData('auditlogs',
+                AuditMapper::withConditional('module', self::MODULE_NAME, [Audit::class])
+                    ::withConditional('type', StringUtils::hash(GroupMapper::class), [Audit::class])
+                    ::withConditional('ref', (string) $request->getData('id') ?? '0', [Audit::class])
+                    ::getBeforePivot((int) $request->getData('audit'), null, 25));
+        } elseif ($request->getData('ptype') === 'n') {
+            $view->setData('auditlogs',
+                AuditMapper::withConditional('module', self::MODULE_NAME, [Audit::class])
+                    ::withConditional('type', StringUtils::hash(GroupMapper::class), [Audit::class])
+                    ::withConditional('ref', (string) $request->getData('id') ?? '0', [Audit::class])
+                    ::getAfterPivot((int) $request->getData('audit'), null, 25));
+        } else {
+            $view->setData('auditlogs',
+                AuditMapper::withConditional('module', self::MODULE_NAME, [Audit::class])
+                    ::withConditional('type', StringUtils::hash(GroupMapper::class), [Audit::class])
+                    ::withConditional('ref', (string) $request->getData('id') ?? '0', [Audit::class])
+                    ::getAfterPivot(0, null, 25));
+        }
+
         return $view;
     }
 
@@ -334,6 +356,15 @@ final class BackendController extends Controller
 
         $groupPermission = GroupMapper::getPermissionForModule($id);
         $view->setData('groupPermissions', $groupPermission);
+
+        // audit log
+        if ($request->getData('ptype') === 'p') {
+            $view->setData('auditlogs', AuditMapper::withConditional('module', (string) $request->getData('id'), [Audit::class])::getBeforePivot((int) $request->getData('audit'), null, 25));
+        } elseif ($request->getData('ptype') === 'n') {
+            $view->setData('auditlogs', AuditMapper::withConditional('module', (string) $request->getData('id'), [Audit::class])::getAfterPivot((int) $request->getData('audit'), null, 25));
+        } else {
+            $view->setData('auditlogs', AuditMapper::withConditional('module', (string) $request->getData('id'), [Audit::class])::getAfterPivot(0, null, 25));
+        }
 
         return $view;
     }

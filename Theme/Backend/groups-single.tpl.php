@@ -16,6 +16,7 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Account\GroupStatus;
 use phpOMS\Account\PermissionOwner;
 use phpOMS\Uri\UriFactory;
+use phpOMS\Message\Http\HttpHeader;
 
 /**
  * @todo Orange-Management/Modules#122
@@ -49,6 +50,10 @@ use phpOMS\Uri\UriFactory;
 $group       = $this->getData('group');
 $permissions = $this->getData('permissions');
 $accounts    = $group->getAccounts();
+$audits      = $this->getData('auditlogs') ?? [];
+
+$previous = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}' : '{/prefix}admin/group/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
+$next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}' : '{/prefix}admin/group/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
 
 echo $this->getData('nav')->render(); ?>
 
@@ -251,24 +256,52 @@ echo $this->getData('nav')->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('AuditLog') ?><i class="fa fa-download floatRight download btn"></i></div>
-                        <table class="default">
+                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor') ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <table class="default fixed">
+                            <colgroup>
+                                <col style="width: 100px">
+                                <col style="width: 150px">
+                                <col style="width: 100px">
+                                <col style="width: 75px">
+                                <col>
+                                <col>
+                                <col>
+                                <col style="width: 125px">
+                                <col style="width: 150px">
+                            </colgroup>
                             <thead>
-                                <tr>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                    <td class="wf-100">Name
+                            <tr>
+                                <td><?= $this->getHtml('ID', '0', '0'); ?>
+                                <td ><?= $this->getHtml('Module', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Type', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Subtype', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Old', 'Auditor') ?>
+                                <td ><?= $this->getHtml('New', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Content', 'Auditor') ?>
+                                <td ><?= $this->getHtml('By', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Date', 'Auditor') ?>
                             <tbody>
-                                <?php $c = 0; foreach ([] as $key => $value) : ++$c; ?>
-                                <tr>
-                                    <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td>
-                                    <td>
-                                <?php endforeach; ?>
-                                <?php if ($c === 0) : ?>
-                                <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                <?php endif; ?>
+                            <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
+                            $url = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
+                                <tr tabindex="0" data-href="<?= $url; ?>">
+                                    <td><?= $audit->getId(); ?>
+                                    <td><?= $this->printHtml($audit->getModule()); ?>
+                                    <td><?= $audit->getType(); ?>
+                                    <td><?= $audit->getSubtype(); ?>
+                                    <td><?= $this->printHtml($audit->getOld()); ?>
+                                    <td><?= $this->printHtml($audit->getNew()); ?>
+                                    <td><?= $this->printHtml($audit->getContent()); ?>
+                                    <td><?= $this->printHtml($audit->getCreatedBy()->getName()); ?>
+                                    <td><?= $audit->getCreatedAt()->format('Y-m-d H:i'); ?>
+                            <?php endforeach; ?>
+                            <?php if ($count === 0) : ?>
+                                <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                            <?php endif; ?>
                         </table>
-                        <div class="portlet-foot"></div>
+                        <div class="portlet-foot">
+                            <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
+                            <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
+                        </div>
                     </div>
                 </div>
             </div>
