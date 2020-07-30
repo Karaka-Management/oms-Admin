@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 
-use \phpOMS\Account\AccountStatus;
+use phpOMS\Account\AccountStatus;
 use phpOMS\Uri\UriFactory;
 
 /**
@@ -21,8 +21,8 @@ use phpOMS\Uri\UriFactory;
  */
 $accounts = $this->getData('accounts') ?? [];
 
-$previous = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \reset($accounts)->getId() . '&ptype=-';
-$next     = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \end($accounts)->getId() . '&ptype=+';
+$previous = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \reset($accounts)->getId() . '&ptype=p';
+$next     = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \end($accounts)->getId() . '&ptype=n';
 
 echo $this->getData('nav')->render(); ?>
 

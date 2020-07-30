@@ -22,7 +22,8 @@ use Modules\Admin\Models\GroupPermissionMapper;
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\NullAccountPermission;
 use Modules\Admin\Models\NullGroupPermission;
-
+use Modules\Auditor\Models\Audit;
+use Modules\Auditor\Models\AuditMapper;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\RelationType;
 use phpOMS\Message\RequestAbstract;
@@ -112,9 +113,9 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
 
-        if ($request->getData('ptype') === '-') {
+        if ($request->getData('ptype') === 'p') {
             $view->setData('accounts', AccountMapper::getBeforePivot((int) ($request->getData('id') ?? 0), null, 25));
-        } elseif ($request->getData('ptype') === '+') {
+        } elseif ($request->getData('ptype') === 'n') {
             $view->setData('accounts', AccountMapper::getAfterPivot((int) ($request->getData('id') ?? 0), null, 25));
         } else {
             $view->setData('accounts', AccountMapper::getAfterPivot(0, null, 25));
@@ -153,6 +154,15 @@ final class BackendController extends Controller
 
         $accGrpSelector = new \Modules\Admin\Theme\Backend\Components\GroupTagSelector\GroupTagSelectorView($this->app->l11nManager, $request, $response);
         $view->addData('grpSelector', $accGrpSelector);
+
+        // audit log
+        if ($request->getData('ptype') === 'p') {
+            $view->setData('auditlogs', AuditMapper::withConditional('createdBy', (int) $request->getData('id'), [Audit::class])::getBeforePivot((int) $request->getData('audit'), null, 25));
+        } elseif ($request->getData('ptype') === 'n') {
+            $view->setData('auditlogs', AuditMapper::withConditional('createdBy', (int) $request->getData('id'), [Audit::class])::getAfterPivot((int) $request->getData('audit'), null, 25));
+        } else {
+            $view->setData('auditlogs', AuditMapper::withConditional('createdBy', (int) $request->getData('id'), [Audit::class])::getAfterPivot(0, null, 25));
+        }
 
         return $view;
     }
@@ -194,9 +204,9 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
 
-        if ($request->getData('ptype') === '-') {
+        if ($request->getData('ptype') === 'p') {
             $view->setData('groups', GroupMapper::getBeforePivot((int) ($request->getData('id') ?? 0), null, 25));
-        } elseif ($request->getData('ptype') === '+') {
+        } elseif ($request->getData('ptype') === 'n') {
             $view->setData('groups', GroupMapper::getAfterPivot((int) ($request->getData('id') ?? 0), null, 25));
         } else {
             $view->setData('groups', GroupMapper::getAfterPivot(0, null, 25));

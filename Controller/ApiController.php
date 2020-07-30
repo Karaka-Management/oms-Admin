@@ -660,7 +660,7 @@ final class ApiController extends Controller
         $collection = new Collection();
         $collection->setName((string) $account->getId());
         $collection->setVirtualPath('/Accounts');
-        $collection->setPath('/Accounts');
+        $collection->setPath('/Modules/Media/Files/Accounts/' . ((string) $account->getId()));
         $collection->setCreatedBy(new NullAccount($request->getHeader()->getAccount()));
 
         CollectionMapper::create($collection);

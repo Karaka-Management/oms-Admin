@@ -20,8 +20,8 @@ use phpOMS\Uri\UriFactory;
  */
 $groups = $this->getData('groups') ?? [];
 
-$previous = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \reset($groups)->getId() . '&ptype=-';
-$next     = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \end($groups)->getId() . '&ptype=+';
+$previous = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \reset($groups)->getId() . '&ptype=p';
+$next     = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \end($groups)->getId() . '&ptype=n';
 
 echo $this->getData('nav')->render(); ?>
 
