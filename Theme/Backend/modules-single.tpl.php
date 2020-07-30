@@ -71,18 +71,18 @@ if ($nav !== null) {
                         </div>
                         <div class="portlet-foot">
                             <?php if (isset($active[$id])) : ?>
-                                <form id="fModuleDeactivate" action="<?= \phpOMS\Uri\UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
+                                <form id="fModuleDeactivate" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
                                     <button id="fModuleDeactivateButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::DEACTIVATE ?>"><?= $this->getHtml('Deactivate'); ?></button>
                                 </form>
                             <?php elseif (isset($installed[$id])) : ?>
                                 <div class="ipt-wrap">
                                     <div class="ipt-first">
-                                        <form id="fModuleUninstall" action="<?= \phpOMS\Uri\UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
+                                        <form id="fModuleUninstall" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
                                             <button id="fModuleUninstallButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::UNINSTALL ?>"><?= $this->getHtml('Uninstall'); ?></button>
                                         </form>
                                     </div>
                                     <div class="ipt-second">
-                                        <form id="fModuleActivate" action="<?= \phpOMS\Uri\UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
+                                        <form id="fModuleActivate" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
                                             <button id="fModuleActivateButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::ACTIVATE ?>"><?= $this->getHtml('Activate'); ?></button>
                                         </form>
                                     </div>
@@ -90,12 +90,12 @@ if ($nav !== null) {
                             <?php elseif (isset($modules[$id])) : ?>
                                 <div class="ipt-wrap">
                                     <div class="ipt-first">
-                                        <form id="fModuleInstall" action="<?= \phpOMS\Uri\UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
+                                        <form id="fModuleInstall" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
                                             <button id="fModuleInstallButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::INSTALL ?>"><?= $this->getHtml('Install'); ?></button>
                                         </form>
                                     </div>
                                     <div class="ipt-second">
-                                        <form id="fModuleDelete" action="<?= \phpOMS\Uri\UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
+                                        <form id="fModuleDelete" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id); ?>" method="POST">
                                             <button id="fModuleDeleteButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::DELETE ?>"><?= $this->getHtml('Delete'); ?></button>
                                         </form>
                                     </div>
@@ -127,7 +127,7 @@ if ($nav !== null) {
                             <tbody>
                                 <?php $c = 0; $groupPermissions = $this->getData('groupPermissions');
                                 foreach ($groupPermissions as $key => $value) : ++$c;
-                                $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="<?= $url; ?>"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>">Group</a>
@@ -150,7 +150,7 @@ if ($nav !== null) {
                         <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor') ?><i class="fa fa-download floatRight download btn"></i></div>
                         <table class="default fixed">
                             <colgroup>
-                                <col style="width: 100px">
+                                <col style="width: 75px">
                                 <col style="width: 150px">
                                 <col style="width: 100px">
                                 <col style="width: 75px">
@@ -158,19 +158,21 @@ if ($nav !== null) {
                                 <col>
                                 <col>
                                 <col style="width: 125px">
+                                <col style="width: 75px">
                                 <col style="width: 150px">
                             </colgroup>
                             <thead>
                             <tr>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                <td ><?= $this->getHtml('Module', 'Auditor') ?>
-                                <td ><?= $this->getHtml('Type', 'Auditor') ?>
-                                <td ><?= $this->getHtml('Subtype', 'Auditor') ?>
-                                <td ><?= $this->getHtml('Old', 'Auditor') ?>
-                                <td ><?= $this->getHtml('New', 'Auditor') ?>
-                                <td ><?= $this->getHtml('Content', 'Auditor') ?>
-                                <td ><?= $this->getHtml('By', 'Auditor') ?>
-                                <td ><?= $this->getHtml('Date', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Module') ?>
+                                <td ><?= $this->getHtml('Type') ?>
+                                <td ><?= $this->getHtml('Subtype') ?>
+                                <td ><?= $this->getHtml('Old') ?>
+                                <td ><?= $this->getHtml('New') ?>
+                                <td ><?= $this->getHtml('Content') ?>
+                                <td ><?= $this->getHtml('By') ?>
+                                <td ><?= $this->getHtml('Ref') ?>
+                                <td ><?= $this->getHtml('Date') ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
                             $url = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
@@ -183,6 +185,7 @@ if ($nav !== null) {
                                     <td><?= $this->printHtml($audit->getNew()); ?>
                                     <td><?= $this->printHtml($audit->getContent()); ?>
                                     <td><?= $this->printHtml($audit->getCreatedBy()->getName()); ?>
+                                    <td><?= $this->printHtml($audit->getRef()); ?>
                                     <td><?= $audit->getCreatedAt()->format('Y-m-d H:i'); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
