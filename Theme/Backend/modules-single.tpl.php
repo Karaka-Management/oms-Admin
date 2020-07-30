@@ -164,15 +164,15 @@ if ($nav !== null) {
                             <thead>
                             <tr>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                <td ><?= $this->getHtml('Module') ?>
-                                <td ><?= $this->getHtml('Type') ?>
-                                <td ><?= $this->getHtml('Subtype') ?>
-                                <td ><?= $this->getHtml('Old') ?>
-                                <td ><?= $this->getHtml('New') ?>
-                                <td ><?= $this->getHtml('Content') ?>
-                                <td ><?= $this->getHtml('By') ?>
-                                <td ><?= $this->getHtml('Ref') ?>
-                                <td ><?= $this->getHtml('Date') ?>
+                                <td ><?= $this->getHtml('Module', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Type', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Subtype', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Old', 'Auditor') ?>
+                                <td ><?= $this->getHtml('New', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Content', 'Auditor') ?>
+                                <td ><?= $this->getHtml('By', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Ref', 'Auditor') ?>
+                                <td ><?= $this->getHtml('Date', 'Auditor') ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
                             $url = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
