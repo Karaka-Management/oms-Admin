@@ -12,11 +12,11 @@
  */
 declare(strict_types=1);
 
-use phpOMS\Account\PermissionType;
 use phpOMS\Account\GroupStatus;
 use phpOMS\Account\PermissionOwner;
-use phpOMS\Uri\UriFactory;
+use phpOMS\Account\PermissionType;
 use phpOMS\Message\Http\HttpHeader;
+use phpOMS\Uri\UriFactory;
 
 /**
  * @todo Orange-Management/Modules#122
