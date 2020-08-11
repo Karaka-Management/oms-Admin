@@ -54,6 +54,10 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email;
 use phpOMS\Version\Version;
+use phpOMS\Auth\LoginReturnType;
+use phpOMS\Model\Message\Notify;
+use phpOMS\Model\Message\Reload;
+use phpOMS\Model\Message\NotifyType;
 
 /**
  * Admin controller class.
@@ -73,6 +77,83 @@ use phpOMS\Version\Version;
  */
 final class ApiController extends Controller
 {
+    /**
+     * Api method to login
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiLogin(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+
+        $login = AccountMapper::login((string) ($request->getData('user') ?? ''), (string) ($request->getData('pass') ?? ''));
+
+        if ($login >= LoginReturnType::OK) {
+            $this->app->sessionManager->set('UID', $login, true);
+            $this->app->sessionManager->save();
+            $response->set($request->getUri()->__toString(), new Reload());
+        } else {
+            $response->set($request->getUri()->__toString(), new Notify(
+                'Login failed due to wrong login information',
+                NotifyType::INFO
+            ));
+        }
+    }
+
+    /**
+     * Api method to login
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiLogout(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+
+        $this->app->sessionManager->remove('UID');
+        $this->app->sessionManager->save();
+
+        $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+        $response->set($request->getUri()->__toString(), [
+            'status'   => NotificationLevel::OK,
+            'title'    => 'Logout successfull',
+            'message'  => 'You are redirected to the login page',
+            'response' => null,
+        ]);
+    }
+
+    /**
+     * Api method to login
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiForgott(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+    }
+
     /**
      * Api method to get settings
      *

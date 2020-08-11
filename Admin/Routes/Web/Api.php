@@ -6,6 +6,33 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
+    '^.*/login(\?.*|$)' => [
+        [
+            'dest' => '\Modules\Admin\Controller\ApiController:apiLogin',
+            'verb' => RouteVerb::SET,
+            'permission' => [
+            ],
+        ],
+    ],
+
+    '^.*/logout(\?.*|$)' => [
+        [
+            'dest' => '\Modules\Admin\Controller\ApiController:apiLogout',
+            'verb' => RouteVerb::SET,
+            'permission' => [
+            ],
+        ],
+    ],
+
+    '^.*/forgott(\?.*|$)' => [
+        [
+            'dest' => '\Modules\Admin\Controller\ApiController:apiForgott',
+            'verb' => RouteVerb::SET,
+            'permission' => [
+            ],
+        ],
+    ],
+
     '^.*/admin/settings(\?.*|$)' => [
         [
             'dest' => '\Modules\Admin\Controller\ApiController:apiSettingsSet',

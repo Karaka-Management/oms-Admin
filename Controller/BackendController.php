@@ -46,6 +46,22 @@ use phpOMS\Views\View;
 final class BackendController extends Controller
 {
     /**
+     * Method which shows the password forgotten
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     */
+    public function viewForgott(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        return new View();
+    }
+
+    /**
      * Method which generates the general settings view.
      *
      * In this view general settings for the entire application can be seen and adjusted. Settings which can be modified
