@@ -38,6 +38,7 @@ use phpOMS\Account\PermissionAbstract;
 use phpOMS\Account\PermissionOwner;
 use phpOMS\Account\PermissionType;
 use phpOMS\Application\ApplicationManager;
+use phpOMS\Auth\LoginReturnType;
 use phpOMS\Localization\Localization;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\RequestMethod;
@@ -47,6 +48,9 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
+use phpOMS\Model\Message\Notify;
+use phpOMS\Model\Message\NotifyType;
+use phpOMS\Model\Message\Reload;
 use phpOMS\System\File\Local\Directory;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
@@ -54,10 +58,6 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email;
 use phpOMS\Version\Version;
-use phpOMS\Auth\LoginReturnType;
-use phpOMS\Model\Message\Notify;
-use phpOMS\Model\Message\Reload;
-use phpOMS\Model\Message\NotifyType;
 
 /**
  * Admin controller class.
