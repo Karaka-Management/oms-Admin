@@ -1366,6 +1366,7 @@ final class ApiController extends Controller
     /**
      * This update logic below is only temp. And will be replaced once the package management is implemented (not part of this application but part of the service provided by the organization website)
      */
+
     /**
      * Api check for updates
      *

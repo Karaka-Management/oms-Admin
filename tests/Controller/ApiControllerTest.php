@@ -43,6 +43,7 @@ use phpOMS\Utils\TestUtils;
 class ApiControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected ApplicationAbstract $app;
+
     protected ModuleAbstract $module;
 
     protected function setUp() : void

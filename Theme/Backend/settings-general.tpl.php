@@ -47,7 +47,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : '' ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -79,23 +79,23 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                     <tbody>
                                         <tr><td>
                                             <label for="iPassword"><?= $this->getHtml('PasswordRegex'); ?></label>
-                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex') ?>"><i class="fa fa-info-circle"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($settings[1000000001]); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
                                         <tr><td>
                                             <label for="iLoginRetries"><?= $this->getHtml('LoginRetries'); ?></label>
-                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries') ?>"><i class="fa fa-info-circle"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries'); ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($settings[1000000005]); ?>" min="-1">
                                         <tr><td>
                                             <label for="iTimeoutPeriod"><?= $this->getHtml('TimeoutPeriod'); ?></label>
-                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod') ?>"><i class="fa fa-info-circle"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod'); ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($settings[1000000002]); ?>">
                                         <tr><td>
                                             <label for="iPasswordChangeInterval"><?= $this->getHtml('PasswordChangeInterval'); ?></label>
-                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval') ?>"><i class="fa fa-info-circle"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval'); ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($settings[1000000003]); ?>">
                                         <tr><td>
                                             <label for="iPasswordHistory"><?= $this->getHtml('PasswordHistory'); ?></label>
-                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory') ?>"><i class="fa fa-info-circle"></i></i>
+                                            <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory'); ?>"><i class="fa fa-info-circle"></i></i>
                                         <tr><td><input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($settings[1000000004]); ?>">
                                 </table>
                             </div>
@@ -127,7 +127,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
             </div>
         </div>
-        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-2' ? ' checked' : '' ?>>
+        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-4">
@@ -147,7 +147,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
-                                            <div class="ipt-second"><input type="submit" name="loadDefaultLocalization" formaction="<?= UriFactory::build('{/api}profile/settings/localization?load=1'); ?>" value="<?= $this->getHtml('Load') ?>"></div>
+                                            <div class="ipt-second"><input type="submit" name="loadDefaultLocalization" formaction="<?= UriFactory::build('{/api}profile/settings/localization?load=1'); ?>" value="<?= $this->getHtml('Load'); ?>"></div>
                                         </div>
                                     <tr><td colspan="2"><label for="iCountries"><?= $this->getHtml('Country'); ?></label>
                                     <tr><td colspan="2">

@@ -26,14 +26,14 @@ $isntalled = $this->getData('isntalled') ?? [];
 <div class="row">
     <div class="col-xs-12">
         <div class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Modules') ?><i class="fa fa-download floatRight download btn"></i></div>
+            <div class="portlet-head"><?= $this->getHtml('Modules'); ?><i class="fa fa-download floatRight download btn"></i></div>
             <table id="moduleList" class="default">
                 <thead>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                    <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                    <td><?= $this->getHtml('Version') ?>
-                    <td><?= $this->getHtml('Status') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                    <td><?= $this->getHtml('Version'); ?>
+                    <td><?= $this->getHtml('Status'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                         <?php $count = 0; foreach ($modules as $key => $module) : ++$count;
                         $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/module/settings?{?}&id=' . $module['name']['internal']);
@@ -42,10 +42,10 @@ $isntalled = $this->getData('isntalled') ?? [];
                             else { $status = ModuleStatus::AVAILABLE; }
                         ?>
                 <tr tabindex="0" data-href="<?= $url; ?>">
-                    <td data-label="<?= $this->getHtml('ID', '0', '0') ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['id']); ?></a>
-                    <td data-label="<?= $this->getHtml('Name') ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['external']); ?></a>
-                    <td data-label="<?= $this->getHtml('Version') ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['version']); ?></a>
-                    <td data-label="<?= $this->getHtml('Status') ?>">
+                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['id']); ?></a>
+                    <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['external']); ?></a>
+                    <td data-label="<?= $this->getHtml('Version'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['version']); ?></a>
+                    <td data-label="<?= $this->getHtml('Status'); ?>">
                         <span class="tag <?php
                             if ($status === ModuleStatus::ACTIVE)
                                 echo 'green';
