@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Admin\tests\Controller\Api;
 
 use Modules\Admin\Models\ModuleStatusUpdateType;
-
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Uri\HttpUri;

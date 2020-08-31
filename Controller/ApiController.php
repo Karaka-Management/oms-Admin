@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Admin\Controller;
 
 use Model\Settings;
-
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
@@ -26,7 +25,6 @@ use Modules\Admin\Models\GroupPermission;
 use Modules\Admin\Models\GroupPermissionMapper;
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
-
 use Modules\Admin\Models\NullAccount;
 use Modules\Admin\Models\PermissionState;
 use Modules\Media\Models\Collection;

@@ -15,15 +15,12 @@ declare(strict_types=1);
 namespace Modules\Admin\tests\Controller;
 
 use Model\CoreSettings;
-
 use Modules\Admin\Models\AccountPermission;
-
 use Modules\Admin\tests\Controller\Api\ApiControllerAccountTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerGroupTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerModuleTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerPermissionTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerSettingsTrait;
-
 use phpOMS\Account\Account;
 use phpOMS\Account\AccountManager;
 use phpOMS\Account\PermissionType;

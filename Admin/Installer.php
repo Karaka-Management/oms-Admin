@@ -17,7 +17,6 @@ namespace Modules\Admin\Admin;
 use phpOMS\Config\SettingsInterface;
 use phpOMS\DataStorage\Database\Connection\SQLiteConnection;
 use phpOMS\DataStorage\Database\DatabasePool;
-
 use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
