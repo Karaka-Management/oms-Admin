@@ -919,9 +919,9 @@ final class ApiController extends Controller
 
         if (empty($module) || empty($status)) {
             $response->set($request->getUri()->__toString(), [
-                'status' => 'warning',
-                'title' => 'Module',
-                'message' => 'Invalid module or status',
+                'status'   => 'warning',
+                'title'    => 'Module',
+                'message'  => 'Invalid module or status',
                 'response' => [],
             ]);
 

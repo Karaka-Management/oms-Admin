@@ -39,13 +39,13 @@ echo $this->getData('nav')->render(); ?>
                     <td><?= $this->getHtml('Activity'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                     <td><?= $this->getHtml('Created'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
-                        <?php $c = 0; foreach ($accounts as $key => $value) : ++$c;
-                        $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
-                        $color = 'darkred';
-                        if ($value->getStatus() === AccountStatus::ACTIVE) { $color = 'green'; }
+                        <?php $c                                                          = 0; foreach ($accounts as $key => $value) : ++$c;
+                        $url                                                              = \phpOMS\Uri\UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
+                        $color                                                            = 'darkred';
+                        if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }
                         elseif ($value->getStatus() === AccountStatus::INACTIVE) { $color = 'darkblue'; }
-                        elseif ($value->getStatus() === AccountStatus::TIMEOUT) { $color = 'purple'; }
-                        elseif ($value->getStatus() === AccountStatus::BANNED) { $color = 'red'; } ?>
+                        elseif ($value->getStatus() === AccountStatus::TIMEOUT) { $color  = 'purple'; }
+                        elseif ($value->getStatus() === AccountStatus::BANNED) { $color   = 'red'; } ?>
                 <tr tabindex="0" data-href="<?= $url; ?>">
                     <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status'. $value->getStatus()); ?></span></a>

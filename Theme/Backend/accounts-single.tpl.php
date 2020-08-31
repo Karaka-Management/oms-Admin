@@ -149,7 +149,7 @@ echo $this->getData('nav')->render(); ?>
                                     <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                             <tbody>
                                 <?php $c = 0; $groups = $account->getGroups(); foreach ($groups as $key => $value) : ++$c;
-                                $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                $url     = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
@@ -308,7 +308,7 @@ echo $this->getData('nav')->render(); ?>
                                 <td ><?= $this->getHtml('Date', 'Auditor'); ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                            $url = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
+                            $url         = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->getId(); ?>
                                     <td><?= $this->printHtml($audit->getModule()); ?>

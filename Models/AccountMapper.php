@@ -215,7 +215,7 @@ final class AccountMapper extends DataMapperAbstract
                 $query->update('account')
                     ->set([
                         'account_password_temp' => '',
-                        'account_lactive' => new \DateTime('now'),
+                        'account_lactive'       => new \DateTime('now'),
                     ])
                     ->where('account_login', '=', $login)
                     ->execute();

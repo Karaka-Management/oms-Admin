@@ -35,11 +35,11 @@ $isntalled = $this->getData('isntalled') ?? [];
                     <td><?= $this->getHtml('Version'); ?>
                     <td><?= $this->getHtml('Status'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
-                        <?php $count = 0; foreach ($modules as $key => $module) : ++$count;
-                        $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/module/settings?{?}&id=' . $module['name']['internal']);
-                            if (isset($active[$module['name']['internal']])) { $status = ModuleStatus::ACTIVE; }
+                        <?php $count                                                          = 0; foreach ($modules as $key => $module) : ++$count;
+                        $url                                                                  = \phpOMS\Uri\UriFactory::build('{/prefix}admin/module/settings?{?}&id=' . $module['name']['internal']);
+                            if (isset($active[$module['name']['internal']])) { $status        = ModuleStatus::ACTIVE; }
                             elseif (isset($installed[$module['name']['internal']])) { $status = ModuleStatus::INACTIVE; }
-                            else { $status = ModuleStatus::AVAILABLE; }
+                            else { $status                                                    = ModuleStatus::AVAILABLE; }
                         ?>
                 <tr tabindex="0" data-href="<?= $url; ?>">
                     <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['id']); ?></a>

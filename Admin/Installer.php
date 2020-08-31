@@ -40,7 +40,7 @@ final class Installer extends InstallerAbstract
         parent::install($dbPool, $info, $cfgHandler);
 
         $sqlite = new SQLiteConnection([
-            'db' => 'sqlite',
+            'db'       => 'sqlite',
             'database' => __DIR__ . '/../../../phpOMS/Localization/Defaults/localization.sqlite',
         ]);
 

@@ -82,10 +82,10 @@ final class GroupMapper extends DataMapperAbstract
      */
     protected static array $hasMany = [
         'accounts' => [
-            'mapper' => AccountMapper::class,
-            'table'  => 'account_group',
+            'mapper'   => AccountMapper::class,
+            'table'    => 'account_group',
             'external' => 'account_group_group',
-            'self'   => 'account_group_account',
+            'self'     => 'account_group_account',
         ],
     ];
 
