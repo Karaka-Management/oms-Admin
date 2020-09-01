@@ -26,15 +26,15 @@ use phpOMS\Stdlib\Base\Enum;
  */
 abstract class ModuleStatusUpdateType extends Enum
 {
-    public const ACTIVATE   = 1;
+    public const ACTIVATE = 1;
 
     public const DEACTIVATE = 2;
 
-    public const INSTALL    = 3;
+    public const INSTALL = 3;
 
-    public const UNINSTALL  = 4;
+    public const UNINSTALL = 4;
 
-    public const DELETE     = 5;
+    public const DELETE = 5;
 
-    public const UPDATE     = 6;
+    public const UPDATE = 6;
 }
