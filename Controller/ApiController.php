@@ -148,7 +148,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiForgott(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
     }
 

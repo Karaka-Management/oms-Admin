@@ -56,7 +56,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewForgott(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         return new View();
     }

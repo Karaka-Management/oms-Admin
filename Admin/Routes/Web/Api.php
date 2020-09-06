@@ -24,9 +24,9 @@ return [
         ],
     ],
 
-    '^.*/forgott(\?.*|$)' => [
+    '^.*/forgot(\?.*|$)' => [
         [
-            'dest'       => '\Modules\Admin\Controller\ApiController:apiForgott',
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiForgot',
             'verb'       => RouteVerb::SET,
             'permission' => [
             ],

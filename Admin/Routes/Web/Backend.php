@@ -6,9 +6,9 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/forgott.*$' => [
+    '^.*/forgot.*$' => [
         [
-            'dest'       => '\Modules\Admin\Controller\BackendController:viewForgott',
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewForgot',
             'verb'       => RouteVerb::GET,
             'permission' => [
             ],
