@@ -30,7 +30,7 @@ class Group extends \phpOMS\Account\Group
      * @var \DateTime
      * @since 1.0.0
      */
-    protected \DateTime $createdAt;
+    protected \DateTimeImmutable $createdAt;
 
     /**
      * Created by.
@@ -66,7 +66,7 @@ class Group extends \phpOMS\Account\Group
     public function __construct(string $name = '')
     {
         $this->createdBy = new NullAccount();
-        $this->createdAt = new \DateTime('now');
+        $this->createdAt = new \DateTimeImmutable('now');
         $this->setName($name);
     }
 
@@ -77,7 +77,7 @@ class Group extends \phpOMS\Account\Group
      *
      * @since 1.0.0
      */
-    public function getCreatedAt() : \DateTime
+    public function getCreatedAt() : \DateTimeInterface
     {
         return $this->createdAt;
     }

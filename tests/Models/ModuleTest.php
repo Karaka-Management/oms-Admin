@@ -39,7 +39,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
     public function testDefault() : void
     {
         self::assertEquals(0, $this->module->getId());
-        self::assertInstanceOf('\DateTime', $this->module->getCreatedAt());
+        self::assertInstanceOf('\DateTimeImmutable', $this->module->getCreatedAt());
         self::assertEquals('', $this->module->getName());
         self::assertEquals('', $this->module->getDescription());
         self::assertEquals(ModuleStatus::INACTIVE, $this->module->getStatus());
