@@ -737,7 +737,7 @@ final class ApiController extends Controller
         $this->createProfileForAccount($account, $request);
 
         $collection = new Collection();
-        $collection->setName((string) $account->getId());
+        $collection->setName(((string) $account->getId()) . ' ' . $account->getName());
         $collection->setVirtualPath('/Accounts');
         $collection->setPath('/Modules/Media/Files/Accounts/' . ((string) $account->getId()));
         $collection->setCreatedBy(new NullAccount($request->getHeader()->getAccount()));
