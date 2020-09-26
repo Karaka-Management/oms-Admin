@@ -27,7 +27,7 @@ class Group extends \phpOMS\Account\Group
     /**
      * Created at.
      *
-     * @var \DateTime
+     * @var \DateTimeImmutable
      * @since 1.0.0
      */
     protected \DateTimeImmutable $createdAt;
