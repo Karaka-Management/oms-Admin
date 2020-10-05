@@ -775,7 +775,7 @@ final class ApiController extends Controller
         );
 
         $this->updateModel($request->getHeader()->getAccount(), $old, $account, function() use($account) : void {
-            $account->setLoginTries((int) $this->app->appSettings->get(null, SettingsENUM::LOGIN_TRIES)['content']);
+            $account->setLoginTries((int) $this->app->appSettings->get(null, SettingsEnum::LOGIN_TRIES)['content']);
             AccountMapper::update($account);
         }, 'account', $request->getOrigin());
     }
