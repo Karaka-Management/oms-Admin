@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
-use Model\Settings;
+use Model\SettingsEnum;
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
@@ -176,8 +176,8 @@ final class ApiController extends Controller
             [
                 'response' => $this->app->appSettings->get(
                     $id !== null ? (int) $id : $id,
-                    $request->getData('name'),
-                    $request->getData('module'),
+                    $request->getData('name') ?? '',
+                    $request->getData('module') ?? null,
                     $group !== null ? (int) $group : $group,
                     $account !== null ? (int) $account : $account
                 ),
@@ -775,7 +775,7 @@ final class ApiController extends Controller
         );
 
         $this->updateModel($request->getHeader()->getAccount(), $old, $account, function() use($account) : void {
-            $account->setLoginTries((int) $this->app->appSettings->get(null, (string) Settings::LOGIN_TRIES));
+            $account->setLoginTries((int) $this->app->appSettings->get(null, SettingsENUM::LOGIN_TRIES)['content']);
             AccountMapper::update($account);
         }, 'account', $request->getOrigin());
     }

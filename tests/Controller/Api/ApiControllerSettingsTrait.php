@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Controller\Api;
 
-use Model\Settings;
+use Model\SettingsEnum;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Uri\HttpUri;
@@ -32,10 +32,10 @@ trait ApiControllerSettingsTrait
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->getHeader()->setAccount(1);
-        $request->setData('name', Settings::PASSWORD_INTERVAL);
+        $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
 
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('90', $response->get('')['response']);
+        self::assertEquals('90', $response->get('')['response']['content']);
     }
 
     /**
@@ -49,14 +49,14 @@ trait ApiControllerSettingsTrait
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->getHeader()->setAccount(1);
-        $request->setData('settings', \json_encode([['name' => Settings::PASSWORD_INTERVAL, 'content' => '60']]));
+        $request->setData('settings', \json_encode([['name' => SettingsEnum::PASSWORD_INTERVAL, 'content' => '60']]));
         $this->module->apiSettingsSet($request, $response);
 
-        $request->setData('name', Settings::PASSWORD_INTERVAL);
+        $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('60', $response->get('')['response']);
+        self::assertEquals('60', $response->get('')['response']['content']);
 
-        $request->setData('settings', \json_encode([['name' => Settings::PASSWORD_INTERVAL, 'content' => '90']]), true);
+        $request->setData('settings', \json_encode([['name' => SettingsEnum::PASSWORD_INTERVAL, 'content' => '90']]), true);
         $this->module->apiSettingsSet($request, $response);
     }
 

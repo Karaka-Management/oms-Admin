@@ -80,23 +80,23 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                         <tr><td>
                                             <label for="iPassword"><?= $this->getHtml('PasswordRegex'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($settings[1000000001]); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
+                                        <tr><td><input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($settings['1000000001']['content']); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
                                         <tr><td>
                                             <label for="iLoginRetries"><?= $this->getHtml('LoginRetries'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($settings[1000000005]); ?>" min="-1">
+                                        <tr><td><input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($settings['1000000005']['content']); ?>" min="-1">
                                         <tr><td>
                                             <label for="iTimeoutPeriod"><?= $this->getHtml('TimeoutPeriod'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($settings[1000000002]); ?>">
+                                        <tr><td><input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($settings['1000000002']['content']); ?>">
                                         <tr><td>
                                             <label for="iPasswordChangeInterval"><?= $this->getHtml('PasswordChangeInterval'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($settings[1000000003]); ?>">
+                                        <tr><td><input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($settings['1000000003']['content']); ?>">
                                         <tr><td>
                                             <label for="iPasswordHistory"><?= $this->getHtml('PasswordHistory'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($settings[1000000004]); ?>">
+                                        <tr><td><input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($settings['1000000004']['content']); ?>">
                                 </table>
                             </div>
                             <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>
@@ -118,7 +118,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                                 <?= $this->getHtml('Log'); ?>
                                             </label>
                                         <tr><td><label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
-                                        <tr><td><input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($settings[1000000007]); ?>" placeholder="&#xf023; /Logs">
+                                        <tr><td><input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($settings['1000000007']['content']); ?>" placeholder="&#xf023; /Logs">
                                 </table>
                             </div>
                             <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>

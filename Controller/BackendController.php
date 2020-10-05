@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
-use Model\Settings;
+use Model\SettingsEnum;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
 use Modules\Admin\Models\GroupMapper;
@@ -79,14 +79,14 @@ final class BackendController extends Controller
     {
         $view     = new View($this->app->l11nManager, $request, $response);
         $settings = $this->app->appSettings->get(null, [
-                Settings::PASSWORD_PATTERN, Settings::LOGIN_TIMEOUT, Settings::PASSWORD_INTERVAL, Settings::PASSWORD_HISTORY, Settings::LOGIN_TRIES, Settings::LOGGING_STATUS, Settings::LOGGING_PATH, Settings::DEFAULT_ORGANIZATION,
-                Settings::LOGIN_STATUS, Settings::DEFAULT_LOCALIZATION, Settings::ADMIN_MAIL,
+                SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_ORGANIZATION,
+                SettingsEnum::LOGIN_STATUS, SettingsEnum::DEFAULT_LOCALIZATION, SettingsEnum::ADMIN_MAIL,
             ]);
 
         $view->setTemplate('/Modules/Admin/Theme/Backend/settings-general');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
         $view->setData('settings', $settings);
-        $view->setData('defaultlocalization', LocalizationMapper::get((int) $settings[Settings::DEFAULT_LOCALIZATION]));
+        $view->setData('defaultlocalization', LocalizationMapper::get((int) $settings[SettingsEnum::DEFAULT_LOCALIZATION]));
 
         return $view;
     }
