@@ -19,6 +19,7 @@ use Modules\Admin\Models\AccountMapper;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Auth\LoginReturnType;
+use phpOMS\Utils\TestUtils;
 
 /**
  * @testdox Modules\Admin\tests\Models\AccountMapperTest: Account database mapper
@@ -99,5 +100,41 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
     public function testValidLogin() : void
     {
         self::assertGreaterThan(0, AccountMapper::login('admin', 'orange'));
+    }
+
+    public function testInvalidLoginTries() : void
+    {
+        $accountR = AccountMapper::get(1);
+        $accountR->setLoginTries(0);
+        AccountMapper::update($accountR);
+
+        self::assertEquals(LoginReturnType::WRONG_INPUT_EXCEEDED, AccountMapper::login($accountR->getName(), 'orange'));
+
+        $accountR->setLoginTries(3);
+        AccountMapper::update($accountR);
+    }
+
+    public function testInvalidLoginAccountStatus() : void
+    {
+        $accountR = AccountMapper::get(1);
+        $accountR->setStatus(AccountStatus::BANNED);
+        AccountMapper::update($accountR);
+
+        self::assertEquals(LoginReturnType::INACTIVE, AccountMapper::login($accountR->getName(), 'orange'));
+
+        $accountR->setStatus(AccountStatus::ACTIVE);
+        AccountMapper::update($accountR);
+    }
+
+    public function testEmptyLoginPassword() : void
+    {
+        $accountR = AccountMapper::get(1);
+        TestUtils::setMember($accountR, 'password', '');
+        AccountMapper::update($accountR);
+
+        self::assertEquals(LoginReturnType::EMPTY_PASSWORD, AccountMapper::login($accountR->getName(), 'orange'));
+
+        $accountR->generatePassword('orange');
+        AccountMapper::update($accountR);
     }
 }

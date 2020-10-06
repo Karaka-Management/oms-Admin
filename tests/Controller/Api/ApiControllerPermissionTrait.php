@@ -18,6 +18,7 @@ use phpOMS\Account\PermissionOwner;
 use phpOMS\Account\PermissionType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Uri\HttpUri;
 
 trait ApiControllerPermissionTrait
@@ -99,7 +100,7 @@ trait ApiControllerPermissionTrait
         $request->setData('permissionowner', PermissionOwner::GROUP);
 
         $this->module->apiAddGroupPermission($request, $response);
-        self::assertEquals('validation', $response->get('permission_create')::TYPE);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**
@@ -117,7 +118,7 @@ trait ApiControllerPermissionTrait
         $request->setData('permissionref', 1);
 
         $this->module->apiAddGroupPermission($request, $response);
-        self::assertEquals('validation', $response->get('permission_create')::TYPE);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**
@@ -224,7 +225,7 @@ trait ApiControllerPermissionTrait
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
 
         $this->module->apiAddAccountPermission($request, $response);
-        self::assertEquals('validation', $response->get('permission_create')::TYPE);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**
@@ -242,7 +243,7 @@ trait ApiControllerPermissionTrait
         $request->setData('permissionref', 1);
 
         $this->module->apiAddAccountPermission($request, $response);
-        self::assertEquals('validation', $response->get('permission_create')::TYPE);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**

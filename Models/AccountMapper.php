@@ -225,7 +225,7 @@ final class AccountMapper extends DataMapperAbstract
 
             return LoginReturnType::WRONG_PASSWORD;
         } catch (\Exception $e) {
-            return LoginReturnType::FAILURE;
+            return LoginReturnType::FAILURE; // @codeCoverageIgnore
         }
     }
 }

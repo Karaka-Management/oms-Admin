@@ -18,6 +18,7 @@ use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Uri\HttpUri;
 
 trait ApiControllerAccountTrait
@@ -54,6 +55,7 @@ trait ApiControllerAccountTrait
         $request->getHeader()->setAccount(1);
         $request->setData('id', 1);
         $request->setData('email', 'oms@orange-management.de');
+        $request->setData('password', 'orange');
 
         $this->module->apiAccountUpdate($request, $response);
         $this->module->apiAccountGet($request, $response);
@@ -104,6 +106,26 @@ trait ApiControllerAccountTrait
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
+    public function testApiAccountCreateWithCustomLocale() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->getHeader()->setAccount(1);
+        $request->setData('login', 'guest2');
+        $request->setData('password', 'guest2');
+        $request->setData('name1', 'Guest2');
+        $request->setData('email', 'guest2@email.com');
+        $request->setData('type', AccountType::USER);
+        $request->setData('status', AccountStatus::INACTIVE);
+        $request->setData('locale', 'de_DE');
+
+        $this->module->apiAccountCreate($request, $response);
+
+        self::assertEquals('guest2', $response->get('')['response']->getName());
+        self::assertGreaterThan(0, $response->get('')['response']->getId());
+    }
+
     /**
      * @testdox A user can be deleted
      * @covers Modules\Admin\Controller\ApiController
@@ -143,7 +165,7 @@ trait ApiControllerAccountTrait
         $request->setData('description', 'test description');
 
         $this->module->apiAccountCreate($request, $response);
-        self::assertEquals('validation', $response->get('account_create')::TYPE);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**

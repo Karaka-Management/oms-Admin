@@ -17,6 +17,7 @@ namespace Modules\Admin\tests\Controller\Api;
 use phpOMS\Account\GroupStatus;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Uri\HttpUri;
 
 trait ApiControllerGroupTrait
@@ -123,7 +124,7 @@ trait ApiControllerGroupTrait
         $request->setData('description', 'test description');
 
         $this->module->apiGroupCreate($request, $response);
-        self::assertEquals('validation', $response->get('group_create')::TYPE);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**

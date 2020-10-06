@@ -31,6 +31,7 @@ use phpOMS\Module\ModuleAbstract;
 use phpOMS\Module\ModuleManager;
 use phpOMS\Router\WebRouter;
 use phpOMS\Utils\TestUtils;
+use Modules\Admin\tests\Controller\Api\ApiControllerApplicationTrait;
 
 /**
  * @testdox Modules\Admin\tests\Controller\ApiControllerTest: Admin api controller
@@ -89,4 +90,5 @@ class ApiControllerTest extends \PHPUnit\Framework\TestCase
     use ApiControllerGroupTrait;
     use ApiControllerPermissionTrait;
     use ApiControllerModuleTrait;
+    use ApiControllerApplicationTrait;
 }

@@ -17,6 +17,7 @@ namespace Modules\Admin\tests\Controller\Api;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Uri\HttpUri;
 
 trait ApiControllerModuleTrait
@@ -65,6 +66,8 @@ trait ApiControllerModuleTrait
 
         $request->setData('status', ModuleStatusUpdateType::INSTALL);
         $this->module->apiModuleStatusUpdate($request, $response);
+
+        self::assertEquals(RequestStatusCode::R_403, $response->getHeader()->getStatusCode());
         self::assertNull($response->get('module_stutus_update'));
     }
 
@@ -80,10 +83,10 @@ trait ApiControllerModuleTrait
 
         $request->getHeader()->setAccount(1);
         $request->setData('module', 'TestModule');
-
         $request->setData('status', 99);
+
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals('warning', $response->get('')['status']);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**
@@ -98,10 +101,10 @@ trait ApiControllerModuleTrait
 
         $request->getHeader()->setAccount(1);
         $request->setData('module', 'invalid');
-
         $request->setData('status', ModuleStatusUpdateType::INSTALL);
+
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals('warning', $response->get('')['status']);
+        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
     }
 
     /**

@@ -17,6 +17,7 @@ namespace Modules\Admin\tests\Controller\Api;
 use Model\SettingsEnum;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Uri\HttpUri;
 
 trait ApiControllerSettingsTrait
@@ -110,6 +111,6 @@ trait ApiControllerSettingsTrait
         $request->setData('account_id', 1);
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
-        self::assertEquals([], $response->get('')['response']);
+        self::assertEquals(RequestStatusCode::R_403, $response->getHeader()->getStatusCode());
     }
 }

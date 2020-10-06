@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Orange Management
  *
@@ -10,6 +11,7 @@
  * @version   1.0.0
  * @link      https://orange-management.org
  */
+
 declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
@@ -88,7 +90,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiLogin(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiLogin(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
@@ -119,7 +121,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiLogout(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiLogout(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
@@ -148,7 +150,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiForgot(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
     }
 
@@ -165,7 +167,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSettingsGet(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $id      = $request->getData('id');
         $group   = $request->getData('group');
@@ -198,7 +200,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSettingsSet(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $dataSettings = $request->getDataJson('settings');
 
@@ -214,7 +216,7 @@ final class ApiController extends Controller
                 $request->getHeader()->getAccount(),
                 $this->app->appSettings->get($id, $name, $module, $group, $account),
                 $data,
-                function() use($id, $name, $content, $module, $group, $account) : void {
+                function () use ($id, $name, $content, $module, $group, $account): void {
                     $this->app->appSettings->set([
                         [
                             'id'      => $id,
@@ -247,16 +249,25 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $requestAccount = $request->getHeader()->getAccount();
         $accountId      = (int) $request->getData('account_id');
 
-        if ($requestAccount !== $accountId
+        if (
+            $requestAccount !== $accountId
             && !$this->app->accountManager->get($accountId)->hasPermission(
-                PermissionType::MODIFY, $this->app->orgId, $this->app->appName, self::MODULE_NAME, PermissionState::ACCOUNT_SETTINGS, $accountId)
+                PermissionType::MODIFY,
+                $this->app->orgId,
+                $this->app->appName,
+                self::MODULE_NAME,
+                PermissionState::ACCOUNT_SETTINGS,
+                $accountId
+            )
         ) {
             $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_403);
+
             return;
         }
 
@@ -380,12 +391,13 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $appManager = new ApplicationManager($this->app->moduleManager);
 
         $app = $request->getData('appSrc');
         if (!\file_exists(__DIR__ . '/../../../' . $app)) {
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
             return;
         }
 
@@ -411,7 +423,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         if (\file_exists(__DIR__ . '/../../../' . $request->getData('appDest') . '/css')) {
             Directory::delete(__DIR__ . '/../../../' . $request->getData('appDest') . '/css');
@@ -439,7 +451,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $group = GroupMapper::get((int) $request->getData('id'));
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully returned', $group);
@@ -458,7 +470,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var Group $old */
         $old = clone GroupMapper::get((int) $request->getData('id'));
@@ -476,7 +488,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateGroupFromRequest(RequestAbstract $request) : Group
+    private function updateGroupFromRequest(RequestAbstract $request): Group
     {
         $group = GroupMapper::get((int) $request->getData('id'));
         $group->setName((string) ($request->getData('name') ?? $group->getName()));
@@ -496,7 +508,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function validateGroupCreate(RequestAbstract $request) : array
+    private function validateGroupCreate(RequestAbstract $request): array
     {
         $val = [];
         if (($val['name'] = empty($request->getData('name')))
@@ -521,10 +533,11 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupCreate(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         if (!empty($val = $this->validateGroupCreate($request))) {
             $response->set('group_create', new FormValidation($val));
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
 
             return;
         }
@@ -543,7 +556,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function createGroupFromRequest(RequestAbstract $request) : Group
+    private function createGroupFromRequest(RequestAbstract $request): Group
     {
         $group = new Group();
         $group->setCreatedBy(new NullAccount($request->getHeader()->getAccount()));
@@ -568,7 +581,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $group = GroupMapper::get((int) $request->getData('id'));
         $this->deleteModel($request->getHeader()->getAccount(), $group, GroupMapper::class, 'group', $request->getOrigin());
@@ -588,7 +601,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $response->getHeader()->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
@@ -612,7 +625,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var Account $account */
         $account = AccountMapper::get((int) $request->getData('id'));
@@ -632,7 +645,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $response->getHeader()->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
@@ -656,7 +669,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var Account[] $accounts */
         $accounts = \array_values(AccountMapper::find((string) ($request->getData('search') ?? '')));
@@ -696,7 +709,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function validateAccountCreate(RequestAbstract $request) : array
+    private function validateAccountCreate(RequestAbstract $request): array
     {
         $val = [];
         if (($val['name1'] = empty($request->getData('name1')))
@@ -723,10 +736,11 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountCreate(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         if (!empty($val = $this->validateAccountCreate($request))) {
             $response->set('account_create', new FormValidation($val));
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
 
             return;
         }
@@ -759,7 +773,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function createProfileForAccount(Account $account, RequestAbstract $request) : void
+    private function createProfileForAccount(Account $account, RequestAbstract $request): void
     {
         if (((string) ($request->getData('password') ?? '')) === ''
             || ((string) ($request->getData('login') ?? '')) === ''
@@ -774,7 +788,7 @@ final class ApiController extends Controller
             $request
         );
 
-        $this->updateModel($request->getHeader()->getAccount(), $old, $account, function() use($account) : void {
+        $this->updateModel($request->getHeader()->getAccount(), $old, $account, function () use ($account): void {
             $account->setLoginTries((int) $this->app->appSettings->get(null, SettingsEnum::LOGIN_TRIES)['content']);
             AccountMapper::update($account);
         }, 'account', $request->getOrigin());
@@ -789,7 +803,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function createAccountFromRequest(RequestAbstract $request) : Account
+    private function createAccountFromRequest(RequestAbstract $request): Account
     {
         $account = new Account();
         $account->setStatus((int) ($request->getData('status') ?? AccountStatus::INACTIVE));
@@ -810,11 +824,11 @@ final class ApiController extends Controller
         } else {
             $locale = \explode('_', $request->getData('locale') ?? '');
 
-            $l11n = $account->getL11n();
-            $l11n->loadFromLanguage(
-                $locale[0] ?? $this->app->l11nServer->getLanguage(),
-                $locale[1] ?? $this->app->l11nServer->getCountry()
-            );
+            $account->getL11n()
+                ->loadFromLanguage(
+                    $locale[0] ?? $this->app->l11nServer->getLanguage(),
+                    $locale[1] ?? $this->app->l11nServer->getCountry()
+                );
         }
 
         return $account;
@@ -833,7 +847,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var Account $account */
         $account = AccountMapper::get((int) ($request->getData('id')));
@@ -854,7 +868,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var Account $old */
         $old = clone AccountMapper::get((int) $request->getData('id'));
@@ -878,7 +892,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateAccountFromRequest(RequestAbstract $request, bool $allowPassword = false) : Account
+    private function updateAccountFromRequest(RequestAbstract $request, bool $allowPassword = false): Account
     {
         /** @var Account $account */
         $account = AccountMapper::get((int) ($request->getData('id')));
@@ -910,7 +924,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $module = $request->getData('module');
         $status = (int) $request->getData('status');
@@ -952,10 +966,19 @@ final class ApiController extends Controller
             default:
                 $done = false;
                 $msg  = 'Unknown module status change request.';
+                $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
         }
         $this->app->eventManager->trigger('POST:Module:Admin-module-status', '', ['status' => $status, 'module' => $module]);
 
-        $this->fillJsonResponse($request, $response, $done ? NotificationLevel::OK : NotificationLevel::WARNING, 'Module', $msg, []);
+        if (!$done) {
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+        }
+
+        $this->fillJsonResponse(
+            $request, $response,
+            $done ? NotificationLevel::OK : NotificationLevel::WARNING,
+            'Module', $msg, []
+        );
     }
 
     /**
@@ -971,7 +994,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var AccountPermission $account */
         $account = AccountPermissionMapper::get((int) $request->getData('id'));
@@ -991,7 +1014,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var GroupPermission $group */
         $group = GroupPermissionMapper::get((int) $request->getData('id'));
@@ -1011,7 +1034,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var GroupPermission $permission */
         $permission = GroupPermissionMapper::get((int) $request->getData('id'));
@@ -1032,7 +1055,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get((int) $request->getData('id'));
@@ -1053,7 +1076,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiUserPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiUserPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get((int) $request->getData('id'));
@@ -1074,10 +1097,11 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->set('permission_create', new FormValidation($val));
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
 
             return;
         }
@@ -1086,6 +1110,7 @@ final class ApiController extends Controller
 
         if (!($permission instanceof GroupPermission)) {
             $response->set('permission_create', new FormValidation($val));
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
 
             return;
         }
@@ -1107,10 +1132,11 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->set('permission_create', new FormValidation($val));
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
 
             return;
         }
@@ -1119,6 +1145,7 @@ final class ApiController extends Controller
 
         if (!($permission instanceof AccountPermission)) {
             $response->set('permission_create', new FormValidation($val));
+            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
 
             return;
         }
@@ -1140,7 +1167,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function createAccountModelPermission(PermissionAbstract $permission, int $account, string $ip) : void
+    public function createAccountModelPermission(PermissionAbstract $permission, int $account, string $ip): void
     {
         $this->createModel($account, $permission, AccountPermissionMapper::class, 'account-permission', $ip);
     }
@@ -1154,7 +1181,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function validatePermissionCreate(RequestAbstract $request) : array
+    private function validatePermissionCreate(RequestAbstract $request): array
     {
         $val = [];
         if (($val['permissionowner'] = !PermissionOwner::isValidValue((int) $request->getData('permissionowner')))
@@ -1175,7 +1202,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function createPermissionFromRequest(RequestAbstract $request) : PermissionAbstract
+    public function createPermissionFromRequest(RequestAbstract $request): PermissionAbstract
     {
         /** @var AccountPermission|GroupPermission $permission */
         $permission = ((int) $request->getData('permissionowner')) === PermissionOwner::GROUP ? new GroupPermission((int) $request->getData('permissionref')) : new AccountPermission((int) $request->getData('permissionref'));
@@ -1187,10 +1214,10 @@ final class ApiController extends Controller
         $permission->setComponent(empty($request->getData('permissioncomponent')) ? null : (int) $request->getData('permissioncomponent'));
         $permission->setPermission(
             (int) ($request->getData('permissioncreate') ?? 0)
-            | (int) ($request->getData('permissionread') ?? 0)
-            | (int) ($request->getData('permissionupdate') ?? 0)
-            | (int) ($request->getData('permissiondelete') ?? 0)
-            | (int) ($request->getData('permissionpermission') ?? 0)
+                | (int) ($request->getData('permissionread') ?? 0)
+                | (int) ($request->getData('permissionupdate') ?? 0)
+                | (int) ($request->getData('permissiondelete') ?? 0)
+                | (int) ($request->getData('permissionpermission') ?? 0)
         );
 
         return $permission;
@@ -1209,7 +1236,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var AccountPermission $old */
         $old = clone AccountPermissionMapper::get((int) $request->getData('id'));
@@ -1234,7 +1261,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         /** @var GroupPermission $old */
         $old = clone GroupPermissionMapper::get((int) $request->getData('id'));
@@ -1256,7 +1283,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updatePermissionFromRequest(PermissionAbstract $permission, RequestAbstract $request) : PermissionAbstract
+    private function updatePermissionFromRequest(PermissionAbstract $permission, RequestAbstract $request): PermissionAbstract
     {
         $permission->setUnit(empty($request->getData('permissionunit')) ? $permission->getUnit() : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? $permission->getApp() : (string) $request->getData('permissionapp'));
@@ -1268,8 +1295,7 @@ final class ApiController extends Controller
             | (int) ($request->getData('permissionread') ?? 0)
             | (int) ($request->getData('permissionupdate') ?? 0)
             | (int) ($request->getData('permissiondelete') ?? 0)
-            | (int) ($request->getData('permissionpermission') ?? 0)
-        );
+            | (int) ($request->getData('permissionpermission') ?? 0));
 
         return $permission;
     }
@@ -1287,7 +1313,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddGroupToAccount(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddGroupToAccount(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $account = (int) $request->getData('account');
         $groups  = \array_map('intval', $request->getDataList('igroup-idlist'));
@@ -1309,7 +1335,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddAccountToGroup(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddAccountToGroup(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $group    = (int) $request->getData('group');
         $accounts = \array_map('intval', $request->getDataList('iaccount-idlist'));
@@ -1331,9 +1357,9 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiReInit(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiReInit(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
-        $directories = \glob(__DIR__ . '/../../../Web/*' , \GLOB_ONLYDIR);
+        $directories = \glob(__DIR__ . '/../../../Web/*', \GLOB_ONLYDIR);
 
         if ($directories !== false) {
             foreach ($directories as $directory) {
@@ -1381,7 +1407,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         // this is only a temp... in the future this logic will change but for current purposes this is the easiest way to implement updates
         $request = new HttpRequest(new HttpUri('https://api.github.com/repos/Orange-Management/Updates/contents'));
@@ -1433,7 +1459,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiUpdateFile(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiUpdateFile(RequestAbstract $request, ResponseAbstract $response, $data = null): void
     {
         $this->apiUpdate([[
             'name'         => 'temp.json',
@@ -1450,7 +1476,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function apiUpdate(array $toUpdate) : void
+    private function apiUpdate(array $toUpdate): void
     {
         // this is only a temp... in the future this logic will change but for current purposes this is the easiest way to implement updates
 
@@ -1472,7 +1498,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function downloadUpdate(string $url, string $dest) : void
+    private function downloadUpdate(string $url, string $dest): void
     {
         // this is only a temp... in the future this logic will change but for current purposes this is the easiest way to implement updates
         $request = new HttpRequest(new HttpUri($url));
@@ -1491,7 +1517,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function runUpdate(string $updateFile) : void
+    private function runUpdate(string $updateFile): void
     {
     }
 }
