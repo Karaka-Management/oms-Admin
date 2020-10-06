@@ -17,6 +17,7 @@ namespace Modules\Admin\tests\Controller;
 use Model\CoreSettings;
 use Modules\Admin\Models\AccountPermission;
 use Modules\Admin\tests\Controller\Api\ApiControllerAccountTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerApplicationTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerGroupTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerModuleTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerPermissionTrait;
@@ -31,7 +32,6 @@ use phpOMS\Module\ModuleAbstract;
 use phpOMS\Module\ModuleManager;
 use phpOMS\Router\WebRouter;
 use phpOMS\Utils\TestUtils;
-use Modules\Admin\tests\Controller\Api\ApiControllerApplicationTrait;
 
 /**
  * @testdox Modules\Admin\tests\Controller\ApiControllerTest: Admin api controller
