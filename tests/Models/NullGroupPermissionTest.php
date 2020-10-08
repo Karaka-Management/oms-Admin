@@ -21,11 +21,19 @@ use Modules\Admin\Models\NullGroupPermission;
  */
 final class NullGroupPermissionTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @covers Modules\Admin\Models\NullGroupPermission
+     * @group module
+     */
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\GroupPermission', new NullGroupPermission());
     }
 
+    /**
+     * @covers Modules\Admin\Models\NullGroupPermission
+     * @group module
+     */
     public function testId() : void
     {
         $null = new NullGroupPermission(2);

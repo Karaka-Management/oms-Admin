@@ -21,6 +21,10 @@ use phpOMS\Uri\HttpUri;
 
 trait ApiControllerApplicationTrait
 {
+    /**
+     * @covers Modules\Admin\Controller\Apicontroller
+     * @group module
+     */
     public function testApiInvalidAppplicationPathInstall() : void
     {
         $response = new HttpResponse();

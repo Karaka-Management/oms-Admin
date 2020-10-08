@@ -106,6 +106,10 @@ trait ApiControllerAccountTrait
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
     public function testApiAccountCreateWithCustomLocale() : void
     {
         $response = new HttpResponse();

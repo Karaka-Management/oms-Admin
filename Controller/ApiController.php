@@ -396,7 +396,7 @@ final class ApiController extends Controller
         $appManager = new ApplicationManager($this->app->moduleManager);
 
         $app = $request->getData('appSrc');
-        if (!\file_exists(__DIR__ . '/../../../' . $app)) {
+        if (!\is_dir(__DIR__ . '/../../../' . $app)) {
             $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
             return;
         }
@@ -425,11 +425,11 @@ final class ApiController extends Controller
      */
     public function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        if (\file_exists(__DIR__ . '/../../../' . $request->getData('appDest') . '/css')) {
+        if (\is_dir(__DIR__ . '/../../../' . $request->getData('appDest') . '/css')) {
             Directory::delete(__DIR__ . '/../../../' . $request->getData('appDest') . '/css');
         }
 
-        if (\file_exists(__DIR__ . '/../../../' . $request->getData('appDest') . '/Themes/' . $request->getData('theme') . '/css')) {
+        if (\is_dir(__DIR__ . '/../../../' . $request->getData('appDest') . '/Themes/' . $request->getData('theme') . '/css')) {
             Directory::copy(
                 __DIR__ . '/../../../' . $request->getData('appDest') . '/Themes/' . $request->getData('theme') . '/css',
                 __DIR__ . '/../../../' . $request->getData('appDest') . '/css',
@@ -1363,21 +1363,21 @@ final class ApiController extends Controller
 
         if ($directories !== false) {
             foreach ($directories as $directory) {
-                if (\file_exists($path = $directory . '/Routes.php')) {
+                if (\is_file($path = $directory . '/Routes.php')) {
                     \file_put_contents($path, '<?php return [];');
                 }
 
-                if (\file_exists($path = $directory . '/Hooks.php')) {
+                if (\is_file($path = $directory . '/Hooks.php')) {
                     \file_put_contents($path, '<?php return [];');
                 }
             }
         }
 
-        if (\file_exists($path = __DIR__ . '/../../../Console/Routes.php')) {
+        if (\is_file($path = __DIR__ . '/../../../Console/Routes.php')) {
             \file_put_contents($path, '<?php return [];');
         }
 
-        if (\file_exists($path = __DIR__ . '/../../../Socket/Routes.php')) {
+        if (\is_file($path = __DIR__ . '/../../../Socket/Routes.php')) {
             \file_put_contents($path, '<?php return [];');
         }
 
@@ -1423,9 +1423,9 @@ final class ApiController extends Controller
             $name = \explode('_', $file['name']);
             $path = '';
 
-            if (\file_exists(__DIR__ . '/../../../' . $name[0])) {
+            if (\is_dir(__DIR__ . '/../../../' . $name[0])) {
                 $path = __DIR__ . '/../../../' . $name[0];
-            } elseif (\file_exists(__DIR__ . '/../../' . $name[0])) {
+            } elseif (\is_dir(__DIR__ . '/../../' . $name[0])) {
                 $path = __DIR__ . '/../../' . $name[0];
             }
 

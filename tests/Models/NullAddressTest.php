@@ -21,11 +21,19 @@ use Modules\Admin\Models\NullAddress;
  */
 final class NullAddressTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @covers Modules\Admin\Models\NullAddress
+     * @group module
+     */
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\Address', new NullAddress());
     }
 
+    /**
+     * @covers Modules\Admin\Models\NullAddress
+     * @group module
+     */
     public function testId() : void
     {
         $null = new NullAddress(2);

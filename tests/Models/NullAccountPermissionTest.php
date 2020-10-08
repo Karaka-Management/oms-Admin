@@ -21,11 +21,19 @@ use Modules\Admin\Models\NullAccountPermission;
  */
 final class NullAccountPermissionTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @covers Modules\Admin\Models\NullAccountPermission
+     * @group module
+     */
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\AccountPermission', new NullAccountPermission());
     }
 
+    /**
+     * @covers Modules\Admin\Models\NullAccountPermission
+     * @group module
+     */
     public function testId() : void
     {
         $null = new NullAccountPermission(2);

@@ -102,6 +102,10 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         self::assertGreaterThan(0, AccountMapper::login('admin', 'orange'));
     }
 
+    /**
+     * @covers Modules\Admin\Models\AccountMapper
+     * @group module
+     */
     public function testInvalidLoginTries() : void
     {
         $accountR = AccountMapper::get(1);
@@ -114,6 +118,10 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         AccountMapper::update($accountR);
     }
 
+    /**
+     * @covers Modules\Admin\Models\AccountMapper
+     * @group module
+     */
     public function testInvalidLoginAccountStatus() : void
     {
         $accountR = AccountMapper::get(1);
@@ -126,6 +134,10 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         AccountMapper::update($accountR);
     }
 
+    /**
+     * @covers Modules\Admin\Models\AccountMapper
+     * @group module
+     */
     public function testEmptyLoginPassword() : void
     {
         $accountR = AccountMapper::get(1);

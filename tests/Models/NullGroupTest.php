@@ -21,11 +21,19 @@ use Modules\Admin\Models\NullGroup;
  */
 final class NullGroupTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @covers Modules\Admin\Models\NullGroup
+     * @group module
+     */
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\Group', new NullGroup());
     }
 
+    /**
+     * @covers Modules\Admin\Models\NullGroup
+     * @group module
+     */
     public function testId() : void
     {
         $null = new NullGroup(2);

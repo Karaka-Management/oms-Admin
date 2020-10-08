@@ -42,6 +42,9 @@ class ApiControllerTest extends \PHPUnit\Framework\TestCase
 {
     protected ApplicationAbstract $app;
 
+    /**
+     * @var \Modules\Admin\Controller\ApiController
+     */
     protected ModuleAbstract $module;
 
     protected function setUp() : void

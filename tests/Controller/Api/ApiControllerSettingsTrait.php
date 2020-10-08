@@ -61,6 +61,10 @@ trait ApiControllerSettingsTrait
         $this->module->apiSettingsSet($request, $response);
     }
 
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
     public function testApiAccountLocalizationLoadSet() : void
     {
         $response = new HttpResponse();
@@ -82,6 +86,10 @@ trait ApiControllerSettingsTrait
         self::assertEquals($l11n->getLanguage(), 'en');
     }
 
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
     public function testApiAccountLocalizationSet() : void
     {
         $response = new HttpResponse();
@@ -102,6 +110,10 @@ trait ApiControllerSettingsTrait
         self::assertEquals($l11n->getCurrency(), 'EUR');
     }
 
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
     public function testInvalidPermissionAccountLocalizationSet() : void
     {
         $response = new HttpResponse();
