@@ -42,8 +42,18 @@
                 "primary": true,
                 "autoincrement": true
             },
-            "address_street": {
-                "name": "address_street",
+            "address_name": {
+                "name": "address_name",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "address_addition": {
+                "name": "address_addition",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "address_address": {
+                "name": "address_address",
                 "type": "VARCHAR(255)",
                 "null": false
             },
@@ -55,7 +65,8 @@
             "address_state": {
                 "name": "address_state",
                 "type": "VARCHAR(255)",
-                "null": false
+                "null": true,
+                "default": null
             },
             "address_city": {
                 "name": "address_city",
@@ -64,9 +75,16 @@
             },
             "address_country": {
                 "name": "address_country",
-                "type": "INT",
+                "type": "VARCHAR(2)",
+                "null": true,
+                "default": null,
                 "foreignTable": "country",
-                "foreignKey": "country_id"
+                "foreignKey": "country_code2"
+            },
+            "address_type": {
+                "name": "address_type",
+                "type": "INT",
+                "null": false
             }
         }
     },
@@ -615,7 +633,7 @@
             },
             "account_name1": {
                 "name": "account_name1",
-                "type": "VARCHAR(50)",
+                "type": "VARCHAR(255)",
                 "null": false,
                 "annotations": {
                     "gdpr": true
@@ -623,7 +641,7 @@
             },
             "account_name2": {
                 "name": "account_name2",
-                "type": "VARCHAR(50)",
+                "type": "VARCHAR(255)",
                 "null": false,
                 "annotations": {
                     "gdpr": true
@@ -631,7 +649,7 @@
             },
             "account_name3": {
                 "name": "account_name3",
-                "type": "VARCHAR(50)",
+                "type": "VARCHAR(255)",
                 "null": false,
                 "annotations": {
                     "gdpr": true
