@@ -54,7 +54,7 @@ final class AddressMapper extends DataMapperAbstract
     protected static array $ownsOne = [
         'country' => [
             'mapper' => CountryMapper::class,
-            'self'   => 'address_country',
+            'external'   => 'address_country',
             'by'            => 'code2',
             'column'        => 'code2',
             'conditional'   => true,

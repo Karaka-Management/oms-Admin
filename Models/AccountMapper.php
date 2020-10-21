@@ -61,7 +61,7 @@ final class AccountMapper extends DataMapperAbstract
     protected static array $ownsOne = [
         'localization'  => [
             'mapper' => LocalizationMapper::class,
-            'self'   => 'account_localization',
+            'external'   => 'account_localization',
         ],
     ];
 
@@ -75,8 +75,8 @@ final class AccountMapper extends DataMapperAbstract
         'groups' => [
             'mapper'   => GroupMapper::class,
             'table'    => 'account_group',
-            'external' => 'account_group_account',
-            'self'     => 'account_group_group',
+            'external' => 'account_group_group',
+            'self'     => 'account_group_account',
         ],
     ];
 
