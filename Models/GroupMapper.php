@@ -84,8 +84,8 @@ final class GroupMapper extends DataMapperAbstract
         'accounts' => [
             'mapper'   => AccountMapper::class,
             'table'    => 'account_group',
-            'external' => 'account_group_group',
-            'self'     => 'account_group_account',
+            'external' => 'account_group_account',
+            'self'     => 'account_group_group',
         ],
     ];
 
