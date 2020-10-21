@@ -99,25 +99,25 @@ final class LocalizationMapper extends DataMapperAbstract
      */
     protected static array $ownsOne = [
         'country'  => [
-            'mapper'        => CountryMapper::class,
+            'mapper'            => CountryMapper::class,
             'external'          => 'l11n_country',
-            'by'            => 'code2',
-            'column'        => 'code2',
-            'conditional'   => true,
+            'by'                => 'code2',
+            'column'            => 'code2',
+            'conditional'       => true,
         ],
         'lang'    => [
-            'mapper'        => LanguageMapper::class,
+            'mapper'            => LanguageMapper::class,
             'external'          => 'l11n_language',
-            'by'            => 'code2',
-            'column'        => 'code2',
-            'conditional'   => true,
+            'by'                => 'code2',
+            'column'            => 'code2',
+            'conditional'       => true,
         ],
         'currency'    => [
-            'mapper'        => CurrencyMapper::class,
+            'mapper'            => CurrencyMapper::class,
             'external'          => 'l11n_currency',
-            'by'            => 'code',
-            'column'        => 'code',
-            'conditional'   => true,
+            'by'                => 'code',
+            'column'            => 'code',
+            'conditional'       => true,
         ],
     ];
 

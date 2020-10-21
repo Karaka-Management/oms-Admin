@@ -60,7 +60,7 @@ final class AccountMapper extends DataMapperAbstract
      */
     protected static array $ownsOne = [
         'localization'  => [
-            'mapper' => LocalizationMapper::class,
+            'mapper'     => LocalizationMapper::class,
             'external'   => 'account_localization',
         ],
     ];
