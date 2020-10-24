@@ -254,8 +254,7 @@ final class ApiController extends Controller
         $requestAccount = $request->getHeader()->getAccount();
         $accountId      = (int) $request->getData('account_id');
 
-        if (
-            $requestAccount !== $accountId
+        if ($requestAccount !== $accountId
             && !$this->app->accountManager->get($accountId)->hasPermission(
                 PermissionType::MODIFY,
                 $this->app->orgId,

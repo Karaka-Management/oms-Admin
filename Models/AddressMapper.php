@@ -34,30 +34,30 @@ final class AddressMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'address_id'        => ['name' => 'address_id',      'type' => 'int',    'internal' => 'id'],
-        'address_name'      => ['name' => 'address_name',  'type' => 'string', 'internal' => 'name'],
-        'address_addition'  => ['name' => 'address_addition',  'type' => 'string', 'internal' => 'addition'],
-        'address_address'   => ['name' => 'address_address',  'type' => 'string', 'internal' => 'address'],
-        'address_postal'    => ['name' => 'address_postal',  'type' => 'string', 'internal' => 'postal'],
-        'address_state'     => ['name' => 'address_state',   'type' => 'string', 'internal' => 'state'],
-        'address_city'      => ['name' => 'address_city',    'type' => 'string', 'internal' => 'city'],
-        'address_country'   => ['name' => 'address_country', 'type' => 'string',    'internal' => 'country'],
-        'address_type'      => ['name' => 'address_type', 'type' => 'int',    'internal' => 'type'],
+        'address_id'       => ['name' => 'address_id',      'type' => 'int',    'internal' => 'id'],
+        'address_name'     => ['name' => 'address_name',  'type' => 'string', 'internal' => 'name'],
+        'address_addition' => ['name' => 'address_addition',  'type' => 'string', 'internal' => 'addition'],
+        'address_address'  => ['name' => 'address_address',  'type' => 'string', 'internal' => 'address'],
+        'address_postal'   => ['name' => 'address_postal',  'type' => 'string', 'internal' => 'postal'],
+        'address_state'    => ['name' => 'address_state',   'type' => 'string', 'internal' => 'state'],
+        'address_city'     => ['name' => 'address_city',    'type' => 'string', 'internal' => 'city'],
+        'address_country'  => ['name' => 'address_country', 'type' => 'string',    'internal' => 'country'],
+        'address_type'     => ['name' => 'address_type', 'type' => 'int',    'internal' => 'type'],
     ];
 
     /**
      * Has one relation.
      *
-     * @var array<string, array{mapper:string, self:string, by?:string}>
+     * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
     protected static array $ownsOne = [
         'country' => [
-            'mapper'        => CountryMapper::class,
-            'external'      => 'address_country',
-            'by'            => 'code2',
-            'column'        => 'code2',
-            'conditional'   => true,
+            'mapper'      => CountryMapper::class,
+            'external'    => 'address_country',
+            'by'          => 'code2',
+            'column'      => 'code2',
+            'conditional' => true,
         ],
     ];
 
