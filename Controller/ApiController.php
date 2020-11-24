@@ -489,10 +489,10 @@ final class ApiController extends Controller
      */
     private function updateGroupFromRequest(RequestAbstract $request) : Group
     {
-        $group = GroupMapper::get((int) $request->getData('id'));
+        $group       = GroupMapper::get((int) $request->getData('id'));
         $group->name = (string) ($request->getData('name') ?? $group->name);
         $group->setStatus((int) ($request->getData('status') ?? $group->getStatus()));
-        $group->description = Markdown::parse((string) ($request->getData('description') ?? $group->descriptionRaw));
+        $group->description    = Markdown::parse((string) ($request->getData('description') ?? $group->descriptionRaw));
         $group->descriptionRaw = (string) ($request->getData('description') ?? $group->descriptionRaw);
 
         return $group;
@@ -557,11 +557,11 @@ final class ApiController extends Controller
      */
     private function createGroupFromRequest(RequestAbstract $request) : Group
     {
-        $group = new Group();
+        $group            = new Group();
         $group->createdBy = new NullAccount($request->header->account);
-        $group->name = (string) ($request->getData('name') ?? '');
+        $group->name      = (string) ($request->getData('name') ?? '');
         $group->setStatus((int) ($request->getData('status') ?? GroupStatus::INACTIVE));
-        $group->description = Markdown::parse((string) ($request->getData('description') ?? ''));
+        $group->description    = Markdown::parse((string) ($request->getData('description') ?? ''));
         $group->descriptionRaw = (string) ($request->getData('description') ?? '');
 
         return $group;
@@ -749,7 +749,7 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
         $this->createProfileForAccount($account, $request);
 
-        $collection = new Collection();
+        $collection       = new Collection();
         $collection->name = ((string) $account->getId()) . ' ' . $account->login;
         $collection->setVirtualPath('/Accounts');
         $collection->setPath('/Modules/Media/Files/Accounts/' . ((string) $account->getId()));
@@ -892,7 +892,7 @@ final class ApiController extends Controller
     private function updateAccountFromRequest(RequestAbstract $request, bool $allowPassword = false) : Account
     {
         /** @var Account $account */
-        $account = AccountMapper::get((int) ($request->getData('id')));
+        $account        = AccountMapper::get((int) ($request->getData('id')));
         $account->login = (string) ($request->getData('login') ?? $account->login);
         $account->name1 = (string) ($request->getData('name1') ?? $account->name1);
         $account->name2 = (string) ($request->getData('name2') ?? $account->name2);
@@ -961,8 +961,8 @@ final class ApiController extends Controller
 
                 break;
             default:
-                $done = false;
-                $msg  = 'Unknown module status change request.';
+                $done                     = false;
+                $msg                      = 'Unknown module status change request.';
                 $response->header->status = RequestStatusCode::R_400;
         }
         $this->app->eventManager->trigger('POST:Module:Admin-module-status', '', ['status' => $status, 'module' => $module]);
