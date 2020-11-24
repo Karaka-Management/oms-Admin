@@ -48,7 +48,7 @@ final class AccountMapper extends DataMapperAbstract
         'account_email'        => ['name' => 'account_email',        'type' => 'string',   'internal' => 'email', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
         'account_tries'        => ['name' => 'account_tries',        'type' => 'int',      'internal' => 'tries'],
         'account_lactive'      => ['name' => 'account_lactive',      'type' => 'DateTime', 'internal' => 'lastActive'],
-        'account_localization' => ['name' => 'account_localization', 'type' => 'int',      'internal' => 'localization'],
+        'account_localization' => ['name' => 'account_localization', 'type' => 'int',      'internal' => 'l11n'],
         'account_created_at'   => ['name' => 'account_created_at',   'type' => 'DateTimeImmutable', 'internal' => 'createdAt', 'readonly' => true],
     ];
 
@@ -59,7 +59,7 @@ final class AccountMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $ownsOne = [
-        'localization'  => [
+        'l11n'  => [
             'mapper'     => LocalizationMapper::class,
             'external'   => 'account_localization',
         ],

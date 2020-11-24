@@ -30,7 +30,7 @@ class Group extends \phpOMS\Account\Group
      * @var \DateTimeImmutable
      * @since 1.0.0
      */
-    protected \DateTimeImmutable $createdAt;
+    public \DateTimeImmutable $createdAt;
 
     /**
      * Created by.
@@ -38,7 +38,7 @@ class Group extends \phpOMS\Account\Group
      * @var Account
      * @since 1.0.0
      */
-    protected Account $createdBy;
+    public Account $createdBy;
 
     /**
      * Group raw description.
@@ -46,7 +46,7 @@ class Group extends \phpOMS\Account\Group
      * @var string
      * @since 1.0.0
      */
-    protected string $descriptionRaw = '';
+    public string $descriptionRaw = '';
 
     /**
      * Accounts
@@ -67,71 +67,7 @@ class Group extends \phpOMS\Account\Group
     {
         $this->createdBy = new NullAccount();
         $this->createdAt = new \DateTimeImmutable('now');
-        $this->setName($name);
-    }
-
-    /**
-     * Get created at.
-     *
-     * @return \DateTimeImmutable
-     *
-     * @since 1.0.0
-     */
-    public function getCreatedAt() : \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Get created by.
-     *
-     * @return Account
-     *
-     * @since 1.0.0
-     */
-    public function getCreatedBy() : Account
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set created by
-     *
-     * @param Account $createdBy Group created by
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setCreatedBy(Account $createdBy) : void
-    {
-        $this->createdBy = $createdBy;
-    }
-
-    /**
-     * Set raw description
-     *
-     * @param string $description Description
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setDescriptionRaw(string $description) : void
-    {
-        $this->descriptionRaw = $description;
-    }
-
-    /**
-     * Get raw description
-     *
-     * @return string Raw description
-     *
-     * @since 1.0.0
-     */
-    public function getDescriptionRaw() : string
-    {
-        return $this->descriptionRaw;
+        $this->name      = $name;
     }
 
     /**

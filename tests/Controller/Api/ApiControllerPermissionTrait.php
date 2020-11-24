@@ -33,7 +33,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
         $request->setData('permissionref', 1);
 
@@ -52,7 +52,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('id', '2');
 
         $this->module->apiGroupPermissionGet($request, $response);
@@ -71,7 +71,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
         $request->setData('permissionref', 1);
 
@@ -96,11 +96,11 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
 
         $this->module->apiAddGroupPermission($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
     /**
@@ -113,12 +113,12 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
         $request->setData('permissionref', 1);
 
         $this->module->apiAddGroupPermission($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
     /**
@@ -131,7 +131,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('id', 1);
         $request->setData('permissionread', PermissionType::READ);
 
@@ -158,7 +158,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
         $request->setData('permissionref', 1);
 
@@ -177,7 +177,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('id', '1');
 
         $this->module->apiAccountPermissionGet($request, $response);
@@ -196,7 +196,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
         $request->setData('permissionref', 1);
 
@@ -221,11 +221,11 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
 
         $this->module->apiAddAccountPermission($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
     /**
@@ -238,12 +238,12 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
         $request->setData('permissionref', 1);
 
         $this->module->apiAddAccountPermission($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
     /**
@@ -256,7 +256,7 @@ trait ApiControllerPermissionTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('id', 1);
         $request->setData('permissionread', PermissionType::READ);
 

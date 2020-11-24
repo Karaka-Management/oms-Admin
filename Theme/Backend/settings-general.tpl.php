@@ -47,7 +47,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -61,7 +61,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                         <tr><td>
                                             <select id="iOname" name="settings_1000000009">
                                                 <?php $unit = UnitMapper::get((int) $settings[1000000009]); ?>
-                                                    <option value="<?= $this->printHtml($unit->getId()); ?>"><?= $this->printHtml($unit->getName()); ?>
+                                                    <option value="<?= $this->printHtml($unit->getId()); ?>"><?= $this->printHtml($unit->name); ?>
                                             </select>
                                 </table>
                             </div>
@@ -127,7 +127,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
             </div>
         </div>
-        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-2' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-4">

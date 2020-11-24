@@ -28,7 +28,7 @@ use phpOMS\Stdlib\Base\Exception\InvalidEnumValue;
 class Module
 {
     /**
-     * Account id.
+     * Module id.
      *
      * @var int
      * @since 1.0.0
@@ -36,20 +36,20 @@ class Module
     protected int $id = 0;
 
     /**
-     * Account name.
+     * Module name.
      *
      * @var string
      * @since 1.0.0
      */
-    protected string $name = '';
+    public string $name = '';
 
     /**
-     * Account name.
+     * Module description.
      *
      * @var string
      * @since 1.0.0
      */
-    protected string $description = '';
+    public string $description = '';
 
     /**
      * Group status.
@@ -65,7 +65,7 @@ class Module
      * @var \DateTimeImmutable
      * @since 1.0.0
      */
-    protected \DateTimeImmutable $createdAt;
+    public \DateTimeImmutable $createdAt;
 
     /**
      * Constructor.
@@ -87,70 +87,6 @@ class Module
     public function getId() : int
     {
         return $this->id;
-    }
-
-    /**
-     * Get created at.
-     *
-     * @return \DateTimeImmutable
-     *
-     * @since 1.0.0
-     */
-    public function getCreatedAt() : \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Get module name.
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getName() : string
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set module name.
-     *
-     * @param string $name module name
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setName(string $name) : void
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Get module description.
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getDescription() : string
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set module description.
-     *
-     * @param string $description Module description
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setDescription(string $description) : void
-    {
-        $this->description = $description;
     }
 
     /**

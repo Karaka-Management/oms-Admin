@@ -33,12 +33,12 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('id', '1');
 
         $this->module->apiAccountGet($request, $response);
 
-        self::assertEquals('admin', $response->get('')['response']->getName());
+        self::assertEquals('admin', $response->get('')['response']->login);
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
@@ -52,7 +52,7 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('id', 1);
         $request->setData('email', 'oms@orange-management.de');
         $request->setData('password', 'orange');
@@ -74,12 +74,12 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('search', 'admin');
 
         $this->module->apiAccountFind($request, $response);
         self::assertCount(1, $response->get(''));
-        self::assertEquals('admin', $response->get('')[0]->getName1());
+        self::assertEquals('admin', $response->get('')[0]->name1);
     }
 
     /**
@@ -92,7 +92,7 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('login', 'guest');
         $request->setData('password', 'guest');
         $request->setData('name1', 'Guest');
@@ -102,7 +102,7 @@ trait ApiControllerAccountTrait
 
         $this->module->apiAccountCreate($request, $response);
 
-        self::assertEquals('guest', $response->get('')['response']->getName());
+        self::assertEquals('guest', $response->get('')['response']->login);
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
@@ -115,7 +115,7 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('login', 'guest2');
         $request->setData('password', 'guest2');
         $request->setData('name1', 'Guest2');
@@ -126,7 +126,7 @@ trait ApiControllerAccountTrait
 
         $this->module->apiAccountCreate($request, $response);
 
-        self::assertEquals('guest2', $response->get('')['response']->getName());
+        self::assertEquals('guest2', $response->get('')['response']->login);
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
@@ -140,7 +140,7 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         // mustn't create a profile otherwise it will not be possible to delete the account because of FK constraints
         $request->setData('name1', 'Guest');
         $request->setData('email', 'test@email.com');
@@ -164,12 +164,12 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('status', 999);
         $request->setData('description', 'test description');
 
         $this->module->apiAccountCreate($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
     /**
@@ -182,7 +182,7 @@ trait ApiControllerAccountTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('account', 1);
         $request->setData('igroup-idlist', '1');
 

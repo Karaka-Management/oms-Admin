@@ -54,7 +54,7 @@ echo $this->getData('nav')->render(); ?>
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -82,25 +82,25 @@ echo $this->getData('nav')->render(); ?>
                                     <tr><td>
                                         <span class="input">
                                             <button type="button"><i class="fa fa-user"></i></button>
-                                            <input id="iUsername" name="name" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->getName()); ?>">
+                                            <input id="iUsername" name="name" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->login); ?>">
                                         </span>
                                     <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
                                     <tr><td>
                                         <span class="input">
                                             <button type="button"><i class="fa fa-user"></i></button>
-                                            <input id="iName1" name="name1" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->getName1()); ?>" required>
+                                            <input id="iName1" name="name1" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->name1); ?>" required>
                                         </span>
                                     <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
                                     <tr><td>
                                         <span class="input">
                                             <button type="button"><i class="fa fa-user"></i></button>
-                                            <input id="iName2" name="name2" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->getName2()); ?>">
+                                            <input id="iName2" name="name2" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->name2); ?>">
                                         </span>
                                     <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
                                     <tr><td>
                                         <span class="input">
                                             <button type="button"><i class="fa fa-user"></i></button>
-                                            <input id="iName3" name="name3" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->getName3()); ?>">
+                                            <input id="iName3" name="name3" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->name3); ?>">
                                         </span>
                                     <tr><td><label for="iEmail"><?= $this->getHtml('Email'); ?></label>
                                     <tr><td>
@@ -153,7 +153,7 @@ echo $this->getData('nav')->render(); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getName()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                 <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
@@ -275,7 +275,7 @@ echo $this->getData('nav')->render(); ?>
             </div>
         </div>
 
-        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-2' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
@@ -317,9 +317,9 @@ echo $this->getData('nav')->render(); ?>
                                     <td><?= $this->printHtml($audit->getOld()); ?>
                                     <td><?= $this->printHtml($audit->getNew()); ?>
                                     <td><?= $this->printHtml($audit->getContent()); ?>
-                                    <td><?= $this->printHtml($audit->getCreatedBy()->getName()); ?>
+                                    <td><?= $this->printHtml($audit->createdBy->login); ?>
                                     <td><?= $this->printHtml($audit->getRef()); ?>
-                                    <td><?= $audit->getCreatedAt()->format('Y-m-d H:i'); ?>
+                                    <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
                                 <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

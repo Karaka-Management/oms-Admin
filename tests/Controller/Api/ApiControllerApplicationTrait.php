@@ -30,10 +30,10 @@ trait ApiControllerApplicationTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('appSrc', 'invalid');
 
         $this->module->apiInstallApplication($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 }

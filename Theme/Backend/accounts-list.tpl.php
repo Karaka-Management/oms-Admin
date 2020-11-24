@@ -60,10 +60,10 @@ echo $this->getData('nav')->render(); ?>
                     <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status'. $value->getStatus()); ?></span></a>
                     <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml(
-                                \sprintf('%3$s %2$s %1$s', $value->getName1(), $value->getName2(), $value->getName3())
+                                \sprintf('%3$s %2$s %1$s', $value->name1, $value->name2, $value->name3)
                             ); ?></a>
                     <td data-label="<?= $this->getHtml('Activity'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->getLastActive()->format('Y-m-d H:i:s')); ?></a>
-                    <td data-label="<?= $this->getHtml('Created'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->getCreatedAt()->format('Y-m-d H:i:s')); ?></a>
+                    <td data-label="<?= $this->getHtml('Created'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->createdAt->format('Y-m-d H:i:s')); ?></a>
                         <?php endforeach; ?>
                         <?php if ($c === 0) : ?>
                             <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

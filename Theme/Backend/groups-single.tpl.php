@@ -65,7 +65,7 @@ echo $this->getData('nav')->render(); ?>
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -76,7 +76,7 @@ echo $this->getData('nav')->render(); ?>
                                 <label for="iGid"><?= $this->getHtml('ID', '0', '0'); ?></label>
                                 <input id="iGid" name="id" type="text" value="<?= $this->printHtml($group->getId()); ?>" disabled>
                                 <label for="iGname"><?= $this->getHtml('Name'); ?></label>
-                                <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->getName()); ?>">
+                                <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->name); ?>">
                                 <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
                                 <select id="iGstatus" name="status">
                                     <?php $status = GroupStatus::getConstants(); foreach ($status as $stat) : ?>
@@ -88,8 +88,8 @@ echo $this->getData('nav')->render(); ?>
                                     'group-editor',
                                     'description',
                                     'fGroupEdit',
-                                    $group->getDescriptionRaw(),
-                                    $group->getDescription()
+                                    $group->descriptionRaw,
+                                    $group->description
                                 ); ?>
                             </div>
                             <div class="portlet-foot">
@@ -111,7 +111,7 @@ echo $this->getData('nav')->render(); ?>
                                 <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; $url = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $value->getName1(); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->name1; ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                 <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
@@ -251,7 +251,7 @@ echo $this->getData('nav')->render(); ?>
             </div>
         </div>
 
-        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-2' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
@@ -293,9 +293,9 @@ echo $this->getData('nav')->render(); ?>
                                     <td><?= $this->printHtml($audit->getOld()); ?>
                                     <td><?= $this->printHtml($audit->getNew()); ?>
                                     <td><?= $this->printHtml($audit->getContent()); ?>
-                                    <td><?= $this->printHtml($audit->getCreatedBy()->getName()); ?>
+                                    <td><?= $this->printHtml($audit->createdBy->login); ?>
                                     <td><?= $this->printHtml($audit->getRef()); ?>
-                                    <td><?= $audit->getCreatedAt()->format('Y-m-d H:i'); ?>
+                                    <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
                                 <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

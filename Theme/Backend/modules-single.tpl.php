@@ -42,7 +42,7 @@ if ($nav !== null) {
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-4">
@@ -131,7 +131,7 @@ if ($nav !== null) {
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="<?= $url; ?>"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>">Group</a>
-                                    <td><a href="<?= $url; ?>"><?= $value->getName(); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->name; ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                 <tr><td colspan="3" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
@@ -142,7 +142,7 @@ if ($nav !== null) {
             </div>
         </div>
 
-        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-2' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
@@ -184,9 +184,9 @@ if ($nav !== null) {
                                     <td><?= $this->printHtml($audit->getOld()); ?>
                                     <td><?= $this->printHtml($audit->getNew()); ?>
                                     <td><?= $this->printHtml($audit->getContent()); ?>
-                                    <td><?= $this->printHtml($audit->getCreatedBy()->getName()); ?>
+                                    <td><?= $this->printHtml($audit->createdBy->login); ?>
                                     <td><?= $this->printHtml($audit->getRef()); ?>
-                                    <td><?= $audit->getCreatedAt()->format('Y-m-d H:i'); ?>
+                                    <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
                                 <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

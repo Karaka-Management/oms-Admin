@@ -37,10 +37,10 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
     {
         $account = new Account();
 
-        $account->setName('TestLogin');
-        $account->setName1('Donald');
-        $account->setName2('Fauntleroy');
-        $account->setName3('Duck');
+        $account->login = 'TestLogin';
+        $account->name1 = 'Donald';
+        $account->name2 = 'Fauntleroy';
+        $account->name3 = 'Duck';
         $account->setLoginTries(3);
         $account->setEmail('d.duck@duckburg.com');
         $account->setStatus(AccountStatus::ACTIVE);
@@ -51,11 +51,11 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($id, $account->getId());
 
         $accountR = AccountMapper::get($account->getId());
-        self::assertEquals($account->getCreatedAt()->format('Y-m-d'), $accountR->getCreatedAt()->format('Y-m-d'));
-        self::assertEquals($account->getName(), $accountR->getName());
-        self::assertEquals($account->getName1(), $accountR->getName1());
-        self::assertEquals($account->getName2(), $accountR->getName2());
-        self::assertEquals($account->getName3(), $accountR->getName3());
+        self::assertEquals($account->createdAt->format('Y-m-d'), $accountR->createdAt->format('Y-m-d'));
+        self::assertEquals($account->login, $accountR->login);
+        self::assertEquals($account->name1, $accountR->name1);
+        self::assertEquals($account->name2, $accountR->name2);
+        self::assertEquals($account->name3, $accountR->name3);
         self::assertEquals($account->getStatus(), $accountR->getStatus());
         self::assertEquals($account->getType(), $accountR->getType());
         self::assertEquals($account->getEmail(), $accountR->getEmail());
@@ -112,7 +112,7 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         $accountR->setLoginTries(0);
         AccountMapper::update($accountR);
 
-        self::assertEquals(LoginReturnType::WRONG_INPUT_EXCEEDED, AccountMapper::login($accountR->getName(), 'orange'));
+        self::assertEquals(LoginReturnType::WRONG_INPUT_EXCEEDED, AccountMapper::login($accountR->login, 'orange'));
 
         $accountR->setLoginTries(3);
         AccountMapper::update($accountR);
@@ -128,7 +128,7 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         $accountR->setStatus(AccountStatus::BANNED);
         AccountMapper::update($accountR);
 
-        self::assertEquals(LoginReturnType::INACTIVE, AccountMapper::login($accountR->getName(), 'orange'));
+        self::assertEquals(LoginReturnType::INACTIVE, AccountMapper::login($accountR->login, 'orange'));
 
         $accountR->setStatus(AccountStatus::ACTIVE);
         AccountMapper::update($accountR);
@@ -144,7 +144,7 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         TestUtils::setMember($accountR, 'password', '');
         AccountMapper::update($accountR);
 
-        self::assertEquals(LoginReturnType::EMPTY_PASSWORD, AccountMapper::login($accountR->getName(), 'orange'));
+        self::assertEquals(LoginReturnType::EMPTY_PASSWORD, AccountMapper::login($accountR->login, 'orange'));
 
         $accountR->generatePassword('orange');
         AccountMapper::update($accountR);

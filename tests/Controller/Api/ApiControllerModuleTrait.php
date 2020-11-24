@@ -32,7 +32,7 @@ trait ApiControllerModuleTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('module', 'TestModule');
 
         $request->setData('status', ModuleStatusUpdateType::INSTALL);
@@ -62,12 +62,12 @@ trait ApiControllerModuleTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
 
         $request->setData('status', ModuleStatusUpdateType::INSTALL);
         $this->module->apiModuleStatusUpdate($request, $response);
 
-        self::assertEquals(RequestStatusCode::R_403, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_403, $response->header->status);
         self::assertNull($response->get('module_stutus_update'));
     }
 
@@ -81,12 +81,12 @@ trait ApiControllerModuleTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('module', 'TestModule');
         $request->setData('status', 99);
 
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
     /**
@@ -99,12 +99,12 @@ trait ApiControllerModuleTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
         $request->setData('module', 'invalid');
         $request->setData('status', ModuleStatusUpdateType::INSTALL);
 
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals(RequestStatusCode::R_400, $response->getHeader()->getStatusCode());
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
     /**
@@ -117,7 +117,7 @@ trait ApiControllerModuleTrait
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
-        $request->getHeader()->setAccount(1);
+        $request->header->account = 1;
 
         $routes = include __DIR__ . '/../../../../../Web/Api/Routes.php';
         $hooks  = include __DIR__ . '/../../../../../Web/Api/Hooks.php';

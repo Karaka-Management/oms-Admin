@@ -92,16 +92,16 @@ final class ApiController extends Controller
      */
     public function apiLogin(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+        $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
         $login = AccountMapper::login((string) ($request->getData('user') ?? ''), (string) ($request->getData('pass') ?? ''));
 
         if ($login >= LoginReturnType::OK) {
             $this->app->sessionManager->set('UID', $login, true);
             $this->app->sessionManager->save();
-            $response->set($request->getUri()->__toString(), new Reload());
+            $response->set($request->uri->__toString(), new Reload());
         } else {
-            $response->set($request->getUri()->__toString(), new Notify(
+            $response->set($request->uri->__toString(), new Notify(
                 'Login failed due to wrong login information',
                 NotifyType::INFO
             ));
@@ -123,13 +123,13 @@ final class ApiController extends Controller
      */
     public function apiLogout(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+        $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
         $this->app->sessionManager->remove('UID');
         $this->app->sessionManager->save();
 
-        $response->getHeader()->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
-        $response->set($request->getUri()->__toString(), [
+        $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+        $response->set($request->uri->__toString(), [
             'status'   => NotificationLevel::OK,
             'title'    => 'Logout successfull',
             'message'  => 'You are redirected to the login page',
@@ -174,7 +174,7 @@ final class ApiController extends Controller
         $account = $request->getData('account');
 
         $response->set(
-            $request->getUri()->__toString(),
+            $request->uri->__toString(),
             [
                 'response' => $this->app->appSettings->get(
                     $id !== null ? (int) $id : $id,
@@ -213,7 +213,7 @@ final class ApiController extends Controller
             $account = isset($data['account']) ? (int) $data['account'] : null;
 
             $this->updateModel(
-                $request->getHeader()->getAccount(),
+                $request->header->account,
                 $this->app->appSettings->get($id, $name, $module, $group, $account),
                 $data,
                 function () use ($id, $name, $content, $module, $group, $account) : void {
@@ -251,7 +251,7 @@ final class ApiController extends Controller
      */
     public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $requestAccount = $request->getHeader()->getAccount();
+        $requestAccount = $request->header->account;
         $accountId      = (int) $request->getData('account_id');
 
         if ($requestAccount !== $accountId
@@ -265,13 +265,13 @@ final class ApiController extends Controller
             )
         ) {
             $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_403);
+            $response->header->status = RequestStatusCode::R_403;
 
             return;
         }
 
         /** @var Localization $l11n */
-        $l11n = AccountMapper::get($accountId)->getL11n();
+        $l11n = AccountMapper::get($accountId)->l11n;
 
         if ((bool) ($request->getData('load') ?? false)) {
             $locale = \explode('_', $request->getData('localization_load'));
@@ -396,7 +396,7 @@ final class ApiController extends Controller
 
         $app = $request->getData('appSrc');
         if (!\is_dir(__DIR__ . '/../../../' . $app)) {
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
             return;
         }
 
@@ -474,7 +474,7 @@ final class ApiController extends Controller
         /** @var Group $old */
         $old = clone GroupMapper::get((int) $request->getData('id'));
         $new = $this->updateGroupFromRequest($request);
-        $this->updateModel($request->getHeader()->getAccount(), $old, $new, GroupMapper::class, 'group', $request->getOrigin());
+        $this->updateModel($request->header->account, $old, $new, GroupMapper::class, 'group', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully updated', $new);
     }
 
@@ -490,10 +490,10 @@ final class ApiController extends Controller
     private function updateGroupFromRequest(RequestAbstract $request) : Group
     {
         $group = GroupMapper::get((int) $request->getData('id'));
-        $group->setName((string) ($request->getData('name') ?? $group->getName()));
+        $group->name = (string) ($request->getData('name') ?? $group->name);
         $group->setStatus((int) ($request->getData('status') ?? $group->getStatus()));
-        $group->setDescription(Markdown::parse((string) ($request->getData('description') ?? $group->getDescriptionRaw())));
-        $group->setDescriptionRaw((string) ($request->getData('description') ?? $group->getDescriptionRaw()));
+        $group->description = Markdown::parse((string) ($request->getData('description') ?? $group->descriptionRaw));
+        $group->descriptionRaw = (string) ($request->getData('description') ?? $group->descriptionRaw);
 
         return $group;
     }
@@ -536,13 +536,13 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateGroupCreate($request))) {
             $response->set('group_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $group = $this->createGroupFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $group, GroupMapper::class, 'group', $request->getOrigin());
+        $this->createModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully created', $group);
     }
 
@@ -558,11 +558,11 @@ final class ApiController extends Controller
     private function createGroupFromRequest(RequestAbstract $request) : Group
     {
         $group = new Group();
-        $group->setCreatedBy(new NullAccount($request->getHeader()->getAccount()));
-        $group->setName((string) ($request->getData('name') ?? ''));
+        $group->createdBy = new NullAccount($request->header->account);
+        $group->name = (string) ($request->getData('name') ?? '');
         $group->setStatus((int) ($request->getData('status') ?? GroupStatus::INACTIVE));
-        $group->setDescription(Markdown::parse((string) ($request->getData('description') ?? '')));
-        $group->setDescriptionRaw((string) ($request->getData('description') ?? ''));
+        $group->description = Markdown::parse((string) ($request->getData('description') ?? ''));
+        $group->descriptionRaw = (string) ($request->getData('description') ?? '');
 
         return $group;
     }
@@ -583,7 +583,7 @@ final class ApiController extends Controller
     public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         $group = GroupMapper::get((int) $request->getData('id'));
-        $this->deleteModel($request->getHeader()->getAccount(), $group, GroupMapper::class, 'group', $request->getOrigin());
+        $this->deleteModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully deleted', $group);
     }
 
@@ -602,9 +602,9 @@ final class ApiController extends Controller
      */
     public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $response->getHeader()->set('Content-Type', MimeType::M_JSON, true);
+        $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
-            $request->getUri()->__toString(),
+            $request->uri->__toString(),
             \array_values(
                 GroupMapper::find((string) ($request->getData('search') ?? ''))
             )
@@ -646,9 +646,9 @@ final class ApiController extends Controller
      */
     public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $response->getHeader()->set('Content-Type', MimeType::M_JSON, true);
+        $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
-            $request->getUri()->__toString(),
+            $request->uri->__toString(),
             \array_values(
                 AccountMapper::find((string) ($request->getData('search') ?? ''))
             )
@@ -695,8 +695,8 @@ final class ApiController extends Controller
             $data[] = $temp;
         }
 
-        $response->getHeader()->set('Content-Type', MimeType::M_JSON, true);
-        $response->set($request->getUri()->__toString(), $data);
+        $response->header->set('Content-Type', MimeType::M_JSON, true);
+        $response->set($request->uri->__toString(), $data);
     }
 
     /**
@@ -739,21 +739,21 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateAccountCreate($request))) {
             $response->set('account_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $account = $this->createAccountFromRequest($request);
 
-        $this->createModel($request->getHeader()->getAccount(), $account, AccountMapper::class, 'account', $request->getOrigin());
+        $this->createModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
         $this->createProfileForAccount($account, $request);
 
         $collection = new Collection();
-        $collection->setName(((string) $account->getId()) . ' ' . $account->getName());
+        $collection->name = ((string) $account->getId()) . ' ' . $account->login;
         $collection->setVirtualPath('/Accounts');
         $collection->setPath('/Modules/Media/Files/Accounts/' . ((string) $account->getId()));
-        $collection->setCreatedBy(new NullAccount($request->getHeader()->getAccount()));
+        $collection->createdBy = new NullAccount($request->header->account);
 
         CollectionMapper::create($collection);
 
@@ -787,7 +787,7 @@ final class ApiController extends Controller
             $request
         );
 
-        $this->updateModel($request->getHeader()->getAccount(), $old, $account, function () use ($account) : void {
+        $this->updateModel($request->header->account, $old, $account, function () use ($account) : void {
             $account->setLoginTries((int) $this->app->appSettings->get(null, SettingsEnum::LOGIN_TRIES)['content']);
             AccountMapper::update($account);
         }, 'account', $request->getOrigin());
@@ -807,23 +807,21 @@ final class ApiController extends Controller
         $account = new Account();
         $account->setStatus((int) ($request->getData('status') ?? AccountStatus::INACTIVE));
         $account->setType((int) ($request->getData('type') ?? AccountType::USER));
-        $account->setName((string) ($request->getData('login') ?? ''));
-        $account->setName1((string) ($request->getData('name1') ?? ''));
-        $account->setName2((string) ($request->getData('name2') ?? ''));
-        $account->setName3((string) ($request->getData('name3') ?? ''));
+        $account->login = (string) ($request->getData('login') ?? '');
+        $account->name1 = (string) ($request->getData('name1') ?? '');
+        $account->name2 = (string) ($request->getData('name2') ?? '');
+        $account->name3 = (string) ($request->getData('name3') ?? '');
         $account->setEmail((string) ($request->getData('email') ?? ''));
         $account->generatePassword((string) ($request->getData('password') ?? ''));
 
         if ($request->getData('locale') === null) {
-            $account->setL11n(
-                Localization::fromJson(
-                    $this->app->l11nServer === null ? $request->getHeader()->getL11n()->jsonSerialize() : $this->app->l11nServer->jsonSerialize()
-                )
-            );
+            $account->l11n = Localization::fromJson(
+                    $this->app->l11nServer === null ? $request->header->l11n->jsonSerialize() : $this->app->l11nServer->jsonSerialize()
+                );
         } else {
             $locale = \explode('_', $request->getData('locale') ?? '');
 
-            $account->getL11n()
+            $account->l11n
                 ->loadFromLanguage(
                     $locale[0] ?? $this->app->l11nServer->getLanguage(),
                     $locale[1] ?? $this->app->l11nServer->getCountry()
@@ -850,7 +848,7 @@ final class ApiController extends Controller
     {
         /** @var Account $account */
         $account = AccountMapper::get((int) ($request->getData('id')));
-        $this->deleteModel($request->getHeader()->getAccount(), $account, AccountMapper::class, 'account', $request->getOrigin());
+        $this->deleteModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully deleted', $account);
     }
 
@@ -872,7 +870,7 @@ final class ApiController extends Controller
         /** @var Account $old */
         $old = clone AccountMapper::get((int) $request->getData('id'));
         $new = $this->updateAccountFromRequest($request);
-        $this->updateModel($request->getHeader()->getAccount(), $old, $new, AccountMapper::class, 'account', $request->getOrigin());
+        $this->updateModel($request->header->account, $old, $new, AccountMapper::class, 'account', $request->getOrigin());
 
         if (\Modules\Profile\Models\ProfileMapper::getFor($new->getId(), 'account') instanceof \Modules\Profile\Models\NullProfile) {
             $this->createProfileForAccount($new, $request);
@@ -895,10 +893,10 @@ final class ApiController extends Controller
     {
         /** @var Account $account */
         $account = AccountMapper::get((int) ($request->getData('id')));
-        $account->setName((string) ($request->getData('login') ?? $account->getName()));
-        $account->setName1((string) ($request->getData('name1') ?? $account->getName1()));
-        $account->setName2((string) ($request->getData('name2') ?? $account->getName2()));
-        $account->setName3((string) ($request->getData('name3') ?? $account->getName3()));
+        $account->login = (string) ($request->getData('login') ?? $account->login);
+        $account->name1 = (string) ($request->getData('name1') ?? $account->name1);
+        $account->name2 = (string) ($request->getData('name2') ?? $account->name2);
+        $account->name3 = (string) ($request->getData('name3') ?? $account->name3);
         $account->setEmail((string) ($request->getData('email') ?? $account->getEmail()));
         $account->setStatus((int) ($request->getData('status') ?? $account->getStatus()));
         $account->setType((int) ($request->getData('type') ?? $account->getType()));
@@ -929,14 +927,14 @@ final class ApiController extends Controller
         $status = (int) $request->getData('status');
 
         if (empty($module) || empty($status)) {
-            $response->set($request->getUri()->__toString(), [
+            $response->set($request->uri->__toString(), [
                 'status'   => 'warning',
                 'title'    => 'Module',
                 'message'  => 'Invalid module or status',
                 'response' => [],
             ]);
 
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_403);
+            $response->header->status = RequestStatusCode::R_403;
             return;
         }
 
@@ -965,12 +963,12 @@ final class ApiController extends Controller
             default:
                 $done = false;
                 $msg  = 'Unknown module status change request.';
-                $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+                $response->header->status = RequestStatusCode::R_400;
         }
         $this->app->eventManager->trigger('POST:Module:Admin-module-status', '', ['status' => $status, 'module' => $module]);
 
         if (!$done) {
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
         }
 
         $this->fillJsonResponse(
@@ -1037,7 +1035,7 @@ final class ApiController extends Controller
     {
         /** @var GroupPermission $permission */
         $permission = GroupPermissionMapper::get((int) $request->getData('id'));
-        $this->deleteModel($request->getHeader()->getAccount(), $permission, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
+        $this->deleteModel($request->header->account, $permission, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
     }
 
@@ -1058,7 +1056,7 @@ final class ApiController extends Controller
     {
         /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get((int) $request->getData('id'));
-        $this->deleteModel($request->getHeader()->getAccount(), $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
+        $this->deleteModel($request->header->account, $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
     }
 
@@ -1079,7 +1077,7 @@ final class ApiController extends Controller
     {
         /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get((int) $request->getData('id'));
-        $this->deleteModel($request->getHeader()->getAccount(), $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
+        $this->deleteModel($request->header->account, $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
     }
 
@@ -1100,7 +1098,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->set('permission_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
@@ -1109,12 +1107,12 @@ final class ApiController extends Controller
 
         if (!($permission instanceof GroupPermission)) {
             $response->set('permission_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
-        $this->createModel($request->getHeader()->getAccount(), $permission, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
+        $this->createModel($request->header->account, $permission, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group permission successfully created', $permission);
     }
 
@@ -1135,7 +1133,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->set('permission_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
@@ -1144,12 +1142,12 @@ final class ApiController extends Controller
 
         if (!($permission instanceof AccountPermission)) {
             $response->set('permission_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
-        $this->createModel($request->getHeader()->getAccount(), $permission, AccountPermissionMapper::class, 'account-permission', $request->getOrigin());
+        $this->createModel($request->header->account, $permission, AccountPermissionMapper::class, 'account-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account permission successfully created', $permission);
     }
 
@@ -1243,7 +1241,7 @@ final class ApiController extends Controller
         /** @var AccountPermission $new */
         $new = $this->updatePermissionFromRequest(AccountPermissionMapper::get((int) $request->getData('id')), $request);
 
-        $this->updateModel($request->getHeader()->getAccount(), $old, $new, AccountPermissionMapper::class, 'account-permission', $request->getOrigin());
+        $this->updateModel($request->header->account, $old, $new, AccountPermissionMapper::class, 'account-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully updated', $new);
     }
 
@@ -1268,7 +1266,7 @@ final class ApiController extends Controller
         /** @var GroupPermission $new */
         $new = $this->updatePermissionFromRequest(GroupPermissionMapper::get((int) $request->getData('id')), $request);
 
-        $this->updateModel($request->getHeader()->getAccount(), $old, $new, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
+        $this->updateModel($request->header->account, $old, $new, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully updated', $new);
     }
 
@@ -1317,7 +1315,7 @@ final class ApiController extends Controller
         $account = (int) $request->getData('account');
         $groups  = \array_map('intval', $request->getDataList('igroup-idlist'));
 
-        $this->createModelRelation($request->getHeader()->getAccount(), $account, $groups, AccountMapper::class, 'groups', 'account-group', $request->getOrigin());
+        $this->createModelRelation($request->header->account, $account, $groups, AccountMapper::class, 'groups', 'account-group', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Relation added', []);
     }
 
@@ -1339,7 +1337,7 @@ final class ApiController extends Controller
         $group    = (int) $request->getData('group');
         $accounts = \array_map('intval', $request->getDataList('iaccount-idlist'));
 
-        $this->createModelRelation($request->getHeader()->getAccount(), $group, $accounts, GroupMapper::class, 'accounts', 'group-account', $request->getOrigin());
+        $this->createModelRelation($request->header->account, $group, $accounts, GroupMapper::class, 'accounts', 'group-account', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Relation added', []);
     }
 
@@ -1411,7 +1409,7 @@ final class ApiController extends Controller
         // this is only a temp... in the future this logic will change but for current purposes this is the easiest way to implement updates
         $request = new HttpRequest(new HttpUri('https://api.github.com/repos/Orange-Management/Updates/contents'));
         $request->setMethod(RequestMethod::GET);
-        $request->getHeader()->set('User-Agent', 'spl1nes');
+        $request->header->set('User-Agent', 'spl1nes');
 
         $updateFilesJson = Rest::request($request)->getJsonData();
 
