@@ -27,7 +27,7 @@ use phpOMS\Module\WebInterface;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-abstract class Controller extends ModuleAbstract implements WebInterface
+abstract class Controller extends ModuleAbstract
 {
     /**
      * Module path.
