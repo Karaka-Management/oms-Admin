@@ -38,20 +38,20 @@ $isntalled = $this->getData('isntalled') ?? [];
                 <tbody>
                     <?php $count = 0;
                         foreach ($modules as $key => $module) : ++$count;
-                            $url = UriFactory::build('{/prefix}admin/module/settings?{?}&id=' . $module['name']['internal']);
+                            $url = UriFactory::build('{/prefix}admin/module/settings?{?}&id=' . $module->getInternalName());
 
-                            if (isset($active[$module['name']['internal']])) {
+                            if (isset($active[$module->getInternalName()])) {
                                 $status = ModuleStatus::ACTIVE;
-                            } elseif (isset($installed[$module['name']['internal']])) {
+                            } elseif (isset($installed[$module->getInternalName()])) {
                                 $status = ModuleStatus::INACTIVE;
                             } else {
                                 $status = ModuleStatus::AVAILABLE;
                             }
                     ?>
                 <tr tabindex="0" data-href="<?= $url; ?>">
-                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['id']); ?></a>
-                    <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['name']['external']); ?></a>
-                    <td data-label="<?= $this->getHtml('Version'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module['version']); ?></a>
+                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getId()); ?></a>
+                    <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getExternalName()); ?></a>
+                    <td data-label="<?= $this->getHtml('Version'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getVersion()); ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>">
                         <span class="tag">
                             <a href="<?= $url; ?>">

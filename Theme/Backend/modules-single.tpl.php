@@ -47,26 +47,26 @@ if ($nav !== null) {
             <div class="row">
                 <div class="col-xs-12 col-md-4">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->printHtml($modules[$id]['name']['external']); ?></div>
+                        <div class="portlet-head"><?= $this->printHtml($modules[$id]->getExternalName()); ?></div>
 
                         <div class="portlet-body">
                             <table class="list wf-100">
                                 <tbody>
                                 <tr>
                                     <td><?= $this->getHtml('Name'); ?>
-                                    <td><?= $this->printHtml($modules[$id]['name']['external']); ?>
+                                    <td><?= $this->printHtml($modules[$id]->getExternalName()); ?>
                                 <tr>
                                     <td><?= $this->getHtml('Version'); ?>
-                                    <td><?= $this->printHtml($modules[$id]['version']); ?>
+                                    <td><?= $this->printHtml($modules[$id]->getVersion()); ?>
                                 <tr>
                                     <td><?= $this->getHtml('CreatedBy'); ?>
-                                    <td><?= $this->printHtml($modules[$id]['creator']['name']); ?>
+                                    <td><?= $this->printHtml($modules[$id]->get()['creator']['name']); ?>
                                 <tr>
                                     <td><?= $this->getHtml('Website'); ?>
-                                    <td><?= $this->printHtml($modules[$id]['creator']['website']); ?>
+                                    <td><?= $this->printHtml($modules[$id]->get()['creator']['website']); ?>
                                 <tr>
                                     <td><?= $this->getHtml('Description'); ?>
-                                    <td><?= $this->printHtml($modules[$id]['description']); ?>
+                                    <td><?= $this->printHtml($modules[$id]->get()['description']); ?>
                             </table>
                         </div>
                         <div class="portlet-foot">

@@ -68,12 +68,6 @@ use phpOMS\Version\Version;
  * @license OMS License 1.0
  * @link    https://orange-management.org
  * @since   1.0.0
- *
- * @todo Orange-Management/Modules#172
- *  Add user & group settings
- *
- * @todo Orange-Management/Modules#193
- *  Implement online database and downloading api for modules and updates
  */
 final class ApiController extends Controller
 {
