@@ -158,7 +158,7 @@ final class LocalizationMapper extends DataMapperAbstract
      *
      * @since 1.0.0
      */
-    public static function get($primaryKey, int $relations = RelationType::ALL, int $depth = 1, string $ref = null, Builder $query = null)
+    public static function get($primaryKey, int $relations = RelationType::ALL, int $depth = 1, string $ref = null, Builder $query = null) : mixed
     {
         return parent::get($primaryKey, $relations, 2);
     }
