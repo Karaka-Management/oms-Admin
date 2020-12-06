@@ -50,18 +50,18 @@ echo $this->getData('nav')->render(); ?>
                                 <table class="layout wf-100">
                                     <tbody>
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <tr><td><input id="iId" name="iaccount-idlist" type="text" value="<?= $this->printHtml($account->getId()); ?>" disabled>
+                                    <tr><td><input id="iId" name="iaccount-idlist" type="text" value="<?= $account->getId(); ?>" disabled>
                                     <tr><td><label for="iType"><?= $this->getHtml('Type'); ?></label>
                                     <tr><td><select id="iType" name="type">
-                                                <option value="<?= $this->printHtml(AccountType::USER); ?>"<?= $this->printHtml($account->getType() === AccountType::USER ? ' selected' : ''); ?>><?= $this->getHtml('Person'); ?>
-                                                <option value="<?= $this->printHtml(AccountType::GROUP); ?>"<?= $this->printHtml($account->getType() === AccountType::GROUP ? ' selected' : ''); ?>><?= $this->getHtml('Organization'); ?>
+                                                <option value="<?= AccountType::USER; ?>"<?= $this->printHtml($account->getType() === AccountType::USER ? ' selected' : ''); ?>><?= $this->getHtml('Person'); ?>
+                                                <option value="<?= AccountType::GROUP; ?>"<?= $this->printHtml($account->getType() === AccountType::GROUP ? ' selected' : ''); ?>><?= $this->getHtml('Organization'); ?>
                                             </select>
                                     <tr><td><label for="iStatus"><?= $this->getHtml('Status'); ?></label>
                                     <tr><td><select id="iStatus" name="status">
-                                                <option value="<?= $this->printHtml(AccountStatus::ACTIVE); ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::ACTIVE ? ' selected' : ''); ?>><?= $this->getHtml('Active'); ?>
-                                                <option value="<?= $this->printHtml(AccountStatus::INACTIVE); ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::INACTIVE ? ' selected' : ''); ?>><?= $this->getHtml('Inactive'); ?>
-                                                <option value="<?= $this->printHtml(AccountStatus::TIMEOUT); ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::TIMEOUT ? ' selected' : ''); ?>><?= $this->getHtml('Timeout'); ?>
-                                                <option value="<?= $this->printHtml(AccountStatus::BANNED); ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::BANNED ? ' selected' : ''); ?>><?= $this->getHtml('Banned'); ?>
+                                                <option value="<?= AccountStatus::ACTIVE; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::ACTIVE ? ' selected' : ''); ?>><?= $this->getHtml('Active'); ?>
+                                                <option value="<?= AccountStatus::INACTIVE; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::INACTIVE ? ' selected' : ''); ?>><?= $this->getHtml('Inactive'); ?>
+                                                <option value="<?= AccountStatus::TIMEOUT; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::TIMEOUT ? ' selected' : ''); ?>><?= $this->getHtml('Timeout'); ?>
+                                                <option value="<?= AccountStatus::BANNED; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::BANNED ? ' selected' : ''); ?>><?= $this->getHtml('Banned'); ?>
                                             </select>
                                     <tr><td><label for="iUsername"><?= $this->getHtml('Username'); ?></label>
                                     <tr><td>
@@ -137,7 +137,7 @@ echo $this->getData('nav')->render(); ?>
                                 $url     = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
@@ -157,7 +157,7 @@ echo $this->getData('nav')->render(); ?>
                                 </table>
                             </div>
                             <div class="portlet-foot">
-                                <input name="account" type="hidden" value="<?= $this->printHtml($account->getId()); ?>">
+                                <input name="account" type="hidden" value="<?= $account->getId(); ?>">
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
                         </form>
@@ -250,7 +250,7 @@ echo $this->getData('nav')->render(); ?>
                                 </table>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="permissionref" value="<?= $this->printHtml($account->getId()); ?>">
+                                <input type="hidden" name="permissionref" value="<?= $account->getId(); ?>">
                                 <input type="hidden" name="permissionowner" value="<?= PermissionOwner::ACCOUNT; ?>">
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>

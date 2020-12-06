@@ -12,6 +12,7 @@
  */
 declare(strict_types=1);
 
+use phpOMS\Account\GroupStatus;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
@@ -28,8 +29,8 @@ echo $this->getData('nav')->render(); ?>
                         <tr><td><label for="iStatus"><?= $this->getHtml('Status'); ?></label>
                         <tr><td>
                                 <select id="iStatus" name="status">
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\GroupStatus::ACTIVE); ?>" selected><?= $this->getHtml('Active'); ?>
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\GroupStatus::INACTIVE); ?>"><?= $this->getHtml('Inactive'); ?>
+                                    <option value="<?= GroupStatus::ACTIVE; ?>" selected><?= $this->getHtml('Active'); ?>
+                                    <option value="<?= GroupStatus::INACTIVE; ?>"><?= $this->getHtml('Inactive'); ?>
                                 </select>
                         <tr><td><label for="iGname"><?= $this->getHtml('Name'); ?></label>
                         <tr><td><input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" required>

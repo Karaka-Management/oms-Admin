@@ -49,7 +49,7 @@ $isntalled = $this->getData('isntalled') ?? [];
                             }
                     ?>
                 <tr tabindex="0" data-href="<?= $url; ?>">
-                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getId()); ?></a>
+                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $module->getId(); ?></a>
                     <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getExternalName()); ?></a>
                     <td data-label="<?= $this->getHtml('Version'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getVersion()); ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>">

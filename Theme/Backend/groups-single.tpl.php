@@ -48,7 +48,7 @@ echo $this->getData('nav')->render(); ?>
                             <div class="portlet-head"><?= $this->getHtml('Group'); ?></div>
                             <div class="portlet-body">
                                 <label for="iGid"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                <input id="iGid" name="id" type="text" value="<?= $this->printHtml($group->getId()); ?>" disabled>
+                                <input id="iGid" name="id" type="text" value="<?= $group->getId(); ?>" disabled>
                                 <label for="iGname"><?= $this->getHtml('Name'); ?></label>
                                 <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->name); ?>">
                                 <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
@@ -215,7 +215,7 @@ echo $this->getData('nav')->render(); ?>
                                 </table>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="permissionref" value="<?= $this->printHtml($group->getId()); ?>">
+                                <input type="hidden" name="permissionref" value="<?= $group->getId(); ?>">
                                 <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP; ?>">
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
