@@ -45,6 +45,7 @@ final class AccountMapper extends DataMapperAbstract
         'account_name2'        => ['name' => 'account_name2',        'type' => 'string',   'internal' => 'name2', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
         'account_name3'        => ['name' => 'account_name3',        'type' => 'string',   'internal' => 'name3', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
         'account_password'     => ['name' => 'account_password',     'type' => 'string',   'internal' => 'password', 'writeonly' => true],
+        'account_password_temp' => ['name' => 'account_password_temp',     'type' => 'string',   'internal' => 'tempPassword', 'writeonly' => true],
         'account_email'        => ['name' => 'account_email',        'type' => 'string',   'internal' => 'email', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
         'account_tries'        => ['name' => 'account_tries',        'type' => 'int',      'internal' => 'tries'],
         'account_lactive'      => ['name' => 'account_lactive',      'type' => 'DateTime', 'internal' => 'lastActive'],
@@ -157,12 +158,13 @@ final class AccountMapper extends DataMapperAbstract
      *
      * @param string $login    Username
      * @param string $password Password
+     * @param int    $tries    Allowed login tries
      *
      * @return int Login code
      *
      * @since 1.0.0
      */
-    public static function login(string $login, string $password) : int
+    public static function login(string $login, string $password, int $tries = 3) : int
     {
         if (empty($password)) {
             return LoginReturnType::WRONG_PASSWORD;
@@ -184,7 +186,7 @@ final class AccountMapper extends DataMapperAbstract
 
             $result = $result[0];
 
-            if ($result['account_tries'] <= 0) {
+            if ($result['account_tries'] >= $tries) {
                 return LoginReturnType::WRONG_INPUT_EXCEEDED;
             }
 
@@ -198,7 +200,10 @@ final class AccountMapper extends DataMapperAbstract
 
             if (\password_verify($password, $result['account_password'] ?? '')) {
                 $query->update('account')
-                    ->set(['account_lactive' => new \DateTime('now')])
+                    ->set([
+                        'account_lactive' => new \DateTime('now'),
+                        'account_tries'   => 0,
+                    ])
                     ->where('account_login', '=', $login)
                     ->execute();
 
@@ -212,12 +217,21 @@ final class AccountMapper extends DataMapperAbstract
                     ->set([
                         'account_password_temp' => '',
                         'account_lactive'       => new \DateTime('now'),
+                        'account_tries'         => 0,
                     ])
                     ->where('account_login', '=', $login)
                     ->execute();
 
                 return $result['account_id'];
             }
+
+            $query->update('account')
+                ->set([
+                    'account_lactive' => new \DateTime('now'),
+                    'account_tries'   => $result['account_tries'] + 1,
+                ])
+                ->where('account_login', '=', $login)
+                ->execute();
 
             return LoginReturnType::WRONG_PASSWORD;
         } catch (\Exception $e) {

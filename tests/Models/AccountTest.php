@@ -31,7 +31,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     public function testDefault() : void
     {
         $account = new Account();
-        self::assertEquals(0, $account->getLoginTries());
+        self::assertEquals(0, $account->tries);
     }
 
     /**
@@ -43,7 +43,7 @@ class AccountTest extends \PHPUnit\Framework\TestCase
     {
         $account = new Account();
 
-        $account->setLoginTries(3);
-        self::assertEquals(3, $account->getLoginTries());
+        $account->tries = 3;
+        self::assertEquals(3, $account->tries);
     }
 }
