@@ -13,6 +13,8 @@
 declare(strict_types=1);
 
 use phpOMS\Uri\UriFactory;
+use phpOMS\Account\AccountType;
+use phpOMS\Account\AccountStatus;
 
 /** @var \phpOMS\Views\View $this */
 echo $this->getData('nav')->render(); ?>
@@ -27,15 +29,15 @@ echo $this->getData('nav')->render(); ?>
                         <tbody>
                         <tr><td><label for="iType"><?= $this->getHtml('Type'); ?></label>
                         <tr><td><select id="Type" name="type">
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\AccountType::USER); ?>"><?= $this->getHtml('Person'); ?>
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\AccountType::GROUP); ?>"><?= $this->getHtml('Organization'); ?>
+                                    <option value="<?= $this->printHtml((string) AccountType::USER); ?>"><?= $this->getHtml('Person'); ?>
+                                    <option value="<?= $this->printHtml((string) AccountType::GROUP); ?>"><?= $this->getHtml('Organization'); ?>
                                 </select>
                         <tr><td><label for="iStatus"><?= $this->getHtml('Status'); ?></label>
                         <tr><td><select id="iStatus" name="status">
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\AccountStatus::ACTIVE); ?>"><?= $this->getHtml('Active'); ?>
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\AccountStatus::INACTIVE); ?>"><?= $this->getHtml('Inactive'); ?>
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\AccountStatus::TIMEOUT); ?>"><?= $this->getHtml('Timeout'); ?>
-                                    <option value="<?= $this->printHtml(\phpOMS\Account\AccountStatus::BANNED); ?>"><?= $this->getHtml('Banned'); ?>
+                                    <option value="<?= $this->printHtml((string) AccountStatus::ACTIVE); ?>"><?= $this->getHtml('Active'); ?>
+                                    <option value="<?= $this->printHtml((string) AccountStatus::INACTIVE); ?>"><?= $this->getHtml('Inactive'); ?>
+                                    <option value="<?= $this->printHtml((string) AccountStatus::TIMEOUT); ?>"><?= $this->getHtml('Timeout'); ?>
+                                    <option value="<?= $this->printHtml((string) AccountStatus::BANNED); ?>"><?= $this->getHtml('Banned'); ?>
                                 </select>
                         <tr><td><label for="iUsername"><?= $this->getHtml('Username'); ?></label>
                         <tr><td><input id="iUsername" name="login" type="text" autocomplete="off" spellcheck="false" placeholder="&#xf007; Fred">

@@ -298,7 +298,7 @@ echo $this->getData('nav')->render(); ?>
                                     <td><?= $audit->getId(); ?>
                                     <td><?= $this->printHtml($audit->getModule()); ?>
                                     <td><?= $audit->getType(); ?>
-                                    <td><?= $audit->getSubtype(); ?>
+                                    <td><?= $this->printHtml($audit->getTrigger()); ?>
                                     <td><?= $this->printHtml($audit->getOld()); ?>
                                     <td><?= $this->printHtml($audit->getNew()); ?>
                                     <td><?= $this->printHtml($audit->getContent()); ?>

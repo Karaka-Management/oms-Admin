@@ -153,8 +153,6 @@ if ($nav !== null) {
                                 <col style="width: 75px">
                                 <col style="width: 150px">
                                 <col style="width: 100px">
-                                <col style="width: 75px">
-                                <col>
                                 <col>
                                 <col>
                                 <col style="width: 125px">
@@ -164,15 +162,13 @@ if ($nav !== null) {
                             <thead>
                             <tr>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                <td ><?= $this->getHtml('Module', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('Type', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('Subtype', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('Old', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('New', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('Content', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('By', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('Ref', 'Auditor'); ?>
-                                <td ><?= $this->getHtml('Date', 'Auditor'); ?>
+                                <td><?= $this->getHtml('Module', 'Auditor'); ?>
+                                <td><?= $this->getHtml('Type', 'Auditor'); ?>
+                                <td><?= $this->getHtml('Trigger', 'Auditor'); ?>
+                                <td><?= $this->getHtml('Content', 'Auditor'); ?>
+                                <td><?= $this->getHtml('By', 'Auditor'); ?>
+                                <td><?= $this->getHtml('Ref', 'Auditor'); ?>
+                                <td><?= $this->getHtml('Date', 'Auditor'); ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
                             $url         = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
@@ -180,16 +176,14 @@ if ($nav !== null) {
                                     <td><?= $audit->getId(); ?>
                                     <td><?= $this->printHtml($audit->getModule()); ?>
                                     <td><?= $audit->getType(); ?>
-                                    <td><?= $audit->getSubtype(); ?>
-                                    <td><?= $this->printHtml($audit->getOld()); ?>
-                                    <td><?= $this->printHtml($audit->getNew()); ?>
+                                    <td><?= $this->printHtml($audit->getTrigger()); ?>
                                     <td><?= $this->printHtml($audit->getContent()); ?>
                                     <td><?= $this->printHtml($audit->createdBy->login); ?>
                                     <td><?= $this->printHtml($audit->getRef()); ?>
                                     <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
-                                <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                <tr><td colspan="8" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                             <?php endif; ?>
                         </table>
                         <div class="portlet-foot">

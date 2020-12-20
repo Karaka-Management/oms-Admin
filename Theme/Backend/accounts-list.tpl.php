@@ -50,7 +50,7 @@ echo $this->getData('nav')->render(); ?>
                         <input id="accountList-r5-desc" name="accountList-sort" type="radio"><label for="accountList-r5-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
                     <tbody>
                         <?php $c                                                          = 0; foreach ($accounts as $key => $value) : ++$c;
-                        $url                                                              = \phpOMS\Uri\UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
+                        $url                                                              = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
                         $color                                                            = 'darkred';
                         if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }
                         elseif ($value->getStatus() === AccountStatus::INACTIVE) { $color = 'darkblue'; }
