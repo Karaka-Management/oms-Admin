@@ -109,12 +109,12 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
     public function testInvalidLoginTries() : void
     {
         $accountR = AccountMapper::get(1);
-        $accountR->tries = 0;
+        $accountR->tries = 10;
         AccountMapper::update($accountR);
 
         self::assertEquals(LoginReturnType::WRONG_INPUT_EXCEEDED, AccountMapper::login($accountR->login, 'orange'));
 
-        $accountR->tries = 3;
+        $accountR->tries = 0;
         AccountMapper::update($accountR);
     }
 
