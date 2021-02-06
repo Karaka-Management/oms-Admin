@@ -29,6 +29,16 @@
                 "name": "country_numeric",
                 "type": "INT(11)",
                 "null": false
+            },
+            "country_region": {
+                "name": "country_region",
+                "type": "VARCHAR(15)",
+                "null": true
+            },
+            "country_developed": {
+                "name": "country_developed",
+                "type": "TINYINT",
+                "null": false
             }
         }
     },

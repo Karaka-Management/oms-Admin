@@ -65,7 +65,7 @@ final class Installer extends InstallerAbstract
         $con = $dbPool->get();
 
         $query = new Builder($con);
-        $query->insert('country_name', 'country_code2', 'country_code3', 'country_numeric')
+        $query->insert('country_name', 'country_code2', 'country_code3', 'country_numeric', 'country_region', 'country_developed')
             ->into('country');
 
         $querySqlite = new Builder($sqlite);
@@ -76,7 +76,9 @@ final class Installer extends InstallerAbstract
                 $country['country_name'] === null ? null : \trim($country['country_name']),
                 $country['country_code2'] === null ? null : \trim($country['country_code2']),
                 $country['country_code3'] === null ? null : \trim($country['country_code3']),
-                $country['country_numeric']
+                $country['country_numeric'],
+                $country['country_region'],
+                (int) $country['country_developed']
             );
         }
 
