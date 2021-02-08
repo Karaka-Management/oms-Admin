@@ -12,9 +12,9 @@
  */
 declare(strict_types=1);
 
-use phpOMS\Uri\UriFactory;
-use phpOMS\Account\AccountType;
 use phpOMS\Account\AccountStatus;
+use phpOMS\Account\AccountType;
+use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
 echo $this->getData('nav')->render(); ?>

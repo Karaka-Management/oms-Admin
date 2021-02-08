@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
-use Model\SettingsEnum;
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
