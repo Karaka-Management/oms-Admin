@@ -29,6 +29,9 @@
     </report>
   </coverage>
   <testsuites>
+    <testsuite name="Install">
+      <directory>../Orange-Management/Install/tests*</directory>
+    </testsuite>
     <testsuite name="Module">
       <directory>../tests*</directory>
     </testsuite>

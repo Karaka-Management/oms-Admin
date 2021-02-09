@@ -34,6 +34,7 @@ final class Autoloader
      */
     private static $paths = [
         __DIR__ . '/../',
+        __DIR__ . '/../Orange-Management/',
         __DIR__ . '/../../',
     ];
 
