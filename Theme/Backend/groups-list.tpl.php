@@ -13,12 +13,14 @@
 declare(strict_types=1);
 
 use phpOMS\Uri\UriFactory;
+use phpOMS\Account\GroupStatus;
 
 /**
  * @var \phpOMS\Views\View            $this
  * @var \Modules\Admin\Models\Group[] $groups
  */
 $groups = $this->getData('groups') ?? [];
+$memberCount = $this->getData('memberCount') ?? [];
 
 $previous = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \reset($groups)->getId() . '&ptype=p';
 $next     = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \end($groups)->getId() . '&ptype=n';
@@ -37,17 +39,20 @@ echo $this->getData('nav')->render(); ?>
                         <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <td><?= $this->getHtml('Members'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                 <tbody>
-                    <?php $c                                                                                = 0; foreach ($groups as $key => $value) : ++$c;
-                        $url                                                                                = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId());
-                        $color                                                                              = 'darkred';
-                            if ($value->getStatus() === \phpOMS\Account\GroupStatus::ACTIVE) { $color       = 'green'; }
-                            elseif ($value->getStatus() === \phpOMS\Account\GroupStatus::INACTIVE) { $color = 'darkblue'; }
-                            elseif ($value->getStatus() === \phpOMS\Account\GroupStatus::HIDDEN) { $color   = 'purple'; } ?>
+                    <?php $c = 0;
+                        foreach ($groups as $key => $value) : ++$c;
+                            $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId());
+
+                            $color = 'darkred';
+                            if ($value->getStatus() === GroupStatus::ACTIVE) { $color       = 'green'; }
+                            elseif ($value->getStatus() === GroupStatus::INACTIVE) { $color = 'darkblue'; }
+                            elseif ($value->getStatus() === GroupStatus::HIDDEN) { $color   = 'purple'; }
+                    ?>
                     <tr tabindex="0" data-href="<?= $url; ?>">
                         <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
                         <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status'. $value->getStatus()); ?></span></a>
                         <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
-                        <td data-label="<?= $this->getHtml('Members'); ?>">
+                        <td data-label="<?= $this->getHtml('Members'); ?>"><?= $memberCount[$value->getId()] ?? 0; ?>
                     <?php endforeach; ?>
                     <?php if ($c === 0) : ?>
                     <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

@@ -677,6 +677,12 @@
                 "default": null,
                 "null": true
             },
+            "account_password_temp_limit": {
+                "name": "account_password_temp_limit",
+                "type": "DATETIME",
+                "default": null,
+                "null": true
+            },
             "account_email": {
                 "name": "account_email",
                 "type": "VARCHAR(70)",

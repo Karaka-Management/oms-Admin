@@ -46,6 +46,7 @@ final class AccountMapper extends DataMapperAbstract
         'account_name3'         => ['name' => 'account_name3',        'type' => 'string',   'internal' => 'name3', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
         'account_password'      => ['name' => 'account_password',     'type' => 'string',   'internal' => 'password', 'writeonly' => true],
         'account_password_temp' => ['name' => 'account_password_temp',     'type' => 'string',   'internal' => 'tempPassword', 'writeonly' => true],
+        'account_password_temp_limit' => ['name' => 'account_password_temp_limit',     'type' => 'DateTimeImmutable',   'internal' => 'tempPasswordLimit'],
         'account_email'         => ['name' => 'account_email',        'type' => 'string',   'internal' => 'email', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
         'account_tries'         => ['name' => 'account_tries',        'type' => 'int',      'internal' => 'tries'],
         'account_lactive'       => ['name' => 'account_lactive',      'type' => 'DateTime', 'internal' => 'lastActive'],
@@ -211,6 +212,8 @@ final class AccountMapper extends DataMapperAbstract
             }
 
             if (!empty($result['account_password_temp'])
+                && $result['account_password_temp_limit'] !== null
+                && (new \DateTime('now'))->getTimestamp() < (new \DateTime($result['account_password_temp_limit']))->getTimestamp()
                 && \password_verify($password, $result['account_password_temp'] ?? '')
             ) {
                 $query->update('account')
@@ -227,8 +230,7 @@ final class AccountMapper extends DataMapperAbstract
 
             $query->update('account')
                 ->set([
-                    'account_lactive' => new \DateTime('now'),
-                    'account_tries'   => $result['account_tries'] + 1,
+                    'account_tries' => $result['account_tries'] + 1,
                 ])
                 ->where('account_login', '=', $login)
                 ->execute();

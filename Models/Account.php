@@ -31,4 +31,20 @@ class Account extends \phpOMS\Account\Account
      * @since 1.0.0
      */
     public int $tries = 0;
+
+    /**
+     * Password.
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public string $tempPassword = '';
+
+    /**
+     * Remaining login tries.
+     *
+     * @var null|\DateTimeImmutable
+     * @since 1.0.0
+     */
+    public ?\DateTimeImmutable $tempPasswordLimit = null;
 }

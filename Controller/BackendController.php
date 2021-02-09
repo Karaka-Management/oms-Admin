@@ -229,6 +229,9 @@ final class BackendController extends Controller
             $view->setData('groups', GroupMapper::getAfterPivot(0, null, 25));
         }
 
+        $memberCount = GroupMapper::countMembers();
+        $view->setData('memberCount', $memberCount);
+
         return $view;
     }
 

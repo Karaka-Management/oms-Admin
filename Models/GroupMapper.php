@@ -16,6 +16,7 @@ namespace Modules\Admin\Models;
 
 use phpOMS\DataStorage\Database\DataMapperAbstract;
 use phpOMS\DataStorage\Database\RelationType;
+use phpOMS\DataStorage\Database\Query\Builder;
 
 /**
  * Group mapper class.
@@ -107,5 +108,23 @@ final class GroupMapper extends DataMapperAbstract
             ->where(GroupPermissionMapper::getTable() . '.group_permission_module', '=', $module);
 
         return self::getAllByQuery($query, RelationType::ALL, $depth);
+    }
+
+    public static function countMembers(int $group = 0) : array
+    {
+        $query  = new Builder(self::$db);
+        $query->select(self::$hasMany['accounts']['self'])
+            ->select('COUNT(' . self::$hasMany['accounts']['external'] . ')')
+            ->from(self::$hasMany['accounts']['table'])
+            ->groupBy(self::$hasMany['accounts']['self']);
+
+        if ($group !== 0) {
+            $query->where(self::$hasMany['accounts']['self'], '=', $group);
+        }
+
+        $result = $query->execute()
+            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+        return $result;
     }
 }
