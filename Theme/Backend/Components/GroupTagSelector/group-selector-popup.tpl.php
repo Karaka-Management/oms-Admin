@@ -3,7 +3,7 @@
         <header><h1><?= $this->getHtml('Group', 'Admin'); ?></h1></header>
 
         <div class="inner">
-            <label for="iSearchGroup">Search</label>
+            <label for="iSearchGroup"><?= $this->getHtml('Search'); ?></label>
             <input type="text" id="iSearchGroup" name="receiver-search" data-action='[
                 {
                     "key": 1, "listener": "keyup", "action": [
@@ -17,12 +17,12 @@
             <table id="acc-table" class="table">
                 <thead>
                     <tr>
-                        <th data-name="id">ID
-                        <th data-name="name">Name
-                        <th data-name="address">Address
-                        <th data-name="city">City
-                        <th data-name="zip">Zip
-                        <th data-name="country">Country
+                        <th data-name="id"><?= $this->getHtml('ID', '0', '0'); ?>
+                        <th data-name="name"><?= $this->getHtml('Name'); ?>
+                        <th data-name="address"><?= $this->getHtml('Address'); ?>
+                        <th data-name="city"><?= $this->getHtml('City'); ?>
+                        <th data-name="zip"><?= $this->getHtml('Zip'); ?>
+                        <th data-name="country"><?= $this->getHtml('Country'); ?>
                 <tbody data-action='[
                     {
                         "key": 1, "listener": "click", "selector": "#acc-table tbody tr", "action": [
