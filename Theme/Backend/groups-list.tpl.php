@@ -12,14 +12,14 @@
  */
 declare(strict_types=1);
 
-use phpOMS\Uri\UriFactory;
 use phpOMS\Account\GroupStatus;
+use phpOMS\Uri\UriFactory;
 
 /**
  * @var \phpOMS\Views\View            $this
  * @var \Modules\Admin\Models\Group[] $groups
  */
-$groups = $this->getData('groups') ?? [];
+$groups      = $this->getData('groups') ?? [];
 $memberCount = $this->getData('memberCount') ?? [];
 
 $previous = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \reset($groups)->getId() . '&ptype=p';
@@ -43,7 +43,7 @@ echo $this->getData('nav')->render(); ?>
                         foreach ($groups as $key => $value) : ++$c;
                             $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId());
 
-                            $color = 'darkred';
+                            $color                                                          = 'darkred';
                             if ($value->getStatus() === GroupStatus::ACTIVE) { $color       = 'green'; }
                             elseif ($value->getStatus() === GroupStatus::INACTIVE) { $color = 'darkblue'; }
                             elseif ($value->getStatus() === GroupStatus::HIDDEN) { $color   = 'purple'; }
