@@ -4,6 +4,7 @@
  *
  * PHP Version 8.0
  *
+ * @package   Modules\Localization
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
@@ -22,7 +23,7 @@ return ['Admin' => [
     'Activate'                 => 'Activate',
     'Active'                   => 'Active',
     'Activity'                 => 'Activity',
-    'Address'                  => '',
+    'Address'                  => 'Address',
     'All'                      => 'All',
     'Amount'                   => 'Amount',
     'App'                      => 'App',
@@ -32,7 +33,7 @@ return ['Admin' => [
     'Banned'                   => 'Banned',
     'Cache'                    => 'Cache',
     'Children'                 => 'Children',
-    'City'                     => '',
+    'City'                     => 'City',
     'Close'                    => 'Close',
     'Comp'                     => 'Comp.',
     'Component'                => 'Component',
@@ -119,7 +120,7 @@ return ['Admin' => [
     'Reset'                    => 'Reset',
     'Running'                  => 'Running',
     'Sea'                      => 'Sea',
-    'Search'                   => '',
+    'Search'                   => 'Search',
     'Security'                 => 'Security',
     'Settings'                 => 'Settings',
     'SettingsGeneral'          => 'Settings - General',
@@ -166,7 +167,7 @@ return ['Admin' => [
     'Warnings'                 => 'Warnings',
     'Website'                  => 'Website',
     'Weight'                   => 'Weight',
-    'Zip'                      => '',
+    'Zip'                      => 'Zip',
     'i:LoginRetries'           => 'Amount of allowed retries (-1 = unlimited)',
     'i:PasswordChangeInterval' => 'Interval in which passwards need to be changed (-1 = never)',
     'i:PasswordHistory'        => 'New password has to be different from the last N passwords',
