@@ -4,7 +4,7 @@
  *
  * PHP Version 8.0
  *
- * @package   Modules\Admin\Language\Backend
+ * @package   Modules\Admin
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
@@ -12,6 +12,5 @@
  */
 declare(strict_types=1);
 
-$MODLANG[1] = [
-    'i:ModuleInstalled' => 'Installation of the module {$1} was successful.',
-];
+return ['Admin' => [
+]];
