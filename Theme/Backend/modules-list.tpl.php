@@ -38,7 +38,7 @@ $isntalled = $this->getData('isntalled') ?? [];
                         </label>
                         <label for="moduleList-sort-2">
                             <input type="radio" name="moduleList-sort" id="moduleList-sort-2">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -50,7 +50,7 @@ $isntalled = $this->getData('isntalled') ?? [];
                         </label>
                         <label for="moduleList-sort-4">
                             <input type="radio" name="moduleList-sort" id="moduleList-sort-4">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -63,7 +63,7 @@ $isntalled = $this->getData('isntalled') ?? [];
                         </label>
                         <label for="moduleList-sort-6">
                             <input type="radio" name="moduleList-sort" id="moduleList-sort-6">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>

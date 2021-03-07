@@ -40,7 +40,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="accountList-r1-desc">
                             <input id="accountList-r1-desc" name="accountList-sort" type="radio">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -52,7 +52,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="accountList-r2-desc">
                             <input id="accountList-r2-desc" name="accountList-sort" type="radio">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -64,7 +64,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="accountList-r3-desc">
                             <input id="accountList-r3-desc" name="accountList-sort" type="radio">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -76,7 +76,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="accountList-r4-desc">
                             <input id="accountList-r4-desc" name="accountList-sort" type="radio">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -88,7 +88,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="accountList-r5-desc">
                             <input id="accountList-r5-desc" name="accountList-sort" type="radio">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>

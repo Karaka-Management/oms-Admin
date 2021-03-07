@@ -41,7 +41,7 @@ echo $this->getData('nav')->render(); ?>
                             </label>
                             <label for="groupList-r1-desc">
                                 <input id="groupList-r1-desc" name="groupList-sort" type="radio">
-                                <i class="sort-desc fa fa-chevron-down"></i>
+                               <i class="sort-desc fa fa-chevron-down"></i>
                             </label>
                         <td><?= $this->getHtml('Status'); ?>
                             <label for="groupList-r2-asc">
@@ -50,7 +50,7 @@ echo $this->getData('nav')->render(); ?>
                             </label>
                             <label for="groupList-r2-desc">
                                 <input id="groupList-r2-desc" name="groupList-sort" type="radio">
-                                <i class="sort-desc fa fa-chevron-down"></i>
+                               <i class="sort-desc fa fa-chevron-down"></i>
                             </label>
                         <td class="wf-100"><?= $this->getHtml('Name'); ?>
                             <label for="groupList-r3-asc">
@@ -59,7 +59,7 @@ echo $this->getData('nav')->render(); ?>
                             </label>
                             <label for="groupList-r3-desc">
                                 <input id="groupList-r3-desc" name="groupList-sort" type="radio">
-                                <i class="sort-desc fa fa-chevron-down"></i>
+                               <i class="sort-desc fa fa-chevron-down"></i>
                             </label>
                         <td><?= $this->getHtml('Members'); ?>
                             <label for="groupList-r4-asc">
@@ -68,7 +68,7 @@ echo $this->getData('nav')->render(); ?>
                             </label>
                             <label for="groupList-r4-desc">
                                 <input id="groupList-r4-desc" name="groupList-sort" type="radio">
-                                <i class="sort-desc fa fa-chevron-down"></i>
+                               <i class="sort-desc fa fa-chevron-down"></i>
                             </label>
                 <tbody>
                     <?php $c = 0;
