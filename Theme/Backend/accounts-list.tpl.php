@@ -34,20 +34,65 @@ echo $this->getData('nav')->render(); ?>
                 <thead>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
-                        <input id="accountList-r1-asc" name="accountList-sort" type="radio"><label for="accountList-r1-asc"><i class="sort-asc fa fa-chevron-up"></i></label>
-                        <input id="accountList-r1-desc" name="accountList-sort" type="radio"><label for="accountList-r1-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
+                        <label for="accountList-r1-asc">
+                            <input id="accountList-r1-asc" name="accountList-sort" type="radio">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="accountList-r1-desc">
+                            <input id="accountList-r1-desc" name="accountList-sort" type="radio">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                     <td><?= $this->getHtml('Status'); ?>
-                        <input id="accountList-r2-asc" name="accountList-sort" type="radio"><label for="accountList-r2-asc"><i class="sort-asc fa fa-chevron-up"></i></label>
-                        <input id="accountList-r2-desc" name="accountList-sort" type="radio"><label for="accountList-r2-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
+                        <label for="accountList-r2-asc">
+                            <input id="accountList-r2-asc" name="accountList-sort" type="radio">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="accountList-r2-desc">
+                            <input id="accountList-r2-desc" name="accountList-sort" type="radio">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                     <td class="wf-100"><?= $this->getHtml('Name'); ?>
-                        <input id="accountList-r3-asc" name="accountList-sort" type="radio"><label for="accountList-r3-asc"><i class="sort-asc fa fa-chevron-up"></i></label>
-                        <input id="accountList-r3-desc" name="accountList-sort" type="radio"><label for="accountList-r3-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
+                        <label for="accountList-r3-asc">
+                            <input id="accountList-r3-asc" name="accountList-sort" type="radio">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="accountList-r3-desc">
+                            <input id="accountList-r3-desc" name="accountList-sort" type="radio">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                     <td><?= $this->getHtml('Activity'); ?>
-                        <input id="accountList-r4-asc" name="accountList-sort" type="radio"><label for="accountList-r4-asc"><i class="sort-asc fa fa-chevron-up"></i></label>
-                        <input id="accountList-r4-desc" name="accountList-sort" type="radio"><label for="accountList-r4-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
+                        <label for="accountList-r4-asc">
+                            <input id="accountList-r4-asc" name="accountList-sort" type="radio">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="accountList-r4-desc">
+                            <input id="accountList-r4-desc" name="accountList-sort" type="radio">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                     <td><?= $this->getHtml('Created'); ?>
-                        <input id="accountList-r5-asc" name="accountList-sort" type="radio"><label for="accountList-r5-asc"><i class="sort-asc fa fa-chevron-up"></i></label>
-                        <input id="accountList-r5-desc" name="accountList-sort" type="radio"><label for="accountList-r5-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
+                        <label for="accountList-r5-asc">
+                            <input id="accountList-r5-asc" name="accountList-sort" type="radio">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="accountList-r5-desc">
+                            <input id="accountList-r5-desc" name="accountList-sort" type="radio">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                     <tbody>
                         <?php $c                                                          = 0; foreach ($accounts as $key => $value) : ++$c;
                         $url                                                              = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());

@@ -31,10 +31,43 @@ $isntalled = $this->getData('isntalled') ?? [];
             <table id="moduleList" class="default">
                 <thead>
                 <tr>
-                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                    <td><?= $this->getHtml('ID', '0', '0'); ?>
+                        <label for="moduleList-sort-1">
+                            <input type="radio" name="moduleList-sort" id="moduleList-sort-1">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="moduleList-sort-2">
+                            <input type="radio" name="moduleList-sort" id="moduleList-sort-2">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
+                    <td class="wf-100"><?= $this->getHtml('Name'); ?>
+                        <label for="moduleList-sort-3">
+                            <input type="radio" name="moduleList-sort" id="moduleList-sort-3">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="moduleList-sort-4">
+                            <input type="radio" name="moduleList-sort" id="moduleList-sort-4">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                     <td><?= $this->getHtml('Version'); ?>
-                    <td><?= $this->getHtml('Status'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                    <td><?= $this->getHtml('Status'); ?>
+                        <label for="moduleList-sort-5">
+                            <input type="radio" name="moduleList-sort" id="moduleList-sort-5">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="moduleList-sort-6">
+                            <input type="radio" name="moduleList-sort" id="moduleList-sort-6">
+                             <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                 <tbody>
                     <?php $count = 0;
                         foreach ($modules as $key => $module) : ++$count;

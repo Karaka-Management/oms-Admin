@@ -165,6 +165,17 @@ return [
             ],
         ],
     ],
+    '^.*/admin/account/localization(\?.*|$)' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsAccountLocalizationSet',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+                'module' => AdminApiController::MODULE_NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionState::ACCOUNT_SETTINGS,
+            ],
+        ],
+    ],
 
     '^.*/admin/module/status.*$' => [
         [
