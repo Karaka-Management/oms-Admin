@@ -43,6 +43,9 @@ use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\RequestMethod;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\Http\Rest;
+use phpOMS\Message\Mail\Email;
+use phpOMS\Message\Mail\MailHandler;
+use phpOMS\Message\Mail\SubmitType;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
@@ -57,11 +60,6 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
-use phpOMS\Message\Mail\Email;
-use phpOMS\Message\Mail\Imap;
-use phpOMS\Message\Mail\MailHandler;
-use phpOMS\Message\Mail\SubmitType;
-use phpOMS\System\CharsetType;
 
 /**
  * Admin controller class.

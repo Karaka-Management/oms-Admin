@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
+use Model\SettingMapper;
 use Model\SettingsEnum;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
@@ -31,7 +32,6 @@ use phpOMS\Message\ResponseAbstract;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
-use Model\SettingMapper;
 
 /**
  * Admin controller class.
@@ -78,7 +78,7 @@ final class BackendController extends Controller
      */
     public function viewSettingsGeneral(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
-        $view     = new View($this->app->l11nManager, $request, $response);
+        $view            = new View($this->app->l11nManager, $request, $response);
         $generalSettings = $this->app->appSettings->get(null, [
                 SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_ORGANIZATION,
                 SettingsEnum::LOGIN_STATUS, SettingsEnum::DEFAULT_LOCALIZATION, SettingsEnum::ADMIN_MAIL,
@@ -89,8 +89,6 @@ final class BackendController extends Controller
         $view->setData('generalSettings', $generalSettings);
         $view->setData('defaultlocalization', LocalizationMapper::get((int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]));
         $view->setData('settings', SettingMapper::getAll());
-
-
 
         return $view;
     }

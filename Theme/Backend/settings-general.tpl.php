@@ -20,7 +20,7 @@ use phpOMS\Uri\UriFactory;
  * @var \phpOMS\Views\View $this
  */
 $generalSettings = $this->getData('generalSettings') ?? [];
-$settings = $this->getData('settings') ?? [];
+$settings        = $this->getData('settings') ?? [];
 
 $countryCodes    = \phpOMS\Localization\ISO3166TwoEnum::getConstants();
 $countries       = \phpOMS\Localization\ISO3166NameEnum::getConstants();

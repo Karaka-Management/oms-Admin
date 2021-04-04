@@ -49,7 +49,7 @@ class Address extends Location
     {
         $data = parent::toArray();
 
-        $data['name'] = $this->name;
+        $data['name']     = $this->name;
         $data['addition'] = $this->addition;
 
         return $data;
@@ -80,7 +80,7 @@ class Address extends Location
 
         $data = \json_decode($serialized, true);
 
-        $this->name = $data['name'];
+        $this->name     = $data['name'];
         $this->addition = $data['addition'];
     }
 }
