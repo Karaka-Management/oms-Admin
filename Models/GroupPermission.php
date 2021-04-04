@@ -44,7 +44,7 @@ class GroupPermission extends PermissionAbstract
      * @param null|int    $unit       Unit Unit to check (null if all are acceptable)
      * @param null|string $app        App App to check  (null if all are acceptable)
      * @param null|string $module     Module to check  (null if all are acceptable)
-     * @param int         $from       Module providing this permission
+     * @param null|string $from       Module providing this permission
      * @param null|int    $type       Type (e.g. customer) (null if all are acceptable)
      * @param null|int    $element    (e.g. customer id) (null if all are acceptable)
      * @param null|int    $component  (e.g. address) (null if all are acceptable)
@@ -57,7 +57,7 @@ class GroupPermission extends PermissionAbstract
         int $unit = null,
         string $app = null,
         string $module = null,
-        int $from = 0,
+        string $from = null,
         int $type = null,
         int $element = null,
         int $component = null,

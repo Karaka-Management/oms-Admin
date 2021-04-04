@@ -29,9 +29,15 @@ echo $this->getData('nav')->render(); ?>
 <div class="row">
     <div class="col-xs-12">
         <div class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Accounts'); ?><i class="fa fa-download floatRight download btn"></i></div>
+            <div class="portlet-head">
+                <?= $this->getHtml('Accounts'); ?>
+                <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-export-data.tpl.php'; ?>
+            </div>
             <table id="accountList" class="default">
                 <thead>
+                <template>
+
+                </template>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
                         <label for="accountList-r1-asc">
@@ -42,9 +48,7 @@ echo $this->getData('nav')->render(); ?>
                             <input id="accountList-r1-desc" name="accountList-sort" type="radio">
                             <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
+                        <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-export-data.tpl.php'; ?>
                     <td><?= $this->getHtml('Status'); ?>
                         <label for="accountList-r2-asc">
                             <input id="accountList-r2-asc" name="accountList-sort" type="radio">

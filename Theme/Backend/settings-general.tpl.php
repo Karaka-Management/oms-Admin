@@ -19,6 +19,7 @@ use phpOMS\Uri\UriFactory;
 /**
  * @var \phpOMS\Views\View $this
  */
+$generalSettings = $this->getData('generalSettings') ?? [];
 $settings = $this->getData('settings') ?? [];
 
 $countryCodes    = \phpOMS\Localization\ISO3166TwoEnum::getConstants();
@@ -44,6 +45,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
             <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label></li>
+            <li><label for="c-tab-3"><?= $this->getHtml('Settings'); ?></label></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -60,7 +62,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                         <tr><td><label for="iOname"><?= $this->getHtml('OrganizationName'); ?></label>
                                         <tr><td>
                                             <select id="iOname" name="settings_1000000009">
-                                                <?php $unit = UnitMapper::get((int) $settings[1000000009]); ?>
+                                                <?php $unit = UnitMapper::get((int) $generalSettings[1000000009]); ?>
                                                     <option value="<?= $unit->getId(); ?>"><?= $this->printHtml($unit->name); ?>
                                             </select>
                                 </table>
@@ -80,23 +82,23 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                         <tr><td>
                                             <label for="iPassword"><?= $this->getHtml('PasswordRegex'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($settings['1000000001']['content']); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
+                                        <tr><td><input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001']['content']); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
                                         <tr><td>
                                             <label for="iLoginRetries"><?= $this->getHtml('LoginRetries'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($settings['1000000005']['content']); ?>" min="-1">
+                                        <tr><td><input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($generalSettings['1000000005']['content']); ?>" min="-1">
                                         <tr><td>
                                             <label for="iTimeoutPeriod"><?= $this->getHtml('TimeoutPeriod'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($settings['1000000002']['content']); ?>">
+                                        <tr><td><input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($generalSettings['1000000002']['content']); ?>">
                                         <tr><td>
                                             <label for="iPasswordChangeInterval"><?= $this->getHtml('PasswordChangeInterval'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($settings['1000000003']['content']); ?>">
+                                        <tr><td><input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($generalSettings['1000000003']['content']); ?>">
                                         <tr><td>
                                             <label for="iPasswordHistory"><?= $this->getHtml('PasswordHistory'); ?></label>
                                             <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory'); ?>"><i class="fa fa-info-circle"></i></i>
-                                        <tr><td><input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($settings['1000000004']['content']); ?>">
+                                        <tr><td><input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($generalSettings['1000000004']['content']); ?>">
                                 </table>
                             </div>
                             <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>
@@ -118,7 +120,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                                 <?= $this->getHtml('Log'); ?>
                                             </label>
                                         <tr><td><label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
-                                        <tr><td><input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($settings['1000000007']['content']); ?>" placeholder="&#xf023; /Logs">
+                                        <tr><td><input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']['content']); ?>" placeholder="&#xf023; /Logs">
                                 </table>
                             </div>
                             <div class="portlet-foot"><input id="iSubmitGeneral" name="submitGeneral" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"></div>
@@ -540,6 +542,99 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 </table>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="radio" id="c-tab-3" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-3' ? ' checked' : ''; ?>>
+        <div class="tab">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <table id="settingsList" class="default">
+                            <thead>
+                            <tr>
+                                <td>
+                                <td><?= $this->getHtml('ID', '0', '0'); ?>
+                                    <label for="settingsList-sort-1">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-1">
+                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                    </label>
+                                    <label for="settingsList-sort-2">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-2">
+                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                    </label>
+                                    <label>
+                                        <i class="filter fa fa-filter"></i>
+                                    </label>
+                                <td><?= $this->getHtml('Name'); ?>
+                                    <label for="settingsList-sort-3">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-3">
+                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                    </label>
+                                    <label for="settingsList-sort-4">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-4">
+                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                    </label>
+                                    <label>
+                                        <i class="filter fa fa-filter"></i>
+                                    </label>
+                                <td class="wf-100"><?= $this->getHtml('Value'); ?>
+                                <td><?= $this->getHtml('Module'); ?>
+                                    <label for="settingsList-sort-5">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-5">
+                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                    </label>
+                                    <label for="settingsList-sort-6">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-6">
+                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                    </label>
+                                    <label>
+                                        <i class="filter fa fa-filter"></i>
+                                    </label>
+                                <td><?= $this->getHtml('Group'); ?>
+                                    <label for="settingsList-sort-7">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-7">
+                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                    </label>
+                                    <label for="settingsList-sort-8">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-8">
+                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                    </label>
+                                    <label>
+                                        <i class="filter fa fa-filter"></i>
+                                    </label>
+                                <td><?= $this->getHtml('Account'); ?>
+                                    <label for="settingsList-sort-9">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-9">
+                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                    </label>
+                                    <label for="settingsList-sort-10">
+                                        <input type="radio" name="settingsList-sort" id="settingsList-sort-10">
+                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                    </label>
+                                    <label>
+                                        <i class="filter fa fa-filter"></i>
+                                    </label>
+                            <tbody>
+                            <?php $count = 0;
+                                foreach ($settings as $key => $setting) : ++$count;
+                            ?>
+                            <tr tabindex="0">
+                                <td><i class="fa fa-cogs"></i>
+                                <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->getId(); ?>
+                                <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($setting->name); ?>
+                                <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml($setting->content); ?>
+                                <td data-label="<?= $this->getHtml('Module'); ?>"><?= $this->printHtml($setting->module); ?>
+                                <td data-label="<?= $this->getHtml('Group'); ?>"><?= $this->printHtml($setting->group); ?>
+                                <td data-label="<?= $this->getHtml('Account'); ?>"><?= $this->printHtml($setting->account); ?>
+                            <?php endforeach; ?>
+                            <?php if ($count === 0) : ?>
+                            <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                            <?php endif; ?>
+                        </table>
+                        <div class="portlet-foot"></div>
                     </div>
                 </div>
             </div>

@@ -41,4 +41,46 @@ class Address extends Location
      * @since 1.0.0
      */
     public string $addition = '';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray() : array
+    {
+        $data = parent::toArray();
+
+        $data['name'] = $this->name;
+        $data['addition'] = $this->addition;
+
+        return $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize() : string
+    {
+        return (string) \json_encode($this->jsonSerialize());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized) : void
+    {
+        parent::unserialize($serialized);
+
+        $data = \json_decode($serialized, true);
+
+        $this->name = $data['name'];
+        $this->addition = $data['addition'];
+    }
 }

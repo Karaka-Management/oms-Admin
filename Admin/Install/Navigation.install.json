@@ -18,7 +18,7 @@
                 "pid": "/",
                 "type": 2,
                 "subtype": 1,
-                "name": "General",
+                "name": "Settings",
                 "uri": "{/prefix}admin/settings/general?{?}",
                 "target": "self",
                 "icon": null,

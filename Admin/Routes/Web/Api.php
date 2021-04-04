@@ -170,7 +170,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsAccountLocalizationSet',
             'verb'       => RouteVerb::SET,
             'permission' => [
-                'module' => AdminApiController::MODULE_NAME,
+                'module' => ApiController::MODULE_NAME,
                 'type'   => PermissionType::MODIFY,
                 'state'  => PermissionState::ACCOUNT_SETTINGS,
             ],

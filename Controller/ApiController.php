@@ -55,8 +55,13 @@ use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
 use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
-use phpOMS\Validation\Network\Email;
+use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
+use phpOMS\Message\Mail\Email;
+use phpOMS\Message\Mail\Imap;
+use phpOMS\Message\Mail\MailHandler;
+use phpOMS\Message\Mail\SubmitType;
+use phpOMS\System\CharsetType;
 
 /**
  * Admin controller class.
@@ -131,7 +136,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to login
+     * Api method to send forgotten password email
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -145,6 +150,65 @@ final class ApiController extends Controller
      */
     public function apiForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        $account = AccountMapper::getBy((string) $request->getData('login'), 'login');
+
+        $forgotten = $this->app->appSettings->get(
+            null,
+            ['forgott_date', 'forgrott_count'],
+            self::MODULE_NAME,
+            null,
+            $account->getId()
+        );
+
+        if ((int) $forgotten['forgrotten_count'] > 3) {
+            $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+            $response->set($request->uri->__toString(), [
+                'status'   => NotificationLevel::ERROR,
+                'title'    => 'Password Reset',
+                'message'  => 'Password reset failed due to invalid login data or too many reset attemps.',
+                'response' => null,
+            ]);
+        }
+
+        $handler = new MailHandler();
+        $handler->setMailer(SubmitType::MAIL);
+
+        $mail = new Email();
+        $mail->setFrom('test1@orange-management.email', 'Orange-Management');
+        $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
+        $mail->subject = 'Orange Management: Forgot Password';
+        $mail->body    = 'Please reset your password at: .....';
+
+        $this->app->appSettings->set([
+            ['name' => 'forgott_date', 'module' => self::MODULE_NAME, 'account' => $account->getId(), 'content' => (string) \time()],
+            ['name' => 'forgotten_count', 'module' => self::MODULE_NAME, 'account' => $account->getId(), 'content' => (string) (((int) $forgotten['forgrotten_count']) + 1)],
+        ], true);
+
+        $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+        $response->set($request->uri->__toString(), [
+            'status'   => NotificationLevel::OK,
+            'title'    => 'Password Reset',
+            'message'  => 'You received a pasword reset email.',
+            'response' => null,
+        ]);
+    }
+
+    /**
+     * Api method to reset the password
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiResetPassword(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        // @todo: implement
     }
 
     /**
@@ -707,7 +771,7 @@ final class ApiController extends Controller
         if (($val['name1'] = empty($request->getData('name1')))
             || ($val['type'] = !AccountType::isValidValue((int) $request->getData('type')))
             || ($val['status'] = !AccountStatus::isValidValue((int) $request->getData('status')))
-            || ($val['email'] = !empty($request->getData('email')) && !Email::isValid((string) $request->getData('email')))
+            || ($val['email'] = !empty($request->getData('email')) && !EmailValidator::isValid((string) $request->getData('email')))
         ) {
             return $val;
         }
