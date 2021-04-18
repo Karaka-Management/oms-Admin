@@ -28,7 +28,7 @@ $isntalled = $this->getData('isntalled') ?? [];
     <div class="col-xs-12">
         <div class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Modules'); ?><i class="fa fa-download floatRight download btn"></i></div>
-            <table id="moduleList" class="default">
+            <table id="moduleList" class="default sticky">
                 <thead>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>

@@ -33,7 +33,7 @@ echo $this->getData('nav')->render(); ?>
                 <?= $this->getHtml('Accounts'); ?>
                 <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-export-data.tpl.php'; ?>
             </div>
-            <table id="accountList" class="default">
+            <table id="accountList" class="default sticky">
                 <thead>
                 <template>
 
@@ -48,7 +48,7 @@ echo $this->getData('nav')->render(); ?>
                             <input id="accountList-r1-desc" name="accountList-sort" type="radio">
                             <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
-                        <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-export-data.tpl.php'; ?>
+                        <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-filter-table.tpl.php'; ?>
                     <td><?= $this->getHtml('Status'); ?>
                         <label for="accountList-r2-asc">
                             <input id="accountList-r2-asc" name="accountList-sort" type="radio">
