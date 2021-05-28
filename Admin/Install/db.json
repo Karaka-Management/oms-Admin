@@ -828,7 +828,7 @@
             },
             "settings_content": {
                 "name": "settings_content",
-                "type": "VARCHAR(250)",
+                "type": "VARCHAR(255)",
                 "null": true
             },
             "settings_module": {
