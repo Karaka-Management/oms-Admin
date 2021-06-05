@@ -718,6 +718,33 @@
             }
         }
     },
+    "account_account_rel": {
+        "description": "Accounts can belong to other accounts. E.g. a user can belong to a company account",
+        "name": "account_account_rel",
+        "fields": {
+            "account_account_rel_id": {
+                "name": "account_account_rel_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "account_account_rel_root": {
+                "name": "account_account_rel_root",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
+            "account_account_rel_child": {
+                "name": "account_account_rel_child",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            }
+        }
+    },
     "account_group": {
         "name": "account_group",
         "fields": {

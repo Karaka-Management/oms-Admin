@@ -41,6 +41,14 @@ class Account extends \phpOMS\Account\Account
     public string $tempPassword = '';
 
     /**
+     * Parents.
+     *
+     * @var Account[]
+     * @since 1.0.0
+     */
+    public array $parents = [];
+
+    /**
      * Remaining login tries.
      *
      * @var null|\DateTimeImmutable

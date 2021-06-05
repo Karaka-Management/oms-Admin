@@ -80,6 +80,12 @@ final class AccountMapper extends DataMapperAbstract
             'external' => 'account_group_group',
             'self'     => 'account_group_account',
         ],
+        'parents' => [
+            'mapper'   => self::class,
+            'table'    => 'account_account_rel',
+            'external' => 'account_account_rel_root',
+            'self'     => 'account_account_rel_child',
+        ],
     ];
 
     /**

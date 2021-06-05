@@ -445,7 +445,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public static function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         $appManager = new ApplicationManager($this->app->moduleManager);
 
@@ -461,7 +461,7 @@ final class ApiController extends Controller
             $request->getData('theme') ?? 'Default'
         );
 
-        $this->apiActivateTheme($request, $response);
+        self::apiActivateTheme($request, $response);
     }
 
     /**
@@ -477,7 +477,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public static function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         if (\is_dir(__DIR__ . '/../../../' . $request->getData('appDest') . '/css')) {
             Directory::delete(__DIR__ . '/../../../' . $request->getData('appDest') . '/css');
