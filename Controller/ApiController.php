@@ -451,9 +451,9 @@ final class ApiController extends Controller
         $uploadedFiles = $request->getFiles() ?? [];
 
         if (!empty($uploadedFiles)) {
-            $upload = new UploadFile();
+            $upload                   = new UploadFile();
             $upload->preserveFileName = false;
-            $upload->soutputDir = __DIR__ . '/../../../Web/Backend/img';
+            $upload->soutputDir       = __DIR__ . '/../../../Web/Backend/img';
 
             $status = $upload->upload($uploadedFiles, 'logo.png', true);
         }
