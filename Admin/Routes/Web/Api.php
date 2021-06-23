@@ -54,6 +54,18 @@ return [
         ],
     ],
 
+    '^.*/admin/settings/design(\?.*|$)' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsDesignSet',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+                'module' => ApiController::MODULE_NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionState::SETTINGS,
+            ],
+        ],
+    ],
+
     '^.*/admin/group$' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupCreate',

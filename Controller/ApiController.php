@@ -30,6 +30,7 @@ use Modules\Admin\Models\NullAccount;
 use Modules\Admin\Models\PermissionState;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
+use Modules\Media\Models\UploadFile;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
@@ -433,6 +434,34 @@ final class ApiController extends Controller
     }
 
     /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        $uploadedFiles = $request->getFiles() ?? [];
+
+        if (!empty($uploadedFiles)) {
+            $upload = new UploadFile();
+            $upload->preserveFileName = false;
+            $upload->soutputDir = __DIR__ . '/../../../Web/Backend/img';
+
+            $status = $upload->upload($uploadedFiles, 'logo.png', true);
+        }
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Design', 'Design successfully updated', []);
+    }
+
+    /**
      * Api method to install a application
      *
      * @param RequestAbstract  $request  Request
@@ -445,7 +474,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public static function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         $appManager = new ApplicationManager($this->app->moduleManager);
 
@@ -461,7 +490,7 @@ final class ApiController extends Controller
             $request->getData('theme') ?? 'Default'
         );
 
-        self::apiActivateTheme($request, $response);
+        $this->apiActivateTheme($request, $response);
     }
 
     /**
@@ -477,7 +506,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public static function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         if (\is_dir(__DIR__ . '/../../../' . $request->getData('appDest') . '/css')) {
             Directory::delete(__DIR__ . '/../../../' . $request->getData('appDest') . '/css');

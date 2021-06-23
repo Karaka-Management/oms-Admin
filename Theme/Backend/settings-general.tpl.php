@@ -46,6 +46,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
             <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
             <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label></li>
             <li><label for="c-tab-3"><?= $this->getHtml('Settings'); ?></label></li>
+            <li><label for="c-tab-4"><?= $this->getHtml('Design'); ?></label></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -725,6 +726,42 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                         </table>
                         <div class="portlet-foot"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <input type="radio" id="c-tab-4"
+            name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-4' ? ' checked' : ''; ?>>
+        <div class="tab">
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Images'); ?></div>
+                        <div class="portlet-body">
+                            <div class="form-group">
+                                <label for="iLoginImage"><?= $this->getHtml('LoginImage'); ?></label>
+                                <div>
+                                    <img id="preview-loginImage"
+                                        alt="<?= $this->getHtml('LoginImage'); ?>"
+                                        itemprop="logo" loading="lazy"
+                                        src="<?= UriFactory::build('Web/Backend/img/logo.png'); ?>"
+                                        width="50px">
+                                    <div>
+                                        <a id="iLoginImageUploadButton" href="#upload" data-action='[
+                                        {"listener": "click", "key": 1, "action": [
+                                            {"key": 1, "type": "event.prevent"},
+                                            {"key": 2, "type": "dom.click", "selector": "#iLoginImageUpload"}
+                                        ]}]'><?= $this->getHtml('Change'); ?></a>
+                                        <form id="iLoginImageUploadForm" action="<?= UriFactory::build('{/api}admin/settings/design'); ?>" method="post">
+                                            <input class="preview" data-action='[
+                                                {"listener": "change", "key": 1, "action": [
+                                                    {"key": 1, "type": "form.submit", "selector": "#iLoginImageUploadForm"}
+                                                ]}]' id="iLoginImageUpload" name="loginImage" type="file" accept="image/png" style="display: none;">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </div>
