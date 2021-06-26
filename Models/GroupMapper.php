@@ -104,15 +104,24 @@ final class GroupMapper extends DataMapperAbstract
         $depth = 3;
         $query = self::getQuery();
         $query->innerJoin(GroupPermissionMapper::getTable())
-            ->on(self::$table . '_' . $depth . '.group_id', '=', GroupPermissionMapper::getTable() . '.group_permission_group')
+            ->on(self::$table . '_d' . $depth . '.group_id', '=', GroupPermissionMapper::getTable() . '.group_permission_group')
             ->where(GroupPermissionMapper::getTable() . '.group_permission_module', '=', $module);
 
         return self::getAllByQuery($query, RelationType::ALL, $depth);
     }
 
+    /**
+     * Count the number of group members
+     *
+     * @param int $group Group to inspect (0 = all groups)
+     *
+     * @return array<string, int>
+     *
+     * @since 1.0.0
+     */
     public static function countMembers(int $group = 0) : array
     {
-        $query  = new Builder(self::$db);
+        $query = new Builder(self::$db);
         $query->select(self::$hasMany['accounts']['self'])
             ->select('COUNT(' . self::$hasMany['accounts']['external'] . ')')
             ->from(self::$hasMany['accounts']['table'])
