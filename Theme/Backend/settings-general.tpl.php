@@ -217,7 +217,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-time" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Time'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -260,7 +260,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-numeric" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Numeric'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -298,7 +298,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-precision" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Precision'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -330,7 +330,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-weight" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Weight'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -382,7 +382,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-speed" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Speed'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -443,7 +443,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-length" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Length'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -504,7 +504,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-area" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Area'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -556,7 +556,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <div class="portlet">
+                    <div id="settings-localization-volume" class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Volume'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">

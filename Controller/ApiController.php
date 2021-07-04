@@ -455,7 +455,7 @@ final class ApiController extends Controller
             $upload->preserveFileName = false;
             $upload->outputDir        = __DIR__ . '/../../../Web/Backend/img';
 
-            $status = $upload->upload($uploadedFiles, 'logo.png', true);
+            $status = $upload->upload($uploadedFiles, ['logo.png'], true);
         }
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Design', 'Design successfully updated', []);
