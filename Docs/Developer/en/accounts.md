@@ -1,7 +1,0 @@
-# Accounts
-
-## DataMapper
-
-## Controller
-
-## API
