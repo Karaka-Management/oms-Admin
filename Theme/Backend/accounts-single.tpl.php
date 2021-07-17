@@ -45,7 +45,7 @@ $next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix
 
 echo $this->getData('nav')->render(); ?>
 
-<div class="tabview tab-2">
+<div id="iaccount-tabs" class="tabview tab-2">
     <div class="box wf-100 col-xs-12">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
