@@ -31,13 +31,11 @@ echo $this->getData('nav')->render(); ?>
         <div class="portlet">
             <div class="portlet-head">
                 <?= $this->getHtml('Accounts'); ?>
+                <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-additional-function.tpl.php'; ?>
                 <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-export-data.tpl.php'; ?>
             </div>
             <table id="accountList" class="default sticky">
                 <thead>
-                <template>
-
-                </template>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
                         <label for="accountList-r1-asc">
@@ -48,7 +46,6 @@ echo $this->getData('nav')->render(); ?>
                             <input id="accountList-r1-desc" name="accountList-sort" type="radio">
                             <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
-                        <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-filter-table.tpl.php'; ?>
                     <td><?= $this->getHtml('Status'); ?>
                         <label for="accountList-r2-asc">
                             <input id="accountList-r2-asc" name="accountList-sort" type="radio">
@@ -57,9 +54,6 @@ echo $this->getData('nav')->render(); ?>
                         <label for="accountList-r2-desc">
                             <input id="accountList-r2-desc" name="accountList-sort" type="radio">
                             <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
                         </label>
                     <td class="wf-100"><?= $this->getHtml('Name'); ?>
                         <label for="accountList-r3-asc">
@@ -70,9 +64,7 @@ echo $this->getData('nav')->render(); ?>
                             <input id="accountList-r3-desc" name="accountList-sort" type="radio">
                             <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
+                        <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-filter-table.tpl.php'; ?>
                     <td><?= $this->getHtml('Activity'); ?>
                         <label for="accountList-r4-asc">
                             <input id="accountList-r4-asc" name="accountList-sort" type="radio">
