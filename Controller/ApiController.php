@@ -61,6 +61,7 @@ use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
+use phpOMS\Uri\UriFactory;
 
 /**
  * Admin controller class.
@@ -832,16 +833,22 @@ final class ApiController extends Controller
 
         $this->createModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
         $this->createProfileForAccount($account, $request);
+        $this->createMediaDirForAccount($account->getId(), $account->login, $request->header->account);
 
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully created. Link: <a href="' . (UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $account->getId())) . '">Account</a>', $account);
+    }
+
+    private function createMediaDirForAccount(int $id, string $name, int $createdBy) : Collection
+    {
         $collection       = new Collection();
-        $collection->name = ((string) $account->getId()) . ' ' . $account->login;
+        $collection->name = ((string) $id) . ' ' . $name;
         $collection->setVirtualPath('/Accounts');
-        $collection->setPath('/Modules/Media/Files/Accounts/' . ((string) $account->getId()));
-        $collection->createdBy = new NullAccount($request->header->account);
+        $collection->setPath('/Modules/Media/Files/Accounts/' . ((string) $id));
+        $collection->createdBy = new NullAccount($createdBy);
 
         CollectionMapper::create($collection);
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully created', $account);
+        return $collection;
     }
 
     /**
