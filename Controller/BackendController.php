@@ -176,11 +176,20 @@ final class BackendController extends Controller
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs', AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])::getBeforePivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs',
+                AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])
+                    ::getBeforePivot((int) $request->getData('audit'), null, 25)
+                );
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs', AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])::getAfterPivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs',
+                AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])
+                    ::getAfterPivot((int) $request->getData('audit'), null, 25)
+                );
         } else {
-            $view->setData('auditlogs', AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])::getAfterPivot(0, null, 25));
+            $view->setData('auditlogs',
+                AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])
+                    ::getAfterPivot(0, null, 25)
+                );
         }
 
         return $view;
