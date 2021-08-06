@@ -40,7 +40,7 @@ $temperatures = \phpOMS\Utils\Converter\TemperatureType::getConstants();
 $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 ?>
 
-<div class="tabview tab-2">
+<div class="tabview tab-2 url-rewrite">
     <div class="box wf-100 col-xs-12">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
@@ -146,7 +146,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']['content']); ?>" placeholder="&#xf023; /Logs">
+                                    <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']['content']); ?>" placeholder="&#xf040; /Logs">
                                 </div>
                             </div>
                             <div class="portlet-foot">
@@ -642,7 +642,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 <div class="col-xs-12">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="fa fa-download floatRight download btn"></i></div>
-                        <table id="settingsList" class="default">
+                        <table id="settingsList" class="default sticky">
                             <thead>
                             <tr>
                                 <td>
@@ -709,6 +709,9 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                     </label>
                             <tbody>
                             <?php $count = 0;
+                                $previousSettings = empty($settings) ? '{/prefix}admin/settings/general' : '{/prefix}admin/settings/general?{?}&sid=' . \reset($settings)->getId() . '&ptype=p';
+                                $nextSettings     = empty($settings) ? '{/prefix}admin/settings/general' : '{/prefix}admin/settings/general?{?}&sid=' . \end($settings)->getId() . '&ptype=n';
+
                                 foreach ($settings as $key => $setting) : ++$count;
                             ?>
                             <tr tabindex="0">
@@ -721,10 +724,13 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <td data-label="<?= $this->getHtml('Account'); ?>"><?= $this->printHtml($setting->account); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
-                            <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                             <?php endif; ?>
                         </table>
-                        <div class="portlet-foot"></div>
+                        <div class="portlet-foot">
+                            <a tabindex="0" class="button" href="<?= UriFactory::build($previousSettings); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
+                            <a tabindex="0" class="button" href="<?= UriFactory::build($nextSettings); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
+                        </div>
                     </div>
                 </div>
             </div>

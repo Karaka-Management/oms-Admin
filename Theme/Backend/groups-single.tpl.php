@@ -4,7 +4,7 @@
  *
  * PHP Version 8.0
  *
- * @package   Modules\Admin\Template\Backend
+ * @package   Modules\Admin\Theme
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
@@ -26,12 +26,16 @@ $permissions = $this->getData('permissions');
 $accounts    = $group->getAccounts();
 $audits      = $this->getData('auditlogs') ?? [];
 
-$previous = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}' : '{/prefix}admin/group/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
-$next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}' : '{/prefix}admin/group/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
+$previous = empty($audits)
+    ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}'
+    : '{/prefix}admin/group/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
+$next     = empty($audits)
+    ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}'
+    : '{/prefix}admin/group/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
 
 echo $this->getData('nav')->render(); ?>
 
-<div class="tabview tab-2">
+<div id="igroup-tabs" class="tabview tab-2 url-rewrite">
     <div class="box wf-100 col-xs-12">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
@@ -47,16 +51,22 @@ echo $this->getData('nav')->render(); ?>
                         <form id="fGroupEdit" action="<?= UriFactory::build('{/api}admin/group'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Group'); ?></div>
                             <div class="portlet-body">
-                                <label for="iGid"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                <input id="iGid" name="id" type="text" value="<?= $group->getId(); ?>" disabled>
-                                <label for="iGname"><?= $this->getHtml('Name'); ?></label>
-                                <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->name); ?>">
-                                <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
-                                <select id="iGstatus" name="status">
-                                    <?php $status = GroupStatus::getConstants(); foreach ($status as $stat) : ?>
-                                    <option value="<?= $stat; ?>"<?= $stat === $group->getStatus() ? ' selected' : ''; ?>><?= $this->getHtml('GroupStatus' . $stat); ?>
-                                <?php endforeach; ?>
+                                <div class="form-group">
+                                    <label for="iGid"><?= $this->getHtml('ID', '0', '0'); ?></label>
+                                    <input id="iGid" name="id" type="text" value="<?= $group->getId(); ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="iGname"><?= $this->getHtml('Name'); ?></label>
+                                    <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->name); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
+                                    <select id="iGstatus" name="status">
+                                        <?php $status = GroupStatus::getConstants(); foreach ($status as $stat) : ?>
+                                        <option value="<?= $stat; ?>"<?= $stat === $group->getStatus() ? ' selected' : ''; ?>><?= $this->getHtml('GroupStatus' . $stat); ?>
+                                    <?php endforeach; ?>
                                     </select>
+                                </div>
                                 <?= $this->getData('editor')->render('group-editor'); ?>
                                 <?= $this->getData('editor')->getData('text')->render(
                                     'group-editor',
@@ -88,7 +98,7 @@ echo $this->getData('nav')->render(); ?>
                                     <td><a href="<?= $url; ?>"><?= $value->name1; ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
-                                <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                    <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                                 <?php endif; ?>
                         </table>
                         <div class="portlet-foot"></div>
@@ -98,8 +108,10 @@ echo $this->getData('nav')->render(); ?>
                         <form id="iAddAccountToGroup" action="<?= UriFactory::build('{/api}admin/group/account'); ?>" method="put">
                             <div class="portlet-head"><?= $this->getHtml('Accounts'); ?></div>
                             <div class="portlet-body">
-                                <label for="iAccount"><?= $this->getHtml('Name'); ?></label>
-                                <?= $this->getData('accGrpSelector')->render('iAccount', 'group', true); ?>
+                                <div class="form-group">
+                                    <label for="iAccount"><?= $this->getHtml('Name'); ?></label>
+                                    <?= $this->getData('accGrpSelector')->render('iAccount', 'group', true); ?>
+                                </div>
                             </div>
                             <div class="portlet-foot">
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
@@ -176,43 +188,72 @@ echo $this->getData('nav')->render(); ?>
                         <form id="fGroupAddPermission" action="<?= UriFactory::build('{/api}admin/group/permission'); ?>" method="put">
                             <div class="portlet-head"><?= $this->getHtml('Permissions'); ?></div>
                             <div class="portlet-body">
-                                <table class="layout wf-100">
-                                    <tbody>
-                                    <tr><td><label for="iPermissionUnit"><?= $this->getHtml('Unit'); ?></label>
-                                    <tr><td><input id="iPermissionUnit" name="permissionunit" type="text" data-tpl-text="/unit" data-tpl-value="/unit">
-                                    <tr><td><label for="iPermissionApp"><?= $this->getHtml('App'); ?></label>
-                                    <tr><td><input id="iPermissionApp" name="permissionapp" type="text" data-tpl-text="/app" data-tpl-value="/app">
-                                    <tr><td><label for="iPermissionModule"><?= $this->getHtml('Module'); ?></label>
-                                    <tr><td><input id="iPermissionModule" name="permissionmodule" type="text" data-tpl-text="/module" data-tpl-value="/module">
-                                    <tr><td><label for="iPermissionType"><?= $this->getHtml('Type'); ?></label>
-                                    <tr><td><input id="iPermissionType" name="permissiontype" type="text" data-tpl-text="/type" data-tpl-value="/type">
-                                    <tr><td><label for="iPermissionElement"><?= $this->getHtml('Element'); ?></label>
-                                    <tr><td><input id="iPermissionElement" name="permissionelement" type="text" data-tpl-text="/ele" data-tpl-value="/ele">
-                                    <tr><td><label for="iPermissionComponent"><?= $this->getHtml('Component'); ?></label>
-                                    <tr><td><input id="iPermissionComponent" name="permissioncomponent" type="text" data-tpl-text="/comp" data-tpl-value="/comp">
-                                    <tr><td><label><?= $this->getHtml('Permission'); ?></label>
-                                    <tr><td>
+                                <div class="form-group">
+                                    <label for="iPermissionUnit"><?= $this->getHtml('Unit'); ?></label>
+                                    <input id="iPermissionUnit" name="permissionunit" type="text" data-tpl-text="/unit" data-tpl-value="/unit">
+                                </div>
+                                <div class="form-group">
+                                    <label for="iPermissionApp"><?= $this->getHtml('App'); ?></label>
+                                    <input id="iPermissionApp" name="permissionapp" type="text" data-tpl-text="/app" data-tpl-value="/app">
+                                </div>
+                                <div class="form-group">
+                                    <label for="iPermissionModule"><?= $this->getHtml('Module'); ?></label>
+                                    <input id="iPermissionModule" name="permissionmodule" type="text" data-tpl-text="/module" data-tpl-value="/module">
+                                </div>
+                                <div class="form-group">
+                                    <label for="iPermissionType"><?= $this->getHtml('Type'); ?></label>
+                                    <input id="iPermissionType" name="permissiontype" type="text" data-tpl-text="/type" data-tpl-value="/type">
+                                </div>
+                                <div class="form-group">
+                                    <label for="iPermissionElement"><?= $this->getHtml('Element'); ?></label>
+                                    <input id="iPermissionElement" name="permissionelement" type="text" data-tpl-text="/ele" data-tpl-value="/ele">
+                                </div>
+                                <div class="form-group">
+                                    <label for="iPermissionComponent"><?= $this->getHtml('Component'); ?></label>
+                                    <input id="iPermissionComponent" name="permissioncomponent" type="text" data-tpl-text="/comp" data-tpl-value="/comp">
+                                </div>
+                                <div class="form-group">
+                                    <label><?= $this->getHtml('Permission'); ?></label>
                                         <span class="checkbox">
-                                            <input id="iPermissionCreate" name="permissioncreate" type="checkbox" value="<?= PermissionType::CREATE; ?>" data-tpl-text="/perm/c" data-tpl-value="/perm/c">
-                                            <label for="iPermissionCreate"><?= $this->getHtml('Create'); ?></label>
+                                            <label class="checkbox" for="iPermissionCreate">
+                                                <input id="iPermissionCreate" type="checkbox" name="permissioncreate" value="<?= PermissionType::CREATE; ?>">
+                                                <span class="checkmark"></span>
+                                                <?= $this->getHtml('Create'); ?>
+                                            </label>
                                         </span>
+
                                         <span class="checkbox">
-                                            <input id="iPermissionRead" name="permissionread" type="checkbox" value="<?= PermissionType::READ; ?>" data-tpl-text="/perm/r" data-tpl-value="/perm/r">
-                                            <label for="iPermissionRead"><?= $this->getHtml('Read'); ?></label>
+                                            <label class="checkbox" for="iPermissionRead">
+                                                <input id="iPermissionRead" type="checkbox" name="permissionread" value="<?= PermissionType::READ; ?>">
+                                                <span class="checkmark"></span>
+                                                <?= $this->getHtml('Read'); ?>
+                                            </label>
                                         </span>
+
                                         <span class="checkbox">
-                                            <input id="iPermissionUpdate" name="permissionupdate" type="checkbox" value="<?= PermissionType::MODIFY; ?>" data-tpl-text="/perm/u" data-tpl-value="/perm/u">
-                                            <label for="iPermissionUpdate"><?= $this->getHtml('Update'); ?></label>
+                                            <label class="checkbox" for="iPermissionUpdate">
+                                                <input id="iPermissionUpdate" type="checkbox" name="permissionupdate" value="<?= PermissionType::MODIFY; ?>">
+                                                <span class="checkmark"></span>
+                                                <?= $this->getHtml('Update'); ?>
+                                            </label>
                                         </span>
+
                                         <span class="checkbox">
-                                            <input id="iPermissionDelete" name="permissiondelete" type="checkbox" value="<?= PermissionType::DELETE; ?>" data-tpl-text="/perm/d" data-tpl-value="/perm/d">
-                                            <label for="iPermissionDelete"><?= $this->getHtml('Delete'); ?></label>
+                                            <label class="checkbox" for="iPermissionDelete">
+                                                <input id="iPermissionDelete" type="checkbox" name="permissiondelete" value="<?= PermissionType::DELETE; ?>">
+                                                <span class="checkmark"></span>
+                                                <?= $this->getHtml('Delete'); ?>
+                                            </label>
                                         </span>
+
                                         <span class="checkbox">
-                                            <input id="iPermissionPermission" name="permissionpermission" type="checkbox" value="<?= PermissionType::PERMISSION; ?>" data-tpl-text="/perm/p" data-tpl-value="/perm/p">
-                                            <label for="iPermissionPermission"><?= $this->getHtml('Permission'); ?></label>
+                                            <label class="checkbox" for="iPermissionPermission">
+                                                <input id="iPermissionPermission" type="checkbox" name="permissionpermission" value="<?= PermissionType::PERMISSION; ?>">
+                                                <span class="checkmark"></span>
+                                                <?= $this->getHtml('Permission'); ?>
+                                            </label>
                                         </span>
-                                </table>
+                                </div>
                             </div>
                             <div class="portlet-foot">
                                 <input type="hidden" name="permissionref" value="<?= $group->getId(); ?>">
@@ -232,23 +273,12 @@ echo $this->getData('nav')->render(); ?>
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="fa fa-download floatRight download btn"></i></div>
                         <table class="default fixed">
-                            <colgroup>
-                                <col style="width: 75px">
-                                <col style="width: 150px">
-                                <col style="width: 100px">
-                                <col>
-                                <col>
-                                <col style="width: 125px">
-                                <col style="width: 75px">
-                                <col style="width: 150px">
-                            </colgroup>
                             <thead>
                             <tr>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?>
                                 <td><?= $this->getHtml('Module', 'Auditor'); ?>
                                 <td><?= $this->getHtml('Type', 'Auditor'); ?>
                                 <td><?= $this->getHtml('Trigger', 'Auditor'); ?>
-                                <td><?= $this->getHtml('Content', 'Auditor'); ?>
                                 <td><?= $this->getHtml('By', 'Auditor'); ?>
                                 <td><?= $this->getHtml('Ref', 'Auditor'); ?>
                                 <td><?= $this->getHtml('Date', 'Auditor'); ?>
@@ -260,13 +290,12 @@ echo $this->getData('nav')->render(); ?>
                                     <td><?= $this->printHtml($audit->getModule()); ?>
                                     <td><?= $audit->getType(); ?>
                                     <td><?= $this->printHtml($audit->getTrigger()); ?>
-                                    <td><?= $this->printHtml($audit->getContent()); ?>
                                     <td><?= $this->printHtml($audit->createdBy->login); ?>
                                     <td><?= $this->printHtml($audit->getRef()); ?>
                                     <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
-                                <tr><td colspan="8" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                             <?php endif; ?>
                         </table>
                         <div class="portlet-foot">
