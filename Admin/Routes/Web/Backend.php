@@ -103,9 +103,31 @@ return [
             ],
         ],
     ],
+    '^.*/admin/module/info\?.*$' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleInfo',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::MODULE,
+            ],
+        ],
+    ],
     '^.*/admin/module/settings\?.*$' => [
         [
-            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleProfile',
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleSettings',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::MODULE,
+            ],
+        ],
+    ],
+    '^.*/admin/module/log\?.*$' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleLog',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::MODULE_NAME,

@@ -26,6 +26,9 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     protected Module $module;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp() : void
     {
         $this->module = new Module();

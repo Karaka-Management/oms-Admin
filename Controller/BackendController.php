@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\Admin\Controller;
 
 use Model\SettingMapper;
+use Model\NullSetting;
 use Model\SettingsEnum;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
@@ -361,10 +362,11 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleProfile(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleInfo(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Admin/Theme/Backend/modules-single');
+        $view->setTemplate('/Modules/Admin/Theme/Backend/modules-info');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
         $id = $request->getData('id') ?? '';
         $view->setData('modules', $this->app->moduleManager->getAllModules());
@@ -372,20 +374,57 @@ final class BackendController extends Controller
         $view->setData('installed', $installed = $this->app->moduleManager->getInstalledModules());
         $view->setData('id', $id);
 
-        $path = \realpath(__DIR__ . '/../' . $id . '/info.json');
-
-        if (isset($installed[$id]) && $path !== false) {
-            $info = new ModuleInfo($path);
-            $info->load();
-
-            $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(
-                $info->getId(),
-                $request, $response
-            ));
-        }
-
         $groupPermission = GroupMapper::getPermissionForModule($id);
         $view->setData('groupPermissions', $groupPermission);
+
+        return $view;
+    }
+
+    /**
+     * Method which generates the module profile view.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     */
+    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+
+        $id = $request->getData('id') ?? '';
+
+        $settings = SettingMapper::getFor($id, 'module');
+        if (!($settings instanceof NullSetting)) {
+            $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
+        }
+
+        return $view;
+    }
+
+    /**
+     * Method which generates the module profile view.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     */
+    public function viewModuleLog(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/Admin/Theme/Backend/modules-log');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+
+        $id = $request->getData('id') ?? '';
 
         // audit log
         if ($request->getData('ptype') === 'p') {

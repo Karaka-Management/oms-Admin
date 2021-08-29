@@ -838,6 +838,17 @@ final class ApiController extends Controller
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully created. Link: <a href="' . (UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $account->getId())) . '">Account</a>', $account);
     }
 
+    /**
+     * Create directory for an account
+     *
+     * @param int    $id        Account id
+     * @param string $name      Name of the directory/account
+     * @param int    $createdBy Creator of the directory
+     *
+     * @return Collection
+     *
+     * @since 1.0.0
+     */
     private function createMediaDirForAccount(int $id, string $name, int $createdBy) : Collection
     {
         $collection       = new Collection();
