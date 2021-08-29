@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
-use Model\SettingMapper;
 use Model\NullSetting;
+use Model\SettingMapper;
 use Model\SettingsEnum;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
@@ -30,7 +30,6 @@ use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\RelationType;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
-use phpOMS\Module\ModuleInfo;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
 

@@ -58,10 +58,10 @@ use phpOMS\System\File\Local\Directory;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
 use phpOMS\Uri\HttpUri;
+use phpOMS\Uri\UriFactory;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
-use phpOMS\Uri\UriFactory;
 
 /**
  * Admin controller class.

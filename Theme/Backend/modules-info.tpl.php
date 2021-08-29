@@ -13,7 +13,6 @@
 declare(strict_types=1);
 
 use Modules\Admin\Models\ModuleStatusUpdateType;
-use phpOMS\Message\Http\HttpHeader;
 use phpOMS\Uri\UriFactory;
 
 /**

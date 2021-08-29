@@ -708,7 +708,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                         <i class="filter fa fa-filter"></i>
                                     </label>
                             <tbody>
-                            <?php $count = 0;
+                            <?php $count          = 0;
                                 $previousSettings = empty($settings) ? '{/prefix}admin/settings/general' : '{/prefix}admin/settings/general?{?}&sid=' . \reset($settings)->getId() . '&ptype=p';
                                 $nextSettings     = empty($settings) ? '{/prefix}admin/settings/general' : '{/prefix}admin/settings/general?{?}&sid=' . \end($settings)->getId() . '&ptype=n';
 
