@@ -642,6 +642,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                 <div class="col-xs-12">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="slider">
                         <table id="settingsList" class="default sticky">
                             <thead>
                             <tr>
@@ -727,6 +728,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                             <?php endif; ?>
                         </table>
+                        </div>
                         <div class="portlet-foot">
                             <a tabindex="0" class="button" href="<?= UriFactory::build($previousSettings); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
                             <a tabindex="0" class="button" href="<?= UriFactory::build($nextSettings); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>

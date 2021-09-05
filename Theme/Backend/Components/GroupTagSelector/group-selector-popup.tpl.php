@@ -33,7 +33,6 @@
                         ]
                     }
                 ]'>
-                <tfoot>
             </table>
             <button type="button" id="iSearchGroup-close" data-action='[
                     {

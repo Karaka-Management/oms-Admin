@@ -34,6 +34,7 @@ echo $this->getData('nav')->render(); ?>
                 <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-additional-function.tpl.php'; ?>
                 <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-export-data.tpl.php'; ?>
             </div>
+            <div class="slider">
             <table id="accountList" class="default sticky">
                 <thead>
                 <tr>
@@ -110,6 +111,7 @@ echo $this->getData('nav')->render(); ?>
                             <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                         <?php endif; ?>
             </table>
+            </div>
             <div class="portlet-foot">
                 <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
                 <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
