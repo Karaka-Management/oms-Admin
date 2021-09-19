@@ -30,9 +30,9 @@ use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\RelationType;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
+use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
-use phpOMS\Utils\Parser\Markdown\Markdown;
 
 /**
  * Admin controller class.

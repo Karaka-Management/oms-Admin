@@ -22,12 +22,12 @@ use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
 use Modules\Admin\Models\AccountPermissionMapper;
-use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\Group;
 use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermission;
 use Modules\Admin\Models\GroupPermissionMapper;
 use Modules\Admin\Models\LocalizationMapper;
+use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
 use Modules\Admin\Models\PermissionState;
@@ -63,9 +63,9 @@ use phpOMS\System\MimeType;
 use phpOMS\Uri\HttpUri;
 use phpOMS\Uri\UriFactory;
 use phpOMS\Utils\Parser\Markdown\Markdown;
+use phpOMS\Utils\StringUtils;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
-use phpOMS\Utils\StringUtils;
 
 /**
  * Admin controller class.
@@ -283,7 +283,7 @@ final class ApiController extends Controller
                             'id'      => $id,
                             'name'    => $name,
                             'content' => $content,
-                            'app'  => $app,
+                            'app'     => $app,
                             'module'  => $module,
                             'group'   => $group,
                             'account' => $account,
@@ -521,8 +521,8 @@ final class ApiController extends Controller
             }
         }
 
-        $app = new App();
-        $app->name = $request->getData('appName') ?? '';
+        $app        = new App();
+        $app->name  = $request->getData('appName') ?? '';
         $app->theme = $request->getData('theme') ?? '';
         AppMapper::create($app);
 
@@ -1083,7 +1083,7 @@ final class ApiController extends Controller
             'PRE:Module:Admin-module-status-update', '',
             [
                 $request->header->account,
-                ['status' => $status, 'module' => $module]
+                ['status' => $status, 'module' => $module],
             ]
         );
         switch ($status) {
@@ -1123,7 +1123,7 @@ final class ApiController extends Controller
                 StringUtils::intHash(ModuleMapper::class), 'module-status',
                 $module,
                 self::MODULE_NAME,
-                $request->getOrigin()
+                $request->getOrigin(),
             ]
         );
 
