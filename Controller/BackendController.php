@@ -32,6 +32,7 @@ use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
+use phpOMS\Utils\Parser\Markdown\Markdown;
 
 /**
  * Admin controller class.
@@ -60,37 +61,6 @@ final class BackendController extends Controller
     public function viewForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         return new View();
-    }
-
-    /**
-     * Method which generates the general settings view.
-     *
-     * In this view general settings for the entire application can be seen and adjusted. Settings which can be modified
-     * here are localization, password, database, etc.
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
-     *
-     * @return RenderableInterface Response can be rendered
-     *
-     * @since 1.0.0
-     */
-    public function viewSettingsGeneral(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
-    {
-        $view            = new View($this->app->l11nManager, $request, $response);
-        $generalSettings = $this->app->appSettings->get(null, [
-                SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_ORGANIZATION,
-                SettingsEnum::LOGIN_STATUS, SettingsEnum::DEFAULT_LOCALIZATION, SettingsEnum::ADMIN_MAIL,
-            ]);
-
-        $view->setTemplate('/Modules/Admin/Theme/Backend/settings-general');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
-        $view->setData('generalSettings', $generalSettings);
-        $view->setData('defaultlocalization', LocalizationMapper::get((int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]));
-        $view->setData('settings', SettingMapper::getAll());
-
-        return $view;
     }
 
     /**
@@ -373,35 +343,29 @@ final class BackendController extends Controller
         $view->setData('installed', $installed = $this->app->moduleManager->getInstalledModules());
         $view->setData('id', $id);
 
-        $groupPermission = GroupMapper::getPermissionForModule($id);
-        $view->setData('groupPermissions', $groupPermission);
+        $type     = 'Help';
+        $page     = 'introduction';
+        $basePath = __DIR__ . '/../../' . $request->getData('id') . '/Docs/' . $type . '/' . $request->getLanguage();
+        $path     = \realpath($basePath . '/' . $page . '.md');
 
-        return $view;
-    }
-
-    /**
-     * Method which generates the module profile view.
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
-     *
-     * @return RenderableInterface Response can be rendered
-     *
-     * @since 1.0.0
-     */
-    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
-    {
-        $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
-
-        $id = $request->getData('id') ?? '';
-
-        $settings = SettingMapper::getFor($id, 'module');
-        if (!($settings instanceof NullSetting)) {
-            $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
+        if ($path === false) {
+            $basePath = __DIR__ . '/../../' . $request->getData('id') . '/Docs/' . $type . '/' . $this->app->l11nServer->getLanguage();
+            $path     = \realpath($basePath . '/' . $page . '.md');
         }
+
+        if ($path === false) {
+            $basePath = __DIR__ . '/../../' . $request->getData('id') . '/Docs/' . $type . '/en';
+            $path     = \realpath($basePath . '/' . $page . '.md');
+        }
+
+        if ($path === false) {
+            $path = \realpath($basePath . '/introduction.md');
+        }
+
+        $toParse = $path === false ? '' : \file_get_contents($path);
+        $content = Markdown::parse($toParse === false ? '' : $toParse);
+
+        $view->setData('introduction', $content);
 
         return $view;
     }
@@ -423,16 +387,57 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-log');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
-        $id = $request->getData('id') ?? '';
+        $id = (string) ($request->getData('id') ?? '');
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs', AuditMapper::with('module', (string) $request->getData('id'), [Audit::class])::getBeforePivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs', AuditMapper::with('module', $id, [Audit::class])::getBeforePivot((int) $request->getData('audit'), null, 25));
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs', AuditMapper::with('module', (string) $request->getData('id'), [Audit::class])::getAfterPivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs', AuditMapper::with('module', $id, [Audit::class])::getAfterPivot((int) $request->getData('audit'), null, 25));
         } else {
-            $view->setData('auditlogs', AuditMapper::with('module', (string) $request->getData('id'), [Audit::class])::getAfterPivot(0, null, 25));
+            $view->setData('auditlogs', AuditMapper::with('module', $id, [Audit::class])::getAfterPivot(0, null, 25));
         }
+
+        return $view;
+    }
+
+    /**
+     * Method which generates the module profile view.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     */
+    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+
+        $id = $request->getData('id') ?? '';
+
+        $settings = SettingMapper::getFor($id, 'module');
+        if (!($settings instanceof NullSetting)) {
+            $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
+        }
+
+        if (\is_file(__DIR__ . '/../Admin/Settings/Theme/Backend/settings.tpl.php')) {
+            $view->setTemplate('/Modules/' . static::MODULE_NAME . '/Admin/Settings/Theme/Backend/settings');
+        } else {
+            $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
+        }
+
+        $generalSettings = $this->app->appSettings->get(null, [
+                SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_ORGANIZATION,
+                SettingsEnum::LOGIN_STATUS, SettingsEnum::DEFAULT_LOCALIZATION, SettingsEnum::ADMIN_MAIL,
+            ]);
+
+        $view->setData('generalSettings', $generalSettings);
+        $view->setData('defaultlocalization', LocalizationMapper::get((int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]));
+        $view->setData('settings', SettingMapper::getAll());
 
         return $view;
     }

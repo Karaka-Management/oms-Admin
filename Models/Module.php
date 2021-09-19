@@ -30,10 +30,10 @@ class Module
     /**
      * Module id.
      *
-     * @var int
+     * @var string
      * @since 1.0.0
      */
-    protected int $id = 0;
+    protected string $id = '';
 
     /**
      * Module name.
@@ -80,11 +80,11 @@ class Module
     /**
      * Get module id.
      *
-     * @return int
+     * @return string
      *
      * @since 1.0.0
      */
-    public function getId() : int
+    public function getId() : string
     {
         return $this->id;
     }
@@ -147,6 +147,7 @@ class Module
         return [
             'id'          => $this->id,
             'name'        => $this->name,
+            'status'      => $this->status,
             'description' => $this->description,
             'createdAt'   => $this->createdAt,
         ];

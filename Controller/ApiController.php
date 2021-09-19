@@ -16,10 +16,13 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
+use Model\App;
+use Model\AppMapper;
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
 use Modules\Admin\Models\AccountPermissionMapper;
+use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\Group;
 use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermission;
@@ -62,6 +65,7 @@ use phpOMS\Uri\UriFactory;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
+use phpOMS\Utils\StringUtils;
 
 /**
  * Admin controller class.
@@ -153,11 +157,9 @@ final class ApiController extends Controller
         $account = AccountMapper::getBy((string) $request->getData('login'), 'login');
 
         $forgotten = $this->app->appSettings->get(
-            null,
-            ['forgott_date', 'forgrott_count'],
-            self::MODULE_NAME,
-            null,
-            $account->getId()
+            names: ['forgott_date', 'forgrott_count'],
+            module: self::MODULE_NAME,
+            account: $account->getId()
         );
 
         if ((int) $forgotten['forgrotten_count'] > 3) {
@@ -235,6 +237,7 @@ final class ApiController extends Controller
             [
                 'response' => $this->app->appSettings->get(
                     $id !== null ? (int) $id : $id,
+                    $request->getData('app') ?? null,
                     $request->getData('name') ?? '',
                     $request->getData('module') ?? null,
                     $group !== null ? (int) $group : $group,
@@ -265,20 +268,22 @@ final class ApiController extends Controller
             $id      = isset($data['id']) ? (int) $data['id'] : null;
             $name    = $data['name'] ?? null;
             $content = $data['content'] ?? null;
+            $app     = $data['app'] ?? null;
             $module  = $data['module'] ?? null;
             $group   = isset($data['group']) ? (int) $data['group'] : null;
             $account = isset($data['account']) ? (int) $data['account'] : null;
 
             $this->updateModel(
                 $request->header->account,
-                $this->app->appSettings->get($id, $name, $module, $group, $account),
+                $this->app->appSettings->get($id, $name, $app, $module, $group, $account),
                 $data,
-                function () use ($id, $name, $content, $module, $group, $account) : void {
+                function () use ($id, $name, $content, $app, $module, $group, $account) : void {
                     $this->app->appSettings->set([
                         [
                             'id'      => $id,
                             'name'    => $name,
                             'content' => $content,
+                            'app'  => $app,
                             'module'  => $module,
                             'group'   => $group,
                             'account' => $account,
@@ -477,7 +482,7 @@ final class ApiController extends Controller
      */
     public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $appManager = new ApplicationManager($this->app->moduleManager);
+        $appManager = new ApplicationManager();
 
         $app = $request->getData('appSrc');
         if (!\is_dir(__DIR__ . '/../../../' . $app)) {
@@ -485,11 +490,41 @@ final class ApiController extends Controller
             return;
         }
 
-        $appManager->install(
+        $info = new ApplicationInfo(__DIR__ . '/../../../' . $app);
+        $info->load();
+
+        // handle dependencies
+        $dependencies = $info->getDependencies();
+        $installed    = $this->app->moduleManager->getInstalledModules();
+
+        foreach ($dependencies as $key => $version) {
+            if (!isset($installed[$key])) {
+                $this->app->moduleManager->install($key);
+            }
+        }
+
+        // handle app installation
+        $result = $appManager->install(
             __DIR__ . '/../../../' . $app,
             __DIR__ . '/../../../' . $request->getData('appDest') ?? '',
             $request->getData('theme') ?? 'Default'
         );
+
+        // handle providing
+        if ($result) {
+            $providing = $info->getProviding();
+
+            foreach ($providing as $key => $version) {
+                if (isset($installed[$key])) {
+                    $this->app->moduleManager->installProviding($app, $key);
+                }
+            }
+        }
+
+        $app = new App();
+        $app->name = $request->getData('appName') ?? '';
+        $app->theme = $request->getData('theme') ?? '';
+        AppMapper::create($app);
 
         $this->apiActivateTheme($request, $response);
     }
@@ -667,6 +702,13 @@ final class ApiController extends Controller
      */
     public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        if (((int) $request->getId('id')) === 3) {
+            // admin group cannot be deleted
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group cannot be deleted', []);
+
+            return;
+        }
+
         $group = GroupMapper::get((int) $request->getData('id'));
         $this->deleteModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully deleted', $group);
@@ -1035,7 +1077,15 @@ final class ApiController extends Controller
             return;
         }
 
-        $this->app->eventManager->trigger('PRE:Module:Admin-module-status', '', ['status' => $status, 'module' => $module]);
+        $old = ModuleMapper::get($module);
+
+        $this->app->eventManager->triggerSimilar(
+            'PRE:Module:Admin-module-status-update', '',
+            [
+                $request->header->account,
+                ['status' => $status, 'module' => $module]
+            ]
+        );
         switch ($status) {
             case ModuleStatusUpdateType::ACTIVATE:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->activate($module);
@@ -1062,7 +1112,20 @@ final class ApiController extends Controller
                 $msg                      = 'Unknown module status change request.';
                 $response->header->status = RequestStatusCode::R_400;
         }
-        $this->app->eventManager->trigger('POST:Module:Admin-module-status', '', ['status' => $status, 'module' => $module]);
+        ModuleMapper::clearCache();
+        $new = ModuleMapper::get($module);
+
+        $this->app->eventManager->triggerSimilar(
+            'POST:Module:Admin-module-status-update', '',
+            [
+                $request->header->account,
+                $old, $new,
+                StringUtils::intHash(ModuleMapper::class), 'module-status',
+                $module,
+                self::MODULE_NAME,
+                $request->getOrigin()
+            ]
+        );
 
         if (!$done) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1132,6 +1195,14 @@ final class ApiController extends Controller
     {
         /** @var GroupPermission $permission */
         $permission = GroupPermissionMapper::get((int) $request->getData('id'));
+
+        if ($permission->getGroup() === 3) {
+            // admin group cannot be deleted
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group permissions cannot be deleted', []);
+
+            return;
+        }
+
         $this->deleteModel($request->header->account, $permission, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
     }
@@ -1158,27 +1229,6 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to delete a user permission
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
-     *
-     * @return void
-     *
-     * @api
-     *
-     * @since 1.0.0
-     */
-    public function apiUserPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
-    {
-        /** @var AccountPermission $permission */
-        $permission = AccountPermissionMapper::get((int) $request->getData('id'));
-        $this->deleteModel($request->header->account, $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
-    }
-
-    /**
      * Api method to add a permission to a group
      *
      * @param RequestAbstract  $request  Request
@@ -1193,6 +1243,13 @@ final class ApiController extends Controller
      */
     public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        if (((int) $request->getId('permissionref')) === 3) {
+            // admin group cannot be deleted
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group permissions cannot get modified', []);
+
+            return;
+        }
+
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->set('permission_create', new FormValidation($val));
             $response->header->status = RequestStatusCode::R_400;
@@ -1360,6 +1417,13 @@ final class ApiController extends Controller
         /** @var GroupPermission $old */
         $old = clone GroupPermissionMapper::get((int) $request->getData('id'));
 
+        if ($old->getGroup() === 3) {
+            // admin group cannot be deleted
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group permissions cannot get modified', []);
+
+            return;
+        }
+
         /** @var GroupPermission $new */
         $new = $this->updatePermissionFromRequest(GroupPermissionMapper::get((int) $request->getData('id')), $request);
 
@@ -1436,6 +1500,64 @@ final class ApiController extends Controller
 
         $this->createModelRelation($request->header->account, $group, $accounts, GroupMapper::class, 'accounts', 'group-account', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Relation added', []);
+    }
+
+    /**
+     * Api method to add a group to an account
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiDeleteGroupFromAccount(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        $account = (int) $request->getData('account');
+        $groups  = \array_map('intval', $request->getDataList('igroup-idlist'));
+
+        if (\in_array(3, $groups) && $account === $request->header->account) {
+            // admin group cannot be deleted
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Account', 'Admin group cannot be removed from yourself', []);
+
+            return;
+        }
+
+        $this->deleteModelRelation($request->header->account, $account, $groups, AccountMapper::class, 'groups', 'account-group', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Relation deleted', []);
+    }
+
+    /**
+     * Api method to add an account to a group
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiDeleteAccountFromGroup(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    {
+        $group    = (int) $request->getData('group');
+        $accounts = \array_map('intval', $request->getDataList('iaccount-idlist'));
+
+        if (\in_array($request->header->account, $accounts) && $group === 3) {
+            // admin group cannot be deleted
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group cannot be removed from yourself', []);
+
+            return;
+        }
+
+        $this->deleteModelRelation($request->header->account, $group, $accounts, GroupMapper::class, 'accounts', 'group-account', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Relation deleted', []);
     }
 
     /**

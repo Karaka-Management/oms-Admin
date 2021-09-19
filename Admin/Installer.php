@@ -156,4 +156,21 @@ final class Installer extends InstallerAbstract
 
         $query->execute();
     }
+
+    /**
+     * Install data from providing modules.
+     *
+     * @param ApplicationAbstract $app  Application
+     * @param array               $data Additional data
+     *
+     * @return array
+     *
+     * @throws PathException
+     * @throws \Exception
+     *
+     * @since 1.0.0
+     */
+    public static function installExternal(ApplicationAbstract $app, array $data) : array
+    {
+    }
 }

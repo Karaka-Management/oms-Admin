@@ -26,6 +26,10 @@ return [
         'Log'       => 'Log',
         'Info'      => 'Info',
         'Account'   => 'Account',
+        'Pages'   => 'Pages',
+        'Permissions'   => 'Permissions',
+        'Navigation'   => 'Navigation',
+        'Routes'   => 'Routes',
         'Accounts'  => 'Accounts',
     ],
 ];

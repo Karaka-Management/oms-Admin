@@ -1,4 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * Orange Management
+ *
+ * PHP Version 8.0
+ *
+ * @package   Modules
+ * @copyright Dennis Eichhorn
+ * @license   OMS License 1.0
+ * @version   1.0.0
+ * @link      https://orange-management.org
+ */
+declare(strict_types=1);
 
 use Modules\Admin\Controller\BackendController;
 use Modules\Admin\Models\PermissionState;
@@ -15,17 +27,18 @@ return [
         ],
     ],
 
-    '^.*/admin/settings/general.*$' => [
+    '^.*/admin/module/settings\?id=Admin.*$' => [
         [
-            'dest'       => '\Modules\Admin\Controller\BackendController:viewSettingsGeneral',
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleSettings',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::MODULE_NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SETTINGS,
+                'state'  => \Modules\Admin\Models\PermissionState::MODULE,
             ],
         ],
     ],
+
     '^.*/admin/account/list.*$' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountList',
@@ -106,17 +119,6 @@ return [
     '^.*/admin/module/info\?.*$' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleInfo',
-            'verb'       => RouteVerb::GET,
-            'permission' => [
-                'module' => BackendController::MODULE_NAME,
-                'type'   => PermissionType::READ,
-                'state'  => PermissionState::MODULE,
-            ],
-        ],
-    ],
-    '^.*/admin/module/settings\?.*$' => [
-        [
-            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleSettings',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::MODULE_NAME,

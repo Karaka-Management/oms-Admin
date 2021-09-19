@@ -23,7 +23,9 @@ $active    = $this->getData('active');
 $installed = $this->getData('installed');
 $id        = $this->getData('id');
 
-echo $this->getData('nav')->render();
+if (isset($installed[$id])) {
+    echo $this->getData('nav')->render();
+}
 ?>
 
 <div class="row">
@@ -87,38 +89,13 @@ echo $this->getData('nav')->render();
         </div>
     </div>
 
-    <div class="col-xs-12 col-md-4">
+    <?php if (!empty($this->getData('introduction'))) : ?>
+    <div class="col-xs-12 col-md-8">
         <div class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
-
             <div class="portlet-body">
-
+                <article><?= $this->getData('introduction'); ?></article>
             </div>
         </div>
     </div>
-
-    <div class="col-xs-12 col-md-4">
-        <div class="portlet">
-            <table id="iModuleGroupList" class="default">
-                <caption><?= $this->getHtml('Permissions'); ?><i class="fa fa-download floatRight download btn"></i></caption>
-                <thead>
-                    <tr>
-                        <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <td>Type<i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                <tbody>
-                    <?php $c = 0; $groupPermissions = $this->getData('groupPermissions');
-                    foreach ($groupPermissions as $key => $value) : ++$c;
-                    $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
-                    <tr data-href="<?= $url; ?>">
-                        <td><a href="<?= $url; ?>"><i class="fa fa-times"></i></a>
-                        <td><a href="<?= $url; ?>">Group</a>
-                        <td><a href="<?= $url; ?>"><?= $value->name; ?></a>
-                    <?php endforeach; ?>
-                    <?php if ($c === 0) : ?>
-                    <tr><td colspan="3" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                    <?php endif; ?>
-            </table>
-        </div>
-    </div>
+    <?php endif; ?>
 </div>

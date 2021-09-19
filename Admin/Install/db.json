@@ -507,6 +507,33 @@
             }
         }
     },
+    "app": {
+        "name": "app",
+        "fields": {
+            "app_id": {
+                "name": "app_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "app_name": {
+                "name": "app_name",
+                "type": "VARCHAR(50)",
+                "null": false
+            },
+            "app_theme": {
+                "name": "app_theme",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "app_status": {
+                "name": "app_status",
+                "type": "TINYINT",
+                "null": false
+            }
+        }
+    },
     "group": {
         "name": "group",
         "fields": {
@@ -857,6 +884,19 @@
                 "name": "settings_content",
                 "type": "VARCHAR(255)",
                 "null": true
+            },
+            "settings_pattern": {
+                "name": "settings_pattern",
+                "type": "TEXT",
+                "null": true
+            },
+            "settings_app": {
+                "name": "settings_app",
+                "type": "INT",
+                "default": null,
+                "null": true,
+                "foreignTable": "app",
+                "foreignKey": "app_id"
             },
             "settings_module": {
                 "name": "settings_module",

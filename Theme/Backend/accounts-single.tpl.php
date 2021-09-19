@@ -53,8 +53,10 @@ echo $this->getData('nav')->render(); ?>
     <div class="box wf-100 col-xs-12">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('AuditLog'); ?></label></li>
+            <li><label for="c-tab-2"><?= $this->getHtml('Groups'); ?></label></li>
+            <li><label for="c-tab-3"><?= $this->getHtml('Permissions'); ?></label></li>
+            <li><label for="c-tab-4"><?= $this->getHtml('Localization'); ?></label></li>
+            <li><label for="c-tab-5"><?= $this->getHtml('AuditLog'); ?></label></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -150,8 +152,31 @@ echo $this->getData('nav')->render(); ?>
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
+        <div class="tab">
+            <div class="row">
                 <div class="col-xs-12 col-md-6">
+                    <div class="portlet">
+                        <form id="iAddGroupToAccount" action="<?= UriFactory::build('{/api}admin/account/group'); ?>" method="put">
+                            <div class="portlet-head"><?= $this->getHtml('Groups'); ?></div>
+                            <div class="portlet-body">
+                                <div class="form-group">
+                                    <label for="iGroup"><?= $this->getHtml('Name'); ?></label>
+                                    <?= $this->getData('grpSelector')->render('iGroup', true); ?>
+                                </div>
+                            </div>
+                            <div class="portlet-foot">
+                                <input name="account" type="hidden" value="<?= $account->getId(); ?>">
+                                <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></div>
                         <table id="groupTable" class="default">
@@ -177,70 +202,14 @@ echo $this->getData('nav')->render(); ?>
                                 <?php endif; ?>
                         </table>
                     </div>
-
-                    <div class="portlet">
-                        <form id="iAddGroupToAccount" action="<?= UriFactory::build('{/api}admin/account/group'); ?>" method="put">
-                            <div class="portlet-head"><?= $this->getHtml('Groups'); ?></div>
-                            <div class="portlet-body">
-                                <div class="form-group">
-                                    <label for="iGroup"><?= $this->getHtml('Name'); ?></label>
-                                    <?= $this->getData('grpSelector')->render('iGroup', true); ?>
-                                </div>
-                            </div>
-                            <div class="portlet-foot">
-                                <input name="account" type="hidden" value="<?= $account->getId(); ?>">
-                                <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
-                            </div>
-                        </form>
-                    </div>
                 </div>
+            </div>
+        </div>
 
+        <input type="radio" id="c-tab-3" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-3' ? ' checked' : ''; ?>>
+        <div class="tab">
+            <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="fa fa-download floatRight download btn"></i></div>
-                        <div style="overflow-x:auto;">
-                            <table id="accountPermissions" class="default">
-                                <thead>
-                                    <tr>
-                                        <td>
-                                        <td>
-                                        <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('App'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Module'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Type'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Ele'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Comp'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td class="wf-100"><?= $this->getHtml('Perm'); ?>
-                                <tbody>
-                                    <?php $c = 0;
-                                        foreach ($permissions as $key => $value) : ++$c;
-                                            $permission = $value->getPermission();
-                                    ?>
-                                    <tr>
-                                        <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><a href="#"><i class="fa fa-cogs"></i></a>
-                                        <td><?= $value->getId(); ?>
-                                        <td><?= $value->getUnit(); ?>
-                                        <td><?= $value->getApp(); ?>
-                                        <td><?= $value->getModule(); ?>
-                                        <td><?= $value->getType(); ?>
-                                        <td><?= $value->getElement(); ?>
-                                        <td><?= $value->getComponent(); ?>
-                                        <td>
-                                            <?= (PermissionType::CREATE | $permission) === $permission ? 'C' : ''; ?>
-                                            <?= (PermissionType::READ | $permission) === $permission ? 'R' : ''; ?>
-                                            <?= (PermissionType::MODIFY | $permission) === $permission ? 'U' : ''; ?>
-                                            <?= (PermissionType::DELETE | $permission) === $permission ? 'D' : ''; ?>
-                                            <?= (PermissionType::PERMISSION | $permission) === $permission ? 'P' : ''; ?>
-                                    <?php endforeach; ?>
-                                    <?php if ($c === 0) : ?>
-                                        <tr><td colspan="10" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                    <?php endif; ?>
-                            </table>
-                        </div>
-                    </div>
-
                     <div class="portlet">
                         <form id="fAccountAddPermission" action="<?= UriFactory::build('{/api}admin/account/permission'); ?>" method="put">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?></div>
@@ -320,6 +289,53 @@ echo $this->getData('nav')->render(); ?>
                         </form>
                     </div>
                 </div>
+
+                <div class="col-xs-12 col-md-6">
+                    <div class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div style="overflow-x:auto;">
+                            <table id="accountPermissions" class="default">
+                                <thead>
+                                    <tr>
+                                        <td>
+                                        <td>
+                                        <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('App'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Module'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Type'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Ele'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('Comp'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td class="wf-100"><?= $this->getHtml('Perm'); ?>
+                                <tbody>
+                                    <?php $c = 0;
+                                        foreach ($permissions as $key => $value) : ++$c;
+                                            $permission = $value->getPermission();
+                                    ?>
+                                    <tr>
+                                        <td><a href="#"><i class="fa fa-times"></i></a>
+                                        <td><a href="#"><i class="fa fa-cogs"></i></a>
+                                        <td><?= $value->getId(); ?>
+                                        <td><?= $value->getUnit(); ?>
+                                        <td><?= $value->getApp(); ?>
+                                        <td><?= $value->getModule(); ?>
+                                        <td><?= $value->getType(); ?>
+                                        <td><?= $value->getElement(); ?>
+                                        <td><?= $value->getComponent(); ?>
+                                        <td>
+                                            <?= (PermissionType::CREATE | $permission) === $permission ? 'C' : ''; ?>
+                                            <?= (PermissionType::READ | $permission) === $permission ? 'R' : ''; ?>
+                                            <?= (PermissionType::MODIFY | $permission) === $permission ? 'U' : ''; ?>
+                                            <?= (PermissionType::DELETE | $permission) === $permission ? 'D' : ''; ?>
+                                            <?= (PermissionType::PERMISSION | $permission) === $permission ? 'P' : ''; ?>
+                                    <?php endforeach; ?>
+                                    <?php if ($c === 0) : ?>
+                                        <tr><td colspan="10" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                    <?php endif; ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -339,7 +355,7 @@ echo $this->getData('nav')->render(); ?>
             $volumes      = VolumeType::getConstants();
             $temperatures = TemperatureType::getConstants();
         ?>
-        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-4" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-4' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-4">
@@ -790,7 +806,7 @@ echo $this->getData('nav')->render(); ?>
             </div>
         </div>
 
-        <input type="radio" id="c-tab-3" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-5" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-5' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">

@@ -72,7 +72,7 @@ $isntalled = $this->getData('isntalled') ?? [];
                 <tbody>
                     <?php $count = 0;
                         foreach ($modules as $key => $module) : ++$count;
-                            $url = UriFactory::build('{/prefix}admin/module/settings?{?}&id=' . $module->getInternalName());
+                            $url = UriFactory::build('{/prefix}admin/module/info?{?}&id=' . $module->getInternalName());
 
                             if (isset($active[$module->getInternalName()])) {
                                 $status = ModuleStatus::ACTIVE;
