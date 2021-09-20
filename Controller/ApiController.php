@@ -482,7 +482,7 @@ final class ApiController extends Controller
      */
     public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $appManager = new ApplicationManager();
+        $appManager = new ApplicationManager($this->app);
 
         $app = $request->getData('appSrc');
         if (!\is_dir(__DIR__ . '/../../../' . $app)) {
@@ -519,41 +519,6 @@ final class ApiController extends Controller
                     $this->app->moduleManager->installProviding($app, $key);
                 }
             }
-        }
-
-        $app        = new App();
-        $app->name  = $request->getData('appName') ?? '';
-        $app->theme = $request->getData('theme') ?? '';
-        AppMapper::create($app);
-
-        $this->apiActivateTheme($request, $response);
-    }
-
-    /**
-     * Api method to activate a theme
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
-     *
-     * @return void
-     *
-     * @api
-     *
-     * @since 1.0.0
-     */
-    public function apiActivateTheme(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
-    {
-        if (\is_dir(__DIR__ . '/../../../' . $request->getData('appDest') . '/css')) {
-            Directory::delete(__DIR__ . '/../../../' . $request->getData('appDest') . '/css');
-        }
-
-        if (\is_dir(__DIR__ . '/../../../' . $request->getData('appDest') . '/Themes/' . $request->getData('theme') . '/css')) {
-            Directory::copy(
-                __DIR__ . '/../../../' . $request->getData('appDest') . '/Themes/' . $request->getData('theme') . '/css',
-                __DIR__ . '/../../../' . $request->getData('appDest') . '/css',
-                true
-            );
         }
     }
 
