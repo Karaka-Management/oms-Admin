@@ -33,10 +33,10 @@ final class AppMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'app_id'             => ['name' => 'app_id',           'type' => 'int',      'internal' => 'id'],
-        'app_name'           => ['name' => 'app_name',        'type' => 'string',   'internal' => 'name'],
+        'app_id'              => ['name' => 'app_id',           'type' => 'int',      'internal' => 'id'],
+        'app_name'            => ['name' => 'app_name',        'type' => 'string',   'internal' => 'name'],
         'app_theme'           => ['name' => 'app_theme',        'type' => 'string',   'internal' => 'theme'],
-        'app_status'         => ['name' => 'app_status',        'type' => 'int',   'internal' => 'status'],
+        'app_status'          => ['name' => 'app_status',        'type' => 'int',   'internal' => 'status'],
     ];
 
     /**
