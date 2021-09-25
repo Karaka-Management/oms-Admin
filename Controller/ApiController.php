@@ -66,6 +66,12 @@ use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
+use phpOMS\Application\ApplicationInfo;
+use phpOMS\Module\ModuleInfo;
+use Modules\Admin\Models\Module;
+use phpOMS\DataStorage\Database\Query\Builder;
+use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Module\ModuleStatus;
 
 /**
  * Admin controller class.
@@ -490,11 +496,11 @@ final class ApiController extends Controller
             return;
         }
 
-        $info = new ApplicationInfo(__DIR__ . '/../../../' . $app);
-        $info->load();
+        $appInfo = new ApplicationInfo(__DIR__ . '/../../../' . $app . '/info.json');
+        $appInfo->load();
 
         // handle dependencies
-        $dependencies = $info->getDependencies();
+        $dependencies = $appInfo->getDependencies();
         $installed    = $this->app->moduleManager->getInstalledModules();
 
         foreach ($dependencies as $key => $version) {
@@ -512,13 +518,24 @@ final class ApiController extends Controller
 
         // handle providing
         if ($result) {
-            $providing = $info->getProviding();
+            $providing = $appInfo->getProviding();
 
             foreach ($providing as $key => $version) {
                 if (isset($installed[$key])) {
                     $this->app->moduleManager->installProviding($app, $key);
                 }
             }
+        }
+
+        // handle Routes of already installed modules
+        // @todo: what about navigation links, works for Api and Backend but only since the Navigation module is installed afterwards. Other applications don't have this and would not have the links?
+        foreach ($installed as $module => $data) {
+            $class = '\Modules\\' . $module . '\Admin\Installer';
+
+            $moduleInfo = new ModuleInfo(__DIR__ . '/../../../Modules/' . $module . '/info.json');
+            $moduleInfo->load();
+
+            $class::reInit($moduleInfo, $appInfo);
         }
     }
 
@@ -667,7 +684,7 @@ final class ApiController extends Controller
      */
     public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        if (((int) $request->getId('id')) === 3) {
+        if (((int) $request->getData('id')) === 3) {
             // admin group cannot be deleted
             $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group cannot be deleted', []);
 
@@ -1063,8 +1080,65 @@ final class ApiController extends Controller
 
                 break;
             case ModuleStatusUpdateType::INSTALL:
-                $done = $module === 'Admin' ? false : $this->app->moduleManager->install($module);
+                $done = $this->app->moduleManager->isInstalled($module) ? true : false;
                 $msg  = $done ? 'Module successfully installed.' : 'Module not installed.';
+
+                if ($done) {
+                    break;
+                }
+
+                $moduleInfo = new ModuleInfo(__DIR__ . '/../../../Modules/' . $module . '/info.json');
+                $moduleInfo->load();
+
+                // install dependencies
+                $dependencies = $moduleInfo->getDependencies();
+                foreach ($dependencies as $key => $version) {
+                    $iResponse                 = new HttpResponse();
+                    $iRequest                  = new HttpRequest(new HttpUri(''));
+                    $iRequest->header->account = 1;
+                    $iRequest->setData('status', ModuleStatusUpdateType::INSTALL);
+
+                    $iRequest->setData('module', $key, true);
+                    $this->apiModuleStatusUpdate($iRequest, $iResponse);
+                }
+
+                // install module
+                $moduleObj = new Module();
+                $moduleObj->id = $module;
+                $moduleObj->theme = 'Default';
+                $moduleObj->path = $moduleInfo->getDirectory();
+                $moduleObj->version = $moduleInfo->getVersion();
+
+                $moduleObj->setStatus(ModuleStatus::AVAILABLE);
+
+                ModuleMapper::create($moduleObj);
+
+                $done = $this->app->moduleManager->install($module);
+                $msg  = $done ? 'Module successfully installed.' : 'Module not installed.';
+
+                $moduleObj->setStatus(ModuleStatus::ACTIVE);
+                ModuleMapper::update($moduleObj);
+
+                $queryLoad = new Builder($this->app->dbPool->get('insert'));
+                $queryLoad->insert('module_load_pid', 'module_load_type', 'module_load_from', 'module_load_for', 'module_load_file')
+                    ->into('module_load');
+
+                $load = $moduleInfo->getLoad();
+                foreach ($load as $val) {
+                    foreach ($val['pid'] as $pid) {
+                        $queryLoad->values(
+                            \sha1(\str_replace('/', '', $pid)),
+                            (int) $val['type'],
+                            $val['from'],
+                            $val['for'],
+                            $val['file']
+                        );
+                    }
+                }
+
+                if (!empty($queryLoad->getValues())) {
+                    $queryLoad->execute();
+                }
 
                 break;
             case ModuleStatusUpdateType::UNINSTALL:
@@ -1208,7 +1282,7 @@ final class ApiController extends Controller
      */
     public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        if (((int) $request->getId('permissionref')) === 3) {
+        if (((int) $request->getData('permissionref')) === 3) {
             // admin group cannot be deleted
             $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group permissions cannot get modified', []);
 

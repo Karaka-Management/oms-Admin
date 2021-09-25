@@ -57,4 +57,16 @@ class App
      * @since 1.0.0
      */
     public int $status = ApplicationStatus::NORMAL;
+
+    /**
+     * Get id
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
+    public function getId() : int
+    {
+        return $this->id;
+    }
 }

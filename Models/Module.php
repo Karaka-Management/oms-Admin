@@ -33,7 +33,7 @@ class Module
      * @var string
      * @since 1.0.0
      */
-    protected string $id = '';
+    public string $id = '';
 
     /**
      * Module name.
@@ -44,12 +44,28 @@ class Module
     public string $name = '';
 
     /**
-     * Module description.
+     * Module path.
      *
      * @var string
      * @since 1.0.0
      */
-    public string $description = '';
+    public string $path = '';
+
+    /**
+     * Module version.
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public string $version = '';
+
+    /**
+     * Module theme.
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public string $theme = '';
 
     /**
      * Group status.
@@ -147,8 +163,9 @@ class Module
         return [
             'id'          => $this->id,
             'name'        => $this->name,
+            'path'        => $this->path,
+            'version'        => $this->version,
             'status'      => $this->status,
-            'description' => $this->description,
             'createdAt'   => $this->createdAt,
         ];
     }

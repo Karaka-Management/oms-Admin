@@ -34,7 +34,10 @@ final class ModuleMapper extends DataMapperAbstract
      */
     protected static array $columns = [
         'module_id'     => ['name' => 'module_id',     'type' => 'string', 'internal' => 'id'],
-        'module_active' => ['name' => 'module_active', 'type' => 'int',    'internal' => 'status'],
+        'module_path' => ['name' => 'module_path', 'type' => 'string',    'internal' => 'path'],
+        'module_theme' => ['name' => 'module_theme', 'type' => 'string',    'internal' => 'theme'],
+        'module_version' => ['name' => 'module_version', 'type' => 'string',    'internal' => 'version'],
+        'module_status' => ['name' => 'module_status', 'type' => 'int',    'internal' => 'status'],
     ];
 
     /**
@@ -52,4 +55,6 @@ final class ModuleMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static string $primaryField = 'module_id';
+
+    protected static bool $autoincrement = false;
 }
