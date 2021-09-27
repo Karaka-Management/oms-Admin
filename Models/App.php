@@ -70,4 +70,3 @@ class App
         return $this->id;
     }
 }
-

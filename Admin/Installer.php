@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Admin;
 
+use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
 use phpOMS\DataStorage\Database\Connection\SQLiteConnection;
 use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
-use phpOMS\Application\ApplicationAbstract;
 use phpOMS\System\File\PathException;
 
 /**
@@ -207,8 +207,8 @@ final class Installer extends InstallerAbstract
     /**
      * Create settings.
      *
-     * @param ApplicationAbstract $app Database instance
-     * @param array        $settings   Media info
+     * @param ApplicationAbstract $app      Database instance
+     * @param array               $settings Media info
      *
      * @return array
      *
