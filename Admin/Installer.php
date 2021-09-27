@@ -20,6 +20,8 @@ use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
+use phpOMS\Application\ApplicationAbstract;
+use phpOMS\System\File\PathException;
 
 /**
  * Installer class.
@@ -172,5 +174,51 @@ final class Installer extends InstallerAbstract
      */
     public static function installExternal(ApplicationAbstract $app, array $data) : array
     {
+        if (!\is_file($data['path'] ?? '')) {
+            throw new PathException($data['path'] ?? '');
+        }
+
+        $adminFile = \file_get_contents($data['path'] ?? '');
+        if ($adminFile === false) {
+            throw new PathException($data['path'] ?? ''); // @codeCoverageIgnore
+        }
+
+        $adminData = \json_decode($adminFile, true) ?? [];
+        if ($adminData === false) {
+            throw new \Exception(); // @codeCoverageIgnore
+        }
+
+        $result = [
+            'settings' => [],
+        ];
+
+        foreach ($adminData as $admin) {
+            switch ($admin['type']) {
+                case 'setting':
+                    $result['settings'][] = self::createSettings($app, $admin);
+                    break;
+                default:
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Create settings.
+     *
+     * @param ApplicationAbstract $app Database instance
+     * @param array        $settings   Media info
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    private static function createSettings(ApplicationAbstract $app, array $setting) : array
+    {
+        unset($setting['type']);
+        $app->appSettings->create($setting);
+
+        return $setting;
     }
 }

@@ -528,7 +528,6 @@ final class ApiController extends Controller
         }
 
         // handle Routes of already installed modules
-        // @todo: what about navigation links, works for Api and Backend but only since the Navigation module is installed afterwards. Other applications don't have this and would not have the links?
         foreach ($installed as $module => $data) {
             $class = '\Modules\\' . $module . '\Admin\Installer';
 
@@ -1140,6 +1139,15 @@ final class ApiController extends Controller
                     $queryLoad->execute();
                 }
 
+                // install receiving from application (receiving from module is already installed during the module installation)
+                $appManager = new ApplicationManager($this->app);
+                $receiving = $appManager->getProvidingForModule($module);
+                foreach ($receiving as $app => $modules) {
+                    foreach ($modules as $module) {
+                        $this->app->moduleManager->installProviding('/Web/' . $app, $module);
+                    }
+                }
+
                 break;
             case ModuleStatusUpdateType::UNINSTALL:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->uninstall($module);
@@ -1657,10 +1665,8 @@ final class ApiController extends Controller
      *
      * @api
      *
-     * @todo Orange-Management/Modules#64
-     *  Create update functionality
-     *
      * @since 1.0.0
+     * @todo implement
      */
     public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
