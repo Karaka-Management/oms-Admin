@@ -253,19 +253,19 @@ final class BackendController extends Controller
         // audit log
         if ($request->getData('ptype') === 'p') {
             $view->setData('auditlogs',
-                AuditMapper::with('module', self::MODULE_NAME, [Audit::class])
+                AuditMapper::with('module', self::NAME, [Audit::class])
                     ::with('type', StringUtils::intHash(GroupMapper::class), [Audit::class])
                     ::with('ref', (string) $request->getData('id') ?? '0', [Audit::class])
                     ::getBeforePivot((int) $request->getData('audit'), null, 25));
         } elseif ($request->getData('ptype') === 'n') {
             $view->setData('auditlogs',
-                AuditMapper::with('module', self::MODULE_NAME, [Audit::class])
+                AuditMapper::with('module', self::NAME, [Audit::class])
                     ::with('type', StringUtils::intHash(GroupMapper::class), [Audit::class])
                     ::with('ref', (string) $request->getData('id') ?? '0', [Audit::class])
                     ::getAfterPivot((int) $request->getData('audit'), null, 25));
         } else {
             $view->setData('auditlogs',
-                AuditMapper::with('module', self::MODULE_NAME, [Audit::class])
+                AuditMapper::with('module', self::NAME, [Audit::class])
                     ::with('type', StringUtils::intHash(GroupMapper::class), [Audit::class])
                     ::with('ref', (string) $request->getData('id') ?? '0', [Audit::class])
                     ::getAfterPivot(0, null, 25));
@@ -425,7 +425,7 @@ final class BackendController extends Controller
         }
 
         if (\is_file(__DIR__ . '/../Admin/Settings/Theme/Backend/settings.tpl.php')) {
-            $view->setTemplate('/Modules/' . static::MODULE_NAME . '/Admin/Settings/Theme/Backend/settings');
+            $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
         } else {
             $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
         }

@@ -32,7 +32,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleSettings',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => \Modules\Admin\Models\PermissionState::MODULE,
             ],
@@ -44,7 +44,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountList',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::ACCOUNT,
             ],
@@ -55,7 +55,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountSettings',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::ACCOUNT,
             ],
@@ -66,7 +66,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountCreate',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
                 'state'  => PermissionState::ACCOUNT,
             ],
@@ -77,7 +77,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupList',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::GROUP,
             ],
@@ -88,7 +88,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupSettings',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::MODIFY,
                 'state'  => PermissionState::GROUP,
             ],
@@ -99,7 +99,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupCreate',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
                 'state'  => PermissionState::GROUP,
             ],
@@ -110,7 +110,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleList',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::MODULE,
             ],
@@ -121,7 +121,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleInfo',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::MODULE,
             ],
@@ -132,7 +132,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleLog',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::MODULE,
             ],

@@ -163,7 +163,7 @@ final class ApiController extends Controller
 
         $forgotten = $this->app->appSettings->get(
             names: ['forgott_date', 'forgrott_count'],
-            module: self::MODULE_NAME,
+            module: self::NAME,
             account: $account->getId()
         );
 
@@ -187,8 +187,8 @@ final class ApiController extends Controller
         $mail->body    = 'Please reset your password at: .....';
 
         $this->app->appSettings->set([
-            ['name' => 'forgott_date', 'module' => self::MODULE_NAME, 'account' => $account->getId(), 'content' => (string) \time()],
-            ['name' => 'forgotten_count', 'module' => self::MODULE_NAME, 'account' => $account->getId(), 'content' => (string) (((int) $forgotten['forgrotten_count']) + 1)],
+            ['name' => 'forgott_date', 'module' => self::NAME, 'account' => $account->getId(), 'content' => (string) \time()],
+            ['name' => 'forgotten_count', 'module' => self::NAME, 'account' => $account->getId(), 'content' => (string) (((int) $forgotten['forgrotten_count']) + 1)],
         ], true);
 
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
@@ -242,8 +242,8 @@ final class ApiController extends Controller
             [
                 'response' => $this->app->appSettings->get(
                     $id !== null ? (int) $id : $id,
-                    $request->getData('app') ?? null,
                     $request->getData('name') ?? '',
+                    $request->getData('app') ?? null,
                     $request->getData('module') ?? null,
                     $group !== null ? (int) $group : $group,
                     $account !== null ? (int) $account : $account
@@ -326,7 +326,7 @@ final class ApiController extends Controller
                 PermissionType::MODIFY,
                 $this->app->orgId,
                 $this->app->appName,
-                self::MODULE_NAME,
+                self::NAME,
                 PermissionState::ACCOUNT_SETTINGS,
                 $accountId
             )
@@ -1168,7 +1168,7 @@ final class ApiController extends Controller
                 $old, $new,
                 StringUtils::intHash(ModuleMapper::class), 'module-status',
                 $module,
-                self::MODULE_NAME,
+                self::NAME,
                 $request->getOrigin(),
             ]
         );
