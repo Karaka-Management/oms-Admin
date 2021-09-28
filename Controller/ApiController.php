@@ -26,6 +26,7 @@ use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermission;
 use Modules\Admin\Models\GroupPermissionMapper;
 use Modules\Admin\Models\LocalizationMapper;
+use Modules\Admin\Models\Module;
 use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
@@ -39,10 +40,13 @@ use phpOMS\Account\GroupStatus;
 use phpOMS\Account\PermissionAbstract;
 use phpOMS\Account\PermissionOwner;
 use phpOMS\Account\PermissionType;
+use phpOMS\Application\ApplicationInfo;
 use phpOMS\Application\ApplicationManager;
 use phpOMS\Auth\LoginReturnType;
+use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Localization\Localization;
 use phpOMS\Message\Http\HttpRequest;
+use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestMethod;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\Http\Rest;
@@ -56,6 +60,8 @@ use phpOMS\Model\Message\FormValidation;
 use phpOMS\Model\Message\Notify;
 use phpOMS\Model\Message\NotifyType;
 use phpOMS\Model\Message\Reload;
+use phpOMS\Module\ModuleInfo;
+use phpOMS\Module\ModuleStatus;
 use phpOMS\System\File\Local\Directory;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
@@ -65,12 +71,6 @@ use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
-use phpOMS\Application\ApplicationInfo;
-use phpOMS\Module\ModuleInfo;
-use Modules\Admin\Models\Module;
-use phpOMS\DataStorage\Database\Query\Builder;
-use phpOMS\Message\Http\HttpResponse;
-use phpOMS\Module\ModuleStatus;
 
 /**
  * Admin controller class.
@@ -1115,10 +1115,10 @@ final class ApiController extends Controller
                 }
 
                 // install module
-                $moduleObj = new Module();
-                $moduleObj->id = $module;
-                $moduleObj->theme = 'Default';
-                $moduleObj->path = $moduleInfo->getDirectory();
+                $moduleObj          = new Module();
+                $moduleObj->id      = $module;
+                $moduleObj->theme   = 'Default';
+                $moduleObj->path    = $moduleInfo->getDirectory();
                 $moduleObj->version = $moduleInfo->getVersion();
 
                 $moduleObj->setStatus(ModuleStatus::AVAILABLE);
@@ -1154,7 +1154,7 @@ final class ApiController extends Controller
 
                 // install receiving from application (receiving from module is already installed during the module installation)
                 $appManager = new ApplicationManager($this->app);
-                $receiving = $appManager->getProvidingForModule($module);
+                $receiving  = $appManager->getProvidingForModule($module);
                 foreach ($receiving as $app => $modules) {
                     foreach ($modules as $module) {
                         $this->app->moduleManager->installProviding('/Web/' . $app, $module);

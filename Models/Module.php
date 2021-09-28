@@ -161,12 +161,12 @@ class Module
     public function toArray() : array
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name,
-            'path'        => $this->path,
+            'id'             => $this->id,
+            'name'           => $this->name,
+            'path'           => $this->path,
             'version'        => $this->version,
-            'status'      => $this->status,
-            'createdAt'   => $this->createdAt,
+            'status'         => $this->status,
+            'createdAt'      => $this->createdAt,
         ];
     }
 }
