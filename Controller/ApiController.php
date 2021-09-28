@@ -1071,10 +1071,18 @@ final class ApiController extends Controller
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->activate($module);
                 $msg  = $done ? 'Module successfully activated.' : 'Module not activated.';
 
+                $new = clone $old;
+                $new->setStatus(ModuleStatusUpdateType::ACTIVATE);
+                ModuleMapper::update($new);
+
                 break;
             case ModuleStatusUpdateType::DEACTIVATE:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->deactivate($module);
                 $msg  = $done ? 'Module successfully deactivated.' : 'Module not deactivated.';
+
+                $new = clone $old;
+                $new->setStatus(ModuleStatusUpdateType::DEACTIVATE);
+                ModuleMapper::update($new);
 
                 break;
             case ModuleStatusUpdateType::INSTALL:
@@ -1082,6 +1090,12 @@ final class ApiController extends Controller
                 $msg  = $done ? 'Module successfully installed.' : 'Module not installed.';
 
                 if ($done) {
+                    break;
+                }
+
+                if (!\is_file(__DIR__ . '/../../../Modules/' . $module . '/info.json')) {
+                    $msg  = 'Status change for unknown module requested';
+                    $done = false;
                     break;
                 }
 
@@ -1096,7 +1110,7 @@ final class ApiController extends Controller
                     $iRequest->header->account = 1;
                     $iRequest->setData('status', ModuleStatusUpdateType::INSTALL);
 
-                    $iRequest->setData('module', $key, true);
+                    $iRequest->setData('module', $key);
                     $this->apiModuleStatusUpdate($iRequest, $iResponse);
                 }
 
@@ -1152,6 +1166,10 @@ final class ApiController extends Controller
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->uninstall($module);
                 $msg  = $done ? 'Module successfully uninstalled.' : 'Module not uninstalled.';
 
+                $new = clone $old;
+                $new->setStatus(ModuleStatusUpdateType::DELETE);
+                ModuleMapper::delete($new);
+
                 break;
             default:
                 $done                     = false;
@@ -1159,21 +1177,22 @@ final class ApiController extends Controller
                 $response->header->status = RequestStatusCode::R_400;
         }
         ModuleMapper::clearCache();
-        $new = ModuleMapper::get($module);
 
-        $this->app->eventManager->triggerSimilar(
-            'POST:Module:Admin-module-status-update', '',
-            [
-                $request->header->account,
-                $old, $new,
-                StringUtils::intHash(ModuleMapper::class), 'module-status',
-                $module,
-                self::NAME,
-                $request->getOrigin(),
-            ]
-        );
+        if ($done) {
+            $new = ModuleMapper::get($module);
 
-        if (!$done) {
+            $this->app->eventManager->triggerSimilar(
+                'POST:Module:Admin-module-status-update', '',
+                [
+                    $request->header->account,
+                    $old, $new,
+                    StringUtils::intHash(ModuleMapper::class), 'module-status',
+                    $module,
+                    self::NAME,
+                    $request->getOrigin(),
+                ]
+            );
+        } else {
             $response->header->status = RequestStatusCode::R_400;
         }
 

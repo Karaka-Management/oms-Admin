@@ -41,10 +41,9 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        self::assertEquals(0, $this->module->getId());
+        self::assertEquals('', $this->module->getId());
         self::assertInstanceOf('\DateTimeImmutable', $this->module->createdAt);
         self::assertEquals('', $this->module->name);
-        self::assertEquals('', $this->module->description);
         self::assertEquals(ModuleStatus::INACTIVE, $this->module->getStatus());
         self::assertEquals(\json_encode($this->module->jsonSerialize()), $this->module->__toString());
         self::assertEquals($this->module->jsonSerialize(), $this->module->toArray());
@@ -59,17 +58,6 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
     {
         $this->module->name = 'Name';
         self::assertEquals('Name', $this->module->name);
-    }
-
-    /**
-     * @testdox The description can be set and returned
-     * @covers Modules\Admin\Models\Module
-     * @group module
-     */
-    public function testDescriptionInputOutput() : void
-    {
-        $this->module->description = 'Desc';
-        self::assertEquals('Desc', $this->module->description);
     }
 
     /**
