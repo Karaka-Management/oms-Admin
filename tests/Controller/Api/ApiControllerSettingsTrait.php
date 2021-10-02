@@ -36,7 +36,7 @@ trait ApiControllerSettingsTrait
         $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
 
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('90', $response->get('')['response']['content']);
+        self::assertEquals('90', $response->get('')['response']->content);
     }
 
     /**
@@ -55,7 +55,7 @@ trait ApiControllerSettingsTrait
 
         $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('60', $response->get('')['response']['content']);
+        self::assertEquals('60', $response->get('')['response']->content);
 
         $request->setData('settings', \json_encode([['name' => SettingsEnum::PASSWORD_INTERVAL, 'content' => '90']]), true);
         $this->module->apiSettingsSet($request, $response);

@@ -81,7 +81,7 @@ echo $this->getData('nav')->render();
                                         <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="fa fa-info-circle"></i></i>
                                     </label>
 
-                                    <input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001']['content']); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
+                                    <input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001']->content); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
                                 </div>
 
                                 <div class="form-group">
@@ -90,7 +90,7 @@ echo $this->getData('nav')->render();
                                         <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries'); ?>"><i class="fa fa-info-circle"></i></i>
                                     </label>
 
-                                    <input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($generalSettings['1000000005']['content']); ?>" min="-1">
+                                    <input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($generalSettings['1000000005']->content); ?>" min="-1">
                                 </div>
 
                                 <div class="form-group">
@@ -99,7 +99,7 @@ echo $this->getData('nav')->render();
                                         <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod'); ?>"><i class="fa fa-info-circle"></i></i>
                                     </label>
 
-                                    <input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($generalSettings['1000000002']['content']); ?>">
+                                    <input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($generalSettings['1000000002']->content); ?>">
                                 </div>
 
                                 <div class="form-group">
@@ -108,7 +108,7 @@ echo $this->getData('nav')->render();
                                         <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval'); ?>"><i class="fa fa-info-circle"></i></i>
                                     </label>
 
-                                    <input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($generalSettings['1000000003']['content']); ?>">
+                                    <input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($generalSettings['1000000003']->content); ?>">
                                 </div>
 
                                 <div class="form-group">
@@ -117,7 +117,7 @@ echo $this->getData('nav')->render();
                                         <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory'); ?>"><i class="fa fa-info-circle"></i></i>
                                     </label>
 
-                                    <input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($generalSettings['1000000004']['content']); ?>">
+                                    <input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($generalSettings['1000000004']->content); ?>">
                                 </div>
 
                             </div>
@@ -145,7 +145,7 @@ echo $this->getData('nav')->render();
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']['content']); ?>" placeholder="&#xf040; /Logs">
+                                    <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']->content); ?>" placeholder="&#xf040; /Logs">
                                 </div>
                             </div>
                             <div class="portlet-foot">

@@ -528,12 +528,13 @@ final class ApiController extends Controller
 
         // handle Routes of already installed modules
         foreach ($installed as $module => $data) {
-            $class = '\Modules\\' . $module . '\Admin\Installer';
+            $class = '\Modules\\' . $module . '\Admin\Status';
 
             $moduleInfo = new ModuleInfo(__DIR__ . '/../../../Modules/' . $module . '/info.json');
             $moduleInfo->load();
 
-            $class::reInit($moduleInfo, $appInfo);
+            $class::activateRoutes($moduleInfo, $appInfo);
+            $class::activateHooks($moduleInfo, $appInfo);
         }
     }
 
