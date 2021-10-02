@@ -122,6 +122,9 @@ trait ApiControllerModuleTrait
         $routes = include __DIR__ . '/../../../../../Web/Api/Routes.php';
         $hooks  = include __DIR__ . '/../../../../../Web/Api/Hooks.php';
 
+        \array_pop($routes);
+        \array_pop($hooks);
+
         $this->module->apiReInit($request, $response);
 
         $routes2 = include __DIR__ . '/../../../../../Web/Api/Routes.php';
