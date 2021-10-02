@@ -207,8 +207,8 @@ final class Installer extends InstallerAbstract
     /**
      * Create settings.
      *
-     * @param ApplicationAbstract $app      Database instance
-     * @param array               $settings Media info
+     * @param ApplicationAbstract $app     Database instance
+     * @param array               $setting Media info
      *
      * @return array
      *

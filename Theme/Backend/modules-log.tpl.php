@@ -30,7 +30,8 @@ echo $this->getData('nav')->render();
     <div class="col-xs-12">
         <div class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="fa fa-download floatRight download btn"></i></div>
-            <table class="default fixed">
+            <div class="slider">
+            <table class="default">
                 <colgroup>
                     <col style="width: 75px">
                     <col style="width: 150px">
@@ -68,6 +69,7 @@ echo $this->getData('nav')->render();
                     <tr><td colspan="8" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                 <?php endif; ?>
             </table>
+            </div>
             <div class="portlet-foot">
                 <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
                 <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>

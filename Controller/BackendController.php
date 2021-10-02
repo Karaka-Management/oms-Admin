@@ -436,7 +436,7 @@ final class BackendController extends Controller
             ]);
 
         $view->setData('generalSettings', $generalSettings);
-        $view->setData('defaultlocalization', LocalizationMapper::get((int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]));
+        $view->setData('defaultlocalization', LocalizationMapper::get((int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content));
         $view->setData('settings', SettingMapper::getAll());
 
         return $view;

@@ -121,7 +121,7 @@ echo $this->getData('nav')->render(); ?>
                                 <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; $url = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $value->name1; ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->name1; ?> <?= $value->name2; ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                     <tr><td colspan="2" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
