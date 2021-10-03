@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Admin;
 
-use phpOMS\Module\UninstallerAbstract;
-
 /**
  * Uninstall class.
  *
