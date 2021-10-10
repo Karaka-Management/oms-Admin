@@ -856,7 +856,7 @@ final class ApiController extends Controller
 
         $this->createModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
         $this->createProfileForAccount($account, $request);
-        $this->createMediaDirForAccount($account->getId(), $account->login, $request->header->account);
+        $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully created. Link: <a href="' . (UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $account->getId())) . '">Account</a>', $account);
     }
