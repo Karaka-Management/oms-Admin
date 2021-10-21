@@ -21,7 +21,7 @@ use Modules\Admin\Models\GroupPermission;
  *
  * @internal
  */
-class GroupPermissionTest extends \PHPUnit\Framework\TestCase
+final class GroupPermissionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The group permission has the expected default values after initialization

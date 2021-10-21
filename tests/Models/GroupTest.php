@@ -22,7 +22,7 @@ use Modules\Admin\Models\NullAccount;
  *
  * @internal
  */
-class GroupTest extends \PHPUnit\Framework\TestCase
+final class GroupTest extends \PHPUnit\Framework\TestCase
 {
     protected Group $group;
 

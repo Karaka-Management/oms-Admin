@@ -24,7 +24,7 @@ use phpOMS\Utils\TestUtils;
  *
  * @internal
  */
-class AppMapperTest extends \PHPUnit\Framework\TestCase
+final class AppMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The model can be created and read from the database

@@ -22,7 +22,7 @@ use phpOMS\Module\ModuleStatus;
  *
  * @internal
  */
-class ModuleTest extends \PHPUnit\Framework\TestCase
+final class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     protected Module $module;
 

@@ -21,7 +21,7 @@ use Modules\Admin\Models\AccountPermission;
  *
  * @internal
  */
-class AccountPermissionTest extends \PHPUnit\Framework\TestCase
+final class AccountPermissionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The account permission has the expected default values after initialization

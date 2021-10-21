@@ -24,7 +24,7 @@ use Modules\Admin\Models\GroupPermissionMapper;
  *
  * @internal
  */
-class GroupMapperTest extends \PHPUnit\Framework\TestCase
+final class GroupMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox All groups which have permissions for a module can be returned

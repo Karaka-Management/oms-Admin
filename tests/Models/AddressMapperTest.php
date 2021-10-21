@@ -24,7 +24,7 @@ use phpOMS\Stdlib\Base\AddressType;
  *
  * @internal
  */
-class AddressMapperTest extends \PHPUnit\Framework\TestCase
+final class AddressMapperTest extends \PHPUnit\Framework\TestCase
 {
 	/**
      * @covers Modules\Admin\Models\AddressMapper

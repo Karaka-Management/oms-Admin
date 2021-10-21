@@ -21,7 +21,7 @@ use Modules\Admin\Models\Account;
  *
  * @internal
  */
-class AccountTest extends \PHPUnit\Framework\TestCase
+final class AccountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The account has the expected default values after initialization

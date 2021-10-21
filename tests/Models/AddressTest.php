@@ -22,7 +22,7 @@ use phpOMS\Stdlib\Base\AddressType;
  *
  * @internal
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+final class AddressTest extends \PHPUnit\Framework\TestCase
 {
     protected Address $address;
 

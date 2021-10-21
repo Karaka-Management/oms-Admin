@@ -22,7 +22,7 @@ use phpOMS\Localization\Localization;
  *
  * @internal
  */
-class LocalizationMapperTest extends \PHPUnit\Framework\TestCase
+final class LocalizationMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The model can be created and read from the database
