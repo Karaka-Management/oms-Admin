@@ -22,6 +22,7 @@ use Modules\Admin\tests\Controller\Api\ApiControllerGroupTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerModuleTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerPermissionTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerSettingsTrait;
+use phpOMS\DataStorage\Session\HttpSession;
 use phpOMS\Account\Account;
 use phpOMS\Account\AccountManager;
 use phpOMS\Account\PermissionType;
@@ -65,6 +66,7 @@ class ApiControllerTest extends \PHPUnit\Framework\TestCase
         $this->app->dispatcher     = new Dispatcher($this->app);
         $this->app->eventManager   = new EventManager($this->app->dispatcher);
         $this->app->eventManager->importFromFile(__DIR__ . '/../../../../Web/Api/Hooks.php');
+        $this->app->sessionManager = new HttpSession(36000);
 
         $account = new Account();
         TestUtils::setMember($account, 'id', 1);

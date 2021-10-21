@@ -149,4 +149,15 @@ class AccountMapperTest extends \PHPUnit\Framework\TestCase
         $accountR->generatePassword('orange');
         AccountMapper::update($accountR);
     }
+
+    /**
+     * @covers Modules\Admin\Models\AccountMapper
+     * @group module
+     */
+    public function testGetWithPermission() : void
+    {
+        $accountR = AccountMapper::getWithPermissions(1);
+        self::assertEquals('admin', $accountR->login);
+        self::assertGreaterThan(0, $accountR->getPermissions());
+    }
 }

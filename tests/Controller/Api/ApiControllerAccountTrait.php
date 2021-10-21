@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Controller\Api;
 
+use phpOMS\Account\GroupStatus;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Message\Http\HttpRequest;
@@ -177,7 +178,7 @@ trait ApiControllerAccountTrait
      * @covers Modules\Admin\Controller\ApiController
      * @group module
      */
-    public function testApiAddGroupToAccount() : void
+    public function testApiAddRemoveGroupToAccount() : void
     {
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
@@ -187,6 +188,80 @@ trait ApiControllerAccountTrait
         $request->setData('igroup-idlist', '1');
 
         $this->module->apiAddGroupToAccount($request, $response);
+        self::assertEquals('ok', $response->get('')['status']);
+
+        // remove
+        $response = new HttpResponse();
+
+        $this->module->apiDeleteGroupFromAccount($request, $response);
+        self::assertEquals('ok', $response->get('')['status']);
+    }
+
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
+    public function testApiRemoveAdminGroupFromOneselfAccount() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $request->setData('account', 1);
+        $request->setData('igroup-idlist', '3');
+
+        $this->module->apiDeleteGroupFromAccount($request, $response);
+        self::assertEquals('error', $response->get('')['status']);
+    }
+
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
+    public function testApiAccountLogin() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $request->setData('user', 'admin');
+        $request->setData('pass', 'orange');
+
+        $this->module->apiLogin($request, $response);
+        self::assertInstanceOf('\phpOMS\Model\Message\Reload', $response->get(''));
+    }
+
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
+    public function testApiAccountLoginInvalid() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $request->setData('user', 'admin');
+        $request->setData('pass', 'invalid');
+
+        $this->module->apiLogin($request, $response);
+        self::assertInstanceOf('\phpOMS\Model\Message\Notify', $response->get(''));
+    }
+
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
+    public function testApiAccountLogout() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $request->setData('user', 'admin');
+        $request->setData('pass', 'invalid');
+
+        $this->module->apiLogout($request, $response);
         self::assertEquals('ok', $response->get('')['status']);
     }
 }

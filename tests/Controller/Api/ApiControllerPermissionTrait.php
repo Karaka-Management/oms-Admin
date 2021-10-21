@@ -43,6 +43,23 @@ trait ApiControllerPermissionTrait
     }
 
     /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
+    public function testApiAddGroupPermissionToAdmin() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $request->setData('permissionowner', PermissionOwner::GROUP);
+        $request->setData('permissionref', 3);
+
+        $this->module->apiAddGroupPermission($request, $response);
+        self::assertEquals('error', $response->get('')['status']);
+    }
+
+    /**
      * @testdox A group permission can be returned
      * @covers Modules\Admin\Controller\ApiController
      * @group module

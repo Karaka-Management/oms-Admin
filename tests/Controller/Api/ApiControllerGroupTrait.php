@@ -110,6 +110,23 @@ trait ApiControllerGroupTrait
     }
 
     /**
+     * @testdox A user group can be created and deleted
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
+    public function testApiGroupDeleteAdminInvalid() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+
+        $request->setData('id', '3');
+        $this->module->apiGroupDelete($request, $response);
+        self::assertEquals('error', $response->get('')['status']);
+    }
+
+    /**
      * @testdox A invalid user group cannot be created
      * @covers Modules\Admin\Controller\ApiController
      * @group module
@@ -132,7 +149,7 @@ trait ApiControllerGroupTrait
      * @covers Modules\Admin\Controller\ApiController
      * @group module
      */
-    public function testApiAddAccountToGroup() : void
+    public function testApiAddRemoveAccountToGroup() : void
     {
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
@@ -143,6 +160,29 @@ trait ApiControllerGroupTrait
 
         $this->module->apiAddAccountToGroup($request, $response);
         self::assertEquals('ok', $response->get('')['status']);
+
+        // remove
+        $response = new HttpResponse();
+
+        $this->module->apiDeleteAccountFromGroup($request, $response);
+        self::assertEquals('ok', $response->get('')['status']);
+    }
+
+    /**
+     * @covers Modules\Admin\Controller\ApiController
+     * @group module
+     */
+    public function testApiRemoveAdminAccountFromAdminGroup() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $request->setData('group', 3);
+        $request->setData('iaccount-idlist', '1');
+
+        $this->module->apiDeleteAccountFromGroup($request, $response);
+        self::assertEquals('error', $response->get('')['status']);
     }
 
     /**

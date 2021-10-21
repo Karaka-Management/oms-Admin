@@ -24,6 +24,16 @@ use Modules\Admin\Models\NullAccount;
  */
 class GroupTest extends \PHPUnit\Framework\TestCase
 {
+    protected Group $group;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp() : void
+    {
+        $this->group = new Group();
+    }
+
     /**
      * @testdox The group has the expected default values after initialization
      * @covers Modules\Admin\Models\Group
@@ -31,11 +41,10 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        $group = new Group();
-        self::assertEquals((new \DateTime('now'))->format('Y-m-d'), $group->createdAt->format('Y-m-d'));
-        self::assertEquals(0, $group->createdBy->getId());
-        self::assertEquals('', $group->descriptionRaw);
-        self::assertEquals([], $group->getAccounts());
+        self::assertEquals((new \DateTime('now'))->format('Y-m-d'), $this->group->createdAt->format('Y-m-d'));
+        self::assertEquals(0, $this->group->createdBy->getId());
+        self::assertEquals('', $this->group->descriptionRaw);
+        self::assertEquals([], $this->group->getAccounts());
     }
 
     /**
@@ -45,10 +54,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      */
     public function testDescriptionInputOutput() : void
     {
-        $group = new Group();
-
-        $group->descriptionRaw = 'Some test';
-        self::assertEquals('Some test', $group->descriptionRaw);
+        $this->group->descriptionRaw = 'Some test';
+        self::assertEquals('Some test', $this->group->descriptionRaw);
     }
 
     /**
@@ -58,9 +65,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreatorInputOutput() : void
     {
-        $group = new Group();
-
-        $group->createdBy = new NullAccount(3);
-        self::assertEquals(3, $group->createdBy->getId());
+        $this->group->createdBy = new NullAccount(3);
+        self::assertEquals(3, $this->group->createdBy->getId());
     }
 }

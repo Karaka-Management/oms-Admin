@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Orange Management
  *
@@ -11,7 +10,6 @@
  * @version   1.0.0
  * @link      https://orange-management.org
  */
-
 declare(strict_types=1);
 
 namespace Modules\Admin\Controller;

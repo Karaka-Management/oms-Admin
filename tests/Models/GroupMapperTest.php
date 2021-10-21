@@ -50,4 +50,14 @@ class GroupMapperTest extends \PHPUnit\Framework\TestCase
 
         self::assertTrue(false);
     }
+
+    /**
+     * @covers Modules\Admin\Models\GroupMapper
+     * @group module
+     */
+    public function testCountMembers() : void
+    {
+        self::assertEquals([3 => 1], GroupMapper::countMembers());
+        self::assertEquals([], GroupMapper::countMembers(1));
+    }
 }
