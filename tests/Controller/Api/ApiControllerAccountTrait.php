@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Controller\Api;
 
-use phpOMS\Account\GroupStatus;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Message\Http\HttpRequest;

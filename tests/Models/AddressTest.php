@@ -50,7 +50,7 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
                 'lat'  => 0,
                 'long' => 0,
             ],
-            'name'  => '',
+            'name'      => '',
             'addition'  => '',
         ];
 
@@ -72,13 +72,13 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
                 'lat'  => 12.1,
                 'long' => 11.2,
             ],
-            'name'  => 'name',
+            'name'      => 'name',
             'addition'  => 'addition',
         ];
 
-        $this->address->name = 'name';
+        $this->address->name     = 'name';
         $this->address->addition = 'addition';
-        $this->address->postal = '0123456789';
+        $this->address->postal   = '0123456789';
         $this->address->setType(AddressType::BUSINESS);
         $this->address->city    = 'city';
         $this->address->address = 'Some address here';
@@ -101,13 +101,13 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
                 'lat'  => 12.1,
                 'long' => 11.2,
             ],
-            'name'  => 'name',
+            'name'      => 'name',
             'addition'  => 'addition',
         ];
 
-        $this->address->name = 'name';
+        $this->address->name     = 'name';
         $this->address->addition = 'addition';
-        $this->address->postal = '0123456789';
+        $this->address->postal   = '0123456789';
         $this->address->setType(AddressType::BUSINESS);
         $this->address->city    = 'city';
         $this->address->address = 'Some address here';
@@ -131,7 +131,7 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
                 'lat'  => 12.1,
                 'long' => 11.2,
             ],
-            'name'  => 'name',
+            'name'      => 'name',
             'addition'  => 'addition',
         ];
 

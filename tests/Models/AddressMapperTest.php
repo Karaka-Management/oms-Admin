@@ -16,7 +16,6 @@ namespace Modules\Admin\tests\Models;
 
 use Modules\Admin\Models\Address;
 use Modules\Admin\Models\AddressMapper;
-use phpOMS\Utils\TestUtils;
 use phpOMS\Stdlib\Base\AddressType;
 
 /**
@@ -27,16 +26,16 @@ use phpOMS\Stdlib\Base\AddressType;
 final class AddressMapperTest extends \PHPUnit\Framework\TestCase
 {
 	/**
-     * @covers Modules\Admin\Models\AddressMapper
-     * @group module
-     */
+	 * @covers Modules\Admin\Models\AddressMapper
+	 * @group module
+	 */
 	public function testCR() : void
     {
         $address = new Address();
 
-        $address->name = 'name';
+        $address->name     = 'name';
         $address->addition = 'addition';
-        $address->postal = '0123456789';
+        $address->postal   = '0123456789';
         $address->setType(AddressType::BUSINESS);
         $address->city    = 'city';
         $address->address = 'Some address here';

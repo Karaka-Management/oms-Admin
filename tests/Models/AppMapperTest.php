@@ -17,7 +17,6 @@ namespace Modules\Admin\tests\Models;
 use Modules\Admin\Models\App;
 use Modules\Admin\Models\AppMapper;
 use phpOMS\Application\ApplicationStatus;
-use phpOMS\Utils\TestUtils;
 
 /**
  * @testdox Modules\Admin\tests\Models\AppMapperTest: App database mapper
@@ -35,8 +34,8 @@ final class AppMapperTest extends \PHPUnit\Framework\TestCase
     {
         $app = new App();
 
-        $app->name = 'TestAppName';
-        $app->theme = 'Default';
+        $app->name   = 'TestAppName';
+        $app->theme  = 'Default';
         $app->status = ApplicationStatus::NORMAL;
 
         $id = AppMapper::create($app);
