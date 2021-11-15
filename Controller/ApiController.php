@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\Admin\Controller;
 
 use Model\App;
+use Model\SettingsEnum;
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
@@ -143,6 +144,41 @@ final class ApiController extends Controller
     }
 
     /**
+     * Create basic server mail handler
+     *
+     * @return MailHandler
+     *
+     * @since 1.0.0
+     **/
+    public function setUpServerMailHandler() : MailHandler
+    {
+        $emailSettings = $this->app->appSettings->get(
+            names: [
+                SettingsEnum::MAIL_SERVER_ADDR,
+                SettingsEnum::MAIL_SERVER_TYPE,
+                SettingsEnum::MAIL_SERVER_USER,
+                SettingsEnum::MAIL_SERVER_PASS,
+                SettingsEnum::MAIL_SERVER_TLS,
+            ],
+            module: self::NAME
+        );
+
+        $handler = new MailHandler();
+        $handler->setMailer((int) ($emailSettings[SettingsEnum::MAIL_SERVER_TYPE] ?? SubmitType::MAIL));
+        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS] ?? false);
+
+        if ((int) ($emailSettings[SettingsEnum::MAIL_SERVER_TYPE] ?? SubmitType::MAIL) === SubmitType::SMTP) {
+            $smtp          = new Smtp();
+            $handler->smtp = $smtp;
+        }
+
+        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER] ?? '';
+        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS] ?? '';
+
+        return $handler;
+    }
+
+    /**
      * Api method to send forgotten password email
      *
      * @param RequestAbstract  $request  Request
@@ -157,15 +193,25 @@ final class ApiController extends Controller
      */
     public function apiForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $account = AccountMapper::getBy((string) $request->getData('login'), 'login');
-
+        $account   = AccountMapper::getBy((string) $request->getData('login'), 'login');
         $forgotten = $this->app->appSettings->get(
-            names: ['forgott_date', 'forgrott_count'],
+            names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_COUNT],
             module: self::NAME,
             account: $account->getId()
         );
 
-        if ((int) $forgotten['forgrotten_count'] > 3) {
+        $emailSettings = $this->app->appSettings->get(
+            names: [
+                SettingsEnum::MAIL_SERVER_ADDR,
+                SettingsEnum::MAIL_SERVER_CERT,
+                SettingsEnum::MAIL_SERVER_KEY,
+                SettingsEnum::MAIL_SERVER_KEYPASS,
+                SettingsEnum::MAIL_SERVER_TLS,
+            ],
+            module: self::NAME
+        );
+
+        if ((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT] > 3) {
             $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::ERROR,
@@ -175,19 +221,47 @@ final class ApiController extends Controller
             ]);
         }
 
-        $handler = new MailHandler();
-        $handler->setMailer(SubmitType::MAIL);
+        $token     = (string) \random_bytes(64);
+        $handler   = $this->setUpServerMailHandler();
+        $resetLink = UriFactory::build('{/backend}reset?user=' . $account->getId() . '&token=' . $token);
 
         $mail = new Email();
-        $mail->setFrom('test1@orange-management.email', 'Orange-Management');
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Orange-Management');
         $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
         $mail->subject = 'Orange Management: Forgot Password';
-        $mail->body    = 'Please reset your password at: .....';
+        $mail->body    = '';
+        $mail->msgHTML('Please reset your password at: <a href="' . $resetLink . '">' . $resetLink . '</a>');
 
         $this->app->appSettings->set([
-            ['name' => 'forgott_date', 'module' => self::NAME, 'account' => $account->getId(), 'content' => (string) \time()],
-            ['name' => 'forgotten_count', 'module' => self::NAME, 'account' => $account->getId(), 'content' => (string) (((int) $forgotten['forgrotten_count']) + 1)],
+            [
+                'name'    => SettingsEnum::LOGIN_FORGOTTEN_DATE,
+                'module'  => self::NAME,
+                'account' => $account->getId(),
+                'content' => (string) \time(),
+            ],
+            [
+                'name'    => SettingsEnum::LOGIN_FORGOTTEN_COUNT,
+                'module'  => self::NAME,
+                'account' => $account->getId(),
+                'content' => (string) (((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT]) + 1),
+            ],
+            [
+                'name'    => SettingsEnum::LOGIN_FORGOTTEN_TOKEN,
+                'module'  => self::NAME,
+                'account' => $account->getId(),
+                'content' => $token,
+            ],
         ], true);
+
+        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '') && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')) {
+            $mail->sign(
+                $emailSettings[SettingsEnum::MAIL_SERVER_CERT],
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEY],
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEYPASS]
+            );
+        }
+
+        $handler->send($mail);
 
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
@@ -213,7 +287,90 @@ final class ApiController extends Controller
      */
     public function apiResetPassword(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        // @todo: implement
+        $forgotten = $this->app->appSettings->get(
+            names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_TOKEN],
+            module: self::NAME,
+            account: (int) $request->getData('user')
+        );
+
+        $date  = new \DateTime($forgotten[SettingsEnum::LOGIN_FORGOTTEN_DATE] ?? '1970-01-01');
+        $token = $forgotten[SettingsEnum::LOGIN_FORGOTTEN_TOKEN] ?? '';
+
+        if ($date->getTimestamp() < \time() - 60 * 10
+            || empty($request->getData('token'))
+            || $request->getData('token') !== $token
+        ) {
+            $response->header->status = RequestStatusCode::R_405;
+            $response->set($request->uri->__toString(), [
+                'status'   => NotificationLevel::OK,
+                'title'    => 'Password Reset',
+                'message'  => 'Invalid reset credentials (username/token).',
+                'response' => null,
+            ]);
+
+            return;
+        }
+
+        $account = AccountMapper::get((int) $request->getData('user'));
+        $account->generatePassword($pass = StringUtils::generateString(10, 14, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-+=/\\{}<>?'));
+
+        AccountMapper::update($account);
+
+        $emailSettings = $this->app->appSettings->get(
+            names: [
+                SettingsEnum::MAIL_SERVER_ADDR,
+                SettingsEnum::MAIL_SERVER_CERT,
+                SettingsEnum::MAIL_SERVER_KEY,
+                SettingsEnum::MAIL_SERVER_KEYPASS,
+                SettingsEnum::MAIL_SERVER_TLS,
+            ],
+            module: self::NAME
+            );
+
+        $handler   = $this->setUpServerMailHandler();
+        $loginLink = UriFactory::build('{/backend}');
+
+        $mail = new Email();
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Orange-Management');
+        $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
+        $mail->subject = 'Orange Management: Password reset';
+        $mail->body    = '';
+        $mail->msgHTML('Your new password: <a href="' . $loginLink . '">' . $pass . '</a>'
+                       . "\n\n"
+                       . 'Please remember to change your password after logging in!');
+
+        $this->app->appSettings->set([
+            [
+                'name'    => SettingsEnum::LOGIN_FORGOTTEN_COUNT,
+                'module'  => self::NAME,
+                'account' => $account->getId(),
+                'content' => '0',
+            ],
+            [
+                'name'    => SettingsEnum::LOGIN_FORGOTTEN_TOKEN,
+                'module'  => self::NAME,
+                'account' => $account->getId(),
+                'content' => '',
+            ],
+        ], true);
+
+        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '') && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')) {
+            $mail->sign(
+                $emailSettings[SettingsEnum::MAIL_SERVER_CERT],
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEY],
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEYPASS]
+            );
+        }
+
+        $handler->send($mail);
+
+        $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
+        $response->set($request->uri->__toString(), [
+            'status'   => NotificationLevel::OK,
+            'title'    => 'Password Reset',
+            'message'  => 'You received a new password.',
+            'response' => null,
+        ]);
     }
 
     /**

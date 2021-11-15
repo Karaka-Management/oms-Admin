@@ -12,6 +12,7 @@
  */
 declare(strict_types=1);
 
+use phpOMS\Account\AccountStatus;
 use phpOMS\Uri\UriFactory;
 
 /**

@@ -44,6 +44,14 @@ return [
             ],
         ],
     ],
+    '^.*/reset(\?.*|$)' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiResetPassword',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+            ],
+        ],
+    ],
 
     '^.*/admin/settings(\?.*|$)' => [
         [
