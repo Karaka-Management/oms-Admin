@@ -777,8 +777,8 @@ echo $this->getData('nav')->render();
                             <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($setting->name); ?>
                             <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml($setting->content); ?>
                             <td data-label="<?= $this->getHtml('Module'); ?>"><?= $this->printHtml($setting->module); ?>
-                            <td data-label="<?= $this->getHtml('Group'); ?>"><?= $this->printHtml($setting->group); ?>
-                            <td data-label="<?= $this->getHtml('Account'); ?>"><?= $this->printHtml($setting->account); ?>
+                            <td data-label="<?= $this->getHtml('Group'); ?>"><?= $this->printHtml((string) $setting->group); ?>
+                            <td data-label="<?= $this->getHtml('Account'); ?>"><?= $this->printHtml((string) $setting->account); ?>
                         <?php endforeach; ?>
                         <?php if ($count === 0) : ?>
                             <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

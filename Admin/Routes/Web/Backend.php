@@ -138,4 +138,15 @@ return [
             ],
         ],
     ],
+    '^.*/admin/module/route/list\?.*$' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleRouteList',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::MODULE,
+            ],
+        ],
+    ],
 ];
