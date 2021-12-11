@@ -14,9 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
-use phpOMS\DataStorage\Database\Query\Builder;
-use phpOMS\DataStorage\Database\RelationType;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 use phpOMS\Localization\Defaults\CountryMapper;
 use phpOMS\Localization\Defaults\CurrencyMapper;
 use phpOMS\Localization\Defaults\LanguageMapper;
@@ -30,7 +28,7 @@ use phpOMS\Localization\Localization;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class LocalizationMapper extends DataMapperAbstract
+final class LocalizationMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -38,7 +36,7 @@ final class LocalizationMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'l11n_id'                   => ['name' => 'l11n_id',                   'type' => 'int',    'internal' => 'id'],
         'l11n_country'              => ['name' => 'l11n_country',              'type' => 'string', 'internal' => 'country'],
         'l11n_language'             => ['name' => 'l11n_language',             'type' => 'string', 'internal' => 'language'],
@@ -97,27 +95,24 @@ final class LocalizationMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
-    protected static array $ownsOne = [
+    public const OWNS_ONE = [
         'country'  => [
             'mapper'            => CountryMapper::class,
             'external'          => 'l11n_country',
             'by'                => 'code2',
-            'column'            => 'code2',
-            'conditional'       => true,
+            'column'            => 'code2'
         ],
         'language'    => [
             'mapper'            => LanguageMapper::class,
             'external'          => 'l11n_language',
             'by'                => 'code2',
-            'column'            => 'code2',
-            'conditional'       => true,
+            'column'            => 'code2'
         ],
         'currency'    => [
             'mapper'            => CurrencyMapper::class,
             'external'          => 'l11n_currency',
             'by'                => 'code',
-            'column'            => 'code',
-            'conditional'       => true,
+            'column'            => 'code'
         ],
     ];
 
@@ -127,7 +122,7 @@ final class LocalizationMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'l11n';
+    public const TABLE = 'l11n';
 
     /**
      * Primary field name.
@@ -135,7 +130,7 @@ final class LocalizationMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'l11n_id';
+    public const PRIMARYFIELD ='l11n_id';
 
     /**
      * Model to use by the mapper.
@@ -143,23 +138,5 @@ final class LocalizationMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $model = Localization::class;
-
-    /**
-     * Get object.
-     *
-     * @param mixed   $primaryKey Key
-     * @param int     $relations  Load relations
-     * @param int     $depth      Relation depth
-     * @param string  $ref        Ref (for getBy and getFor)
-     * @param Builder $query      Query
-     *
-     * @return mixed
-     *
-     * @since 1.0.0
-     */
-    public static function get($primaryKey, int $relations = RelationType::ALL, int $depth = 1, string $ref = null, Builder $query = null) : mixed
-    {
-        return parent::get($primaryKey, $relations, 2);
-    }
+    public const MODEL = Localization::class;
 }

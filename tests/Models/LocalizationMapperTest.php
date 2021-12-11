@@ -35,8 +35,8 @@ final class LocalizationMapperTest extends \PHPUnit\Framework\TestCase
             \json_decode(\file_get_contents(__DIR__ . '/om_OMS.json'), true)
         );
 
-        $id                 = LocalizationMapper::create($localization);
-        $localizationRemote = LocalizationMapper::get($id);
+        $id                 = LocalizationMapper::create()->execute($localization);
+        $localizationRemote = LocalizationMapper::get()->where('id', $id)->execute();
 
         self::assertEquals('fahrenheit', $localizationRemote->getTemperature());
         self::assertEquals($localization->jsonSerialize(), $localizationRemote->jsonSerialize());

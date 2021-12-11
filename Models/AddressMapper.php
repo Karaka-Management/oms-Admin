@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 use phpOMS\Localization\Defaults\CountryMapper;
 
 /**
@@ -25,7 +25,7 @@ use phpOMS\Localization\Defaults\CountryMapper;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class AddressMapper extends DataMapperAbstract
+final class AddressMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -33,7 +33,7 @@ final class AddressMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'address_id'       => ['name' => 'address_id',      'type' => 'int',    'internal' => 'id'],
         'address_name'     => ['name' => 'address_name',  'type' => 'string', 'internal' => 'name'],
         'address_addition' => ['name' => 'address_addition',  'type' => 'string', 'internal' => 'addition'],
@@ -51,7 +51,7 @@ final class AddressMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
-    protected static array $ownsOne = [
+    public const OWNS_ONE = [
         'country' => [
             'mapper'      => CountryMapper::class,
             'external'    => 'address_country',
@@ -67,7 +67,7 @@ final class AddressMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'address';
+    public const TABLE = 'address';
 
     /**
      * Primary field name.
@@ -75,5 +75,5 @@ final class AddressMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'address_id';
+    public const PRIMARYFIELD ='address_id';
 }

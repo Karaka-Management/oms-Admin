@@ -46,11 +46,11 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         $account->setStatus(AccountStatus::ACTIVE);
         $account->setType(AccountType::USER);
 
-        $id = AccountMapper::create($account);
+        $id = AccountMapper::create()->execute($account);
         self::assertGreaterThan(0, $account->getId());
         self::assertEquals($id, $account->getId());
 
-        $accountR = AccountMapper::get($account->getId());
+        $accountR = AccountMapper::get()->where('id', $account->getId())->execute();
         self::assertEquals($account->createdAt->format('Y-m-d'), $accountR->createdAt->format('Y-m-d'));
         self::assertEquals($account->login, $accountR->login);
         self::assertEquals($account->name1, $accountR->name1);
@@ -108,14 +108,14 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidLoginTries() : void
     {
-        $accountR        = AccountMapper::get(1);
+        $accountR        = AccountMapper::get()->where('id', 1)->execute();
         $accountR->tries = 10;
-        AccountMapper::update($accountR);
+        AccountMapper::update()->execute($accountR);
 
         self::assertEquals(LoginReturnType::WRONG_INPUT_EXCEEDED, AccountMapper::login($accountR->login, 'orange'));
 
         $accountR->tries = 0;
-        AccountMapper::update($accountR);
+        AccountMapper::update()->execute($accountR);
     }
 
     /**
@@ -124,14 +124,15 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testInvalidLoginAccountStatus() : void
     {
-        $accountR = AccountMapper::get(1);
+        /** @var Account $accountR */
+        $accountR = AccountMapper::get()->where('id', 1)->execute();
         $accountR->setStatus(AccountStatus::BANNED);
-        AccountMapper::update($accountR);
+        AccountMapper::update()->execute($accountR);
 
         self::assertEquals(LoginReturnType::INACTIVE, AccountMapper::login($accountR->login, 'orange'));
 
         $accountR->setStatus(AccountStatus::ACTIVE);
-        AccountMapper::update($accountR);
+        AccountMapper::update()->execute($accountR);
     }
 
     /**
@@ -140,14 +141,15 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testEmptyLoginPassword() : void
     {
-        $accountR = AccountMapper::get(1);
+        /** @var Account $accountR */
+        $accountR = AccountMapper::get()->where('id', 1)->execute();
         TestUtils::setMember($accountR, 'password', '');
-        AccountMapper::update($accountR);
+        AccountMapper::update()->execute($accountR);
 
         self::assertEquals(LoginReturnType::EMPTY_PASSWORD, AccountMapper::login($accountR->login, 'orange'));
 
         $accountR->generatePassword('orange');
-        AccountMapper::update($accountR);
+        AccountMapper::update()->execute($accountR);
     }
 
     /**

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Module mapper class.
@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class ModuleMapper extends DataMapperAbstract
+final class ModuleMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -32,7 +32,7 @@ final class ModuleMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'module_id'      => ['name' => 'module_id',     'type' => 'string', 'internal' => 'id'],
         'module_path'    => ['name' => 'module_path', 'type' => 'string',    'internal' => 'path'],
         'module_theme'   => ['name' => 'module_theme', 'type' => 'string',    'internal' => 'theme'],
@@ -46,7 +46,7 @@ final class ModuleMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'module';
+    public const TABLE = 'module';
 
     /**
      * Primary field name.
@@ -54,7 +54,7 @@ final class ModuleMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'module_id';
+    public const PRIMARYFIELD ='module_id';
 
-    protected static bool $autoincrement = false;
+    public const AUTOINCREMENT = false;
 }

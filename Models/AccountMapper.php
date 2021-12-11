@@ -16,9 +16,8 @@ namespace Modules\Admin\Models;
 
 use phpOMS\Account\AccountStatus;
 use phpOMS\Auth\LoginReturnType;
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 use phpOMS\DataStorage\Database\Query\Builder;
-use phpOMS\DataStorage\Database\RelationType;
 
 /**
  * Account mapper class.
@@ -28,7 +27,7 @@ use phpOMS\DataStorage\Database\RelationType;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class AccountMapper extends DataMapperAbstract
+final class AccountMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -36,7 +35,7 @@ final class AccountMapper extends DataMapperAbstract
      * @var array<string, array<string, bool|string|array>>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'account_id'                  => ['name' => 'account_id',           'type' => 'int',      'internal' => 'id'],
         'account_status'              => ['name' => 'account_status',       'type' => 'int',      'internal' => 'status'],
         'account_type'                => ['name' => 'account_type',         'type' => 'int',      'internal' => 'type'],
@@ -60,7 +59,7 @@ final class AccountMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
-    protected static array $ownsOne = [
+    public const OWNS_ONE = [
         'l11n'  => [
             'mapper'     => LocalizationMapper::class,
             'external'   => 'account_localization',
@@ -73,7 +72,7 @@ final class AccountMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, table:string, self?:?string, external?:?string, column?:string}>
      * @since 1.0.0
      */
-    protected static array $hasMany = [
+    public const HAS_MANY = [
         'groups' => [
             'mapper'   => GroupMapper::class,
             'table'    => 'account_group',
@@ -94,7 +93,7 @@ final class AccountMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $model = Account::class;
+    public const MODEL = Account::class;
 
     /**
      * Primary table.
@@ -102,7 +101,7 @@ final class AccountMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'account';
+    public const TABLE = 'account';
 
     /**
      * Primary field name.
@@ -110,7 +109,7 @@ final class AccountMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'account_id';
+    public const PRIMARYFIELD ='account_id';
 
     /**
      * Created at column
@@ -118,7 +117,7 @@ final class AccountMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $createdAt = 'account_created_at';
+    public const CREATED_AT = 'account_created_at';
 
     /**
      * Get account with permissions
@@ -131,30 +130,19 @@ final class AccountMapper extends DataMapperAbstract
      */
     public static function getWithPermissions(int $id) : Account
     {
-        $account          = self::get($id);
-        $groupPermissions = GroupPermissionMapper::getFor(
-            \array_keys($account->getGroups()),
-            'group',
-            RelationType::ALL,
-            2
-        );
+        $account = self::get()->with('groups')->with('l11n')->where('id', $id)->execute();
+        $groups  =  \array_keys($account->getGroups());
 
-        if (\is_array($groupPermissions)) {
-            foreach ($groupPermissions as $permission) {
-                $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
-            }
-        } else {
-            $account->addPermissions([$groupPermissions]);
+        $groupPermissions = empty($groups)
+            ? []
+            : GroupPermissionMapper::getAll()->where('group', \array_keys($account->getGroups()), 'in')->execute();
+        foreach ($groupPermissions as $permission) {
+            $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
         }
 
-        $accountPermissions = AccountPermissionMapper::getFor($id, 'account', RelationType::ALL, 2);
-
-        if (\is_array($accountPermissions)) {
-            foreach ($accountPermissions as $permission) {
-                $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
-            }
-        } else {
-            $account->addPermissions([$accountPermissions]);
+        $accountPermissions = AccountPermissionMapper::getAll()->where('account', $id)->execute();
+        foreach ($accountPermissions as $permission) {
+            $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
         }
 
         return $account;

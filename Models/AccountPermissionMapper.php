@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Account permission mapper class.
@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class AccountPermissionMapper extends DataMapperAbstract
+final class AccountPermissionMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -32,7 +32,7 @@ final class AccountPermissionMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'account_permission_id'         => ['name' => 'account_permission_id',         'type' => 'int',    'internal' => 'id'],
         'account_permission_account'    => ['name' => 'account_permission_account',    'type' => 'int',    'internal' => 'account'],
         'account_permission_unit'       => ['name' => 'account_permission_unit',       'type' => 'int',    'internal' => 'unit'],
@@ -51,7 +51,7 @@ final class AccountPermissionMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $model = AccountPermission::class;
+    public const MODEL = AccountPermission::class;
 
     /**
      * Primary table.
@@ -59,7 +59,7 @@ final class AccountPermissionMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'account_permission';
+    public const TABLE = 'account_permission';
 
     /**
      * Primary field name.
@@ -67,5 +67,5 @@ final class AccountPermissionMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'account_permission_id';
+    public const PRIMARYFIELD ='account_permission_id';
 }

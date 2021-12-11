@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Account mapper class.
@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class AppMapper extends DataMapperAbstract
+final class AppMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -32,7 +32,7 @@ final class AppMapper extends DataMapperAbstract
      * @var array<string, array<string, bool|string|array>>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'app_id'              => ['name' => 'app_id',           'type' => 'int',      'internal' => 'id'],
         'app_name'            => ['name' => 'app_name',        'type' => 'string',   'internal' => 'name'],
         'app_theme'           => ['name' => 'app_theme',        'type' => 'string',   'internal' => 'theme'],
@@ -45,7 +45,7 @@ final class AppMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $model = App::class;
+    public const MODEL = App::class;
 
     /**
      * Primary table.
@@ -53,7 +53,7 @@ final class AppMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'app';
+    public const TABLE = 'app';
 
     /**
      * Primary field name.
@@ -61,5 +61,5 @@ final class AppMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'app_id';
+    public const PRIMARYFIELD ='app_id';
 }

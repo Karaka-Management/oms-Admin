@@ -14,9 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 use phpOMS\DataStorage\Database\Query\Builder;
-use phpOMS\DataStorage\Database\RelationType;
 
 /**
  * Group mapper class.
@@ -26,7 +25,7 @@ use phpOMS\DataStorage\Database\RelationType;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class GroupMapper extends DataMapperAbstract
+final class GroupMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -34,7 +33,7 @@ final class GroupMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'group_id'       => ['name' => 'group_id',       'type' => 'int',      'internal' => 'id'],
         'group_name'     => ['name' => 'group_name',     'type' => 'string',   'internal' => 'name', 'autocomplete' => true],
         'group_status'   => ['name' => 'group_status',   'type' => 'int',      'internal' => 'status'],
@@ -49,7 +48,7 @@ final class GroupMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $model = Group::class;
+    public const MODEL = Group::class;
 
     /**
      * Primary table.
@@ -57,7 +56,7 @@ final class GroupMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'group';
+    public const TABLE = 'group';
 
     /**
      * Primary field name.
@@ -65,7 +64,7 @@ final class GroupMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'group_id';
+    public const PRIMARYFIELD ='group_id';
 
     /**
      * Created at column
@@ -73,7 +72,7 @@ final class GroupMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $createdAt = 'group_created';
+    public const CREATED_AT = 'group_created';
 
     /**
      * Has many relation.
@@ -81,7 +80,7 @@ final class GroupMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, table:string, self?:?string, external?:?string, column?:string}>
      * @since 1.0.0
      */
-    protected static array $hasMany = [
+    public const HAS_MANY = [
         'accounts' => [
             'mapper'   => AccountMapper::class,
             'table'    => 'account_group',
@@ -101,13 +100,12 @@ final class GroupMapper extends DataMapperAbstract
      */
     public static function getPermissionForModule(string $module) : array
     {
-        $depth = 3;
         $query = self::getQuery();
-        $query->innerJoin(GroupPermissionMapper::getTable())
-            ->on(self::$table . '_d' . $depth . '.group_id', '=', GroupPermissionMapper::getTable() . '.group_permission_group')
-            ->where(GroupPermissionMapper::getTable() . '.group_permission_module', '=', $module);
+        $query->innerJoin(GroupPermissionMapper::TABLE)
+            ->on(self::TABLE . '_d1.group_id', '=', GroupPermissionMapper::TABLE . '.group_permission_group')
+            ->where(GroupPermissionMapper::TABLE . '.group_permission_module', '=', $module);
 
-        return self::getAllByQuery($query, RelationType::ALL, $depth);
+        return self::getAll()->execute($query);
     }
 
     /**
@@ -122,13 +120,13 @@ final class GroupMapper extends DataMapperAbstract
     public static function countMembers(int $group = 0) : array
     {
         $query = new Builder(self::$db);
-        $query->select(self::$hasMany['accounts']['self'])
-            ->select('COUNT(' . self::$hasMany['accounts']['external'] . ')')
-            ->from(self::$hasMany['accounts']['table'])
-            ->groupBy(self::$hasMany['accounts']['self']);
+        $query->select(self::HAS_MANY['accounts']['self'])
+            ->select('COUNT(' . self::HAS_MANY['accounts']['external'] . ')')
+            ->from(self::HAS_MANY['accounts']['table'])
+            ->groupBy(self::HAS_MANY['accounts']['self']);
 
         if ($group !== 0) {
-            $query->where(self::$hasMany['accounts']['self'], '=', $group);
+            $query->where(self::HAS_MANY['accounts']['self'], '=', $group);
         }
 
         $result = $query->execute()

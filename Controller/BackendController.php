@@ -24,10 +24,9 @@ use Modules\Admin\Models\GroupPermissionMapper;
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\NullAccountPermission;
 use Modules\Admin\Models\NullGroupPermission;
-use Modules\Auditor\Models\Audit;
 use Modules\Auditor\Models\AuditMapper;
 use phpOMS\Contract\RenderableInterface;
-use phpOMS\DataStorage\Database\RelationType;
+use phpOMS\Localization\NullLocalization;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Utils\Parser\Markdown\Markdown;
@@ -103,11 +102,11 @@ final class BackendController extends Controller
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
 
         if ($request->getData('ptype') === 'p') {
-            $view->setData('accounts', AccountMapper::getBeforePivot((int) ($request->getData('id') ?? 0), null, 25));
+            $view->setData('accounts', AccountMapper::getAll()->where('id', (int) ($request->getData('id') ?? 0), '<')->limit(25)->execute());
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('accounts', AccountMapper::getAfterPivot((int) ($request->getData('id') ?? 0), null, 25));
+            $view->setData('accounts', AccountMapper::getAll()->where('id', (int) ($request->getData('id') ?? 0), '>')->limit(25)->execute());
         } else {
-            $view->setData('accounts', AccountMapper::getAfterPivot(0, null, 25));
+            $view->setData('accounts', AccountMapper::getAll()->where('id', 0, '>')->limit(25)->execute());
         }
 
         return $view;
@@ -129,9 +128,16 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-single');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
-        $view->addData('account', AccountMapper::get((int) $request->getData('id'), RelationType::ALL, 2));
 
-        $permissions = AccountPermissionMapper::getFor((int) $request->getData('id'), 'account');
+        /** @var \Modules\Admin\Models\Account $account */
+        $account = AccountMapper::get()->with('groups')->with('l11n')->where('id', (int) $request->getData('id'))->execute();
+        if ($account->l11n instanceof NullLocalization) {
+            $account->l11n->loadFromLanguage($request->getLanguage());
+        }
+
+        $view->addData('account', $account);
+
+        $permissions = AccountPermissionMapper::getAll()->where('account', (int) $request->getData('id'))->execute();
 
         if (!isset($permissions) || $permissions instanceof NullAccountPermission) {
             $permissions = [];
@@ -147,18 +153,15 @@ final class BackendController extends Controller
         // audit log
         if ($request->getData('ptype') === 'p') {
             $view->setData('auditlogs',
-                AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])
-                    ::getBeforePivot((int) $request->getData('audit'), null, 25)
+                    AuditMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('audit') ?? 0), '<')->limit(25)->execute()
                 );
         } elseif ($request->getData('ptype') === 'n') {
             $view->setData('auditlogs',
-                AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])
-                    ::getAfterPivot((int) $request->getData('audit'), null, 25)
+                    AuditMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('audit') ?? 0), '>')->limit(25)->execute()
                 );
         } else {
             $view->setData('auditlogs',
-                AuditMapper::with('createdBy', (int) $request->getData('id'), [Audit::class])
-                    ::getAfterPivot(0, null, 25)
+                    AuditMapper::getAll()->with('createdBy')->where('id', 0, '>')->limit(25)->execute()
                 );
         }
 
@@ -203,11 +206,11 @@ final class BackendController extends Controller
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
 
         if ($request->getData('ptype') === 'p') {
-            $view->setData('groups', GroupMapper::getBeforePivot((int) ($request->getData('id') ?? 0), null, 25));
+            $view->setData('groups', GroupMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('id') ?? 0), '<')->limit(25)->execute());
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('groups', GroupMapper::getAfterPivot((int) ($request->getData('id') ?? 0), null, 25));
+            $view->setData('groups', GroupMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('id') ?? 0), '>')->limit(25)->execute());
         } else {
-            $view->setData('groups', GroupMapper::getAfterPivot(0, null, 25));
+            $view->setData('groups', GroupMapper::getAll()->where('id', 0, '>')->limit(25)->execute());
         }
 
         $memberCount = GroupMapper::countMembers();
@@ -232,9 +235,11 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-single');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
-        $view->addData('group', GroupMapper::get((int) $request->getData('id'), RelationType::ALL, 2));
+        $view->addData('group',
+            GroupMapper::get()->with('accounts')->where('id', (int) $request->getData('id'))->execute()
+        );
 
-        $permissions = GroupPermissionMapper::getFor((int) $request->getData('id'), 'group');
+        $permissions = GroupPermissionMapper::getAll()->where('group', (int) $request->getData('id'))->execute();
 
         if (!isset($permissions) || $permissions instanceof NullGroupPermission) {
             $permissions = [];
@@ -250,25 +255,20 @@ final class BackendController extends Controller
         $editor = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
         $view->addData('editor', $editor);
 
+        $mapperQuery = AuditMapper::getAll()
+            ->with('createdBy')
+            ->where('module', self::NAME)
+            ->where('type', StringUtils::intHash(GroupMapper::class))
+            ->where('ref', (string) ($request->getData('id') ?? '0'))
+            ->limit(25);
+
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs',
-                AuditMapper::with('module', self::NAME, [Audit::class])
-                    ::with('type', StringUtils::intHash(GroupMapper::class), [Audit::class])
-                    ::with('ref', (string) $request->getData('id') ?? '0', [Audit::class])
-                    ::getBeforePivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs', $mapperQuery->where('id', (int) ($request->getData('audit') ?? 0), '<')->limit(25)->execute());
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs',
-                AuditMapper::with('module', self::NAME, [Audit::class])
-                    ::with('type', StringUtils::intHash(GroupMapper::class), [Audit::class])
-                    ::with('ref', (string) $request->getData('id') ?? '0', [Audit::class])
-                    ::getAfterPivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs', $mapperQuery->where('id', (int) ($request->getData('audit') ?? 0), '>')->limit(25)->execute());
         } else {
-            $view->setData('auditlogs',
-                AuditMapper::with('module', self::NAME, [Audit::class])
-                    ::with('type', StringUtils::intHash(GroupMapper::class), [Audit::class])
-                    ::with('ref', (string) $request->getData('id') ?? '0', [Audit::class])
-                    ::getAfterPivot(0, null, 25));
+            $view->setData('auditlogs', $mapperQuery->where('id', 0, '>')->limit(25)->execute());
         }
 
         return $view;
@@ -391,11 +391,11 @@ final class BackendController extends Controller
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs', AuditMapper::with('module', $id, [Audit::class])::getBeforePivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs', AuditMapper::getAll()->where('module', $id)->where('id', (int) $request->getData('audit'), '<')->limit(25)->execute());
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs', AuditMapper::with('module', $id, [Audit::class])::getAfterPivot((int) $request->getData('audit'), null, 25));
+            $view->setData('auditlogs', AuditMapper::getAll()->where('module', $id)->where('id', (int) $request->getData('audit'), '>')->limit(25)->execute());
         } else {
-            $view->setData('auditlogs', AuditMapper::with('module', $id, [Audit::class])::getAfterPivot(0, null, 25));
+            $view->setData('auditlogs', AuditMapper::getAll()->where('module', $id)->where('id', 0, '>')->limit(25)->execute());
         }
 
         return $view;
@@ -439,7 +439,7 @@ final class BackendController extends Controller
 
         $id = $request->getData('id') ?? '';
 
-        $settings = SettingMapper::getFor($id, 'module');
+        $settings = SettingMapper::getAll()->where('module', $id)->execute();
         if (!($settings instanceof NullSetting)) {
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
         }
@@ -456,8 +456,7 @@ final class BackendController extends Controller
             ]);
 
         $view->setData('generalSettings', $generalSettings);
-        $view->setData('defaultlocalization', LocalizationMapper::get((int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content));
-        $view->setData('settings', SettingMapper::getAll());
+        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content)->execute());
 
         return $view;
     }

@@ -17,11 +17,13 @@ namespace Modules\Admin\Admin;
 use Model\Setting;
 use Model\SettingMapper;
 use Model\SettingsEnum;
+use Modules\Admin\Models\LocalizationMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
 use phpOMS\DataStorage\Database\Connection\SQLiteConnection;
 use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\DataStorage\Database\Query\Builder;
+use phpOMS\Localization\Localization;
 use phpOMS\Message\Mail\SubmitType;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
@@ -74,27 +76,27 @@ final class Installer extends InstallerAbstract
      **/
     private static function installDefaultSettings() : void
     {
-        SettingMapper::create(new Setting(0, SettingsEnum::PASSWORD_PATTERN, ''));
-        SettingMapper::create(new Setting(0, SettingsEnum::LOGIN_TRIES, '3', '\\d+'));
-        SettingMapper::create(new Setting(0, SettingsEnum::LOGIN_TIMEOUT, '3', '\\d+'));
-        SettingMapper::create(new Setting(0, SettingsEnum::PASSWORD_INTERVAL, '90', '\\d+'));
-        SettingMapper::create(new Setting(0, SettingsEnum::PASSWORD_HISTORY, '3', '\\d+'));
-        SettingMapper::create(new Setting(0, SettingsEnum::LOGGING_STATUS, '1', '[0-3]'));
-        SettingMapper::create(new Setting(0, SettingsEnum::LOGGING_PATH, ''));
-        SettingMapper::create(new Setting(0, SettingsEnum::DEFAULT_ORGANIZATION, '1', '\\d+'));
-        SettingMapper::create(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', '[0-3]'));
-        SettingMapper::create(new Setting(0, SettingsEnum::DEFAULT_LOCALIZATION, '1', '\\d+'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, 'admin@orange-management.email', "(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", module: 'Admin'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_TYPE, SubmitType::MAIL, module: 'Admin'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_USER, '', module: 'Admin'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_PASS, '', module: 'Admin'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_CERT, '', module: 'Admin'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_KEY, '', module: 'Admin'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_KEYPASS, '', module: 'Admin'));
-        SettingMapper::create(new Setting(0, SettingsEnum::MAIL_SERVER_TLS, (string) false, module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_PATTERN, ''));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TRIES, '3', '\\d+'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TIMEOUT, '3', '\\d+'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_INTERVAL, '90', '\\d+'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_HISTORY, '3', '\\d+'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_STATUS, '1', '[0-3]'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_PATH, ''));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_ORGANIZATION, '1', '\\d+'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', '[0-3]'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_LOCALIZATION, '1', '\\d+'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, 'admin@orange-management.email', "(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TYPE, SubmitType::MAIL, module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_USER, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PASS, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_CERT, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEY, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEYPASS, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TLS, (string) false, module: 'Admin'));
 
-        $l11n = Localization::fromLanguage($request->getData('defaultlang'), $request->getData('defaultcountry') ?? '*');
-        LocalizationMapper::create($l11n);
+        $l11n = Localization::fromLanguage('en');
+        LocalizationMapper::create()->execute($l11n);
     }
 
     /**

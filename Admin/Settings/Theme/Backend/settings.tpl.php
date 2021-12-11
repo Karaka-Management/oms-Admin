@@ -63,7 +63,7 @@ echo $this->getData('nav')->render();
                             <div class="form-group">
                                 <label for="iOname"><?= $this->getHtml('OrganizationName'); ?></label>
                                 <select id="iOname" name="settings_1000000009">
-                                    <?php $unit = UnitMapper::get((int) $generalSettings[1000000009]->content); ?>
+                                    <?php $unit = UnitMapper::get()->where('id', (int) $generalSettings[1000000009]->content)->execute(); ?>
                                         <option value="<?= $unit->getId(); ?>"><?= $this->printHtml($unit->name); ?>
                                 </select>
                             </div>

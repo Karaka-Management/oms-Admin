@@ -34,10 +34,10 @@ final class GroupMapperTest extends \PHPUnit\Framework\TestCase
     public function testGroupPermissionForModule() : void
     {
         $group   = new Group('test');
-        $groupId = GroupMapper::create($group);
+        $groupId = GroupMapper::create()->execute($group);
 
         $permission = new GroupPermission($groupId, null, null, 'Admin');
-        GroupPermissionMapper::create($permission);
+        GroupPermissionMapper::create()->execute($permission);
 
         $permissions = GroupMapper::getPermissionForModule('Admin');
 
