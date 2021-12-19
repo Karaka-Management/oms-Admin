@@ -340,7 +340,7 @@ final class BackendController extends Controller
         $id = $request->getData('id') ?? '';
         $view->setData('modules', $this->app->moduleManager->getAllModules());
         $view->setData('active', $this->app->moduleManager->getActiveModules());
-        $view->setData('installed', $installed = $this->app->moduleManager->getInstalledModules());
+        $view->setData('installed',$this->app->moduleManager->getInstalledModules());
         $view->setData('id', $id);
 
         $type     = 'Help';

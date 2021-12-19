@@ -144,12 +144,12 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         /** @var Account $accountR */
         $accountR = AccountMapper::get()->where('id', 1)->execute();
         TestUtils::setMember($accountR, 'password', '');
-        AccountMapper::update()->execute($accountR);
+        AccountMapper::update()->with('password')->execute($accountR);
 
         self::assertEquals(LoginReturnType::EMPTY_PASSWORD, AccountMapper::login($accountR->login, 'orange'));
 
         $accountR->generatePassword('orange');
-        AccountMapper::update()->execute($accountR);
+        AccountMapper::update()->with('password')->execute($accountR);
     }
 
     /**

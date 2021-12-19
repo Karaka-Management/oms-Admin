@@ -1074,8 +1074,6 @@ final class ApiController extends Controller
             return;
         }
 
-        $old = clone $account;
-
         $this->app->moduleManager->get('Profile')->apiProfileCreateDbEntry(
             new \Modules\Profile\Models\Profile($account),
             $request
