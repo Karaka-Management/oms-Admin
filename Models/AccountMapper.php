@@ -135,12 +135,20 @@ final class AccountMapper extends DataMapperFactory
 
         $groupPermissions = empty($groups)
             ? []
-            : GroupPermissionMapper::getAll()->where('group', \array_keys($account->getGroups()), 'in')->execute();
+            : GroupPermissionMapper::getAll()
+                ->where('group', \array_keys($account->getGroups()), 'in')
+                ->where('element', null)
+                ->execute();
+
         foreach ($groupPermissions as $permission) {
             $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
         }
 
-        $accountPermissions = AccountPermissionMapper::getAll()->where('account', $id)->execute();
+        $accountPermissions = AccountPermissionMapper::getAll()
+            ->where('account', $id)
+            ->where('element', null)
+            ->execute();
+
         foreach ($accountPermissions as $permission) {
             $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
         }

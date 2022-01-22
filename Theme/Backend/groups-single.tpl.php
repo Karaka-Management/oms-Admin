@@ -169,7 +169,7 @@ echo $this->getData('nav')->render(); ?>
                                     <label><?= $this->getHtml('Permission'); ?></label>
                                         <span class="checkbox">
                                             <label class="checkbox" for="iPermissionCreate">
-                                                <input id="iPermissionCreate" type="checkbox" name="permissioncreate" value="<?= PermissionType::CREATE; ?>">
+                                                <input id="iPermissionCreate" type="checkbox" name="permissioncreate" value="<?= PermissionType::CREATE; ?>" data-tpl-text="/perm/c" data-tpl-value="/perm/c">
                                                 <span class="checkmark"></span>
                                                 <?= $this->getHtml('Create'); ?>
                                             </label>
@@ -177,7 +177,7 @@ echo $this->getData('nav')->render(); ?>
 
                                         <span class="checkbox">
                                             <label class="checkbox" for="iPermissionRead">
-                                                <input id="iPermissionRead" type="checkbox" name="permissionread" value="<?= PermissionType::READ; ?>">
+                                                <input id="iPermissionRead" type="checkbox" name="permissionread" value="<?= PermissionType::READ; ?>" data-tpl-text="/perm/r" data-tpl-value="/perm/r">
                                                 <span class="checkmark"></span>
                                                 <?= $this->getHtml('Read'); ?>
                                             </label>
@@ -185,7 +185,7 @@ echo $this->getData('nav')->render(); ?>
 
                                         <span class="checkbox">
                                             <label class="checkbox" for="iPermissionUpdate">
-                                                <input id="iPermissionUpdate" type="checkbox" name="permissionupdate" value="<?= PermissionType::MODIFY; ?>">
+                                                <input id="iPermissionUpdate" type="checkbox" name="permissionupdate" value="<?= PermissionType::MODIFY; ?>" data-tpl-text="/perm/u" data-tpl-value="/perm/u">
                                                 <span class="checkmark"></span>
                                                 <?= $this->getHtml('Update'); ?>
                                             </label>
@@ -193,7 +193,7 @@ echo $this->getData('nav')->render(); ?>
 
                                         <span class="checkbox">
                                             <label class="checkbox" for="iPermissionDelete">
-                                                <input id="iPermissionDelete" type="checkbox" name="permissiondelete" value="<?= PermissionType::DELETE; ?>">
+                                                <input id="iPermissionDelete" type="checkbox" name="permissiondelete" value="<?= PermissionType::DELETE; ?>" data-tpl-text="/perm/d" data-tpl-value="/perm/d">
                                                 <span class="checkmark"></span>
                                                 <?= $this->getHtml('Delete'); ?>
                                             </label>
@@ -201,7 +201,7 @@ echo $this->getData('nav')->render(); ?>
 
                                         <span class="checkbox">
                                             <label class="checkbox" for="iPermissionPermission">
-                                                <input id="iPermissionPermission" type="checkbox" name="permissionpermission" value="<?= PermissionType::PERMISSION; ?>">
+                                                <input id="iPermissionPermission" type="checkbox" name="permissionpermission" value="<?= PermissionType::PERMISSION; ?>" data-tpl-text="/perm/p" data-tpl-value="/perm/p">
                                                 <span class="checkmark"></span>
                                                 <?= $this->getHtml('Permission'); ?>
                                             </label>
@@ -211,7 +211,9 @@ echo $this->getData('nav')->render(); ?>
                             <div class="portlet-foot">
                                 <input type="hidden" name="permissionref" value="<?= $group->getId(); ?>">
                                 <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP; ?>">
-                                <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input type="submit" class="cancel hidden" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
+                                <input type="submit" class="update hidden" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                                <input type="submit" class="save" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
                         </form>
                     </div>
@@ -220,8 +222,13 @@ echo $this->getData('nav')->render(); ?>
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="fa fa-download floatRight download btn"></i></div>
-                        <div style="overflow-x:auto;">
-                            <table id="groupPermissions" class="default" data-table-form="fGroupAddPermission">
+                        <div class="slider">
+                            <table id="groupPermissions" class="default"
+                                data-update-content="tbody"
+                                data-update-element="tr"
+                                data-tag="form"
+                                data-update-form="fGroupAddPermission"
+                                data-table-form="fGroupAddPermission">
                                 <thead>
                                     <tr>
                                         <td>
@@ -255,23 +262,35 @@ echo $this->getData('nav')->render(); ?>
                                             </td>
                                         </tr>
                                     </template>
-                                    <?php $c = 0; foreach ($permissions as $key => $value) : ++$c; $permission = $value->getPermission(); ?>
+                                    <?php $c = 0;
+                                    foreach ($permissions as $key => $value) : ++$c;
+                                        $permission = $value->getPermission(); ?>
                                     <tr>
                                         <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><a href="#"><i class="fa fa-cogs"></i></a>
+                                        <td><i class="fa fa-cogs update btn"></i>
                                         <td><?= $value->getId(); ?>
-                                        <td><?= $value->getUnit(); ?>
-                                        <td><?= $value->getApp(); ?>
-                                        <td><?= $value->getModule(); ?>
-                                        <td><?= $value->getType(); ?>
-                                        <td><?= $value->getElement(); ?>
-                                        <td><?= $value->getComponent(); ?>
+                                        <td data-tpl-text="/unit" data-tpl-value="/unit"><?= $value->getUnit(); ?>
+                                        <td data-tpl-text="/app" data-tpl-value="/app"><?= $value->getApp(); ?>
+                                        <td data-tpl-text="/module" data-tpl-value="/module"><?= $value->getModule(); ?>
+                                        <td data-tpl-text="/type" data-tpl-value="/type"><?= $value->getType(); ?>
+                                        <td data-tpl-text="/ele" data-tpl-value="/ele"><?= $value->getElement(); ?>
+                                        <td data-tpl-text="/comp" data-tpl-value="/comp"><?= $value->getComponent(); ?>
                                         <td>
-                                            <?= (PermissionType::CREATE | $permission) === $permission ? 'C' : ''; ?>
-                                            <?= (PermissionType::READ | $permission) === $permission ? 'R' : ''; ?>
-                                            <?= (PermissionType::MODIFY | $permission) === $permission ? 'U' : ''; ?>
-                                            <?= (PermissionType::DELETE | $permission) === $permission ? 'D' : ''; ?>
-                                            <?= (PermissionType::PERMISSION | $permission) === $permission ? 'P' : ''; ?>
+                                            <?php if ((PermissionType::CREATE | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/c" data-tpl-value="/perm/c" data-value="<?= PermissionType::CREATE; ?>">C</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::READ | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/r" data-tpl-value="/perm/r" data-value="<?= PermissionType::READ; ?>">R</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::MODIFY | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/u" data-tpl-value="/perm/u" data-value="<?= PermissionType::MODIFY; ?>">U</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::DELETE | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/d" data-tpl-value="/perm/d" data-value="<?= PermissionType::DELETE; ?>">D</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::PERMISSION | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/p" data-tpl-value="/perm/p" data-value="<?= PermissionType::PERMISSION; ?>">P</span>
+                                            <?php endif; ?>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
                                     <tr><td colspan="10" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

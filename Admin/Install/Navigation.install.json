@@ -150,7 +150,7 @@
                         "children": []
                     },
                     {
-                        "id": 1000105301,
+                        "id": 1000105401,
                         "pid": "/admin/module",
                         "type": 3,
                         "subtype": 1,
@@ -158,14 +158,14 @@
                         "uri": "{/prefix}admin/module/route/list?{?}",
                         "target": "self",
                         "icon": null,
-                        "order": 10,
+                        "order": 15,
                         "from": "Admin",
                         "permission": { "permission": 2, "type": null, "element": null },
                         "parent": 1000105001,
                         "children": []
                     },
                     {
-                        "id": 1000105401,
+                        "id": 1000105501,
                         "pid": "/admin/module",
                         "type": 3,
                         "subtype": 1,
@@ -173,7 +173,7 @@
                         "uri": "{/prefix}admin/module/log?{?}",
                         "target": "self",
                         "icon": null,
-                        "order": 15,
+                        "order": 20,
                         "from": "Admin",
                         "permission": { "permission": 2, "type": null, "element": null },
                         "parent": 1000105001,

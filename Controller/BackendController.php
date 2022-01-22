@@ -418,6 +418,23 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-route-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
+        $module = $request->getData('id') ?? '';
+        $view->setData('module', $module);
+
+        $appPath      = __DIR__ . '/../../../Web';
+        $activeRoutes = [];
+        $apps         = \scandir($appPath);
+
+        foreach ($apps as $app) {
+            if (!\is_file(__DIR__ . '/../../../Web/' . $app . '/Routes.php')) {
+                continue;
+            }
+
+            $activeRoutes[$app] = include __DIR__ . '/../../../Web/' . $app . '/Routes.php';
+        }
+
+        $view->setData('routes', $activeRoutes);
+
         return $view;
     }
 
