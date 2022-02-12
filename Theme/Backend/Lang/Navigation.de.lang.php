@@ -4,7 +4,7 @@
  *
  * PHP Version 8.0
  *
- * @package   Modules\Admin\Language\Backend
+ * @package   Modules\Localization
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
@@ -12,17 +12,22 @@
  */
 declare(strict_types=1);
 
-return [
-    'Navigation' => [
-        'Admin'    => 'Admin',
-        'Create'   => 'Erstellen',
-        'Front'    => 'Front',
-        'General'  => 'Allgemein',
-        'Groups'   => 'Gruppen',
-        'List'     => 'Liste',
-        'Members'  => 'Mitglieder',
-        'Modules'  => 'Module',
-        'Account'  => 'Account',
-        'Accounts' => 'Accounts',
-    ],
-];
+return ['Navigation' => [
+    'Account'     => 'Konto',
+    'Accounts'    => 'Konten',
+    'Admin'       => 'Administrator',
+    'Create'      => 'Erstellen',
+    'Front'       => 'Vorderseite',
+    'General'     => 'Allgemein',
+    'Groups'      => 'Gruppen',
+    'Info'        => 'Die Info',
+    'List'        => 'Aufführen',
+    'Log'         => 'Protokoll',
+    'Members'     => 'Mitglieder',
+    'Modules'     => 'Module',
+    'Navigation'  => 'Navigation',
+    'Pages'       => 'Seiten',
+    'Permissions' => 'Berechtigungen',
+    'Routes'      => 'Routen',
+    'Settings'    => 'Einstellungen',
+]];
