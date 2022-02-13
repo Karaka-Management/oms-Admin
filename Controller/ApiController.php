@@ -493,7 +493,11 @@ final class ApiController extends Controller
         }
 
         /** @var Localization $l11n */
-        $l11n = AccountMapper::get()->where('id', $accountId)->execute()->l11n;
+        $l11n = AccountMapper::get()
+            ->with('l11n')
+            ->where('id', $accountId)
+            ->execute()
+            ->l11n;
 
         if ((bool) ($request->getData('load') ?? false)) {
             $locale = \explode('_', $request->getData('localization_load'));
