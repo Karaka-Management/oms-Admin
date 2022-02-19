@@ -1,6 +1,6 @@
 <?php
 /**
- * Orange Management
+ * Karaka
  *
  * PHP Version 8.0
  *
@@ -8,7 +8,7 @@
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
- * @link      https://orange-management.org
+ * @link      https://karaka.app
  */
 declare(strict_types=1);
 
@@ -54,13 +54,13 @@ trait ApiControllerAccountTrait
 
         $request->header->account = 1;
         $request->setData('id', 1);
-        $request->setData('email', 'oms@orange-management.de');
+        $request->setData('email', 'oms@karaka.de');
         $request->setData('password', 'orange');
 
         $this->module->apiAccountUpdate($request, $response);
         $this->module->apiAccountGet($request, $response);
 
-        self::assertEquals('oms@orange-management.de', $response->get('')['response']->getEmail());
+        self::assertEquals('oms@karaka.de', $response->get('')['response']->getEmail());
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 

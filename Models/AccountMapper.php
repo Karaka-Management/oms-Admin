@@ -1,6 +1,6 @@
 <?php
 /**
- * Orange Management
+ * Karaka
  *
  * PHP Version 8.0
  *
@@ -8,7 +8,7 @@
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
- * @link      https://orange-management.org
+ * @link      https://karaka.app
  */
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\Query\Builder;
  *
  * @package Modules\Admin\Models
  * @license OMS License 1.0
- * @link    https://orange-management.org
+ * @link    https://karaka.app
  * @since   1.0.0
  */
 final class AccountMapper extends DataMapperFactory
@@ -130,7 +130,7 @@ final class AccountMapper extends DataMapperFactory
      */
     public static function getWithPermissions(int $id) : Account
     {
-        $account = self::get()->with('groups')->with('l11n')->where('id', $id)->execute();
+        $account = self::get()->with('groups')->with('groups/permissions')->with('l11n')->where('id', $id)->execute();
         $groups  =  \array_keys($account->getGroups());
 
         $groupPermissions = empty($groups)

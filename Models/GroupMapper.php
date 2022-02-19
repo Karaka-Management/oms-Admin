@@ -1,6 +1,6 @@
 <?php
 /**
- * Orange Management
+ * Karaka
  *
  * PHP Version 8.0
  *
@@ -8,7 +8,7 @@
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
- * @link      https://orange-management.org
+ * @link      https://karaka.app
  */
 declare(strict_types=1);
 
@@ -22,7 +22,7 @@ use phpOMS\DataStorage\Database\Query\Builder;
  *
  * @package Modules\Admin\Models
  * @license OMS License 1.0
- * @link    https://orange-management.org
+ * @link    https://karaka.app
  * @since   1.0.0
  */
 final class GroupMapper extends DataMapperFactory
@@ -86,6 +86,12 @@ final class GroupMapper extends DataMapperFactory
             'table'    => 'account_group',
             'external' => 'account_group_account',
             'self'     => 'account_group_group',
+        ],
+        'permissions' => [
+            'mapper'   => GroupPermissionMapper::class,
+            'table'    => 'group_permission',
+            'external' => null,
+            'self'     => 'group_permission_group',
         ],
     ];
 

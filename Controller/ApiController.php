@@ -1,6 +1,6 @@
 <?php
 /**
- * Orange Management
+ * Karaka
  *
  * PHP Version 8.0
  *
@@ -8,7 +8,7 @@
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
- * @link      https://orange-management.org
+ * @link      https://karaka.app
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ use phpOMS\Version\Version;
  *
  * @package Modules\Admin
  * @license OMS License 1.0
- * @link    https://orange-management.org
+ * @link    https://karaka.app
  * @since   1.0.0
  */
 final class ApiController extends Controller
@@ -228,7 +228,7 @@ final class ApiController extends Controller
         $mail = new Email();
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Orange-Management');
         $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
-        $mail->subject = 'Orange Management: Forgot Password';
+        $mail->subject = 'Karaka: Forgot Password';
         $mail->body    = '';
         $mail->msgHTML('Please reset your password at: <a href="' . $resetLink . '">' . $resetLink . '</a>');
 
@@ -333,7 +333,7 @@ final class ApiController extends Controller
         $mail = new Email();
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Orange-Management');
         $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
-        $mail->subject = 'Orange Management: Password reset';
+        $mail->subject = 'Karaka: Password reset';
         $mail->body    = '';
         $mail->msgHTML('Your new password: <a href="' . $loginLink . '">' . $pass . '</a>'
                        . "\n\n"

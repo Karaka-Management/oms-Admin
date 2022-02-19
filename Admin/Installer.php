@@ -1,6 +1,6 @@
 <?php
 /**
- * Orange Management
+ * Karaka
  *
  * PHP Version 8.0
  *
@@ -8,7 +8,7 @@
  * @copyright Dennis Eichhorn
  * @license   OMS License 1.0
  * @version   1.0.0
- * @link      https://orange-management.org
+ * @link      https://karaka.app
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ use phpOMS\System\File\PathException;
  *
  * @package Modules\Admin\Admin
  * @license OMS License 1.0
- * @link    https://orange-management.org
+ * @link    https://karaka.app
  * @since   1.0.0
  */
 final class Installer extends InstallerAbstract
@@ -86,7 +86,7 @@ final class Installer extends InstallerAbstract
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_ORGANIZATION, '1', '\\d+'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', '[0-3]'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_LOCALIZATION, '1', '\\d+'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, 'admin@orange-management.email', "(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, 'admin@karaka.email', "(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TYPE, SubmitType::MAIL, module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_USER, '', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PASS, '', module: 'Admin'));
