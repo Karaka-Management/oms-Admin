@@ -226,7 +226,7 @@ final class ApiController extends Controller
         $resetLink = UriFactory::build('{/backend}reset?user=' . $account->getId() . '&token=' . $token);
 
         $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Orange-Management');
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Karaka');
         $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
         $mail->subject = 'Karaka: Forgot Password';
         $mail->body    = '';
@@ -331,7 +331,7 @@ final class ApiController extends Controller
         $loginLink = UriFactory::build('{/backend}');
 
         $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Orange-Management');
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Karaka');
         $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
         $mail->subject = 'Karaka: Password reset';
         $mail->body    = '';
@@ -1860,7 +1860,7 @@ final class ApiController extends Controller
     public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
         // this is only a temp... in the future this logic will change but for current purposes this is the easiest way to implement updates
-        $request = new HttpRequest(new HttpUri('https://api.github.com/repos/Orange-Management/Updates/contents'));
+        $request = new HttpRequest(new HttpUri('https://api.github.com/repos/Karaka/Updates/contents'));
         $request->setMethod(RequestMethod::GET);
         $request->header->set('User-Agent', 'spl1nes');
 
@@ -1913,7 +1913,7 @@ final class ApiController extends Controller
     {
         $this->apiUpdate([[
             'name'         => 'temp.json',
-            'download_url' => 'https://raw.githubusercontent.com/Orange-Management/' . ($request->getData('url') ?? ''),
+            'download_url' => 'https://raw.githubusercontent.com/Karaka-Management/' . ($request->getData('url') ?? ''),
         ]]);
     }
 
