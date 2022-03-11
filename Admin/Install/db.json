@@ -633,9 +633,33 @@
                 "default": null,
                 "null": true
             },
-            "group_permission_permission": {
-                "name": "group_permission_permission",
-                "type": "INT",
+            "group_permission_hasread": {
+                "name": "group_permission_hasread",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "group_permission_hascreate": {
+                "name": "group_permission_hascreate",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "group_permission_hasmodify": {
+                "name": "group_permission_hasmodify",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "group_permission_hasdelete": {
+                "name": "group_permission_hasdelete",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "group_permission_haspermission": {
+                "name": "group_permission_haspermission",
+                "type": "TINYINT(1)",
                 "default": null,
                 "null": true
             }
@@ -857,9 +881,33 @@
                 "default": null,
                 "null": true
             },
-            "account_permission_permission": {
-                "name": "account_permission_permission",
-                "type": "INT",
+            "account_permission_hasread": {
+                "name": "account_permission_hasread",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "account_permission_hascreate": {
+                "name": "account_permission_hascreate",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "account_permission_hasmodify": {
+                "name": "account_permission_hasmodify",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "account_permission_hasdelete": {
+                "name": "account_permission_hasdelete",
+                "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "account_permission_haspermission": {
+                "name": "account_permission_haspermission",
+                "type": "TINYINT(1)",
                 "default": null,
                 "null": true
             }

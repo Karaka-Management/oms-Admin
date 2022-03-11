@@ -79,7 +79,7 @@ final class BackendController extends Controller
     public function viewEmptyCommand(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Admin/Theme/Console/empty-command');
+        $view->setTemplate('/Modules/Admin/Theme/Cli/empty-command');
 
         return $view;
     }

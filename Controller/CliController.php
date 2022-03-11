@@ -29,7 +29,7 @@ use phpOMS\Views\View;
  * @link    https://karaka.app
  * @since   1.0.0
  */
-final class ConsoleController extends Controller
+final class CliController extends Controller
 {
     /**
      * Method which generates the general settings view.
@@ -49,7 +49,37 @@ final class ConsoleController extends Controller
     public function viewEmptyCommand(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Admin/Theme/Console/empty-command');
+        $view->setTemplate('/Modules/Admin/Theme/Cli/empty-command');
+
+        return $view;
+    }
+
+    /**
+     * Find and run events
+     *
+     * This is mostly used by the web applications to offload searching for event hooks and of course running the events which might take a long time for complex events.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function cliRunEvent(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $event = $this->app->eventManager->triggerSimilar(
+            $request->getData('g'),
+            $request->getData('i'),
+            \json_decode($request->getData('d'), true)
+        );
+
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/Admin/Theme/Cli/event-result');
+
+        $view->setData('event', $event);
 
         return $view;
     }

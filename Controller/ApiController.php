@@ -63,6 +63,7 @@ use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
+use phpOMS\System\SystemUtils;
 use phpOMS\Uri\HttpUri;
 use phpOMS\Uri\UriFactory;
 use phpOMS\Utils\Parser\Markdown\Markdown;
@@ -1825,7 +1826,7 @@ final class ApiController extends Controller
             }
         }
 
-        if (\is_file($path = __DIR__ . '/../../../Console/Routes.php')) {
+        if (\is_file($path = __DIR__ . '/../../../Cli/Routes.php')) {
             \file_put_contents($path, '<?php return [];');
         }
 
