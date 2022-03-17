@@ -39,7 +39,7 @@ final class GroupPermissionMapper extends DataMapperFactory
         'group_permission_app'        => ['name' => 'group_permission_app',        'type' => 'string', 'internal' => 'app'],
         'group_permission_module'     => ['name' => 'group_permission_module',     'type' => 'string', 'internal' => 'module'],
         'group_permission_from'       => ['name' => 'group_permission_from',       'type' => 'string',    'internal' => 'from'],
-        'group_permission_type'       => ['name' => 'group_permission_type',       'type' => 'int',    'internal' => 'type'],
+        'group_permission_category'       => ['name' => 'group_permission_category',       'type' => 'int',    'internal' => 'category'],
         'group_permission_element'    => ['name' => 'group_permission_element',    'type' => 'int',    'internal' => 'element'],
         'group_permission_component'  => ['name' => 'group_permission_component',  'type' => 'int',    'internal' => 'component'],
         'group_permission_hasread' => ['name' => 'group_permission_hasread', 'type' => 'bool',    'internal' => 'hasRead'],

@@ -28,7 +28,7 @@ use Modules\Admin\Models\Module;
 use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
-use Modules\Admin\Models\PermissionState;
+use Modules\Admin\Models\PermissionCategory;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\UploadFile;
@@ -483,7 +483,7 @@ final class ApiController extends Controller
                 $this->app->orgId,
                 $this->app->appName,
                 self::NAME,
-                PermissionState::ACCOUNT_SETTINGS,
+                PermissionCategory::ACCOUNT_SETTINGS,
                 $accountId
             )
         ) {

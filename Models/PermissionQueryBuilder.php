@@ -40,7 +40,7 @@ final class PermissionQueryBuilder
 
     private array $modules = [null];
 
-    private array $types = [null];
+    private array $categories = [null];
 
     private int $permission = 0;
 
@@ -78,9 +78,9 @@ final class PermissionQueryBuilder
         return $this;
     }
 
-    public function types(array $types) : self
+    public function categories(array $categories) : self
     {
-        $this->types = $types;
+        $this->categories = $categories;
 
         return $this;
     }
@@ -132,8 +132,8 @@ final class PermissionQueryBuilder
             $accountPermission->where($subWhere);
 
             $subWhere = new Where($this->connection);
-            foreach ($this->types as $type) {
-                $subWhere->orWhere('account_permission_type', '=', $type);
+            foreach ($this->categories as $category) {
+                $subWhere->orWhere('account_permission_category', '=', $category);
             }
 
             $accountPermission->where($subWhere);
@@ -171,8 +171,8 @@ final class PermissionQueryBuilder
             $groupPermission->where($subWhere);
 
             $subWhere = new Where($this->connection);
-            foreach ($this->types as $type) {
-                $subWhere->orWhere('group_permission_type', '=', $type);
+            foreach ($this->categories as $category) {
+                $subWhere->orWhere('group_permission_category', '=', $category);
             }
 
             $groupPermission->where($subWhere);

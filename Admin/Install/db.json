@@ -615,8 +615,8 @@
                 "default": null,
                 "null": true
             },
-            "group_permission_type": {
-                "name": "group_permission_type",
+            "group_permission_category": {
+                "name": "group_permission_category",
                 "type": "INT",
                 "default": null,
                 "null": true
@@ -863,8 +863,8 @@
                 "default": null,
                 "null": true
             },
-            "account_permission_type": {
-                "name": "account_permission_type",
+            "account_permission_category": {
+                "name": "account_permission_category",
                 "type": "INT",
                 "default": null,
                 "null": true

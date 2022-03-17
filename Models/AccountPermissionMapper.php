@@ -39,7 +39,7 @@ final class AccountPermissionMapper extends DataMapperFactory
         'account_permission_app'        => ['name' => 'account_permission_app',        'type' => 'string', 'internal' => 'app'],
         'account_permission_module'     => ['name' => 'account_permission_module',     'type' => 'string', 'internal' => 'module'],
         'account_permission_from'       => ['name' => 'account_permission_from',       'type' => 'string',    'internal' => 'from'],
-        'account_permission_type'       => ['name' => 'account_permission_type',       'type' => 'int',    'internal' => 'type'],
+        'account_permission_category'       => ['name' => 'account_permission_category',       'type' => 'int',    'internal' => 'category'],
         'account_permission_element'    => ['name' => 'account_permission_element',    'type' => 'int',    'internal' => 'element'],
         'account_permission_component'  => ['name' => 'account_permission_component',  'type' => 'int',    'internal' => 'component'],
         'account_permission_hasread' => ['name' => 'account_permission_hasread', 'type' => 'bool',    'internal' => 'hasRead'],

@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 use Modules\Admin\Controller\BackendController;
-use Modules\Admin\Models\PermissionState;
+use Modules\Admin\Models\PermissionCategory;
 use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
@@ -34,7 +34,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => \Modules\Admin\Models\PermissionState::MODULE,
+                'state'  => \Modules\Admin\Models\PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -46,7 +46,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::ACCOUNT,
+                'state'  => PermissionCategory::ACCOUNT,
             ],
         ],
     ],
@@ -57,7 +57,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::ACCOUNT,
+                'state'  => PermissionCategory::ACCOUNT,
             ],
         ],
     ],
@@ -68,7 +68,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::ACCOUNT,
+                'state'  => PermissionCategory::ACCOUNT,
             ],
         ],
     ],
@@ -79,7 +79,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::GROUP,
+                'state'  => PermissionCategory::GROUP,
             ],
         ],
     ],
@@ -90,7 +90,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::GROUP,
+                'state'  => PermissionCategory::GROUP,
             ],
         ],
     ],
@@ -101,7 +101,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::GROUP,
+                'state'  => PermissionCategory::GROUP,
             ],
         ],
     ],
@@ -112,7 +112,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -123,7 +123,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -134,7 +134,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -145,7 +145,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],

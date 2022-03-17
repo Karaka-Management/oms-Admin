@@ -45,7 +45,7 @@ class GroupPermission extends PermissionAbstract
      * @param null|string $app        App App to check  (null if all are acceptable)
      * @param null|string $module     Module to check  (null if all are acceptable)
      * @param null|string $from       Module providing this permission
-     * @param null|int    $type       Type (e.g. customer) (null if all are acceptable)
+     * @param null|int    $category       Category (e.g. customer) (null if all are acceptable)
      * @param null|int    $element    (e.g. customer id) (null if all are acceptable)
      * @param null|int    $component  (e.g. address) (null if all are acceptable)
      * @param int         $permission Permission to check
@@ -58,13 +58,13 @@ class GroupPermission extends PermissionAbstract
         string $app = null,
         string $module = null,
         string $from = null,
-        int $type = null,
+        int $category = null,
         int $element = null,
         int $component = null,
         int $permission = PermissionType::NONE
     ) {
         $this->group = $group;
-        parent::__construct($unit, $app, $module, $from, $type, $element, $component, $permission);
+        parent::__construct($unit, $app, $module, $from, $category, $element, $component, $permission);
     }
 
     /**

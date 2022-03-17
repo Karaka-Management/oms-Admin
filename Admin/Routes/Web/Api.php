@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 use Modules\Admin\Controller\ApiController;
-use Modules\Admin\Models\PermissionState;
+use Modules\Admin\Models\PermissionCategory;
 use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
@@ -60,7 +60,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::SETTINGS,
+                'state'  => PermissionCategory::SETTINGS,
             ],
         ],
         [
@@ -69,7 +69,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SETTINGS,
+                'state'  => PermissionCategory::SETTINGS,
             ],
         ],
     ],
@@ -81,7 +81,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::SETTINGS,
+                'state'  => PermissionCategory::SETTINGS,
             ],
         ],
     ],
@@ -93,7 +93,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::GROUP,
+                'state'  => PermissionCategory::GROUP,
             ],
         ],
         [
@@ -102,7 +102,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::GROUP,
+                'state'  => PermissionCategory::GROUP,
             ],
         ],
         [
@@ -111,7 +111,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::DELETE,
-                'state'  => PermissionState::GROUP,
+                'state'  => PermissionCategory::GROUP,
             ],
         ],
         [
@@ -120,7 +120,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::GROUP,
+                'state'  => PermissionCategory::GROUP,
             ],
         ],
     ],
@@ -132,7 +132,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SEARCH,
+                'state'  => PermissionCategory::SEARCH,
             ],
         ],
     ],
@@ -143,7 +143,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SEARCH,
+                'state'  => PermissionCategory::SEARCH,
             ],
         ],
     ],
@@ -154,7 +154,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SEARCH,
+                'state'  => PermissionCategory::SEARCH,
             ],
         ],
     ],
@@ -166,7 +166,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::ACCOUNT,
+                'state'  => PermissionCategory::ACCOUNT,
             ],
         ],
         [
@@ -175,7 +175,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::ACCOUNT,
+                'state'  => PermissionCategory::ACCOUNT,
             ],
         ],
         [
@@ -184,7 +184,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::DELETE,
-                'state'  => PermissionState::ACCOUNT,
+                'state'  => PermissionCategory::ACCOUNT,
             ],
         ],
         [
@@ -193,7 +193,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::ACCOUNT,
+                'state'  => PermissionCategory::ACCOUNT,
             ],
         ],
     ],
@@ -204,7 +204,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::ACCOUNT_SETTINGS,
+                'state'  => PermissionCategory::ACCOUNT_SETTINGS,
             ],
         ],
     ],
@@ -216,7 +216,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -228,7 +228,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -239,7 +239,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -251,7 +251,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
         [
@@ -260,7 +260,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
         [
@@ -269,7 +269,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
         [
@@ -278,7 +278,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -289,7 +289,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
         [
@@ -298,7 +298,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
         [
@@ -307,7 +307,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
         [
@@ -316,7 +316,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
-                'state'  => PermissionState::MODULE,
+                'state'  => PermissionCategory::MODULE,
             ],
         ],
     ],
@@ -327,7 +327,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::ROUTE,
+                'state'  => PermissionCategory::ROUTE,
             ],
         ],
     ],
@@ -339,7 +339,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::APP,
+                'state'  => PermissionCategory::APP,
             ],
         ],
     ],
@@ -350,7 +350,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::APP,
+                'state'  => PermissionCategory::APP,
             ],
         ],
     ],
@@ -361,7 +361,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::APP,
+                'state'  => PermissionCategory::APP,
             ],
         ],
     ],
