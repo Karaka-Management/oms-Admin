@@ -50,18 +50,18 @@ final class Installer extends InstallerAbstract
     /**
      * {@inheritdoc}
      */
-    public static function install(DatabasePool $dbPool, ModuleInfo $info, SettingsInterface $cfgHandler) : void
+    public static function install(ApplicationAbstract $app, ModuleInfo $info, SettingsInterface $cfgHandler) : void
     {
-        parent::install($dbPool, $info, $cfgHandler);
+        parent::install($app, $info, $cfgHandler);
 
         $sqlite = new SQLiteConnection([
             'db'       => 'sqlite',
             'database' => __DIR__ . '/../../../phpOMS/Localization/Defaults/localization.sqlite',
         ]);
 
-        self::installCountries($sqlite, $dbPool);
-        self::installLanguages($sqlite, $dbPool);
-        self::installCurrencies($sqlite, $dbPool);
+        self::installCountries($sqlite, $app->dbPool);
+        self::installLanguages($sqlite, $app->dbPool);
+        self::installCurrencies($sqlite, $app->dbPool);
         self::installDefaultSettings();
 
         $sqlite->close();
