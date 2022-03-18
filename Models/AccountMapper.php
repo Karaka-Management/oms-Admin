@@ -27,7 +27,7 @@ use phpOMS\DataStorage\Database\Query\Builder;
  * @link    https://karaka.app
  * @since   1.0.0
  */
-final class AccountMapper extends DataMapperFactory
+class AccountMapper extends DataMapperFactory
 {
     /**
      * Columns.

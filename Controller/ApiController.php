@@ -16,6 +16,7 @@ namespace Modules\Admin\Controller;
 
 use Model\SettingsEnum;
 use Modules\Admin\Models\Account;
+use Modules\Admin\Models\AccountCredentialMapper;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
 use Modules\Admin\Models\AccountPermissionMapper;
@@ -1028,7 +1029,7 @@ final class ApiController extends Controller
 
         $account = $this->createAccountFromRequest($request);
 
-        $this->createModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
+        $this->createModel($request->header->account, $account, AccountCredentialMapper::class, 'account', $request->getOrigin());
         $this->createProfileForAccount($account, $request);
         $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
 
@@ -1597,7 +1598,7 @@ final class ApiController extends Controller
         $permission->setUnit(empty($request->getData('permissionunit')) ? null : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? null : (string) $request->getData('permissionapp'));
         $permission->setModule(empty($request->getData('permissionmodule')) ? null : (string) $request->getData('permissionmodule'));
-        $permission->setType(empty($request->getData('permissiontype')) ? null : (int) $request->getData('permissiontype'));
+        $permission->setCategory(empty($request->getData('permissiontype')) ? null : (int) $request->getData('permissiontype'));
         $permission->setElement(empty($request->getData('permissionelement')) ? null : (int) $request->getData('permissionelement'));
         $permission->setComponent(empty($request->getData('permissioncomponent')) ? null : (int) $request->getData('permissioncomponent'));
         $permission->setPermission(
@@ -1683,7 +1684,7 @@ final class ApiController extends Controller
         $permission->setUnit(empty($request->getData('permissionunit')) ? $permission->getUnit() : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? $permission->getApp() : (string) $request->getData('permissionapp'));
         $permission->setModule(empty($request->getData('permissionmodule')) ? $permission->getModule() : (string) $request->getData('permissionmodule'));
-        $permission->setType(empty($request->getData('permissiontype')) ? $permission->getType() : (int) $request->getData('permissiontype'));
+        $permission->setCategory(empty($request->getData('permissiontype')) ? $permission->getCategory() : (int) $request->getData('permissiontype'));
         $permission->setElement(empty($request->getData('permissionelement')) ? $permission->getElement() : (int) $request->getData('permissionelement'));
         $permission->setComponent(empty($request->getData('permissioncomponent')) ? $permission->getComponent() : (int) $request->getData('permissioncomponent'));
         $permission->setPermission((int) ($request->getData('permissioncreate') ?? 0)
