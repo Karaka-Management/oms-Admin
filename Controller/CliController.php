@@ -49,7 +49,12 @@ final class CliController extends Controller
     public function viewEmptyCommand(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Admin/Theme/Cli/empty-command');
+
+        if ($request->hasData('v')) {
+            $view->setTemplate('/Modules/Admin/Theme/Cli/version-command');
+        } else {
+            $view->setTemplate('/Modules/Admin/Theme/Cli/empty-command');
+        }
 
         return $view;
     }

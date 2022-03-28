@@ -3,7 +3,7 @@
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^$' => [
+    '^/* .*?$' => [
         [
             'dest' => '\Modules\Admin\Controller\CliController:viewEmptyCommand',
             'verb' => RouteVerb::ANY,

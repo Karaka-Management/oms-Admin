@@ -28,6 +28,8 @@ use phpOMS\Message\Mail\SubmitType;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\System\File\PathException;
+use phpOMS\System\OperatingSystem;
+use phpOMS\System\SystemType;
 
 /**
  * Installer class.
@@ -83,9 +85,13 @@ final class Installer extends InstallerAbstract
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_HISTORY, '3', '\\d+'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_STATUS, '1', '[0-3]'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_PATH, ''));
+
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_ORGANIZATION, '1', '\\d+'));
+
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', '[0-3]'));
+
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_LOCALIZATION, '1', '\\d+'));
+
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, 'admin@karaka.email', "(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TYPE, SubmitType::MAIL, module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_USER, '', module: 'Admin'));
@@ -94,6 +100,21 @@ final class Installer extends InstallerAbstract
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEY, '', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEYPASS, '', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TLS, (string) false, module: 'Admin'));
+
+        SettingMapper::create()->execute(
+            new Setting(
+                0,
+                SettingsEnum::CLI_ACTIVE,
+                (string) (
+                    \stripos(\shell_exec(
+                        (OperatingSystem::getSystem() === SystemType::WIN
+                            ? 'php.exe'
+                            : 'php'
+                        ) .' cli.php -v'
+                    ), 'Version:') !== false
+                )
+            )
+        );
 
         $l11n = Localization::fromLanguage('en');
         LocalizationMapper::create()->execute($l11n);

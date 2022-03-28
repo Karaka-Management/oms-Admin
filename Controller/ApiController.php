@@ -64,6 +64,8 @@ use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
+use phpOMS\System\OperatingSystem;
+use phpOMS\System\SystemType;
 use phpOMS\System\SystemUtils;
 use phpOMS\Uri\HttpUri;
 use phpOMS\Uri\UriFactory;
@@ -1971,5 +1973,37 @@ final class ApiController extends Controller
      */
     private function runUpdate(string $updateFile) : void
     {
+    }
+
+    /**
+     * Api method to make a call to the cli app
+     *
+     * @param mixed $data Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function cliEventCall(...$data) : void
+    {
+        $cliEventHandling = (bool) ($this->app->appSettings->get(null, SettingsEnum::CLI_ACTIVE)->content ?? false);
+
+        if ($cliEventHandling) {
+            $count = \count($data);
+
+            SystemUtils::runProc(
+                OperatingSystem::getSystem() === SystemType::WIN ? 'php.exe' : 'php',
+                \escapeshellarg(\realpath(__DIR__ . '/../../../cli.php')) . ' '
+                    . 'post:/admin/event' . ' '
+                    . '-g ' . \escapeshellarg($data[$count - 2]) . ' '
+                    . '-i ' . \escapeshellarg($data[$count - 1]) . ' '
+                    . '-d ' . \escapeshellarg(\json_encode($data)),
+                true
+            );
+        } else {
+            $this->app->moduleManager->get('Workflow')->runWorkflowFromHook($data);
+        }
     }
 }
