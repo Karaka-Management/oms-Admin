@@ -29,7 +29,6 @@ final class PermissionAbstractMapper extends DataMapperFactory
 {
     public static function helper(ConnectionAbstract $connection) : PermissionQueryBuilder
     {
-
         return new PermissionQueryBuilder($connection);
     }
 }

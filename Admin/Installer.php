@@ -101,18 +101,19 @@ final class Installer extends InstallerAbstract
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEYPASS, '', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TLS, (string) false, module: 'Admin'));
 
+        $cmdResult = \shell_exec(
+            (OperatingSystem::getSystem() === SystemType::WIN
+                ? 'php.exe'
+                : 'php'
+            ) .' cli.php -v'
+        );
+        $cmdResult = $cmdResult === null || $cmdResult === false ? '' : $cmdResult;
+
         SettingMapper::create()->execute(
             new Setting(
                 0,
                 SettingsEnum::CLI_ACTIVE,
-                (string) (
-                    \stripos(\shell_exec(
-                        (OperatingSystem::getSystem() === SystemType::WIN
-                            ? 'php.exe'
-                            : 'php'
-                        ) .' cli.php -v'
-                    ), 'Version:') !== false
-                )
+                (string) (\stripos($cmdResult, 'Version:') !== false)
             )
         );
 

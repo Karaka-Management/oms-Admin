@@ -45,7 +45,7 @@ class AccountPermission extends PermissionAbstract
      * @param null|string $app        App App to check  (null if all are acceptable)
      * @param null|string $module     Module to check  (null if all are acceptable)
      * @param null|string $from       Module providing this permission
-     * @param null|int    $category       Category (e.g. customer) (null if all are acceptable)
+     * @param null|int    $category   Category (e.g. customer) (null if all are acceptable)
      * @param null|int    $element    (e.g. customer id) (null if all are acceptable)
      * @param null|int    $component  (e.g. address) (null if all are acceptable)
      * @param int         $permission Permission to check

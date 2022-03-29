@@ -1978,7 +1978,7 @@ final class ApiController extends Controller
     /**
      * Api method to make a call to the cli app
      *
-     * @param mixed $data Generic data
+     * @param mixed ...$data Generic data
      *
      * @return void
      *
@@ -1993,13 +1993,23 @@ final class ApiController extends Controller
         if ($cliEventHandling) {
             $count = \count($data);
 
+            $cliPath = \realpath(__DIR__ . '/../../../cli.php');
+            if ($cliPath === false) {
+                return;
+            }
+
+            $jsonData = \json_encode($data);
+            if ($jsonData === false) {
+                $jsonData = '{}';
+            }
+
             SystemUtils::runProc(
                 OperatingSystem::getSystem() === SystemType::WIN ? 'php.exe' : 'php',
-                \escapeshellarg(\realpath(__DIR__ . '/../../../cli.php')) . ' '
-                    . 'post:/admin/event' . ' '
-                    . '-g ' . \escapeshellarg($data[$count - 2]) . ' '
-                    . '-i ' . \escapeshellarg($data[$count - 1]) . ' '
-                    . '-d ' . \escapeshellarg(\json_encode($data)),
+                \escapeshellarg($cliPath)
+                    . ' post:/admin/event '
+                    . '-g ' . \escapeshellarg($data[$count - 2] ?? '') . ' '
+                    . '-i ' . \escapeshellarg($data[$count - 1] ?? '') . ' '
+                    . '-d ' . \escapeshellarg($jsonData),
                 true
             );
         } else {

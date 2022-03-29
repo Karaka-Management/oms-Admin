@@ -423,7 +423,11 @@ final class BackendController extends Controller
 
         $appPath      = __DIR__ . '/../../../Web';
         $activeRoutes = [];
-        $apps         = \scandir($appPath);
+
+        $apps = \scandir($appPath);
+        if ($apps === false) {
+            $apps = [];
+        }
 
         foreach ($apps as $app) {
             if (!\is_file(__DIR__ . '/../../../Web/' . $app . '/Routes.php')) {
