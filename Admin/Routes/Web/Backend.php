@@ -149,4 +149,15 @@ return [
             ],
         ],
     ],
+    '^.*/admin/module/hook/list\?.*$' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleHookList',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::MODULE,
+            ],
+        ],
+    ],
 ];

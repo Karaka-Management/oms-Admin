@@ -18,7 +18,7 @@ use phpOMS\Router\RouteVerb;
 /**
  * @var \phpOMS\Views\View $this
  */
-$routes = $this->getData('routes') ?? [];
+$hooks = $this->getData('hooks') ?? [];
 $module = $this->getData('module') ?? '';
 
 echo $this->getData('nav')->render();
@@ -27,7 +27,7 @@ echo $this->getData('nav')->render();
 <div class="row">
     <div class="col-xs-12">
         <div class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Routes'); ?><i class="fa fa-download floatRight download btn"></i></div>
+            <div class="portlet-head"><?= $this->getHtml('Hooks'); ?><i class="fa fa-download floatRight download btn"></i></div>
             <div class="slider">
             <table id="navElements" class="default sticky">
                 <thead>
@@ -84,8 +84,8 @@ echo $this->getData('nav')->render();
                 </thead>
                 <tbody>
                     <?php $c = 0;
-                        foreach ($routes as $app => $appRoutes) :
-                        foreach ($appRoutes as $uri => $destinations) :
+                        foreach ($hooks as $app => $appHooks) :
+                        foreach ($appHooks as $uri => $destinations) :
                         foreach ($destinations as $route) :
                             if (\stripos($route['dest'], '\Modules\\' . $module . '\Controller') === false) {
                                 continue;

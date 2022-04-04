@@ -162,6 +162,7 @@ return ['Admin' => [
     'Uppercase'                => 'Uppercase',
     'Username'                 => 'Username',
     'Value'                    => 'Value',
+    'Verb'                     => 'Verb',
     'Version'                  => 'Version',
     'VeryFast'                 => 'Very Fast',
     'VeryHeavy'                => 'Very Heavy',

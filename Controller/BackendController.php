@@ -453,6 +453,47 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
+    public function viewModuleHookList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/Admin/Theme/Backend/modules-hook-list');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+
+        $module = $request->getData('id') ?? '';
+        $view->setData('module', $module);
+
+        $appPath      = __DIR__ . '/../../../Web';
+        $activeHooks = [];
+
+        $apps = \scandir($appPath);
+        if ($apps === false) {
+            $apps = [];
+        }
+
+        foreach ($apps as $app) {
+            if (!\is_file(__DIR__ . '/../../../Web/' . $app . '/Hooks.php')) {
+                continue;
+            }
+
+            $activeHooks[$app] = include __DIR__ . '/../../../Web/' . $app . '/Hooks.php';
+        }
+
+        $view->setData('hooks', $activeHooks);
+
+        return $view;
+    }
+
+    /**
+     * Method which generates the module profile view.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     */
     public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
