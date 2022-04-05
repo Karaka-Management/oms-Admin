@@ -462,7 +462,7 @@ final class BackendController extends Controller
         $module = $request->getData('id') ?? '';
         $view->setData('module', $module);
 
-        $appPath      = __DIR__ . '/../../../Web';
+        $appPath     = __DIR__ . '/../../../Web';
         $activeHooks = [];
 
         $apps = \scandir($appPath);

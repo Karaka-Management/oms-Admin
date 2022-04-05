@@ -622,7 +622,7 @@ final class ApiController extends Controller
      */
     public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        $uploadedFiles = $request->getFiles() ?? [];
+        $uploadedFiles = $request->getFiles();
 
         if (!empty($uploadedFiles)) {
             $upload                   = new UploadFile();
@@ -674,7 +674,7 @@ final class ApiController extends Controller
         // handle app installation
         $result = $appManager->install(
             __DIR__ . '/../../../' . $app,
-            __DIR__ . '/../../../' . $request->getData('appDest') ?? '',
+            __DIR__ . '/../../../' . ($request->getData('appDest') ?? ''),
             $request->getData('theme') ?? 'Default'
         );
 
@@ -1114,7 +1114,7 @@ final class ApiController extends Controller
                     $this->app->l11nServer === null ? $request->header->l11n->jsonSerialize() : $this->app->l11nServer->jsonSerialize()
                 );
         } else {
-            $locale = \explode('_', $request->getData('locale') ?? '');
+            $locale = \explode('_', $request->getData('locale'));
 
             $account->l11n
                 ->loadFromLanguage(

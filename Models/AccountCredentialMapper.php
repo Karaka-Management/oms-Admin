@@ -27,7 +27,7 @@ final class AccountCredentialMapper extends AccountMapper
     /**
      * Columns.
      *
-     * @var array<string, array<string, bool|string|array>>
+     * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
     public const COLUMNS = [
