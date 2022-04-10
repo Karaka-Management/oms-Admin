@@ -100,19 +100,19 @@ final class LocalizationMapper extends DataMapperFactory
             'mapper'            => CountryMapper::class,
             'external'          => 'l11n_country',
             'by'                => 'code2',
-            'column'            => 'code2'
+            'column'            => 'code2',
         ],
         'language'    => [
             'mapper'            => LanguageMapper::class,
             'external'          => 'l11n_language',
             'by'                => 'code2',
-            'column'            => 'code2'
+            'column'            => 'code2',
         ],
         'currency'    => [
             'mapper'            => CurrencyMapper::class,
             'external'          => 'l11n_currency',
             'by'                => 'code',
-            'column'            => 'code'
+            'column'            => 'code',
         ],
     ];
 

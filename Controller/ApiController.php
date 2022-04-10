@@ -315,7 +315,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $account = AccountMapper::get()->where('id', (int) $request->getData('user'))->execute();
+        $account                         = AccountMapper::get()->where('id', (int) $request->getData('user'))->execute();
         $account->generatePassword($pass = StringRng::generateString(10, 14, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-+=/\\{}<>?'));
 
         AccountMapper::update()->execute($account);

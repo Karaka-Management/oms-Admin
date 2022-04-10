@@ -115,7 +115,6 @@ final class PermissionQueryBuilder
      */
     public function groups(array $groups) : self
     {
-
         $this->groups = $groups;
 
         return $this;
@@ -203,7 +202,6 @@ final class PermissionQueryBuilder
 
     /**
      * Set permission flags
-     *
      *
      * @param int $permission Permission flags
      *

@@ -12,13 +12,12 @@
  */
 declare(strict_types=1);
 
-use phpOMS\Message\Http\HttpHeader;
 use phpOMS\Router\RouteVerb;
 
 /**
  * @var \phpOMS\Views\View $this
  */
-$hooks = $this->getData('hooks') ?? [];
+$hooks  = $this->getData('hooks') ?? [];
 $module = $this->getData('module') ?? '';
 
 echo $this->getData('nav')->render();
@@ -94,8 +93,8 @@ echo $this->getData('nav')->render();
                             ++$c;
                     ?>
                     <tr>
-                        <td><label class="checkbox" for="iActive-<?= $c ?>">
-                                <input id="iActive-<?= $c ?>" type="checkbox" name="active_route" value="<?= $this->printHtml($uri); ?>"<?= true ? ' checked' : ''; ?>>
+                        <td><label class="checkbox" for="iActive-<?= $c; ?>">
+                                <input id="iActive-<?= $c; ?>" type="checkbox" name="active_route" value="<?= $this->printHtml($uri); ?>"<?= true ? ' checked' : ''; ?>>
                                 <span class="checkmark"></span>
                             </label>
                         <td><?= $app; ?>
