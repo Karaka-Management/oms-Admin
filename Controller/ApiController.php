@@ -62,7 +62,6 @@ use phpOMS\Model\Message\NotifyType;
 use phpOMS\Model\Message\Reload;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
-use phpOMS\Module\NullModule;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
 use phpOMS\System\OperatingSystem;

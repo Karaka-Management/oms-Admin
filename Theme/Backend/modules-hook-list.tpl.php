@@ -12,8 +12,6 @@
  */
 declare(strict_types=1);
 
-use phpOMS\Router\RouteVerb;
-
 /**
  * @var \phpOMS\Views\View $this
  */
