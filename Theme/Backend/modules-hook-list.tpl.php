@@ -44,19 +44,7 @@ echo $this->getData('nav')->render();
                         <label>
                             <i class="filter fa fa-filter"></i>
                         </label>
-                    <td><?= $this->getHtml('Verb'); ?>
-                        <label for="navElements-sort-3">
-                            <input type="radio" name="navElements-sort" id="navElements-sort-3">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="navElements-sort-4">
-                            <input type="radio" name="navElements-sort" id="navElements-sort-4">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
-                    <td><?= $this->getHtml('Route'); ?>
+                    <td><?= $this->getHtml('Trigger'); ?>
                         <label for="navElements-sort-5">
                             <input type="radio" name="navElements-sort" id="navElements-sort-5">
                             <i class="sort-asc fa fa-chevron-up"></i>
@@ -85,8 +73,9 @@ echo $this->getData('nav')->render();
                     <?php $c = 0;
                         foreach ($hooks as $app => $appHooks) :
                         foreach ($appHooks as $uri => $destinations) :
-                        foreach ($destinations as $route) :
-                            if (\stripos($route['dest'], '\Modules\\' . $module . '\Controller') === false) {
+                        foreach ($destinations as $callbacks) :
+                        foreach ($callbacks as $callback) :
+                            if (\stripos($callback, '\Modules\\' . $module . '\Controller') === false) {
                                 continue;
                             }
 
@@ -98,10 +87,9 @@ echo $this->getData('nav')->render();
                                 <span class="checkmark"></span>
                             </label>
                         <td><?= $app; ?>
-                        <td><?= RouteVerb::getName((string) $route['verb']); ?>
                         <td><?= $uri; ?>
-                        <td><?= $route['dest']; ?>
-                    <?php endforeach; endforeach; endforeach; ?>
+                        <td><?= $callback; ?>
+                    <?php endforeach; endforeach; endforeach; endforeach; ?>
             </table>
         </div>
     </div>

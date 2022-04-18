@@ -31,6 +31,7 @@ use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Utils\StringUtils;
+use phpOMS\Views\NullView;
 use phpOMS\Views\View;
 
 /**
@@ -434,7 +435,15 @@ final class BackendController extends Controller
                 continue;
             }
 
-            $activeRoutes[$app] = include __DIR__ . '/../../../Web/' . $app . '/Routes.php';
+            $activeRoutes['Web/' . $app] = include __DIR__ . '/../../../Web/' . $app . '/Routes.php';
+        }
+
+        if (\is_file(__DIR__ . '/../../../Cli/Routes.php')) {
+            $activeRoutes['Cli'] = include __DIR__ . '/../../../Cli/Routes.php';
+        }
+
+        if (\is_file(__DIR__ . '/../../../Socket/Routes.php')) {
+            $activeRoutes['Socket'] = include __DIR__ . '/../../../Socket/Routes.php';
         }
 
         $view->setData('routes', $activeRoutes);
@@ -475,7 +484,15 @@ final class BackendController extends Controller
                 continue;
             }
 
-            $activeHooks[$app] = include __DIR__ . '/../../../Web/' . $app . '/Hooks.php';
+            $activeHooks['Web/' . $app] = include __DIR__ . '/../../../Web/' . $app . '/Hooks.php';
+        }
+
+        if (\is_file(__DIR__ . '/../../../Cli/Hooks.php')) {
+            $activeHooks['Cli'] = include __DIR__ . '/../../../Cli/Hooks.php';
+        }
+
+        if (\is_file(__DIR__ . '/../../../Socket/Hooks.php')) {
+            $activeHooks['Socket'] = include __DIR__ . '/../../../Socket/Hooks.php';
         }
 
         $view->setData('hooks', $activeHooks);
@@ -506,8 +523,10 @@ final class BackendController extends Controller
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
         }
 
-        if (\is_file(__DIR__ . '/../Admin/Settings/Theme/Backend/settings.tpl.php')) {
-            $view->setTemplate('/Modules/' . static::NAME . '/Admin/Settings/Theme/Backend/settings');
+        if ($request->getData('id') === 'Admin') {
+            $view->setTemplate('/Modules/' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings');
+        } elseif (\is_file(__DIR__ . '/../../' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings.tpl.php')) {
+            return new NullView();
         } else {
             $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
         }

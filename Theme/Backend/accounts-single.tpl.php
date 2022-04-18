@@ -319,7 +319,7 @@ echo $this->getData('nav')->render(); ?>
                                         <td><?= $value->getUnit(); ?>
                                         <td><?= $value->getApp(); ?>
                                         <td><?= $value->getModule(); ?>
-                                        <td><?= $value->getType(); ?>
+                                        <td><?= $value->getCategory(); ?>
                                         <td><?= $value->getElement(); ?>
                                         <td><?= $value->getComponent(); ?>
                                         <td>

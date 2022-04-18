@@ -62,6 +62,7 @@ use phpOMS\Model\Message\NotifyType;
 use phpOMS\Model\Message\Reload;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
+use phpOMS\Module\NullModule;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
 use phpOMS\System\OperatingSystem;
@@ -168,16 +169,16 @@ final class ApiController extends Controller
         );
 
         $handler = new MailHandler();
-        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE] ?? SubmitType::MAIL);
-        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS] ?? false);
+        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]?->content ?? SubmitType::MAIL);
+        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS . '::' . self::NAME]?->content ?? false);
 
-        if ((int) ($emailSettings[SettingsEnum::MAIL_SERVER_TYPE] ?? SubmitType::MAIL) === SubmitType::SMTP) {
+        if ((int) ($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]?->content ?? SubmitType::MAIL) === SubmitType::SMTP) {
             $smtp          = new Smtp();
             $handler->smtp = $smtp;
         }
 
-        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER] ?? '';
-        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS] ?? '';
+        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER . '::' . self::NAME]?->content ?? '';
+        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS . '::' . self::NAME]?->content ?? '';
 
         return $handler;
     }
@@ -257,7 +258,9 @@ final class ApiController extends Controller
             ],
         ], true);
 
-        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '') && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')) {
+        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '')
+            && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')
+        ) {
             $mail->sign(
                 $emailSettings[SettingsEnum::MAIL_SERVER_CERT],
                 $emailSettings[SettingsEnum::MAIL_SERVER_KEY],
@@ -358,7 +361,9 @@ final class ApiController extends Controller
             ],
         ], true);
 
-        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '') && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')) {
+        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '')
+            && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')
+        ) {
             $mail->sign(
                 $emailSettings[SettingsEnum::MAIL_SERVER_CERT],
                 $emailSettings[SettingsEnum::MAIL_SERVER_KEY],
@@ -2013,7 +2018,9 @@ final class ApiController extends Controller
                 true
             );
         } else {
-            $this->app->moduleManager->get('Workflow')->runWorkflowFromHook($data);
+            if ($this->app->moduleManager->isActive('Workflow')) {
+                $this->app->moduleManager->get('Workflow')->runWorkflowFromHook($data);
+            }
         }
     }
 }
