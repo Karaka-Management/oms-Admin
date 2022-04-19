@@ -2,7 +2,7 @@
 /**
  * Karaka
  *
- * PHP Version 8.0
+ * PHP Version 8.1
  *
  * @package   Modules\Admin
  * @copyright Dennis Eichhorn
@@ -317,7 +317,9 @@ final class ApiController extends Controller
             return;
         }
 
-        $account                         = AccountMapper::get()->where('id', (int) $request->getData('user'))->execute();
+        /** @var \Modules\Admin\Models\Account $account */
+        $account = AccountMapper::get()->where('id', (int) $request->getData('user'))->execute();
+
         $account->generatePassword($pass = StringRng::generateString(10, 14, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-+=/\\{}<>?'));
 
         AccountMapper::update()->execute($account);
@@ -331,7 +333,7 @@ final class ApiController extends Controller
                 SettingsEnum::MAIL_SERVER_TLS,
             ],
             module: self::NAME
-            );
+        );
 
         $handler   = $this->setUpServerMailHandler();
         $loginLink = UriFactory::build('{/backend}');
@@ -720,6 +722,7 @@ final class ApiController extends Controller
      */
     public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        /** @var \Modules\Admin\Models\Group $group */
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully returned', $group);
     }
@@ -739,7 +742,7 @@ final class ApiController extends Controller
      */
     public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
-        /** @var Group $old */
+        /** @var \Modules\Admin\Models\Group $old */
         $old = clone GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $new = $this->updateGroupFromRequest($request);
         $this->updateModel($request->header->account, $old, $new, GroupMapper::class, 'group', $request->getOrigin());
@@ -757,6 +760,7 @@ final class ApiController extends Controller
      */
     private function updateGroupFromRequest(RequestAbstract $request) : Group
     {
+        /** @var \Modules\Admin\Models\Group $group */
         $group       = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $group->name = (string) ($request->getData('name') ?? $group->name);
         $group->setStatus((int) ($request->getData('status') ?? $group->getStatus()));
@@ -857,6 +861,7 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var \Modules\Admin\Models\Group $group */
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully deleted', $group);
@@ -1237,6 +1242,7 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var \Modules\Admin\Models\Module $old */
         $old = ModuleMapper::get()->where('id', $module)->execute();
 
         $this->app->eventManager->triggerSimilar(

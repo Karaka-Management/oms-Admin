@@ -2,7 +2,7 @@
 /**
  * Karaka
  *
- * PHP Version 8.0
+ * PHP Version 8.1
  *
  * @package   Modules\Admin\Models
  * @copyright Dennis Eichhorn
@@ -74,7 +74,7 @@ class Address extends Location
     /**
      * {@inheritdoc}
      */
-    public function unserialize($serialized) : void
+    public function unserialize(mixed $serialized) : void
     {
         parent::unserialize($serialized);
 
