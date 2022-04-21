@@ -44,7 +44,7 @@ final class AccountPermissionMapper extends DataMapperFactory
         'account_permission_component'      => ['name' => 'account_permission_component',  'type' => 'int',    'internal' => 'component'],
         'account_permission_hasread'        => ['name' => 'account_permission_hasread', 'type' => 'bool',    'internal' => 'hasRead'],
         'account_permission_hascreate'      => ['name' => 'account_permission_hascreate', 'type' => 'bool',    'internal' => 'hasCreate'],
-        'account_permission_hasmodify'      => ['name' => 'account_permission_hasmodify', 'type' => 'bool',    'internal' => 'hasCreate'],
+        'account_permission_hasmodify'      => ['name' => 'account_permission_hasmodify', 'type' => 'bool',    'internal' => 'hasModify'],
         'account_permission_hasdelete'      => ['name' => 'account_permission_hasdelete', 'type' => 'bool',    'internal' => 'hasDelete'],
         'account_permission_haspermission'  => ['name' => 'account_permission_haspermission', 'type' => 'bool',    'internal' => 'hasPermission'],
     ];

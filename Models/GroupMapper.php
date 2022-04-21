@@ -135,9 +135,8 @@ final class GroupMapper extends DataMapperFactory
             $query->where(self::HAS_MANY['accounts']['self'], '=', $group);
         }
 
-        $result = $query->execute()
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $result = $query->execute()?->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-        return $result;
+        return $result === null ? [] : $result;
     }
 }

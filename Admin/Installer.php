@@ -142,6 +142,10 @@ final class Installer extends InstallerAbstract
         $querySqlite = new Builder($sqlite);
         $countries   = $querySqlite->select('*')->from('country')->execute();
 
+        if ($countries === null) {
+            return;
+        }
+
         foreach ($countries as $country) {
             $query->values(
                 $country['country_name'] === null ? null : \trim($country['country_name']),
@@ -177,6 +181,10 @@ final class Installer extends InstallerAbstract
         $querySqlite = new Builder($sqlite);
         $languages   = $querySqlite->select('*')->from('language')->execute();
 
+        if ($languages === null) {
+            return;
+        }
+
         foreach ($languages as $language) {
             $query->values(
                 $language['language_name'] === null ? null : \trim($language['language_name']),
@@ -211,6 +219,10 @@ final class Installer extends InstallerAbstract
 
         $querySqlite = new Builder($sqlite);
         $currencies  = $querySqlite->select('*')->from('currency')->execute();
+
+        if ($currencies === null) {
+            return;
+        }
 
         foreach ($currencies as $currency) {
             $query->values(
@@ -253,7 +265,7 @@ final class Installer extends InstallerAbstract
         }
 
         $adminData = \json_decode($adminFile, true) ?? [];
-        if ($adminData === false) {
+        if (!\is_array($adminData)) {
             throw new \Exception(); // @codeCoverageIgnore
         }
 

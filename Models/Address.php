@@ -78,7 +78,15 @@ class Address extends Location
     {
         parent::unserialize($serialized);
 
+        if (!\is_string($serialized)) {
+            return;
+        }
+
+        /** @var array{name:string, addition:string} $data */
         $data = \json_decode($serialized, true);
+        if (!\is_array($data)) {
+            return;
+        }
 
         $this->name     = $data['name'];
         $this->addition = $data['addition'];

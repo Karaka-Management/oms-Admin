@@ -46,7 +46,7 @@ final class CliController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewEmptyCommand(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewEmptyCommand(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
 
@@ -73,7 +73,7 @@ final class CliController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function cliRunEvent(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function cliRunEvent(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $event = $this->app->eventManager->triggerSimilar(
             $request->getData('g'),

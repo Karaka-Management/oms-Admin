@@ -58,7 +58,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewForgot(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         return new View();
     }
@@ -77,7 +77,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewEmptyCommand(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewEmptyCommand(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Cli/empty-command');
@@ -96,7 +96,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewAccountList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewAccountList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-list');
@@ -124,7 +124,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewAccountSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewAccountSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-single');
@@ -138,6 +138,7 @@ final class BackendController extends Controller
 
         $view->addData('account', $account);
 
+        /** @var \Modules\Admin\Models\AccountPermission[] $permissions */
         $permissions = AccountPermissionMapper::getAll()->where('account', (int) $request->getData('id'))->execute();
 
         if (!isset($permissions) || $permissions instanceof NullAccountPermission) {
@@ -180,7 +181,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewAccountCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewAccountCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-create');
@@ -200,7 +201,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewGroupList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewGroupList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-list');
@@ -231,7 +232,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewGroupSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewGroupSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-single');
@@ -240,9 +241,10 @@ final class BackendController extends Controller
             GroupMapper::get()->with('accounts')->where('id', (int) $request->getData('id'))->execute()
         );
 
+        /** @var null|\Modules\Admin\Models\GroupPermission[] $permissions */
         $permissions = GroupPermissionMapper::getAll()->where('group', (int) $request->getData('id'))->execute();
 
-        if (!isset($permissions) || $permissions instanceof NullGroupPermission) {
+        if ($permissions === null || $permissions instanceof NullGroupPermission) {
             $permissions = [];
         } elseif (!\is_array($permissions)) {
             $permissions = [$permissions];
@@ -286,7 +288,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewGroupCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewGroupCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-create');
@@ -309,7 +311,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-list');
@@ -332,7 +334,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleInfo(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleInfo(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-info');
@@ -382,7 +384,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleLog(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleLog(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-log');
@@ -413,7 +415,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleRouteList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleRouteList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-route-list');
@@ -462,7 +464,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleHookList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleHookList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-hook-list');
@@ -511,13 +513,14 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
         $id = $request->getData('id') ?? '';
 
+        /** @var \Model\Setting[] $settings */
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
         if (!($settings instanceof NullSetting)) {
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);

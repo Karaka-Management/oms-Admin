@@ -100,7 +100,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiLogin(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiLogin(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
@@ -131,7 +131,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiLogout(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiLogout(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
@@ -195,7 +195,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiForgot(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiForgot(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $account   = AccountMapper::get()->where('login', (string) $request->getData('login'))->execute();
         $forgotten = $this->app->appSettings->get(
@@ -291,7 +291,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiResetPassword(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiResetPassword(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $forgotten = $this->app->appSettings->get(
             names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_TOKEN],
@@ -396,7 +396,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSettingsGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $id      = $request->getData('id');
         $group   = $request->getData('group');
@@ -430,7 +430,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSettingsSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $dataSettings = $request->getDataJson('settings');
 
@@ -481,7 +481,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $requestAccount = $request->header->account;
         $accountId      = (int) $request->getData('account_id');
@@ -626,7 +626,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $uploadedFiles = $request->getFiles();
 
@@ -654,7 +654,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $appManager = new ApplicationManager($this->app);
 
@@ -720,7 +720,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Admin\Models\Group $group */
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -740,7 +740,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Admin\Models\Group $old */
         $old = clone GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -804,7 +804,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateGroupCreate($request))) {
             $response->set('group_create', new FormValidation($val));
@@ -852,7 +852,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (((int) $request->getData('id')) === 3) {
             // admin group cannot be deleted
@@ -880,7 +880,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
@@ -904,7 +904,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account $account */
         $account = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -924,7 +924,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
@@ -954,7 +954,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account[] $accounts */
         $accounts = \array_values(
@@ -1029,7 +1029,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateAccountCreate($request))) {
             $response->set('account_create', new FormValidation($val));
@@ -1148,7 +1148,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account $account */
         $account = AccountMapper::get()->where('id', (int) ($request->getData('id')))->execute();
@@ -1169,7 +1169,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account $old */
         $old = clone AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1225,7 +1225,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $module = $request->getData('module');
         $status = (int) $request->getData('status');
@@ -1401,7 +1401,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var AccountPermission $account */
         $account = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1421,7 +1421,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var GroupPermission $group */
         $group = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1441,7 +1441,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var GroupPermission $permission */
         $permission = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1470,7 +1470,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1491,7 +1491,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (((int) $request->getData('permissionref')) === 3) {
             // admin group cannot be deleted
@@ -1533,7 +1533,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->set('permission_create', new FormValidation($val));
@@ -1637,7 +1637,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var AccountPermission $old */
         $old = clone AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1662,7 +1662,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var GroupPermission $old */
         $old = clone GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1721,7 +1721,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddGroupToAccount(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddGroupToAccount(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $account = (int) $request->getData('account');
         $groups  = \array_map('intval', $request->getDataList('igroup-idlist'));
@@ -1743,7 +1743,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddAccountToGroup(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiAddAccountToGroup(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $group    = (int) $request->getData('group');
         $accounts = \array_map('intval', $request->getDataList('iaccount-idlist'));
@@ -1765,7 +1765,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiDeleteGroupFromAccount(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiDeleteGroupFromAccount(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $account = (int) $request->getData('account');
         $groups  = \array_map('intval', $request->getDataList('igroup-idlist'));
@@ -1794,7 +1794,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiDeleteAccountFromGroup(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiDeleteAccountFromGroup(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $group    = (int) $request->getData('group');
         $accounts = \array_map('intval', $request->getDataList('iaccount-idlist'));
@@ -1823,7 +1823,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiReInit(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiReInit(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $directories = \glob(__DIR__ . '/../../../Web/*', \GLOB_ONLYDIR);
 
@@ -1871,7 +1871,7 @@ final class ApiController extends Controller
      * @since 1.0.0
      * @todo implement
      */
-    public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         // this is only a temp... in the future this logic will change but for current purposes this is the easiest way to implement updates
         $request = new HttpRequest(new HttpUri('https://api.github.com/repos/Karaka/Updates/contents'));
@@ -1923,7 +1923,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiUpdateFile(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
+    public function apiUpdateFile(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         $this->apiUpdate([[
             'name'         => 'temp.json',

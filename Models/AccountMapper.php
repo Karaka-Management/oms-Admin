@@ -130,6 +130,7 @@ class AccountMapper extends DataMapperFactory
         $account = self::get()->with('groups')->with('groups/permissions')->with('l11n')->where('id', $id)->execute();
         $groups  =  \array_keys($account->getGroups());
 
+        /** @var \Modules\Admin\Models\GroupPermission[] $groupPermissions */
         $groupPermissions = empty($groups)
             ? []
             : GroupPermissionMapper::getAll()
@@ -141,6 +142,7 @@ class AccountMapper extends DataMapperFactory
             $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
         }
 
+        /** @var \Modules\Admin\Models\AccountPermission[] $accountPermission */
         $accountPermissions = AccountPermissionMapper::getAll()
             ->where('account', $id)
             ->where('element', null)
@@ -178,9 +180,9 @@ class AccountMapper extends DataMapperFactory
                 ->from('account')
                 ->where('account_login', '=', $login)
                 ->execute()
-                ->fetchAll();
+                ?->fetchAll();
 
-            if (!isset($result[0])) {
+            if ($result === null || !isset($result[0])) {
                 return LoginReturnType::WRONG_USERNAME;
             }
 

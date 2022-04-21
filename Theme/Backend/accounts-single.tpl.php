@@ -289,8 +289,10 @@ echo $this->getData('nav')->render(); ?>
                         </form>
                     </div>
                 </div>
+            </div>
 
-                <div class="col-xs-12 col-md-6">
+            <div class="row">
+                <div class="col-xs-12">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="fa fa-download floatRight download btn"></i></div>
                         <div style="overflow-x:auto;">
