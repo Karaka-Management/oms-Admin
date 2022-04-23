@@ -1044,7 +1044,16 @@ final class ApiController extends Controller
         $this->createProfileForAccount($account, $request);
         $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully created. Link: <a href="' . (UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $account->getId())) . '">Account</a>', $account);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            'Account',
+            'Account successfully created. Link: <a href="'
+                . (UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $account->getId()))
+                . '">Account</a>',
+            $account
+        );
     }
 
     /**
@@ -1606,7 +1615,10 @@ final class ApiController extends Controller
     public function createPermissionFromRequest(RequestAbstract $request) : PermissionAbstract
     {
         /** @var AccountPermission|GroupPermission $permission */
-        $permission = ((int) $request->getData('permissionowner')) === PermissionOwner::GROUP ? new GroupPermission((int) $request->getData('permissionref')) : new AccountPermission((int) $request->getData('permissionref'));
+        $permission = ((int) $request->getData('permissionowner')) === PermissionOwner::GROUP
+            ? new GroupPermission((int) $request->getData('permissionref'))
+            : new AccountPermission((int) $request->getData('permissionref'));
+
         $permission->setUnit(empty($request->getData('permissionunit')) ? null : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? null : (string) $request->getData('permissionapp'));
         $permission->setModule(empty($request->getData('permissionmodule')) ? null : (string) $request->getData('permissionmodule'));
@@ -1854,10 +1866,6 @@ final class ApiController extends Controller
     }
 
     /**
-     * This update logic below is only temp. And will be replaced once the package management is implemented (not part of this application but part of the service provided by the organization website)
-     */
-
-    /**
      * Api check for updates
      *
      * @param RequestAbstract  $request  Request
@@ -1869,7 +1877,6 @@ final class ApiController extends Controller
      * @api
      *
      * @since 1.0.0
-     * @todo implement
      */
     public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
