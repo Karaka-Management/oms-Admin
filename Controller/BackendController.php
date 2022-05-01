@@ -31,7 +31,6 @@ use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Utils\StringUtils;
-use phpOMS\Views\NullView;
 use phpOMS\Views\View;
 
 /**

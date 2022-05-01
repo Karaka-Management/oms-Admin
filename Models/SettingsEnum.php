@@ -86,5 +86,4 @@ abstract class SettingsEnum extends Enum
     public const DEFAULT_WORD_EXPORT_TEMPLATE = '1000000027';
 
     public const DEFAULT_EMAIL_EXPORT_TEMPLATE = '1000000028';
-
 }

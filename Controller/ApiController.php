@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
-use Modules\Admin\Models\SettingsEnum;
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountCredentialMapper;
 use Modules\Admin\Models\AccountMapper;
@@ -30,6 +29,7 @@ use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
 use Modules\Admin\Models\PermissionCategory;
+use Modules\Admin\Models\SettingsEnum;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\UploadFile;
