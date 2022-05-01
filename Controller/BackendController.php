@@ -16,7 +16,6 @@ namespace Modules\Admin\Controller;
 
 use Model\NullSetting;
 use Model\SettingMapper;
-use Model\SettingsEnum;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
 use Modules\Admin\Models\GroupMapper;
@@ -24,6 +23,7 @@ use Modules\Admin\Models\GroupPermissionMapper;
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\NullAccountPermission;
 use Modules\Admin\Models\NullGroupPermission;
+use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Localization\NullLocalization;
@@ -529,18 +529,21 @@ final class BackendController extends Controller
         if ($request->getData('id') === 'Admin') {
             $view->setTemplate('/Modules/' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings');
         } elseif (\is_file(__DIR__ . '/../../' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings.tpl.php')) {
-            return new NullView();
+            return $this->app->moduleManager->get($request->getData('id'))->viewModuleSettings($request, $response, $data);
         } else {
             $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
         }
 
-        $generalSettings = $this->app->appSettings->get(null, [
+        $generalSettings = $this->app->appSettings->get(
+            names: [
                 SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_ORGANIZATION,
                 SettingsEnum::LOGIN_STATUS, SettingsEnum::DEFAULT_LOCALIZATION, SettingsEnum::MAIL_SERVER_ADDR,
-            ]);
+            ],
+            module: 'Admin'
+        );
 
         $view->setData('generalSettings', $generalSettings);
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content)->execute());
+        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION . '::Admin']->content)->execute());
 
         return $view;
     }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
-use Model\SettingsEnum;
+use Modules\Admin\Models\SettingsEnum;
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountCredentialMapper;
 use Modules\Admin\Models\AccountMapper;
@@ -509,7 +509,7 @@ final class ApiController extends Controller
             ->execute()
             ->l11n;
 
-        if ((bool) ($request->getData('load') ?? false)) {
+        if (($request->getData('localization_load') ?? '-1') !== '-1') {
             $locale = \explode('_', $request->getData('localization_load'));
             $l11n->loadFromLanguage($locale[0], $locale[1]);
 

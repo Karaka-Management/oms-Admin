@@ -272,7 +272,7 @@ echo $this->getData('nav')->render(); ?>
                                         <td data-tpl-text="/unit" data-tpl-value="/unit"><?= $value->getUnit(); ?>
                                         <td data-tpl-text="/app" data-tpl-value="/app"><?= $value->getApp(); ?>
                                         <td data-tpl-text="/module" data-tpl-value="/module"><?= $value->getModule(); ?>
-                                        <td data-tpl-text="/type" data-tpl-value="/type"><?= $value->getType(); ?>
+                                        <td data-tpl-text="/type" data-tpl-value="/type"><?= $value->getCategory(); ?>
                                         <td data-tpl-text="/ele" data-tpl-value="/ele"><?= $value->getElement(); ?>
                                         <td data-tpl-text="/comp" data-tpl-value="/comp"><?= $value->getComponent(); ?>
                                         <td>

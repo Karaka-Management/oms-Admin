@@ -27,7 +27,7 @@ return [
         ],
     ],
 
-    '^.*/admin/module/settings\?id=Admin.*$' => [
+    '^.*/admin/module/settings.*$' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleSettings',
             'verb'       => RouteVerb::GET,

@@ -92,14 +92,16 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                     <tbody>
                         <?php
-                        $c     = 0; foreach ($accounts as $key => $value) : ++$c;
-                        $url   = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
-                        $color = 'darkred';
+                        $c = 0;
+                        foreach ($accounts as $key => $value) : ++$c;
+                            $url   = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
+                            $color = 'darkred';
 
-                        if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }
-                        elseif ($value->getStatus() === AccountStatus::INACTIVE) { $color = 'darkblue'; }
-                        elseif ($value->getStatus() === AccountStatus::TIMEOUT) { $color  = 'purple'; }
-                        elseif ($value->getStatus() === AccountStatus::BANNED) { $color   = 'red'; } ?>
+                            if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }
+                            elseif ($value->getStatus() === AccountStatus::INACTIVE) { $color = 'darkblue'; }
+                            elseif ($value->getStatus() === AccountStatus::TIMEOUT) { $color  = 'purple'; }
+                            elseif ($value->getStatus() === AccountStatus::BANNED) { $color   = 'red'; }
+                        ?>
                 <tr tabindex="0" data-href="<?= $url; ?>">
                     <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status'. $value->getStatus()); ?></span></a>

@@ -1,0 +1,71 @@
+[
+    {
+        "type": "collection",
+        "create_directory": true,
+        "name": "Admin",
+        "virtualPath": "/Modules",
+        "user": 1
+    },
+    {
+        "type": "collection",
+        "create_directory": true,
+        "name": "Templates",
+        "virtualPath": "/Modules/Admin",
+        "user": 1
+    },
+    {
+        "type": "upload",
+        "create_collection": true,
+        "name": "Pdf Exporter",
+        "virtualPath": "/Modules/Admin/Templates",
+        "path": "/Modules/Admin/Templates/Pdf Exporter",
+        "files": [
+            "/Modules/Admin/Admin/Install/Media/PdfExporter"
+        ],
+        "user": 1
+    },
+    {
+        "type": "upload",
+        "create_collection": true,
+        "name": "Excel Exporter",
+        "virtualPath": "/Modules/Admin/Templates",
+        "path": "/Modules/Admin/Templates/Excel Exporter",
+        "files": [
+            "/Modules/Admin/Admin/Install/Media/ExcelExporter"
+        ],
+        "user": 1
+    },
+    {
+        "type": "upload",
+        "create_collection": true,
+        "name": "Csv Exporter",
+        "virtualPath": "/Modules/Admin/Templates",
+        "path": "/Modules/Admin/Templates/Csv Exporter",
+        "files": [
+            "/Modules/Admin/Admin/Install/Media/CsvExporter"
+        ],
+        "user": 1
+    },
+    {
+        "type": "upload",
+        "create_collection": true,
+        "name": "Word Exporter",
+        "virtualPath": "/Modules/Admin/Templates",
+        "path": "/Modules/Admin/Templates/Word Exporter",
+        "files": [
+            "/Modules/Admin/Admin/Install/Media/WordExporter"
+        ],
+        "user": 1
+    },
+    {
+        "type": "upload",
+        "create_collection": true,
+        "name": "Email Exporter",
+        "virtualPath": "/Modules/Admin/Templates",
+        "path": "/Modules/Admin/Templates/Email Exporter",
+        "files": [
+            "/Modules/Admin/Admin/Install/Media/EmailExporter"
+        ],
+        "user": 1
+    }
+]

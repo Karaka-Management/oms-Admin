@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Controller\Api;
 
-use Model\SettingsEnum;
+use Modules\Admin\Models\SettingsEnum;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;

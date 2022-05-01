@@ -18,6 +18,7 @@
     "directory": "Admin",
     "dependencies": {},
     "providing": {
+        "Media": "*",
         "Navigation": "*"
     },
     "load": [
