@@ -21,54 +21,57 @@ use phpOMS\Uri\UriFactory;
 
 $modules   = $this->getData('modules') ?? [];
 $active    = $this->getData('active') ?? [];
-$isntalled = $this->getData('isntalled') ?? [];
+$installed = $this->getData('installed') ?? [];
+
+$tableView            = $this->getData('tableView');
+$tableView->id        = 'moduleList';
+$tableView->baseUri   = '{/prefix}admin/module/list';
+$tableView->exportUri = '{/api}admin/module/list/export';
+$tableView->setObjects($modules);
 ?>
 
 <div class="row">
     <div class="col-xs-12">
         <div class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Modules'); ?><i class="fa fa-download floatRight download btn"></i></div>
+            <div class="portlet-head">
+                <?= $tableView->renderTitle(
+                    $this->getHtml('Modules')
+                ); ?>
+            </div>
             <div class="slider">
-            <table id="moduleList" class="default sticky">
+            <table id="<?= $tableView->id; ?>" class="default sticky">
                 <thead>
                 <tr>
-                    <td><?= $this->getHtml('ID', '0', '0'); ?>
-                        <label for="moduleList-sort-1">
-                            <input type="radio" name="moduleList-sort" id="moduleList-sort-1">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="moduleList-sort-2">
-                            <input type="radio" name="moduleList-sort" id="moduleList-sort-2">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
-                    <td class="wf-100"><?= $this->getHtml('Name'); ?>
-                        <label for="moduleList-sort-3">
-                            <input type="radio" name="moduleList-sort" id="moduleList-sort-3">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="moduleList-sort-4">
-                            <input type="radio" name="moduleList-sort" id="moduleList-sort-4">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
-                    <td><?= $this->getHtml('Version'); ?>
-                    <td><?= $this->getHtml('Status'); ?>
-                        <label for="moduleList-sort-5">
-                            <input type="radio" name="moduleList-sort" id="moduleList-sort-5">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="moduleList-sort-6">
-                            <input type="radio" name="moduleList-sort" id="moduleList-sort-6">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
+                    <td><?= $tableView->renderHeaderElement(
+                        'id',
+                        $this->getHtml('ID', '0', '0'),
+                        'number'
+                    ); ?>
+                    <td class="wf-100"><?= $tableView->renderHeaderElement(
+                            'name',
+                            $this->getHtml('Name'),
+                            'text'
+                        ); ?>
+                    <td><?= $tableView->renderHeaderElement(
+                            'version',
+                            $this->getHtml('Version'),
+                            'text',
+                            [],
+                            false,
+                            false,
+                            false
+                        ); ?>
+                    <td><?= $tableView->renderHeaderElement(
+                            'action',
+                            $this->getHtml('Status'),
+                            'select',
+                            [
+                                'active' => $this->getHtml('active'),
+                                'available' => $this->getHtml('available'),
+                                'inactive' => $this->getHtml('inactive'),
+                            ],
+                            false // don't render sort
+                        ); ?>
                 <tbody>
                     <?php $count = 0;
                         foreach ($modules as $key => $module) : ++$count;
@@ -87,7 +90,7 @@ $isntalled = $this->getData('isntalled') ?? [];
                     <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getExternalName()); ?></a>
                     <td data-label="<?= $this->getHtml('Version'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($module->getVersion()); ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>">
-                        <span class="tag">
+                        <span class="tag module-status-<?= $status; ?>">
                             <a href="<?= $url; ?>">
                                 <?php if ($status === ModuleStatus::ACTIVE)
                                     echo \mb_strtolower($this->getHtml('Active'));
@@ -103,7 +106,6 @@ $isntalled = $this->getData('isntalled') ?? [];
                 <?php endif; ?>
             </table>
             </div>
-            <div class="portlet-foot"></div>
         </div>
     </div>
 </div>

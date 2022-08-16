@@ -21,8 +21,22 @@ use phpOMS\Uri\UriFactory;
  */
 $accounts = $this->getData('accounts') ?? [];
 
-$previous = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \reset($accounts)->getId() . '&ptype=p';
-$next     = empty($accounts) ? '{/prefix}admin/account/list' : '{/prefix}admin/account/list?{?}&id=' . \end($accounts)->getId() . '&ptype=n';
+$tableView            = $this->getData('tableView');
+$tableView->id        = 'accountsList';
+$tableView->baseUri   = '{/prefix}admin/account/list';
+$tableView->exportUri = '{/api}admin/account/list/export';
+$tableView->setObjects($accounts);
+
+$previous = $tableView->getPreviousLink(
+    $this->request,
+    empty($this->objects) || !$this->getData('hasPrevious') ? null : \reset($this->objects)
+);
+
+$next = $tableView->getNextLink(
+    $this->request,
+    empty($this->objects) ? null : \end($this->objects),
+    $this->getData('hasNext') ?? false
+);
 
 echo $this->getData('nav')->render(); ?>
 
@@ -30,66 +44,44 @@ echo $this->getData('nav')->render(); ?>
     <div class="col-xs-12">
         <div class="portlet">
             <div class="portlet-head">
-                <?= $this->getHtml('Accounts'); ?>
-                <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-additional-function.tpl.php'; ?>
-                <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-export-data.tpl.php'; ?>
+                <?= $tableView->renderTitle(
+                    $this->getHtml('Accounts')
+                ); ?>
             </div>
             <div class="slider">
-            <table id="accountList" class="default sticky">
+            <table id="<?= $tableView->id; ?>" class="default sticky">
                 <thead>
                 <tr>
-                    <td><?= $this->getHtml('ID', '0', '0'); ?>
-                        <label for="accountList-r1-asc">
-                            <input id="accountList-r1-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="accountList-r1-desc">
-                            <input id="accountList-r1-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                    <td><?= $this->getHtml('Status'); ?>
-                        <label for="accountList-r2-asc">
-                            <input id="accountList-r2-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="accountList-r2-desc">
-                            <input id="accountList-r2-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                    <td class="wf-100"><?= $this->getHtml('Name'); ?>
-                        <label for="accountList-r3-asc">
-                            <input id="accountList-r3-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="accountList-r3-desc">
-                            <input id="accountList-r3-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-filter-table.tpl.php'; ?>
-                    <td><?= $this->getHtml('Activity'); ?>
-                        <label for="accountList-r4-asc">
-                            <input id="accountList-r4-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="accountList-r4-desc">
-                            <input id="accountList-r4-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
-                    <td><?= $this->getHtml('Created'); ?>
-                        <label for="accountList-r5-asc">
-                            <input id="accountList-r5-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
-                        </label>
-                        <label for="accountList-r5-desc">
-                            <input id="accountList-r5-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
-                        </label>
-                        <label>
-                            <i class="filter fa fa-filter"></i>
-                        </label>
+                    <td><?= $tableView->renderHeaderElement(
+                            'id',
+                            $this->getHtml('ID', '0', '0'),
+                            'number'
+                        ); ?>
+                    <td><?= $tableView->renderHeaderElement(
+                            'action',
+                            $this->getHtml('Status'),
+                            'select',
+                            [
+                                'active' => $this->getHtml('Active'),
+                                'inactive' => $this->getHtml('Inactive'),
+                            ],
+                            false // don't render sort
+                        ); ?>
+                    <td class="wf-100"><?= $tableView->renderHeaderElement(
+                            'module',
+                            $this->getHtml('Name'),
+                            'text'
+                        ); ?>
+                    <td><?= $tableView->renderHeaderElement(
+                        'lastActive',
+                        $this->getHtml('Activity'),
+                        'date'
+                    ); ?>
+                    <td><?= $tableView->renderHeaderElement(
+                        'createdAt',
+                        $this->getHtml('Created'),
+                        'date'
+                    ); ?>
                     <tbody>
                         <?php
                         $c = 0;
@@ -114,10 +106,16 @@ echo $this->getData('nav')->render(); ?>
                         <?php endif; ?>
             </table>
             </div>
+            <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
             <div class="portlet-foot">
-                <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
-                <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
+                <?php if ($this->getData('hasPrevious')) : ?>
+                <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><i class="fa fa-chevron-left"></i></a>
+                <?php endif; ?>
+                <?php if ($this->getData('hasNext')) : ?>
+                <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><i class="fa fa-chevron-right"></i></a>
+                <?php endif; ?>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

@@ -25,13 +25,17 @@ use Modules\Admin\Models\NullAccountPermission;
 use Modules\Admin\Models\NullGroupPermission;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
+use Modules\Media\Models\MediaMapper;
+use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
+use phpOMS\DataStorage\Database\Query\OrderType;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Utils\Parser\Markdown\Markdown;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
+use Web\Backend\Views\TableView;
 
 /**
  * Admin controller class.
@@ -101,13 +105,90 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
 
-        if ($request->getData('ptype') === 'p') {
-            $view->setData('accounts', AccountMapper::getAll()->where('id', (int) ($request->getData('id') ?? 0), '<')->limit(25)->execute());
-        } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('accounts', AccountMapper::getAll()->where('id', (int) ($request->getData('id') ?? 0), '>')->limit(25)->execute());
-        } else {
-            $view->setData('accounts', AccountMapper::getAll()->where('id', 0, '>')->limit(25)->execute());
+        $searchFieldData = $request->getLike('.*\-p\-.*');
+        $searchField     = [];
+        foreach ($searchFieldData as $key => $data) {
+            if ($data === '1') {
+                $split = \explode('-', $key);
+                $member =  \end($split);
+
+                $searchField[] = $member;
+            }
         }
+
+        $filterFieldData = $request->getLike('.*\-f\-.*?\-t');
+        $filterField     = [];
+        foreach ($filterFieldData as $key => $type) {
+            $split = \explode('-', $key);
+            \end($split);
+
+            $member = \prev($split);
+
+            if (!empty($request->getData('accountslist-f-' . $member . '-f1'))) {
+                $filterField[$member] = [
+                    'type' => $type,
+                    'value1' => $request->getData('accountslist-f-' . $member . '-f1'),
+                    'logic1' => $request->getData('accountslist-f-' . $member . '-o1'),
+                    'value2' => $request->getData('accountslist-f-' . $member . '-f2'),
+                    'logic2' => $request->getData('accountslist-f-' . $member . '-o2'),
+                ];
+            }
+        }
+
+        $pageLimit = 25;
+        $view->addData('pageLimit', $pageLimit);
+
+        $mapper = AccountMapper::getAll()->with('createdBy');
+        $list   = AccountMapper::find(
+            search: $request->getData('search'),
+            mapper: $mapper,
+            id: (int) ($request->getData('id') ?? 0),
+            secondaryId: (string) ($request->getData('subid') ?? ''),
+            type: $request->getData('pType'),
+            pageLimit: empty((int) ($request->getData('limit') ?? 0)) ? 100 : ((int) $request->getData('limit')),
+            sortBy: $request->getData('sort_by') ?? '',
+            sortOrder: $request->getData('sort_order') ?? OrderType::DESC,
+            searchFields: $searchField,
+            filters: $filterField
+        );
+
+        $view->setData('accounts', $list['data']);
+
+        /** @var \Model\Setting[] $exportTemplates */
+        $exportTemplates = $this->app->appSettings->get(
+            names: [
+                SettingsEnum::DEFAULT_PDF_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_EXCEL_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_CSV_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_WORD_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_EMAIL_EXPORT_TEMPLATE,
+            ],
+            module: 'Admin'
+        );
+
+        $templateIds = [];
+        foreach ($exportTemplates as $template) {
+            $templateIds[] = (int) $template->content;
+        }
+
+        $mediaTemplates = MediaMapper::getAll()
+            ->where('id', $templateIds, 'in')
+            ->execute();
+
+        $tableView         = new TableView($this->app->l11nManager, $request, $response);
+        $tableView->module = 'Admin';
+        $tableView->theme  = 'Backend';
+        $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
+        $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
+        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
+        $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
+        $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
+        $tableView->setData('hasPrevious', $list['hasPrevious']);
+        $tableView->setData('hasNext', $list['hasNext']);
+
+        $view->addData('tableView', $tableView);
+
 
         return $view;
     }
@@ -206,16 +287,92 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
 
-        if ($request->getData('ptype') === 'p') {
-            $view->setData('groups', GroupMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('id') ?? 0), '<')->limit(25)->execute());
-        } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('groups', GroupMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('id') ?? 0), '>')->limit(25)->execute());
-        } else {
-            $view->setData('groups', GroupMapper::getAll()->where('id', 0, '>')->limit(25)->execute());
+        $searchFieldData = $request->getLike('.*\-p\-.*');
+        $searchField     = [];
+        foreach ($searchFieldData as $key => $data) {
+            if ($data === '1') {
+                $split = \explode('-', $key);
+                $member =  \end($split);
+
+                $searchField[] = $member;
+            }
         }
+
+        $filterFieldData = $request->getLike('.*\-f\-.*?\-t');
+        $filterField     = [];
+        foreach ($filterFieldData as $key => $type) {
+            $split = \explode('-', $key);
+            \end($split);
+
+            $member = \prev($split);
+
+            if (!empty($request->getData('groupslist-f-' . $member . '-f1'))) {
+                $filterField[$member] = [
+                    'type' => $type,
+                    'value1' => $request->getData('groupslist-f-' . $member . '-f1'),
+                    'logic1' => $request->getData('groupslist-f-' . $member . '-o1'),
+                    'value2' => $request->getData('groupslist-f-' . $member . '-f2'),
+                    'logic2' => $request->getData('groupslist-f-' . $member . '-o2'),
+                ];
+            }
+        }
+
+        $pageLimit = 25;
+        $view->addData('pageLimit', $pageLimit);
+
+        $mapper = GroupMapper::getAll()->with('createdBy');
+        $list   = GroupMapper::find(
+            search: $request->getData('search'),
+            mapper: $mapper,
+            id: (int) ($request->getData('id') ?? 0),
+            secondaryId: (string) ($request->getData('subid') ?? ''),
+            type: $request->getData('pType'),
+            pageLimit: empty((int) ($request->getData('limit') ?? 0)) ? 100 : ((int) $request->getData('limit')),
+            sortBy: $request->getData('sort_by') ?? '',
+            sortOrder: $request->getData('sort_order') ?? OrderType::DESC,
+            searchFields: $searchField,
+            filters: $filterField
+        );
+
+        $view->setData('groups', $list['data']);
 
         $memberCount = GroupMapper::countMembers();
         $view->setData('memberCount', $memberCount);
+
+        /** @var \Model\Setting[] $exportTemplates */
+        $exportTemplates = $this->app->appSettings->get(
+            names: [
+                SettingsEnum::DEFAULT_PDF_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_EXCEL_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_CSV_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_WORD_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_EMAIL_EXPORT_TEMPLATE,
+            ],
+            module: 'Admin'
+        );
+
+        $templateIds = [];
+        foreach ($exportTemplates as $template) {
+            $templateIds[] = (int) $template->content;
+        }
+
+        $mediaTemplates = MediaMapper::getAll()
+            ->where('id', $templateIds, 'in')
+            ->execute();
+
+        $tableView         = new TableView($this->app->l11nManager, $request, $response);
+        $tableView->module = 'Admin';
+        $tableView->theme  = 'Backend';
+        $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
+        $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
+        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
+        $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
+        $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
+        $tableView->setData('hasPrevious', $list['hasPrevious']);
+        $tableView->setData('hasNext', $list['hasNext']);
+
+        $view->addData('tableView', $tableView);
 
         return $view;
     }
@@ -312,12 +469,49 @@ final class BackendController extends Controller
      */
     public function viewModuleList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
+        /** @var \phpOMS\Model\Html\Head $head */
+        $head = $response->get('Content')->getData('head');
+        $head->addAsset(AssetType::CSS, 'Modules/Admin/Theme/Backend/css/styles.css?v=1.0.0');
+
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-list');
 
         $view->setData('modules', $this->app->moduleManager->getAllModules());
         $view->setData('active', $this->app->moduleManager->getActiveModules());
         $view->setData('installed', $this->app->moduleManager->getInstalledModules());
+
+        /** @var \Model\Setting[] $exportTemplates */
+        $exportTemplates = $this->app->appSettings->get(
+            names: [
+                SettingsEnum::DEFAULT_PDF_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_EXCEL_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_CSV_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_WORD_EXPORT_TEMPLATE,
+                SettingsEnum::DEFAULT_EMAIL_EXPORT_TEMPLATE,
+            ],
+            module: 'Admin'
+        );
+
+        $templateIds = [];
+        foreach ($exportTemplates as $template) {
+            $templateIds[] = (int) $template->content;
+        }
+
+        $mediaTemplates = MediaMapper::getAll()
+            ->where('id', $templateIds, 'in')
+            ->execute();
+
+        $tableView         = new TableView($this->app->l11nManager, $request, $response);
+        $tableView->module = 'Admin';
+        $tableView->theme  = 'Backend';
+        $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
+        $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
+        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
+        $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
+        $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
+
+        $view->addData('tableView', $tableView);
 
         return $view;
     }

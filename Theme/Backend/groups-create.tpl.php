@@ -21,7 +21,10 @@ echo $this->getData('nav')->render(); ?>
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <div class="portlet">
-            <form id="fGroupCreate" action="<?= UriFactory::build('{/api}admin/group'); ?>" method="put">
+            <form id="fGroupCreate"
+                action="<?= UriFactory::build('{/api}admin/group'); ?>"
+                method="put"
+                autocomplete="off">
                 <div class="portlet-head"><?= $this->getHtml('Group'); ?></div>
                 <div class="portlet-body">
                     <table class="layout wf-100" style="table-layout: fixed">
@@ -33,7 +36,7 @@ echo $this->getData('nav')->render(); ?>
                                     <option value="<?= GroupStatus::INACTIVE; ?>"><?= $this->getHtml('Inactive'); ?>
                                 </select>
                         <tr><td><label for="iGname"><?= $this->getHtml('Name'); ?></label>
-                        <tr><td><input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" required>
+                        <tr><td><input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" required>
                         <tr><td><?= $this->getData('editor')->render('group-editor'); ?>
                         <tr><td><?= $this->getData('editor')->getData('text')->render('group-editor', 'description', 'fGroupCreate'); ?>
                     </table>

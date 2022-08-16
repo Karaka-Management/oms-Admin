@@ -1,0 +1,30 @@
+.tag.module-status-1,
+.tag.module-status-2,
+.tag.module-status-3,
+.tag.module-status-4,
+.tag.module-status-5 {
+    color: #000;
+}
+
+.tag.module-status-5 {
+    background: #ff6250;
+    color: #fff;
+}
+
+.tag.module-status-3 {
+    background: #3498db;
+    color: #fff;
+}
+
+.tag.module-status-2 {
+    background: #ffd321;
+}
+
+.tag.module-status-4 {
+    background: #9b59b6;
+    color: #fff;
+}
+
+.tag.module-status-1 {
+    background: #46eb8b;
+}

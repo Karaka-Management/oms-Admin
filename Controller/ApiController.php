@@ -658,7 +658,7 @@ final class ApiController extends Controller
     {
         $appManager = new ApplicationManager($this->app);
 
-        $app = $request->getData('appSrc');
+        $app = \rtrim($request->getData('appSrc') ?? '', '/\\ ');
         if (!\is_dir(__DIR__ . '/../../../' . $app)) {
             $response->header->status = RequestStatusCode::R_400;
             return;
@@ -743,8 +743,8 @@ final class ApiController extends Controller
     public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Admin\Models\Group $old */
-        $old = clone GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $new = $this->updateGroupFromRequest($request);
+        $old = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateGroupFromRequest($request, clone $old);
         $this->updateModel($request->header->account, $old, $new, GroupMapper::class, 'group', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully updated', $new);
     }
@@ -758,10 +758,8 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateGroupFromRequest(RequestAbstract $request) : Group
+    private function updateGroupFromRequest(RequestAbstract $request, Group $group) : Group
     {
-        /** @var \Modules\Admin\Models\Group $group */
-        $group       = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $group->name = (string) ($request->getData('name') ?? $group->name);
         $group->setStatus((int) ($request->getData('status') ?? $group->getStatus()));
         $group->description    = Markdown::parse((string) ($request->getData('description') ?? $group->descriptionRaw));
@@ -1181,8 +1179,8 @@ final class ApiController extends Controller
     public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account $old */
-        $old = clone AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $new = $this->updateAccountFromRequest($request);
+        $old = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateAccountFromRequest($request, clone $old);
         $this->updateModel($request->header->account, $old, $new, AccountMapper::class, 'account', $request->getOrigin());
 
         if (\Modules\Profile\Models\ProfileMapper::get()->where('account', $new->getId())->execute() instanceof \Modules\Profile\Models\NullProfile) {
@@ -1202,10 +1200,8 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateAccountFromRequest(RequestAbstract $request, bool $allowPassword = false) : Account
+    private function updateAccountFromRequest(RequestAbstract $request, Account $account, bool $allowPassword = false) : Account
     {
-        /** @var Account $account */
-        $account        = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $account->login = (string) ($request->getData('login') ?? $account->login);
         $account->name1 = (string) ($request->getData('name1') ?? $account->name1);
         $account->name2 = (string) ($request->getData('name2') ?? $account->name2);
@@ -1652,10 +1648,10 @@ final class ApiController extends Controller
     public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var AccountPermission $old */
-        $old = clone AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
 
         /** @var AccountPermission $new */
-        $new = $this->updatePermissionFromRequest(AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute(), $request);
+        $new = $this->updatePermissionFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, AccountPermissionMapper::class, 'account-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully updated', $new);
@@ -1677,7 +1673,7 @@ final class ApiController extends Controller
     public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var GroupPermission $old */
-        $old = clone GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
 
         if ($old->getGroup() === 3) {
             // admin group cannot be deleted
@@ -1687,7 +1683,7 @@ final class ApiController extends Controller
         }
 
         /** @var GroupPermission $new */
-        $new = $this->updatePermissionFromRequest(GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute(), $request);
+        $new = $this->updatePermissionFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully updated', $new);
@@ -1696,14 +1692,14 @@ final class ApiController extends Controller
     /**
      * Method to update a group permission from a request
      *
-     * @param PermissionAbstract $permission Permission model
      * @param RequestAbstract    $request    Request
+     * @param PermissionAbstract $permission Permission model
      *
      * @return PermissionAbstract
      *
      * @since 1.0.0
      */
-    private function updatePermissionFromRequest(PermissionAbstract $permission, RequestAbstract $request) : PermissionAbstract
+    private function updatePermissionFromRequest(RequestAbstract $request, PermissionAbstract $permission) : PermissionAbstract
     {
         $permission->setUnit(empty($request->getData('permissionunit')) ? $permission->getUnit() : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? $permission->getApp() : (string) $request->getData('permissionapp'));

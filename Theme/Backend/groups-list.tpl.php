@@ -22,55 +22,66 @@ use phpOMS\Uri\UriFactory;
 $groups      = $this->getData('groups') ?? [];
 $memberCount = $this->getData('memberCount') ?? [];
 
-$previous = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \reset($groups)->getId() . '&ptype=p';
-$next     = empty($groups) ? '{/prefix}admin/group/list' : '{/prefix}admin/group/list?{?}&id=' . \end($groups)->getId() . '&ptype=n';
+$tableView            = $this->getData('tableView');
+$tableView->id        = 'groupsList';
+$tableView->baseUri   = '{/prefix}admin/group/list';
+$tableView->exportUri = '{/api}admin/group/list/export';
+$tableView->setObjects($groups);
+
+$previous = $tableView->getPreviousLink(
+    $this->request,
+    empty($this->objects) || !$this->getData('hasPrevious') ? null : \reset($this->objects)
+);
+
+$next = $tableView->getNextLink(
+    $this->request,
+    empty($this->objects) ? null : \end($this->objects),
+    $this->getData('hasNext') ?? false
+);
 
 echo $this->getData('nav')->render(); ?>
 
 <div class="row">
     <div class="col-xs-12">
         <div class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></div>
+            <div class="portlet-head">
+                <?= $tableView->renderTitle(
+                    $this->getHtml('Groups')
+                ); ?>
+            </div>
             <div class="slider">
-            <table id="groupList" class="default sticky">
+            <table id="<?= $tableView->id; ?>" class="default sticky">
                 <thead>
                     <tr>
-                        <td><?= $this->getHtml('ID', '0', '0'); ?>
-                            <label for="groupList-r1-asc">
-                                <input id="groupList-r1-asc" name="groupList-sort" type="radio">
-                                <i class="sort-asc fa fa-chevron-up"></i>
-                            </label>
-                            <label for="groupList-r1-desc">
-                                <input id="groupList-r1-desc" name="groupList-sort" type="radio">
-                               <i class="sort-desc fa fa-chevron-down"></i>
-                            </label>
-                        <td><?= $this->getHtml('Status'); ?>
-                            <label for="groupList-r2-asc">
-                                <input id="groupList-r2-asc" name="groupList-sort" type="radio">
-                                <i class="sort-asc fa fa-chevron-up"></i>
-                            </label>
-                            <label for="groupList-r2-desc">
-                                <input id="groupList-r2-desc" name="groupList-sort" type="radio">
-                               <i class="sort-desc fa fa-chevron-down"></i>
-                            </label>
-                        <td class="wf-100"><?= $this->getHtml('Name'); ?>
-                            <label for="groupList-r3-asc">
-                                <input id="groupList-r3-asc" name="groupList-sort" type="radio">
-                                <i class="sort-asc fa fa-chevron-up"></i>
-                            </label>
-                            <label for="groupList-r3-desc">
-                                <input id="groupList-r3-desc" name="groupList-sort" type="radio">
-                               <i class="sort-desc fa fa-chevron-down"></i>
-                            </label>
-                        <td><?= $this->getHtml('Members'); ?>
-                            <label for="groupList-r4-asc">
-                                <input id="groupList-r4-asc" name="groupList-sort" type="radio">
-                                <i class="sort-asc fa fa-chevron-up"></i>
-                            </label>
-                            <label for="groupList-r4-desc">
-                                <input id="groupList-r4-desc" name="groupList-sort" type="radio">
-                               <i class="sort-desc fa fa-chevron-down"></i>
-                            </label>
+                        <td><?= $tableView->renderHeaderElement(
+                            'id',
+                            $this->getHtml('ID', '0', '0'),
+                            'number'
+                        ); ?>
+                        <td><?= $tableView->renderHeaderElement(
+                                'action',
+                                $this->getHtml('Status'),
+                                'select',
+                                [
+                                    'active' => $this->getHtml('Active'),
+                                    'inactive' => $this->getHtml('Inactive'),
+                                ],
+                                false // don't render sort
+                            ); ?>
+                        <td class="wf-100"><?= $tableView->renderHeaderElement(
+                                'module',
+                                $this->getHtml('Name'),
+                                'text'
+                            ); ?>
+                        <td><?= $tableView->renderHeaderElement(
+                                'module',
+                                $this->getHtml('Members'),
+                                'number',
+                                [],
+                                true,
+                                false,
+                                false
+                            ); ?>
                 <tbody>
                     <?php $c = 0;
                         foreach ($groups as $key => $value) : ++$c;
@@ -92,10 +103,16 @@ echo $this->getData('nav')->render(); ?>
                     <?php endif; ?>
             </table>
             </div>
+            <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
             <div class="portlet-foot">
-                <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
-                <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
+                <?php if ($this->getData('hasPrevious')) : ?>
+                <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><i class="fa fa-chevron-left"></i></a>
+                <?php endif; ?>
+                <?php if ($this->getData('hasNext')) : ?>
+                <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><i class="fa fa-chevron-right"></i></a>
+                <?php endif; ?>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
