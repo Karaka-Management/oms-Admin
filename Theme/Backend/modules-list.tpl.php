@@ -66,9 +66,9 @@ $tableView->setObjects($modules);
                             $this->getHtml('Status'),
                             'select',
                             [
-                                'active' => $this->getHtml('active'),
+                                'active'    => $this->getHtml('active'),
                                 'available' => $this->getHtml('available'),
-                                'inactive' => $this->getHtml('inactive'),
+                                'inactive'  => $this->getHtml('inactive'),
                             ],
                             false // don't render sort
                         ); ?>

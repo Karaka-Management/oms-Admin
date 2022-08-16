@@ -63,7 +63,7 @@ echo $this->getData('nav')->render(); ?>
                                 $this->getHtml('Status'),
                                 'select',
                                 [
-                                    'active' => $this->getHtml('Active'),
+                                    'active'   => $this->getHtml('Active'),
                                     'inactive' => $this->getHtml('Inactive'),
                                 ],
                                 false // don't render sort

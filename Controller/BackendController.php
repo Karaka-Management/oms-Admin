@@ -109,7 +109,7 @@ final class BackendController extends Controller
         $searchField     = [];
         foreach ($searchFieldData as $key => $data) {
             if ($data === '1') {
-                $split = \explode('-', $key);
+                $split  = \explode('-', $key);
                 $member =  \end($split);
 
                 $searchField[] = $member;
@@ -126,7 +126,7 @@ final class BackendController extends Controller
 
             if (!empty($request->getData('accountslist-f-' . $member . '-f1'))) {
                 $filterField[$member] = [
-                    'type' => $type,
+                    'type'   => $type,
                     'value1' => $request->getData('accountslist-f-' . $member . '-f1'),
                     'logic1' => $request->getData('accountslist-f-' . $member . '-o1'),
                     'value2' => $request->getData('accountslist-f-' . $member . '-f2'),
@@ -188,7 +188,6 @@ final class BackendController extends Controller
         $tableView->setData('hasNext', $list['hasNext']);
 
         $view->addData('tableView', $tableView);
-
 
         return $view;
     }
@@ -291,7 +290,7 @@ final class BackendController extends Controller
         $searchField     = [];
         foreach ($searchFieldData as $key => $data) {
             if ($data === '1') {
-                $split = \explode('-', $key);
+                $split  = \explode('-', $key);
                 $member =  \end($split);
 
                 $searchField[] = $member;
@@ -308,7 +307,7 @@ final class BackendController extends Controller
 
             if (!empty($request->getData('groupslist-f-' . $member . '-f1'))) {
                 $filterField[$member] = [
-                    'type' => $type,
+                    'type'   => $type,
                     'value1' => $request->getData('groupslist-f-' . $member . '-f1'),
                     'logic1' => $request->getData('groupslist-f-' . $member . '-o1'),
                     'value2' => $request->getData('groupslist-f-' . $member . '-f2'),
