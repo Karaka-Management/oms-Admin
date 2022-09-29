@@ -1999,7 +1999,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function cliEventCall(...$data) : void
+    public function cliEventCall(mixed ...$data) : void
     {
         $cliEventHandling = (bool) ($this->app->appSettings->get(null, SettingsEnum::CLI_ACTIVE)->content ?? false);
 

@@ -85,7 +85,7 @@ class GroupTagSelectorView extends View
     /**
      * {@inheritdoc}
      */
-    public function render(...$data) : string
+    public function render(mixed ...$data) : string
     {
         $this->id         = $data[0];
         $this->isRequired = $data[1] ?? false;
