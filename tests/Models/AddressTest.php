@@ -43,7 +43,7 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
         $expected = [
             'postal'  => '',
             'city'    => '',
-            'country' => 'US',
+            'country' => 'XX',
             'address' => '',
             'state'   => '',
             'geo'     => [
