@@ -27,6 +27,15 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
  */
 final class PermissionAbstractMapper extends DataMapperFactory
 {
+    /**
+     * Create a permission query
+     *
+     * @param ConnectionAbstract $connection Connection
+     *
+     * @return PermissionQueryBuilder
+     *
+     * @since 1.0.0
+     */
     public static function helper(ConnectionAbstract $connection) : PermissionQueryBuilder
     {
         return new PermissionQueryBuilder($connection);

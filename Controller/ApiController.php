@@ -1194,6 +1194,7 @@ final class ApiController extends Controller
      * Method to update an account from a request
      *
      * @param RequestAbstract $request       Request
+     * @param Account         $account       Account
      * @param bool            $allowPassword Allow to change password
      *
      * @return Account

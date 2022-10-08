@@ -34,7 +34,7 @@
                     }
                 ]'>
                 <datalist id="<?= $this->getId(); ?>-datalist"></datalist>
-                <input type="hidden" id="<?= $this->getId(); ?>-idlist"<?= $this->isRequired() ? ' required' : ''; ?>>
+                <input name="datalist-list" type="hidden" id="<?= $this->getId(); ?>-idlist"<?= $this->isRequired() ? ' required' : ''; ?>>
             </span>
         </div>
         <div class="ipt-second"><button><?= $this->getHtml('Add', '0', '0'); ?></button></div>
