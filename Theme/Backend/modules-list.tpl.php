@@ -25,7 +25,7 @@ $installed = $this->getData('installed') ?? [];
 
 $tableView            = $this->getData('tableView');
 $tableView->id        = 'moduleList';
-$tableView->baseUri   = '{/prefix}admin/module/list';
+$tableView->baseUri   = 'admin/module/list';
 $tableView->exportUri = '{/api}admin/module/list/export';
 $tableView->setObjects($modules);
 ?>
@@ -75,7 +75,7 @@ $tableView->setObjects($modules);
                 <tbody>
                     <?php $count = 0;
                         foreach ($modules as $key => $module) : ++$count;
-                            $url = UriFactory::build('{/prefix}admin/module/info?{?}&id=' . $module->getInternalName());
+                            $url = UriFactory::build('admin/module/info?{?}&id=' . $module->getInternalName());
 
                             if (isset($active[$module->getInternalName()])) {
                                 $status = ModuleStatus::ACTIVE;

@@ -23,7 +23,7 @@ $accounts = $this->getData('accounts') ?? [];
 
 $tableView            = $this->getData('tableView');
 $tableView->id        = 'accountsList';
-$tableView->baseUri   = '{/prefix}admin/account/list';
+$tableView->baseUri   = 'admin/account/list';
 $tableView->exportUri = '{/api}admin/account/list/export';
 $tableView->setObjects($accounts);
 
@@ -86,7 +86,7 @@ echo $this->getData('nav')->render(); ?>
                         <?php
                         $c = 0;
                         foreach ($accounts as $key => $value) : ++$c;
-                            $url   = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId());
+                            $url   = UriFactory::build('admin/account/settings?{?}&id=' . $value->getId());
                             $color = 'darkred';
 
                             if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }

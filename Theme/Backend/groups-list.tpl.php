@@ -24,7 +24,7 @@ $memberCount = $this->getData('memberCount') ?? [];
 
 $tableView            = $this->getData('tableView');
 $tableView->id        = 'groupsList';
-$tableView->baseUri   = '{/prefix}admin/group/list';
+$tableView->baseUri   = 'admin/group/list';
 $tableView->exportUri = '{/api}admin/group/list/export';
 $tableView->setObjects($groups);
 
@@ -85,7 +85,7 @@ echo $this->getData('nav')->render(); ?>
                 <tbody>
                     <?php $c = 0;
                         foreach ($groups as $key => $value) : ++$c;
-                            $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId());
+                            $url = UriFactory::build('admin/group/settings?{?}&id=' . $value->getId());
 
                             $color                                                          = 'darkred';
                             if ($value->getStatus() === GroupStatus::ACTIVE) { $color       = 'green'; }

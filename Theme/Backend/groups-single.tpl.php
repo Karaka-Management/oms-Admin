@@ -27,11 +27,11 @@ $accounts    = $group->getAccounts();
 $audits      = $this->getData('auditlogs') ?? [];
 
 $previous = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}'
-    : '{/prefix}admin/group/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
+    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
+    : 'admin/group/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
 $next     = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/group/settings?id={?id}#{\#}'
-    : '{/prefix}admin/group/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
+    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
+    : 'admin/group/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
 
 echo $this->getData('nav')->render(); ?>
 
@@ -118,7 +118,7 @@ echo $this->getData('nav')->render(); ?>
                                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                     <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                             <tbody>
-                                <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; $url = UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $value->getId()); ?>
+                                <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; $url = UriFactory::build('admin/account/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $value->name1; ?> <?= $value->name2; ?></a>
@@ -320,7 +320,7 @@ echo $this->getData('nav')->render(); ?>
                                 <td><?= $this->getHtml('Date', 'Auditor'); ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                            $url         = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
+                            $url         = UriFactory::build('admin/audit/single?{?}&id=' . $audit->getId()); ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->getId(); ?>
                                     <td><?= $this->printHtml($audit->getModule()); ?>

@@ -41,11 +41,11 @@ $audits      = $this->getData('auditlogs') ?? [];
 $l11n        = $account->l11n;
 
 $previous = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/account/settings?id={?id}#{\#}'
-    : '{/prefix}admin/account/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
+    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/account/settings?id={?id}#{\#}'
+    : 'admin/account/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
 $next     = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/account/settings?id={?id}#{\#}'
-    : '{/prefix}admin/account/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
+    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/account/settings?id={?id}#{\#}'
+    : 'admin/account/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
 
 echo $this->getData('nav')->render(); ?>
 
@@ -190,7 +190,7 @@ echo $this->getData('nav')->render(); ?>
                                     $c      = 0;
                                     $groups = $account->getGroups();
                                     foreach ($groups as $key => $value) : ++$c;
-                                        $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId());
+                                        $url = UriFactory::build('admin/group/settings?{?}&id=' . $value->getId());
                                 ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
@@ -827,7 +827,7 @@ echo $this->getData('nav')->render(); ?>
                             <tbody>
                             <?php $count = 0;
                             foreach ($audits as $key => $audit) : ++$count;
-                                $url = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId());
+                                $url = UriFactory::build('admin/audit/single?{?}&id=' . $audit->getId());
                             ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->getId(); ?>

@@ -1048,7 +1048,7 @@ final class ApiController extends Controller
             NotificationLevel::OK,
             'Account',
             'Account successfully created. Link: <a href="'
-                . (UriFactory::build('{/prefix}admin/account/settings?{?}&id=' . $account->getId()))
+                . (UriFactory::build('admin/account/settings?{?}&id=' . $account->getId()))
                 . '">Account</a>',
             $account
         );

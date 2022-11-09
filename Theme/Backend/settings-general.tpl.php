@@ -710,8 +710,8 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                     </label>
                             <tbody>
                             <?php $count          = 0;
-                                $previousSettings = empty($settings) ? '{/prefix}admin/settings/general' : '{/prefix}admin/settings/general?{?}&sid=' . \reset($settings)->getId() . '&ptype=p';
-                                $nextSettings     = empty($settings) ? '{/prefix}admin/settings/general' : '{/prefix}admin/settings/general?{?}&sid=' . \end($settings)->getId() . '&ptype=n';
+                                $previousSettings = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \reset($settings)->getId() . '&ptype=p';
+                                $nextSettings     = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \end($settings)->getId() . '&ptype=n';
 
                                 foreach ($settings as $key => $setting) : ++$count;
                             ?>

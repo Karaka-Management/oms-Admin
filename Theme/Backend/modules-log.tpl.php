@@ -20,8 +20,8 @@ use phpOMS\Uri\UriFactory;
  */
 $audits = $this->getData('auditlogs') ?? [];
 
-$previous = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/module/settings?id={?id}#{\#}' : '{/prefix}admin/module/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
-$next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? '{/prefix}admin/module/settings?id={?id}#{\#}' : '{/prefix}admin/module/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
+$previous = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/module/settings?id={?id}#{\#}' : 'admin/module/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
+$next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/module/settings?id={?id}#{\#}' : 'admin/module/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
 
 echo $this->getData('nav')->render();
 ?>
@@ -54,7 +54,7 @@ echo $this->getData('nav')->render();
                     <td><?= $this->getHtml('Date', 'Auditor'); ?>
                 <tbody>
                 <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                $url         = UriFactory::build('{/prefix}admin/audit/single?{?}&id=' . $audit->getId()); ?>
+                $url         = UriFactory::build('admin/audit/single?{?}&id=' . $audit->getId()); ?>
                     <tr tabindex="0" data-href="<?= $url; ?>">
                         <td><?= $audit->getId(); ?>
                         <td><?= $this->printHtml($audit->getModule()); ?>
