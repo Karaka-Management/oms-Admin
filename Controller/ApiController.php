@@ -69,7 +69,9 @@ use phpOMS\System\SystemType;
 use phpOMS\System\SystemUtils;
 use phpOMS\Uri\HttpUri;
 use phpOMS\Uri\UriFactory;
+use phpOMS\Utils\ArrayUtils;
 use phpOMS\Utils\Parser\Markdown\Markdown;
+use phpOMS\Utils\Parser\Php\ArrayParser;
 use phpOMS\Utils\RnG\StringUtils as StringRng;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Validation\Network\Email as EmailValidator;
@@ -227,7 +229,7 @@ final class ApiController extends Controller
 
         $token     = (string) \random_bytes(64);
         $handler   = $this->setUpServerMailHandler();
-        $resetLink = UriFactory::build('{/backend}reset?user=' . $account->getId() . '&token=' . $token);
+        $resetLink = UriFactory::build('{/lang}/{/app}/{/backend}reset?user=' . $account->getId() . '&token=' . $token);
 
         $mail = new Email();
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Karaka');
@@ -336,7 +338,7 @@ final class ApiController extends Controller
         );
 
         $handler   = $this->setUpServerMailHandler();
-        $loginLink = UriFactory::build('{/backend}');
+        $loginLink = UriFactory::build('{/lang}/{/app}/{/backend}');
 
         $mail = new Email();
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Karaka');
@@ -415,6 +417,34 @@ final class ApiController extends Controller
                 ),
             ]
         );
+    }
+
+    /**
+     * Set app config
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiAppConfigSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        $dataSettings = $request->getDataJson('settings');
+
+        $config = include __DIR__ . '/../../../config.php';
+
+        foreach ($dataSettings as $data) {
+            $config = ArrayUtils::setArray($data['path'], $config, $data['value'], '/', true);
+        }
+
+        \file_put_contents(__DIR__ . '/../../../config.php', "<?php\ndeclare(strict_types=1);\nreturn " . ArrayParser::serializeArray($config) . ';');
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Config', 'Config successfully modified', $dataSettings);
     }
 
     /**
@@ -1048,7 +1078,7 @@ final class ApiController extends Controller
             NotificationLevel::OK,
             'Account',
             'Account successfully created. Link: <a href="'
-                . (UriFactory::build('admin/account/settings?{?}&id=' . $account->getId()))
+                . (UriFactory::build('{/lang}/{/app}/admin/account/settings?{?}&id=' . $account->getId()))
                 . '">Account</a>',
             $account
         );

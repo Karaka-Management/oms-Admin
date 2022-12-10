@@ -86,7 +86,7 @@ echo $this->getData('nav')->render(); ?>
                         <?php
                         $c = 0;
                         foreach ($accounts as $key => $value) : ++$c;
-                            $url   = UriFactory::build('admin/account/settings?{?}&id=' . $value->getId());
+                            $url   = UriFactory::build('{/lang}/{/app}/admin/account/settings?{?}&id=' . $value->getId());
                             $color = 'darkred';
 
                             if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }

@@ -75,7 +75,7 @@ $tableView->setObjects($modules);
                 <tbody>
                     <?php $count = 0;
                         foreach ($modules as $key => $module) : ++$count;
-                            $url = UriFactory::build('admin/module/info?{?}&id=' . $module->getInternalName());
+                            $url = UriFactory::build('{/lang}/{/app}/admin/module/info?{?}&id=' . $module->getInternalName());
 
                             if (isset($active[$module->getInternalName()])) {
                                 $status = ModuleStatus::ACTIVE;

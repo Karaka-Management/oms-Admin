@@ -190,7 +190,7 @@ echo $this->getData('nav')->render(); ?>
                                     $c      = 0;
                                     $groups = $account->getGroups();
                                     foreach ($groups as $key => $value) : ++$c;
-                                        $url = UriFactory::build('admin/group/settings?{?}&id=' . $value->getId());
+                                        $url = UriFactory::build('{/lang}/{/app}/admin/group/settings?{?}&id=' . $value->getId());
                                 ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
@@ -827,7 +827,7 @@ echo $this->getData('nav')->render(); ?>
                             <tbody>
                             <?php $count = 0;
                             foreach ($audits as $key => $audit) : ++$count;
-                                $url = UriFactory::build('admin/audit/single?{?}&id=' . $audit->getId());
+                                $url = UriFactory::build('{/lang}/{/app}/admin/audit/single?{?}&id=' . $audit->getId());
                             ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->getId(); ?>
