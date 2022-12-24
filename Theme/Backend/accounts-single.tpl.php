@@ -831,11 +831,11 @@ echo $this->getData('nav')->render(); ?>
                             ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->getId(); ?>
-                                    <td><?= $this->printHtml($audit->getModule()); ?>
+                                    <td><?= $this->printHtml($audit->module); ?>
                                     <td><?= $audit->getType(); ?>
-                                    <td><?= $this->printHtml($audit->getTrigger()); ?>
+                                    <td><?= $this->printHtml($audit->trigger); ?>
                                     <td><?= $this->printHtml($audit->createdBy->login); ?>
-                                    <td><?= $this->printHtml($audit->getRef()); ?>
+                                    <td><?= $this->printHtml($audit->ref); ?>
                                     <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>

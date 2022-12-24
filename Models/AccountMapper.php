@@ -127,8 +127,14 @@ class AccountMapper extends DataMapperFactory
      */
     public static function getWithPermissions(int $id) : Account
     {
-        $account = self::get()->with('groups')->with('groups/permissions')->with('l11n')->where('id', $id)->execute();
-        $groups  =  \array_keys($account->getGroups());
+        $account = self::get()
+            ->with('groups')
+            ->with('groups/permissions')
+            ->with('l11n')
+            ->where('id', $id)
+            ->execute();
+
+        $groups = \array_keys($account->getGroups());
 
         /** @var \Modules\Admin\Models\GroupPermission[] $groupPermissions */
         $groupPermissions = empty($groups)
@@ -139,17 +145,17 @@ class AccountMapper extends DataMapperFactory
                 ->execute();
 
         foreach ($groupPermissions as $permission) {
-            $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
+            $account->addPermission($permission);
         }
 
-        /** @var \Modules\Admin\Models\AccountPermission[] $accountPermission */
+        /** @var \Modules\Admin\Models\AccountPermission[] $accountPermissions */
         $accountPermissions = AccountPermissionMapper::getAll()
             ->where('account', $id)
             ->where('element', null)
             ->execute();
 
         foreach ($accountPermissions as $permission) {
-            $account->addPermissions(\is_array($permission) ? $permission : [$permission]);
+            $account->addPermission($permission);
         }
 
         return $account;

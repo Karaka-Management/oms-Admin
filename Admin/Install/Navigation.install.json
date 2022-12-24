@@ -114,7 +114,7 @@
                 "uri": "{/lang}/{/app}/admin/module/list",
                 "target": "self",
                 "icon": null,
-                "order": 5,
+                "order": 6,
                 "from": "Admin",
                 "permission": { "permission": 2, "category": null, "element": null },
                 "parent": 1000101001,

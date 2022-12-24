@@ -342,7 +342,7 @@ final class ApiController extends Controller
 
         $mail = new Email();
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Karaka');
-        $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
+        $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
         $mail->subject = 'Karaka: Password reset';
         $mail->body    = '';
         $mail->msgHTML('Your new password: <a href="' . $loginLink . '">' . $pass . '</a>'

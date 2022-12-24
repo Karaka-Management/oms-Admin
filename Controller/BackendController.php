@@ -218,13 +218,9 @@ final class BackendController extends Controller
         $view->addData('account', $account);
 
         /** @var \Modules\Admin\Models\AccountPermission[] $permissions */
-        $permissions = AccountPermissionMapper::getAll()->where('account', (int) $request->getData('id'))->execute();
-
-        if (!isset($permissions) || $permissions instanceof NullAccountPermission) {
-            $permissions = [];
-        } elseif (!\is_array($permissions)) {
-            $permissions = [$permissions];
-        }
+        $permissions = AccountPermissionMapper::getAll()
+            ->where('account', (int) $request->getData('id'))
+            ->execute();
 
         $view->addData('permissions', $permissions);
 
@@ -396,14 +392,10 @@ final class BackendController extends Controller
             GroupMapper::get()->with('accounts')->where('id', (int) $request->getData('id'))->execute()
         );
 
-        /** @var null|\Modules\Admin\Models\GroupPermission[] $permissions */
-        $permissions = GroupPermissionMapper::getAll()->where('group', (int) $request->getData('id'))->execute();
-
-        if ($permissions === null || $permissions instanceof NullGroupPermission) {
-            $permissions = [];
-        } elseif (!\is_array($permissions)) {
-            $permissions = [$permissions];
-        }
+        /** @var \Modules\Admin\Models\GroupPermission[] $permissions */
+        $permissions = GroupPermissionMapper::getAll()
+            ->where('group', (int) $request->getData('id'))
+            ->execute();
 
         $view->addData('permissions', $permissions);
 
@@ -712,16 +704,17 @@ final class BackendController extends Controller
 
         $id = $request->getData('id') ?? '';
 
-        /** @var \Model\Setting[] $settings */
+        /** @var null|\Model\NullSetting|\Model\Setting[] $settings */
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
         if (!($settings instanceof NullSetting)) {
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
         }
 
         if ($request->getData('id') === 'Admin') {
-            $view->setTemplate('/Modules/' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings');
+            $view->setTemplate('/Modules/' . $request->getData('id') . '/Admin/Settings/Theme/Backend/settings');
         } elseif (\is_file(__DIR__ . '/../../' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings.tpl.php')) {
-            return $this->app->moduleManager->get($request->getData('id'))->viewModuleSettings($request, $response, $data);
+            return $this->app->moduleManager->get($request->getData('id') ?? '')
+                ->viewModuleSettings($request, $response, $data);
         } else {
             $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
         }
