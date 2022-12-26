@@ -717,6 +717,7 @@ final class BackendController extends Controller
             $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
         }
 
+        /** @var \Model\Setting[] $generalSettings */
         $generalSettings = $this->app->appSettings->get(
             names: [
                 SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_ORGANIZATION,

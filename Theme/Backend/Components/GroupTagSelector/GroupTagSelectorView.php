@@ -87,8 +87,10 @@ class GroupTagSelectorView extends View
      */
     public function render(mixed ...$data) : string
     {
+        /** @var array{0:string, 1:null|bool} $data */
         $this->id         = $data[0];
         $this->isRequired = $data[1] ?? false;
+
         $this->getData('group-selector-popup')->setId($this->id);
 
         return parent::render();

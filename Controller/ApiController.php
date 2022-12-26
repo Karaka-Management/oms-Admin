@@ -158,6 +158,7 @@ final class ApiController extends Controller
      **/
     public function setUpServerMailHandler() : MailHandler
     {
+        /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
             names: [
                 SettingsEnum::MAIL_SERVER_ADDR,
@@ -170,16 +171,16 @@ final class ApiController extends Controller
         );
 
         $handler = new MailHandler();
-        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]?->content ?? SubmitType::MAIL);
-        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS . '::' . self::NAME]?->content ?? false);
+        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]->content ?? SubmitType::MAIL);
+        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS . '::' . self::NAME]->content ?? false);
 
-        if ((int) ($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]?->content ?? SubmitType::MAIL) === SubmitType::SMTP) {
+        if ((int) ($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]->content ?? SubmitType::MAIL) === SubmitType::SMTP) {
             $smtp          = new Smtp();
             $handler->smtp = $smtp;
         }
 
-        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER . '::' . self::NAME]?->content ?? '';
-        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS . '::' . self::NAME]?->content ?? '';
+        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER . '::' . self::NAME]->content ?? '';
+        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS . '::' . self::NAME]->content ?? '';
 
         return $handler;
     }
@@ -199,13 +200,17 @@ final class ApiController extends Controller
      */
     public function apiForgot(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        $account   = AccountMapper::get()->where('login', (string) $request->getData('login'))->execute();
+        /** @var \Modules\Admin\Models\Account $account */
+        $account = AccountMapper::get()->where('login', (string) $request->getData('login'))->execute();
+
+        /** @var \Model\Setting[] $forgotten */
         $forgotten = $this->app->appSettings->get(
             names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_COUNT],
             module: self::NAME,
             account: $account->getId()
         );
 
+        /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
             names: [
                 SettingsEnum::MAIL_SERVER_ADDR,
@@ -217,7 +222,7 @@ final class ApiController extends Controller
             module: self::NAME
         );
 
-        if ((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT] > 3) {
+        if ((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT]->content > 3) {
             $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::ERROR,
@@ -232,8 +237,8 @@ final class ApiController extends Controller
         $resetLink = UriFactory::build('{/lang}/{/app}/{/backend}reset?user=' . $account->getId() . '&token=' . $token);
 
         $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Karaka');
-        $mail->addTo($account->email, \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Karaka');
+        $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
         $mail->subject = 'Karaka: Forgot Password';
         $mail->body    = '';
         $mail->msgHTML('Please reset your password at: <a href="' . $resetLink . '">' . $resetLink . '</a>');
@@ -249,7 +254,7 @@ final class ApiController extends Controller
                 'name'    => SettingsEnum::LOGIN_FORGOTTEN_COUNT,
                 'module'  => self::NAME,
                 'account' => $account->getId(),
-                'content' => (string) (((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT]) + 1),
+                'content' => (string) (((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT]->content) + 1),
             ],
             [
                 'name'    => SettingsEnum::LOGIN_FORGOTTEN_TOKEN,
@@ -259,13 +264,13 @@ final class ApiController extends Controller
             ],
         ], true);
 
-        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '')
-            && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')
+        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT]->content)
+            && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY]->content)
         ) {
             $mail->sign(
-                $emailSettings[SettingsEnum::MAIL_SERVER_CERT],
-                $emailSettings[SettingsEnum::MAIL_SERVER_KEY],
-                $emailSettings[SettingsEnum::MAIL_SERVER_KEYPASS]
+                $emailSettings[SettingsEnum::MAIL_SERVER_CERT]->content,
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEY]->content,
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEYPASS]->content
             );
         }
 
@@ -295,14 +300,15 @@ final class ApiController extends Controller
      */
     public function apiResetPassword(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        /** @var \Model\Setting[] $forgotten */
         $forgotten = $this->app->appSettings->get(
             names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_TOKEN],
             module: self::NAME,
             account: (int) $request->getData('user')
         );
 
-        $date  = new \DateTime($forgotten[SettingsEnum::LOGIN_FORGOTTEN_DATE] ?? '1970-01-01');
-        $token = $forgotten[SettingsEnum::LOGIN_FORGOTTEN_TOKEN] ?? '';
+        $date  = new \DateTime($forgotten[SettingsEnum::LOGIN_FORGOTTEN_DATE]->content);
+        $token = $forgotten[SettingsEnum::LOGIN_FORGOTTEN_TOKEN]->content;
 
         if ($date->getTimestamp() < \time() - 60 * 10
             || empty($request->getData('token'))
@@ -326,6 +332,7 @@ final class ApiController extends Controller
 
         AccountMapper::update()->execute($account);
 
+        /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
             names: [
                 SettingsEnum::MAIL_SERVER_ADDR,
@@ -341,7 +348,7 @@ final class ApiController extends Controller
         $loginLink = UriFactory::build('{/lang}/{/app}/{/backend}');
 
         $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR], 'Karaka');
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Karaka');
         $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
         $mail->subject = 'Karaka: Password reset';
         $mail->body    = '';
@@ -364,13 +371,13 @@ final class ApiController extends Controller
             ],
         ], true);
 
-        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT] ?? '')
-            && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY] ?? '')
+        if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT]->content)
+            && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY]->content)
         ) {
             $mail->sign(
-                $emailSettings[SettingsEnum::MAIL_SERVER_CERT],
-                $emailSettings[SettingsEnum::MAIL_SERVER_KEY],
-                $emailSettings[SettingsEnum::MAIL_SERVER_KEYPASS]
+                $emailSettings[SettingsEnum::MAIL_SERVER_CERT]->content,
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEY]->content,
+                $emailSettings[SettingsEnum::MAIL_SERVER_KEYPASS]->content
             );
         }
 
@@ -532,32 +539,31 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var Localization $l11n */
-        $l11n = AccountMapper::get()
+        /** @var \Modules\Admin\Models\Account $account */
+        $account = AccountMapper::get()
             ->with('l11n')
             ->where('id', $accountId)
-            ->execute()
-            ->l11n;
+            ->execute();
 
         if (($request->getData('localization_load') ?? '-1') !== '-1') {
             $locale = \explode('_', $request->getData('localization_load'));
-            $l11n->loadFromLanguage($locale[0], $locale[1]);
+            $account->l11n->loadFromLanguage($locale[0], $locale[1]);
 
-            LocalizationMapper::update()->execute($l11n);
+            LocalizationMapper::update()->execute($account->l11n);
 
-            $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $l11n);
+            $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $account->l11n);
 
             return;
         }
 
         $dataSettings = $request->getLike('settings_(.*)');
 
-        $l11n->setCountry($dataSettings['settings_country']);
-        $l11n->setLanguage($dataSettings['settings_language']);
-        $l11n->setTemperature($dataSettings['settings_temperature']);
+        $account->l11n->setCountry($dataSettings['settings_country']);
+        $account->l11n->setLanguage($dataSettings['settings_language']);
+        $account->l11n->setTemperature($dataSettings['settings_temperature']);
 
-        $l11n->setTimezone($dataSettings['settings_timezone']);
-        $l11n->setDatetime(
+        $account->l11n->setTimezone($dataSettings['settings_timezone']);
+        $account->l11n->setDatetime(
             [
                 'very_short' => $dataSettings['settings_timeformat_vs'],
                 'short'      => $dataSettings['settings_timeformat_s'],
@@ -567,13 +573,13 @@ final class ApiController extends Controller
             ]
         );
 
-        $l11n->setCurrency($dataSettings['settings_currency']);
-        $l11n->setCurrencyFormat($dataSettings['settings_currencyformat']);
+        $account->l11n->setCurrency($dataSettings['settings_currency']);
+        $account->l11n->setCurrencyFormat($dataSettings['settings_currencyformat']);
 
-        $l11n->setDecimal($dataSettings['settings_decimal']);
-        $l11n->setThousands($dataSettings['settings_thousands']);
+        $account->l11n->setDecimal($dataSettings['settings_decimal']);
+        $account->l11n->setThousands($dataSettings['settings_thousands']);
 
-        $l11n->setPrecision(
+        $account->l11n->setPrecision(
             [
                 'very_short' => $dataSettings['settings_precision_vs'],
                 'short'      => $dataSettings['settings_precision_s'],
@@ -583,7 +589,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $l11n->setWeight(
+        $account->l11n->setWeight(
             [
                 'very_light' => $dataSettings['settings_weight_vl'],
                 'light'      => $dataSettings['settings_weight_l'],
@@ -593,7 +599,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $l11n->setSpeed(
+        $account->l11n->setSpeed(
             [
                 'very_slow' => $dataSettings['settings_speed_vs'],
                 'slow'      => $dataSettings['settings_speed_s'],
@@ -604,7 +610,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $l11n->setLength(
+        $account->l11n->setLength(
             [
                 'very_short' => $dataSettings['settings_length_vs'],
                 'short'      => $dataSettings['settings_length_s'],
@@ -615,7 +621,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $l11n->setArea(
+        $account->l11n->setArea(
             [
                 'very_small' => $dataSettings['settings_area_vs'],
                 'small'      => $dataSettings['settings_area_s'],
@@ -625,7 +631,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $l11n->setVolume(
+        $account->l11n->setVolume(
             [
                 'very_small' => $dataSettings['settings_volume_vs'],
                 'small'      => $dataSettings['settings_volume_s'],
@@ -638,9 +644,9 @@ final class ApiController extends Controller
             ]
         );
 
-        LocalizationMapper::update()->execute($l11n);
+        LocalizationMapper::update()->execute($account->l11n);
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $l11n);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $account->l11n);
     }
 
     /**
@@ -1000,6 +1006,7 @@ final class ApiController extends Controller
         $data   = [];
 
         foreach ($accounts as $account) {
+            /** @var array $temp */
             $temp                = $account->jsonSerialize();
             $temp['type_prefix'] = 'a';
             $temp['type_name']   = 'Account';
@@ -1008,6 +1015,7 @@ final class ApiController extends Controller
         }
 
         foreach ($groups as $group) {
+            /** @var array $temp */
             $temp                = $group->jsonSerialize();
             $temp['name']        = [$temp['name']];
             $temp['email']       = '---';
@@ -1263,7 +1271,7 @@ final class ApiController extends Controller
      */
     public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        $module = $request->getData('module');
+        $module = (string) ($request->getData('module') ?? '');
         $status = (int) $request->getData('status');
 
         if (empty($module) || empty($status)) {
@@ -2032,7 +2040,9 @@ final class ApiController extends Controller
      */
     public function cliEventCall(mixed ...$data) : void
     {
-        $cliEventHandling = (bool) ($this->app->appSettings->get(null, SettingsEnum::CLI_ACTIVE)->content ?? false);
+        /** @var \Model\Setting $setting */
+        $setting          = $this->app->appSettings->get(null, SettingsEnum::CLI_ACTIVE);
+        $cliEventHandling = (bool) ($setting->content ?? false);
 
         if ($cliEventHandling) {
             $count = \count($data);

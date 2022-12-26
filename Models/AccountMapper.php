@@ -127,6 +127,7 @@ class AccountMapper extends DataMapperFactory
      */
     public static function getWithPermissions(int $id) : Account
     {
+        /** @var \Modules\Admin\Models\Account $account */
         $account = self::get()
             ->with('groups')
             ->with('groups/permissions')

@@ -78,7 +78,9 @@ class GroupTagSelectorPopupView extends View
      */
     public function render(mixed ...$data) : string
     {
+        /** @var array{0:null|string} $data */
         $this->id = $data[0] ?? $this->id;
+
         return parent::render();
     }
 }
