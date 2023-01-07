@@ -520,6 +520,7 @@
             "app_name": {
                 "name": "app_name",
                 "type": "VARCHAR(50)",
+                "unique": true,
                 "null": false
             },
             "app_theme": {
@@ -529,6 +530,11 @@
             },
             "app_status": {
                 "name": "app_status",
+                "type": "TINYINT",
+                "null": false
+            },
+            "app_type": {
+                "name": "app_type",
                 "type": "TINYINT",
                 "null": false
             }

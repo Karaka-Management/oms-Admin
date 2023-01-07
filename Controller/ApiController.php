@@ -33,6 +33,9 @@ use Modules\Admin\Models\SettingsEnum;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\UploadFile;
+use Modules\Admin\Models\App;
+use phpOMS\Application\ApplicationType;
+use Modules\Admin\Models\AppMapper;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
@@ -675,6 +678,71 @@ final class ApiController extends Controller
         }
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Design', 'Design successfully updated', []);
+    }
+
+    /**
+     * Api method to install a application
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiApplicationCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateApplicationCreate($request))) {
+            $response->set('application_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $app = $this->createApplicationFromRequest($request);
+
+        $this->createModel($request->header->account, $app, AppMapper::class, 'application', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Application', 'Application successfully created', $app);
+    }
+
+    /**
+     * Validate app create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateApplicationCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['name'] = empty($request->getData('name')))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to create task from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return App Returns the created application from the request
+     *
+     * @since 1.0.0
+     */
+    private function createApplicationFromRequest(RequestAbstract $request) : App
+    {
+        $app       = new App();
+        $app->name = (string) ($request->getData('name') ?? '');
+        $app->type = (int) ($request->getData('type') ?? ApplicationType::WEB);
+
+        return $app;
     }
 
     /**
@@ -1339,8 +1407,8 @@ final class ApiController extends Controller
                     $iRequest                  = new HttpRequest(new HttpUri(''));
                     $iRequest->header->account = 1;
                     $iRequest->setData('status', ModuleStatusUpdateType::INSTALL);
-
                     $iRequest->setData('module', $key);
+
                     $this->apiModuleStatusUpdate($iRequest, $iResponse);
                 }
 

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\Admin\Models;
 
 use phpOMS\Application\ApplicationStatus;
+use phpOMS\Application\ApplicationType;
 
 /**
  * App model.
@@ -57,6 +58,14 @@ class App
      * @since 1.0.0
      */
     public int $status = ApplicationStatus::NORMAL;
+
+    /**
+     * Status
+     *
+     * @var int
+     * @since 1.0.0
+     */
+    public int $type = ApplicationType::WEB;
 
     /**
      * Get id
