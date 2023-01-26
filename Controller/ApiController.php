@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
+use Model\Setting;
+use Model\SettingMapper;
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountCredentialMapper;
 use Modules\Admin\Models\AccountMapper;
@@ -36,6 +38,9 @@ use Modules\Media\Models\UploadFile;
 use Modules\Admin\Models\App;
 use phpOMS\Application\ApplicationType;
 use Modules\Admin\Models\AppMapper;
+use Modules\Admin\Models\DataChange;
+use Modules\Admin\Models\NullDataChange;
+use Modules\Admin\Models\DataChangeMapper;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
@@ -420,6 +425,7 @@ final class ApiController extends Controller
                 'response' => $this->app->appSettings->get(
                     $id !== null ? (int) $id : $id,
                     $request->getData('name') ?? '',
+                    $request->getData('unit') ?? null,
                     $request->getData('app') ?? null,
                     $request->getData('module') ?? null,
                     $group !== null ? (int) $group : $group,
@@ -478,34 +484,131 @@ final class ApiController extends Controller
             $id      = isset($data['id']) ? (int) $data['id'] : null;
             $name    = $data['name'] ?? null;
             $content = $data['content'] ?? null;
+            $unit     = $data['unit'] ?? null;
             $app     = $data['app'] ?? null;
             $module  = $data['module'] ?? null;
             $group   = isset($data['group']) ? (int) $data['group'] : null;
             $account = isset($data['account']) ? (int) $data['account'] : null;
 
-            $this->updateModel(
-                $request->header->account,
-                $this->app->appSettings->get($id, $name, $app, $module, $group, $account),
-                $data,
-                function () use ($id, $name, $content, $app, $module, $group, $account) : void {
-                    $this->app->appSettings->set([
-                        [
-                            'id'      => $id,
-                            'name'    => $name,
-                            'content' => $content,
-                            'app'     => $app,
-                            'module'  => $module,
-                            'group'   => $group,
-                            'account' => $account,
-                        ],
-                    ], true);
-                },
-                'settings',
-                $request->getOrigin()
-            );
+            $old = $this->app->appSettings->get($id, $name, $unit, $app, $module, $group, $account);
+            $new = clone $old;
+
+            $new->name    = $name ?? $new->name;
+            $new->content = $content ?? $new->content;
+            $new->unit     = $unit ?? $new->unit;
+            $new->app     = $app ?? $new->app;
+            $new->module  = $module ?? $new->module;
+            $new->group   = $group ?? $new->group;
+            $new->account = $account ?? $new->account;
+
+            $this->app->appSettings->set([
+                [
+                    'id'      => $new->id,
+                    'name'    => $new->name,
+                    'content' => $new->content,
+                    'unit'     => $new->unit,
+                    'app'     => $new->app,
+                    'module'  => $new->module,
+                    'group'   => $new->group,
+                    'account' => $new->account
+                ]
+            ], false);
+
+            $this->updateModel($request->header->account, $old, $new, SettingMapper::class, 'settings',$request->getOrigin());
         }
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Settings', 'Settings successfully modified', $dataSettings);
+    }
+
+    /**
+     * Api method for modifying account password
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiSettingsAccountPasswordSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        // has required data
+        if (!empty($val = $this->validatePasswordUpdate($request))) {
+            $response->set('password_update', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $requestAccount = $request->header->account;
+
+        // request account is valid
+        if ($requestAccount <= 0) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        $account = AccountMapper::get()
+            ->where('id', $requestAccount)
+            ->execute();
+
+        // test old password is correct
+        if (AccountMapper::login($account->login, (string) $request->getData('oldpass')) !== $requestAccount) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        // test password repetition
+        if (((string) $request->getData('newpass')) !== ((string) $request->getData('reppass'))) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        // test password complexity
+        $complexity = $this->app->appSettings->get(names: [SettingsEnum::PASSWORD_PATTERN], module: 'Admin');
+        if (\preg_match($complexity->content, (string) $request->getData('newpass')) !== 1) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        $account->generatePassword((string) $request->getData('newpass'));
+
+        AccountMapper::update()->execute($account);
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Password', 'Password successfully modified', $account);
+    }
+
+    /**
+     * Validate password update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validatePasswordUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['oldpass'] = empty($request->getData('oldpass')))
+            || ($val['newpass'] = empty($request->getData('newpass')))
+            || ($val['reppass'] = empty($request->getData('reppass')))
+        ) {
+            return $val;
+        }
+
+        return [];
     }
 
     /**
@@ -529,7 +632,7 @@ final class ApiController extends Controller
         if ($requestAccount !== $accountId
             && !$this->app->accountManager->get($accountId)->hasPermission(
                 PermissionType::MODIFY,
-                $this->app->orgId,
+                $this->app->unitId,
                 $this->app->appName,
                 self::NAME,
                 PermissionCategory::ACCOUNT_SETTINGS,
@@ -703,9 +806,31 @@ final class ApiController extends Controller
         }
 
         $app = $this->createApplicationFromRequest($request);
-
         $this->createModel($request->header->account, $app, AppMapper::class, 'application', $request->getOrigin());
+
+        $this->createDefaultAppSettings($app, $request);
+        /** @var \Model\Setting $setting */
+        $setting = $this->app->appSettings->get(null, SettingsEnum::GROUP_GENERATE_AUTOMATICALLY_APP);
+        if ($setting->content === '1') {
+            $newRequest                  = new HttpRequest();
+            $newRequest->header->account = $request->header->account;
+            $newRequest->setData('name', 'app:' . \strtolower($app->name));
+            $newRequest->setData('status', GroupStatus::ACTIVE);
+            $this->apiGroupCreate($newRequest, $response, $data);
+        }
+
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Application', 'Application successfully created', $app);
+    }
+
+    private function createDefaultAppSettings(App $app, RequestAbstract $request) : void
+    {
+        $settings   = [];
+        $settings[] = new Setting(0, SettingsEnum::REGISTRATION_ALLOWED, '0', '\\d+', app: $app->getId(), module: 'Admin');
+        $settings[] = new Setting(0, SettingsEnum::APP_DEFAULT_GROUPS, '[]', app: $app->getId(), module: 'Admin');
+
+        foreach ($settings as $setting) {
+            $this->createModel($request->header->account, $setting, SettingMapper::class, 'setting', $request->getOrigin());
+        }
     }
 
     /**
@@ -1148,6 +1273,37 @@ final class ApiController extends Controller
         $this->createProfileForAccount($account, $request);
         $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
 
+        // find default groups and create them
+        $defaultGroups   = [];
+        $defaultGroupIds = [];
+
+        if ($request->hasData('app')) {
+            $defaultGroupSettings = $this->app->appSettings->get(
+                names: SettingsEnum::APP_DEFAULT_GROUPS,
+                app:  (int) $request->getData('app'),
+                module: 'Admin'
+            );
+            $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
+        }
+
+
+        if ($request->hasData('unit')) {
+            $defaultGroupSettings = $this->app->appSettings->get(
+                names: SettingsEnum::UNIT_DEFAULT_GROUPS,
+                unit: (int) $request->getData('unit'),
+                module: 'Admin'
+            );
+            $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
+        }
+
+        foreach ($defaultGroups as $group) {
+            $defaultGroupIds[] = $group->getId();
+        }
+
+        if (!empty($defaultGroupIds)) {
+            $this->createModelRelation($account->getId(), $account->getId(), $defaultGroupIds, AccountMapper::class, 'groups', 'account', $request->getOrigin());
+        }
+
         $this->fillJsonResponse(
             $request,
             $response,
@@ -1158,6 +1314,240 @@ final class ApiController extends Controller
                 . '">Account</a>',
             $account
         );
+    }
+
+    public function apiAccountRegister(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateRegistration($request))) {
+            $response->set('account_registration', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $allowed = $this->app->appSettings->get(
+            names: [SettingsEnum::REGISTRATION_ALLOWED],
+            app: (int) $request->getData('app'),
+            module: 'Admin'
+        );
+
+        if ($allowed->content !== '1') {
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'Registration not allowed', []);
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $complexity = $this->app->appSettings->get(names: [SettingsEnum::PASSWORD_PATTERN], module: 'Admin');
+        if ($request->hasData('password')
+            && \preg_match($complexity->content, (string) $request->getData('password')) !== 1
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'Invalid password format', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        // Check if account already exists
+        /** @var Account $emailAccount */
+        $emailAccount = AccountMapper::get()->where('email', (string) $request->getData('email'))->execute();
+
+        /** @var Account $loginAccount */
+        $loginAccount = AccountMapper::get()->where('login', (string) ($request->getData('login') ?? $request->getData('email')))->execute();
+
+        /** @var null|Account $account */
+        $account = null;
+
+        // email already in use
+        if (!($emailAccount instanceof NullAccount)
+            && AccountMapper::login($emailAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Registration', 'Email already in use, use your login details to login or activate your account also for this service.', []);
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        } elseif (!($emailAccount instanceof NullAccount)) {
+            $account = $emailAccount;
+        }
+
+        // login already in use by different email
+        if ($account === null
+            && !($loginAccount instanceof NullAccount)
+            && $loginAccount->getEmail() !== $request->getData('email')
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'Login already in use with a different email', []);
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        } elseif ($account === null
+            && !($loginAccount instanceof NullAccount)
+            && AccountMapper::login($loginAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
+        ) {
+            $account = $loginAccount;
+        }
+
+        $defaultGroups   = [];
+        $defaultGroupIds = [];
+
+        $defaultGroupSettings = $this->app->appSettings->get(
+            names: SettingsEnum::APP_DEFAULT_GROUPS,
+            app:  (int) $request->getData('app'),
+            module: 'Admin'
+        );
+        $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
+
+        $defaultGroupSettings = $this->app->appSettings->get(
+            names: SettingsEnum::UNIT_DEFAULT_GROUPS,
+            unit: (int) $request->getData('unit'),
+             module: 'Admin'
+        );
+        $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
+
+        foreach ($defaultGroups as $group) {
+            $defaultGroupIds[] = $group->getId();
+        }
+
+        // Already registered
+        if ($account !== null) {
+            $account = AccountMapper::get()
+                ->with('groups')
+                ->where('id', $account->getId())
+                ->execute();
+
+            foreach ($defaultGroupIds as $index => $id) {
+                if ($account->hasGroup($id)) {
+                    unset($defaultGroupIds[$index]);
+                }
+            }
+
+            if (empty($defaultGroupIds)
+                && $account->getStatus() === AccountStatus::ACTIVE
+            ) {
+                $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'You are already registered, use your login data.', []);
+                $response->header->status = RequestStatusCode::R_403;
+
+                return;
+            } elseif (empty($defaultGroupIds)
+                && $account->getStatus() === AccountStatus::INACTIVE
+            ) {
+                $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'You are already registered, please activate your account through the email we sent you.', []);
+                $response->header->status = RequestStatusCode::R_403;
+
+                return;
+            }
+
+            // Create missing account / group relationships
+            $this->createModelRelation($account->getId(), $account->getId(), $defaultGroupIds, AccountMapper::class, 'groups', 'registration', $request->getOrigin());
+        } else {
+            $request->setData('status', AccountStatus::INACTIVE);
+            $request->setData('type', AccountType::USER);
+            $request->setData('name1', !$request->hasData('name1')
+                ? \explode('@', $request->getData('email'))[0]
+                : $request->getData('name1')
+            );
+            $request->setData('login', $request->getData('login') ?? $request->getData('email'));
+
+            $this->apiAccountCreate($request, $response, $data);
+            $account = $response->get($request->uri->__toString())['response'];
+
+            // Create confirmation pending entry
+            $dataChange = new DataChange();
+            $dataChange->type = 'account';
+            $dataChange->createdBy = $account->getId();
+
+            $dataChange->data = \json_encode([
+                'status' => AccountStatus::ACTIVE
+            ]);
+
+            $tries = 0;
+            do {
+                $dataChange->reHash();
+                $this->createModel($account->getId(), $dataChange, DataChangeMapper::class, 'datachange', $request->getOrigin());
+
+                ++$tries;
+            } while($dataChange->getId() === 0 && $tries < 5);
+        }
+
+        // Create confirmation email
+        // @todo: send email for activation
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Registration', 'We have sent you an email to confirm your registration.', $account);
+    }
+
+    /**
+     * Method to validate account registration from request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateRegistration(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['email'] = !empty($request->getData('email'))
+                && !EmailValidator::isValid((string) $request->getData('email')))
+            || ($val['unit'] = empty($request->getData('unit')))
+            || ($val['app'] = empty($request->getData('app')))
+            || ($val['password'] = empty($request->getData('password')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    // @todo: maybe move to job/workflow??? This feels very much like a job/event especially if we make the 'type' an event-trigger
+    public function apiDataChange(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateDataChange($request))) {
+            $response->set('data_change', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        /** @var DataChange $dataChange */
+        $dataChange = DataChangeMapper::get()->where('hash', (string) $request->getData('hash'))->execute();
+        if ($dataChange instanceof NullDataChange) {
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        switch ($dataChange->type) {
+            case 'account':
+                $old = AccountMapper::get()->where('id', $dataChange->createdBy)->execute();
+                $new = clone $old;
+
+                $data = \json_decode($dataChange->data, true);
+                $new->setStatus((int) $data['status']);
+
+                $this->updateModel($dataChange->createdBy, $old, $new, AccountMapper::class, 'datachange', $request->getOrigin());
+                $this->deleteModel($dataChange->createdBy, $dataChange, DataChangeMapper::class, 'datachange', $request->getOrigin());
+
+                break;
+        }
+    }
+
+    /**
+     * Method to validate account registration from request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateDataChange(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['hash'] = empty($request->getData('hash')))) {
+            return $val;
+        }
+
+        return [];
     }
 
     /**
@@ -1285,11 +1675,18 @@ final class ApiController extends Controller
     public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account $old */
-        $old = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = AccountMapper::get()
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
         $new = $this->updateAccountFromRequest($request, clone $old);
         $this->updateModel($request->header->account, $old, $new, AccountMapper::class, 'account', $request->getOrigin());
 
-        if (\Modules\Profile\Models\ProfileMapper::get()->where('account', $new->getId())->execute() instanceof \Modules\Profile\Models\NullProfile) {
+        $profile = \Modules\Profile\Models\ProfileMapper::get()
+            ->where('account', $new->getId())
+            ->execute();
+
+        if ($profile instanceof \Modules\Profile\Models\NullProfile) {
             $this->createProfileForAccount($new, $request);
         }
 
@@ -1418,6 +1815,7 @@ final class ApiController extends Controller
                 $moduleObj->theme   = 'Default';
                 $moduleObj->path    = $moduleInfo->getDirectory();
                 $moduleObj->version = $moduleInfo->getVersion();
+                $moduleObj->name    = $moduleInfo->getExternalName();
 
                 $moduleObj->setStatus(ModuleStatus::AVAILABLE);
 
@@ -1725,7 +2123,7 @@ final class ApiController extends Controller
         $permission->setUnit(empty($request->getData('permissionunit')) ? null : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? null : (string) $request->getData('permissionapp'));
         $permission->setModule(empty($request->getData('permissionmodule')) ? null : (string) $request->getData('permissionmodule'));
-        $permission->setCategory(empty($request->getData('permissiontype')) ? null : (int) $request->getData('permissiontype'));
+        $permission->setCategory(empty($request->getData('permissioncategory')) ? null : (int) $request->getData('permissioncategory'));
         $permission->setElement(empty($request->getData('permissionelement')) ? null : (int) $request->getData('permissionelement'));
         $permission->setComponent(empty($request->getData('permissioncomponent')) ? null : (int) $request->getData('permissioncomponent'));
         $permission->setPermission(
@@ -1811,7 +2209,7 @@ final class ApiController extends Controller
         $permission->setUnit(empty($request->getData('permissionunit')) ? $permission->getUnit() : (int) $request->getData('permissionunit'));
         $permission->setApp(empty($request->getData('permissionapp')) ? $permission->getApp() : (string) $request->getData('permissionapp'));
         $permission->setModule(empty($request->getData('permissionmodule')) ? $permission->getModule() : (string) $request->getData('permissionmodule'));
-        $permission->setCategory(empty($request->getData('permissiontype')) ? $permission->getCategory() : (int) $request->getData('permissiontype'));
+        $permission->setCategory(empty($request->getData('permissioncategory')) ? $permission->getCategory() : (int) $request->getData('permissioncategory'));
         $permission->setElement(empty($request->getData('permissionelement')) ? $permission->getElement() : (int) $request->getData('permissionelement'));
         $permission->setComponent(empty($request->getData('permissioncomponent')) ? $permission->getComponent() : (int) $request->getData('permissioncomponent'));
         $permission->setPermission((int) ($request->getData('permissioncreate') ?? 0)

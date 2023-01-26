@@ -43,26 +43,26 @@ class Media
     {
         $media = \Modules\Media\Admin\Installer::installExternal($app, ['path' => __DIR__ . '/Media.install.json']);
 
-        $defaultPdfExport   = (int) \reset($media['upload'][0]);
-        $defaultExcelExport = (int) \reset($media['upload'][1]);
-        $defaultCsvExport   = (int) \reset($media['upload'][2]);
-        $defaultWordExport  = (int) \reset($media['upload'][3]);
-        $defaultEmailExport = (int) \reset($media['upload'][4]);
+        SettingMapper::create()->execute(
+            new Setting(
+                0,
+                SettingsEnum::DEFAULT_LIST_EXPORTS,
+                (string) $media['collection'][4]['id'],
+                '\\d+',
+                unit: 1,
+                module: 'Admin'
+            )
+        );
 
         SettingMapper::create()->execute(
-            new Setting(0, SettingsEnum::DEFAULT_PDF_EXPORT_TEMPLATE, (string) $defaultPdfExport, '\\d+', 1, 'Admin')
-        );
-        SettingMapper::create()->execute(
-            new Setting(0, SettingsEnum::DEFAULT_EXCEL_EXPORT_TEMPLATE, (string) $defaultExcelExport, '\\d+', 1, 'Admin')
-        );
-        SettingMapper::create()->execute(
-            new Setting(0, SettingsEnum::DEFAULT_CSV_EXPORT_TEMPLATE, (string) $defaultCsvExport, '\\d+', 1, 'Admin')
-        );
-        SettingMapper::create()->execute(
-            new Setting(0, SettingsEnum::DEFAULT_WORD_EXPORT_TEMPLATE, (string) $defaultWordExport, '\\d+', 1, 'Admin')
-        );
-        SettingMapper::create()->execute(
-            new Setting(0, SettingsEnum::DEFAULT_EMAIL_EXPORT_TEMPLATE, (string) $defaultEmailExport, '\\d+', 1, 'Admin')
+            new Setting(
+                0,
+                SettingsEnum::DEFAULT_LETTERS,
+                (string) $media['collection'][5]['id'],
+                '\\d+',
+                unit: 1,
+                module: 'Admin'
+            )
         );
     }
 }

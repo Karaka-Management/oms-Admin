@@ -12,4 +12,12 @@
  */
 declare(strict_types=1);
 
-$exporter = null;
+$data = $this->getData('data') ?? [];
+
+$out = \fopen('php://output', 'w');
+
+foreach ($data as $row) {
+    fputcsv($out, $row);
+}
+
+\fclose($out);

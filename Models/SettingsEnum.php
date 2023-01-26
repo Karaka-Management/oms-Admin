@@ -42,7 +42,9 @@ abstract class SettingsEnum extends Enum
     public const LOGGING_PATH = '1000000007';
 
     /* Organization settings */
-    public const DEFAULT_ORGANIZATION = '1000000009';
+    public const DEFAULT_UNIT = '1000000008';
+
+    public const UNIT_DEFAULT_GROUPS = '1000000009';
 
     /* Login settings */
     public const LOGIN_FORGOTTEN_COUNT = '1000000010';
@@ -77,13 +79,14 @@ abstract class SettingsEnum extends Enum
     public const CLI_ACTIVE = '1000000023';
 
     /* Global default templates */
-    public const DEFAULT_PDF_EXPORT_TEMPLATE = '1000000024';
+    public const DEFAULT_LIST_EXPORTS = '1000000024';
 
-    public const DEFAULT_CSV_EXPORT_TEMPLATE = '1000000025';
+    public const DEFAULT_LETTERS = '1000000025';
 
-    public const DEFAULT_EXCEL_EXPORT_TEMPLATE = '1000000026';
+    /* App settings */
+    public const REGISTRATION_ALLOWED = '1000000029';
 
-    public const DEFAULT_WORD_EXPORT_TEMPLATE = '1000000027';
+    public const GROUP_GENERATE_AUTOMATICALLY_APP = '1000000030';
 
-    public const DEFAULT_EMAIL_EXPORT_TEMPLATE = '1000000028';
+    public const APP_DEFAULT_GROUPS = '1000000031';
 }

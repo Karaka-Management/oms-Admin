@@ -78,7 +78,7 @@ final class Installer extends InstallerAbstract
      **/
     private static function installDefaultSettings() : void
     {
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_PATTERN, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_PATTERN, '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TRIES, '3', '\\d+', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TIMEOUT, '3', '\\d+', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_INTERVAL, '90', '\\d+', module: 'Admin'));
@@ -86,7 +86,7 @@ final class Installer extends InstallerAbstract
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_STATUS, '1', '[0-3]', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_PATH, '', module: 'Admin'));
 
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_ORGANIZATION, '1', '\\d+', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_UNIT, '1', '\\d+', module: 'Admin'));
 
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', '[0-3]', module: 'Admin'));
 
@@ -100,6 +100,8 @@ final class Installer extends InstallerAbstract
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEY, '', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEYPASS, '', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TLS, (string) false, module: 'Admin'));
+
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::GROUP_GENERATE_AUTOMATICALLY_APP, (string) true, module: 'Admin'));
 
         $cmdResult = \shell_exec(
             (OperatingSystem::getSystem() === SystemType::WIN

@@ -213,7 +213,7 @@ class AccountMapper extends DataMapperFactory
                         'account_lactive' => new \DateTime('now'),
                         'account_tries'   => 0,
                     ])
-                    ->where('account_login', '=', $login)
+                    ->where('account_id', '=', (int) $result['account_id'])
                     ->execute();
 
                 return $result['account_id'];
@@ -230,7 +230,7 @@ class AccountMapper extends DataMapperFactory
                         'account_lactive'       => new \DateTime('now'),
                         'account_tries'         => 0,
                     ])
-                    ->where('account_login', '=', $login)
+                    ->where('account_id', '=', (int) $result['account_id'])
                     ->execute();
 
                 return $result['account_id'];
@@ -240,7 +240,7 @@ class AccountMapper extends DataMapperFactory
                 ->set([
                     'account_tries' => $result['account_tries'] + 1,
                 ])
-                ->where('account_login', '=', $login)
+                ->where('account_id', '=', (int) $result['account_id'])
                 ->execute();
 
             return LoginReturnType::WRONG_PASSWORD;

@@ -34,6 +34,7 @@ final class ModuleMapper extends DataMapperFactory
      */
     public const COLUMNS = [
         'module_id'      => ['name' => 'module_id',     'type' => 'string', 'internal' => 'id'],
+        'module_name'    => ['name' => 'module_name', 'type' => 'string',    'internal' => 'name'],
         'module_path'    => ['name' => 'module_path', 'type' => 'string',    'internal' => 'path'],
         'module_theme'   => ['name' => 'module_theme', 'type' => 'string',    'internal' => 'theme'],
         'module_version' => ['name' => 'module_version', 'type' => 'string',    'internal' => 'version'],

@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\Application\ApplicationStatus;
-use phpOMS\Application\ApplicationType;
-
 /**
  * App model.
  *
@@ -25,7 +22,7 @@ use phpOMS\Application\ApplicationType;
  * @link    https://jingga.app
  * @since   1.0.0
  */
-class App implements \JsonSerializable
+class DataChange
 {
     /**
      * Id
@@ -36,36 +33,31 @@ class App implements \JsonSerializable
     protected int $id = 0;
 
     /**
-     * Name
+     * Hash
      *
      * @var string
      * @since 1.0.0
      */
-    public string $name = '';
+    protected string $hash = '';
+
+    public string $data = '';
+
+    public string $type = '';
+
+    public int $createdBy = 0;
+
+    public \DateTimeImmutable $createdAt;
 
     /**
-     * Theme
+     * Constructor.
      *
-     * @var string
      * @since 1.0.0
      */
-    public string $theme = '';
-
-    /**
-     * Status
-     *
-     * @var int
-     * @since 1.0.0
-     */
-    public int $status = ApplicationStatus::NORMAL;
-
-    /**
-     * Status
-     *
-     * @var int
-     * @since 1.0.0
-     */
-    public int $type = ApplicationType::WEB;
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable('now');
+        $this->reHash();
+    }
 
     /**
      * Get id
@@ -79,6 +71,23 @@ class App implements \JsonSerializable
         return $this->id;
     }
 
+    public function reHash() : void
+    {
+        $this->hash = \random_bytes(64);
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function getHash() : string
+    {
+        return $this->hash;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -86,9 +95,7 @@ class App implements \JsonSerializable
     {
         return [
             'id'          => $this->id,
-            'name'        => $this->name,
-            'type'        => $this->type,
-            'status'      => $this->status,
+            'data'        => $this->data,
         ];
     }
 

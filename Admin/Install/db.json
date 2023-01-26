@@ -507,6 +507,56 @@
             }
         }
     },
+    "unit": {
+        "name": "unit",
+        "fields": {
+            "unit_id": {
+                "name": "unit_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_name": {
+                "name": "unit_name",
+                "type": "VARCHAR(50)",
+                "default": null,
+                "null": true
+            },
+            "unit_image": {
+                "name": "unit_image",
+                "type": "INT",
+                "default": null,
+                "null": true
+            },
+            "unit_description": {
+                "name": "unit_description",
+                "type": "TEXT",
+                "default": null,
+                "null": true
+            },
+            "unit_descriptionraw": {
+                "name": "unit_descriptionraw",
+                "type": "TEXT",
+                "default": null,
+                "null": true
+            },
+            "unit_parent": {
+                "name": "unit_parent",
+                "type": "INT",
+                "default": null,
+                "null": true,
+                "foreignTable": "unit",
+                "foreignKey": "unit_id"
+            },
+            "unit_status": {
+                "name": "unit_status",
+                "type": "TINYINT",
+                "default": null,
+                "null": true
+            }
+        }
+    },
     "app": {
         "name": "app",
         "fields": {
@@ -553,7 +603,8 @@
             "group_name": {
                 "name": "group_name",
                 "type": "VARCHAR(50)",
-                "null": false
+                "null": false,
+                "unique": true
             },
             "group_status": {
                 "name": "group_status",
@@ -601,9 +652,12 @@
                 "name": "group_permission_unit",
                 "type": "INT",
                 "default": null,
-                "null": true
+                "null": true,
+                "foreignTable": "unit",
+                "foreignKey": "unit_id"
             },
             "group_permission_app": {
+                "description": "@todo: consider to use int as value and create foreign key",
                 "name": "group_permission_app",
                 "type": "VARCHAR(255)",
                 "default": null,
@@ -681,6 +735,11 @@
                 "primary": true,
                 "autoincrement": true
             },
+            "account_id_temp": {
+                "name": "account_id_temp",
+                "type": "VARCHAR(65)",
+                "null": false
+            },
             "account_status": {
                 "name": "account_status",
                 "type": "TINYINT",
@@ -748,6 +807,14 @@
                     "gdpr": true
                 }
             },
+            "account_email_temp": {
+                "name": "account_email_temp",
+                "type": "VARCHAR(70)",
+                "null": false,
+                "annotations": {
+                    "gdpr": true
+                }
+            },
             "account_tries": {
                 "name": "account_tries",
                 "type": "TINYINT",
@@ -772,6 +839,87 @@
                 "name": "account_created_at",
                 "type": "DATETIME",
                 "null": false
+            }
+        }
+    },
+    "account_address_rel": {
+        "name": "account_address_rel",
+        "fields": {
+            "account_address_rel_id": {
+                "name": "account_address_rel_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "account_address_rel_contact": {
+                "name": "account_address_rel_contact",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "profile_contact",
+                "foreignKey": "profile_contact_id"
+            },
+            "account_address_rel_module": {
+                "name": "account_address_rel_module",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "module",
+                "foreignKey": "module_id"
+            },
+            "account_address_rel_address": {
+                "name": "account_address_rel_address",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "address",
+                "foreignKey": "address_id"
+            }
+        }
+    },
+    "account_contact": {
+        "name": "account_contact",
+        "fields": {
+            "account_contact_id": {
+                "name": "account_contact_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "account_contact_type": {
+                "name": "account_contact_type",
+                "type": "TINYINT",
+                "null": false
+            },
+            "account_contact_subtype": {
+                "name": "account_contact_subtype",
+                "type": "TINYINT",
+                "null": false
+            },
+            "account_contact_order": {
+                "name": "account_contact_order",
+                "type": "INT",
+                "null": false
+            },
+            "account_contact_content": {
+                "name": "account_contact_content",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "account_contact_module": {
+                "name": "account_contact_module",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "module",
+                "foreignKey": "module_id"
+            },
+            "account_contact_account": {
+                "name": "account_contact_account",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
             }
         }
     },
@@ -919,6 +1067,41 @@
             }
         }
     },
+    "account_api": {
+        "name": "account_api",
+        "fields": {
+            "account_api_id": {
+                "name": "account_api_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "account_api_status": {
+                "name": "account_api_status",
+                "type": "TINYINT",
+                "null": false
+            },
+            "account_api_key": {
+                "name": "account_api_key",
+                "type": "VARCHAR(129)",
+                "null": false,
+                "unique": true
+            },
+            "account_api_created_at": {
+                "name": "account_api_created_at",
+                "type": "DATETIME",
+                "null": false
+            },
+            "account_api_account": {
+                "name": "account_api_account",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            }
+        }
+    },
     "settings": {
         "name": "settings",
         "fields": {
@@ -943,6 +1126,14 @@
                 "name": "settings_pattern",
                 "type": "TEXT",
                 "null": true
+            },
+            "settings_unit": {
+                "name": "settings_unit",
+                "type": "INT",
+                "default": null,
+                "null": true,
+                "foreignTable": "unit",
+                "foreignKey": "unit_id"
             },
             "settings_app": {
                 "name": "settings_app",
@@ -975,6 +1166,47 @@
                 "null": true,
                 "foreignTable": "account",
                 "foreignKey": "account_id"
+            }
+        }
+    },
+    "data_change": {
+        "name": "data_change",
+        "fields": {
+            "data_change_id": {
+                "name": "data_change_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "data_change_type": {
+                "name": "data_change_type",
+                "type": "VARCHAR(65)",
+                "null": false,
+                "unique": true
+            },
+            "data_change_hash": {
+                "name": "data_change_hash",
+                "type": "VARCHAR(65)",
+                "null": false,
+                "unique": true
+            },
+            "data_change_data": {
+                "name": "data_change_data",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "data_change_created_by": {
+                "name": "data_change_created_by",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
+            "data_change_created_at": {
+                "name": "data_change_created_at",
+                "type": "DATETIME",
+                "null": false
             }
         }
     }
