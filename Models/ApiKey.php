@@ -17,14 +17,14 @@ namespace Modules\Admin\Models;
 use phpOMS\Account\AccountStatus;
 
 /**
- * Account class.
+ * Api key class.
  *
  * @package Modules\Admin\Models
  * @license OMS License 1.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
-class Account
+class ApiKey
 {
     /**
      * Id.
@@ -43,7 +43,7 @@ class Account
     public string $key = '';
 
     /**
-     * Account status.
+     * Api key status.
      *
      * @var int
      * @since 1.0.0
@@ -73,7 +73,7 @@ class Account
      */
     public function __construct()
     {
-        $this->key = \random_bytes(128);
+        $this->key       = \random_bytes(128);
         $this->createdAt = new \DateTimeImmutable('now');
     }
 }

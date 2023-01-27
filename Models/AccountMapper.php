@@ -53,7 +53,7 @@ class AccountMapper extends DataMapperFactory
     /**
      * Has one relation.
      *
-     * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
+     * @var array<string, array{mapper:class-string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
     public const OWNS_ONE = [
@@ -66,7 +66,7 @@ class AccountMapper extends DataMapperFactory
     /**
      * Has many relation.
      *
-     * @var array<string, array{mapper:string, table:string, self?:?string, external?:?string, column?:string}>
+     * @var array<string, array{mapper:class-string, table:string, self?:?string, external?:?string, column?:string}>
      * @since 1.0.0
      */
     public const HAS_MANY = [
@@ -82,12 +82,24 @@ class AccountMapper extends DataMapperFactory
             'external' => 'account_account_rel_root',
             'self'     => 'account_account_rel_child',
         ],
+        'locations' => [
+            'mapper'   => AddressMapper::class,
+            'table'    => 'account_address_rel',
+            'external' => 'account_address_rel_address',
+            'self'     => 'account_address_rel_account',
+        ],
+        'contacts' => [
+            'mapper'   => ContactMapper::class,
+            'table'    => 'account_contact',
+            'self'     => 'account_contact_account',
+            'external' => null,
+        ],
     ];
 
     /**
      * Model to use by the mapper.
      *
-     * @var string
+     * @var class-string
      * @since 1.0.0
      */
     public const MODEL = Account::class;

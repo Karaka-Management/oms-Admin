@@ -36,17 +36,17 @@ class ApiKeyMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'account_api_id'                  => ['name' => 'account_api_id',           'type' => 'int',      'internal' => 'id'],
-        'account_api_key'              => ['name' => 'account_api_key',       'type' => 'string',      'internal' => 'key'],
-        'account_api_status'              => ['name' => 'account_api_status',       'type' => 'int',      'internal' => 'status'],
-        'account_api_account'              => ['name' => 'account_api_account',       'type' => 'int',      'internal' => 'account'],
-        'account_api_created_at'              => ['name' => 'account_api_created_at',       'type' => 'DateTime',      'internal' => 'createdAt'],
+        'account_api_id'         => ['name' => 'account_api_id',           'type' => 'int',      'internal' => 'id'],
+        'account_api_key'        => ['name' => 'account_api_key',       'type' => 'string',      'internal' => 'key'],
+        'account_api_status'     => ['name' => 'account_api_status',       'type' => 'int',      'internal' => 'status'],
+        'account_api_account'    => ['name' => 'account_api_account',       'type' => 'int',      'internal' => 'account'],
+        'account_api_created_at' => ['name' => 'account_api_created_at',       'type' => 'DateTime',      'internal' => 'createdAt'],
     ];
 
     /**
      * Model to use by the mapper.
      *
-     * @var string
+     * @var class-string
      * @since 1.0.0
      */
     public const MODEL = ApiKey::class;
@@ -75,6 +75,15 @@ class ApiKeyMapper extends DataMapperFactory
      */
     public const CREATED_AT = 'account_api_created_at';
 
+    /**
+     * Authenticates a user based on an api key
+     *
+     * @param string $api Api key
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
     public static function authenticateApiKey(string $api) : int
     {
         if (empty($api)) {
@@ -107,11 +116,11 @@ class ApiKeyMapper extends DataMapperFactory
             }
 
             $query->update('account')
-            ->set([
-                'account_lactive' => new \DateTime('now'),
-            ])
-            ->where('account_id', '=', (int) $result['account_id'])
-            ->execute();
+                ->set([
+                    'account_lactive' => new \DateTime('now'),
+                ])
+                ->where('account_id', '=', (int) $result['account_id'])
+                ->execute();
 
             return (int) $result['account_id'];
         } catch (\Exception $e) {

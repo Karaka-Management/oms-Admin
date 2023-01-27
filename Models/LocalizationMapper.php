@@ -92,7 +92,7 @@ final class LocalizationMapper extends DataMapperFactory
     /**
      * Has one relation.
      *
-     * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
+     * @var array<string, array{mapper:class-string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
     public const OWNS_ONE = [
@@ -135,7 +135,7 @@ final class LocalizationMapper extends DataMapperFactory
     /**
      * Model to use by the mapper.
      *
-     * @var string
+     * @var class-string
      * @since 1.0.0
      */
     public const MODEL = Localization::class;

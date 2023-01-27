@@ -23,6 +23,9 @@ use Modules\Admin\Models\AccountPermission;
 use Modules\Admin\Models\AccountPermissionMapper;
 use Modules\Admin\Models\App;
 use Modules\Admin\Models\AppMapper;
+use Modules\Admin\Models\ContactMapper;
+use Modules\Admin\Models\DataChange;
+use Modules\Admin\Models\DataChangeMapper;
 use Modules\Admin\Models\Group;
 use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermission;
@@ -32,17 +35,12 @@ use Modules\Admin\Models\Module;
 use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
+use Modules\Admin\Models\NullDataChange;
 use Modules\Admin\Models\PermissionCategory;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\UploadFile;
-use Modules\Admin\Models\App;
-use phpOMS\Application\ApplicationType;
-use Modules\Admin\Models\AppMapper;
-use Modules\Admin\Models\DataChange;
-use Modules\Admin\Models\NullDataChange;
-use Modules\Admin\Models\DataChangeMapper;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
@@ -487,18 +485,19 @@ final class ApiController extends Controller
             $id      = isset($data['id']) ? (int) $data['id'] : null;
             $name    = $data['name'] ?? null;
             $content = $data['content'] ?? null;
-            $unit     = $data['unit'] ?? null;
+            $unit    = $data['unit'] ?? null;
             $app     = $data['app'] ?? null;
             $module  = $data['module'] ?? null;
             $group   = isset($data['group']) ? (int) $data['group'] : null;
             $account = isset($data['account']) ? (int) $data['account'] : null;
 
+            /** @var \Model\Setting $old */
             $old = $this->app->appSettings->get($id, $name, $unit, $app, $module, $group, $account);
             $new = clone $old;
 
             $new->name    = $name ?? $new->name;
             $new->content = $content ?? $new->content;
-            $new->unit     = $unit ?? $new->unit;
+            $new->unit    = $unit ?? $new->unit;
             $new->app     = $app ?? $new->app;
             $new->module  = $module ?? $new->module;
             $new->group   = $group ?? $new->group;
@@ -506,10 +505,10 @@ final class ApiController extends Controller
 
             $this->app->appSettings->set([
                 [
-                    'id'      => $new->id,
+                    'id'      => $new->getId(),
                     'name'    => $new->name,
                     'content' => $new->content,
-                    'unit'     => $new->unit,
+                    'unit'    => $new->unit,
                     'app'     => $new->app,
                     'module'  => $new->module,
                     'group'   => $new->group,
@@ -556,12 +555,15 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var Account $account */
         $account = AccountMapper::get()
             ->where('id', $requestAccount)
             ->execute();
 
         // test old password is correct
-        if (AccountMapper::login($account->login, (string) $request->getData('oldpass')) !== $requestAccount) {
+        if ($account->login === null
+            || AccountMapper::login($account->login, (string) $request->getData('oldpass')) !== $requestAccount
+        ) {
             $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
             $response->header->status = RequestStatusCode::R_403;
 
@@ -577,6 +579,7 @@ final class ApiController extends Controller
         }
 
         // test password complexity
+        /** @var \Model\Setting $complexity */
         $complexity = $this->app->appSettings->get(names: [SettingsEnum::PASSWORD_PATTERN], module: 'Admin');
         if (\preg_match($complexity->content, (string) $request->getData('newpass')) !== 1) {
             $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
@@ -825,6 +828,16 @@ final class ApiController extends Controller
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Application', 'Application successfully created', $app);
     }
 
+    /**
+     * Create default settings for new app
+     *
+     * @param App             $app     Application to create new settings for
+     * @param RequestAbstract $request Request used to create the app
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     private function createDefaultAppSettings(App $app, RequestAbstract $request) : void
     {
         $settings   = [];
@@ -1281,21 +1294,24 @@ final class ApiController extends Controller
         $defaultGroupIds = [];
 
         if ($request->hasData('app')) {
+            /** @var \Model\Setting $defaultGroupSettings */
             $defaultGroupSettings = $this->app->appSettings->get(
                 names: SettingsEnum::APP_DEFAULT_GROUPS,
                 app:  (int) $request->getData('app'),
                 module: 'Admin'
             );
+
             $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
         }
 
-
         if ($request->hasData('unit')) {
+            /** @var \Model\Setting $defaultGroupSettings */
             $defaultGroupSettings = $this->app->appSettings->get(
                 names: SettingsEnum::UNIT_DEFAULT_GROUPS,
                 unit: (int) $request->getData('unit'),
                 module: 'Admin'
             );
+
             $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
         }
 
@@ -1304,7 +1320,15 @@ final class ApiController extends Controller
         }
 
         if (!empty($defaultGroupIds)) {
-            $this->createModelRelation($account->getId(), $account->getId(), $defaultGroupIds, AccountMapper::class, 'groups', 'account', $request->getOrigin());
+            $this->createModelRelation(
+                $account->getId(),
+                $account->getId(),
+                $defaultGroupIds,
+                AccountMapper::class,
+                'groups',
+                'account',
+                $request->getOrigin()
+            );
         }
 
         $this->fillJsonResponse(
@@ -1319,6 +1343,19 @@ final class ApiController extends Controller
         );
     }
 
+    /**
+     * Api method to register an account
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
     public function apiAccountRegister(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateRegistration($request))) {
@@ -1328,6 +1365,7 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var \Model\Setting $allowed */
         $allowed = $this->app->appSettings->get(
             names: [SettingsEnum::REGISTRATION_ALLOWED],
             app: (int) $request->getData('app'),
@@ -1341,6 +1379,7 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var \Model\Setting $complexity */
         $complexity = $this->app->appSettings->get(names: [SettingsEnum::PASSWORD_PATTERN], module: 'Admin');
         if ($request->hasData('password')
             && \preg_match($complexity->content, (string) $request->getData('password')) !== 1
@@ -1363,6 +1402,7 @@ final class ApiController extends Controller
 
         // email already in use
         if (!($emailAccount instanceof NullAccount)
+            && $emailAccount->login !== null
             && AccountMapper::login($emailAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
         ) {
             $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Registration', 'Email already in use, use your login details to login or activate your account also for this service.', []);
@@ -1384,6 +1424,7 @@ final class ApiController extends Controller
             return;
         } elseif ($account === null
             && !($loginAccount instanceof NullAccount)
+            && $loginAccount->login !== null
             && AccountMapper::login($loginAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
         ) {
             $account = $loginAccount;
@@ -1392,18 +1433,22 @@ final class ApiController extends Controller
         $defaultGroups   = [];
         $defaultGroupIds = [];
 
+        /** @var \Model\Setting $defaultGroupSettings */
         $defaultGroupSettings = $this->app->appSettings->get(
             names: SettingsEnum::APP_DEFAULT_GROUPS,
             app:  (int) $request->getData('app'),
             module: 'Admin'
         );
+
         $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
 
+        /** @var \Model\Setting $defaultGroupSettings */
         $defaultGroupSettings = $this->app->appSettings->get(
             names: SettingsEnum::UNIT_DEFAULT_GROUPS,
             unit: (int) $request->getData('unit'),
              module: 'Admin'
         );
+
         $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
 
         foreach ($defaultGroups as $group) {
@@ -1412,6 +1457,7 @@ final class ApiController extends Controller
 
         // Already registered
         if ($account !== null) {
+            /** @var Account $account */
             $account = AccountMapper::get()
                 ->with('groups')
                 ->where('id', $account->getId())
@@ -1454,8 +1500,8 @@ final class ApiController extends Controller
             $account = $response->get($request->uri->__toString())['response'];
 
             // Create confirmation pending entry
-            $dataChange = new DataChange();
-            $dataChange->type = 'account';
+            $dataChange            = new DataChange();
+            $dataChange->type      = 'account';
             $dataChange->createdBy = $account->getId();
 
             $dataChange->data = \json_encode([
@@ -1468,7 +1514,7 @@ final class ApiController extends Controller
                 $this->createModel($account->getId(), $dataChange, DataChangeMapper::class, 'datachange', $request->getOrigin());
 
                 ++$tries;
-            } while($dataChange->getId() === 0 && $tries < 5);
+            } while ($dataChange->getId() === 0 && $tries < 5);
         }
 
         // Create confirmation email
@@ -1501,7 +1547,20 @@ final class ApiController extends Controller
         return [];
     }
 
-    // @todo: maybe move to job/workflow??? This feels very much like a job/event especially if we make the 'type' an event-trigger
+    /**
+     * Api method to perform a pending model change
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     * @todo: maybe move to job/workflow??? This feels very much like a job/event especially if we make the 'type' an event-trigger
+     *
+     * @since 1.0.0
+     */
     public function apiDataChange(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateDataChange($request))) {
@@ -1521,6 +1580,7 @@ final class ApiController extends Controller
 
         switch ($dataChange->type) {
             case 'account':
+                /** @var Account $old */
                 $old = AccountMapper::get()->where('id', $dataChange->createdBy)->execute();
                 $new = clone $old;
 
@@ -1614,13 +1674,13 @@ final class ApiController extends Controller
      */
     private function createAccountFromRequest(RequestAbstract $request) : Account
     {
-        $account = new Account();
-        $account->setStatus((int) ($request->getData('status') ?? AccountStatus::INACTIVE));
-        $account->setType((int) ($request->getData('type') ?? AccountType::USER));
+        $account        = new Account();
         $account->login = (string) ($request->getData('login') ?? '');
         $account->name1 = (string) ($request->getData('name1') ?? '');
         $account->name2 = (string) ($request->getData('name2') ?? '');
         $account->name3 = (string) ($request->getData('name3') ?? '');
+        $account->setStatus((int) ($request->getData('status') ?? AccountStatus::INACTIVE));
+        $account->setType((int) ($request->getData('type') ?? AccountType::USER));
         $account->setEmail((string) ($request->getData('email') ?? ''));
         $account->generatePassword((string) ($request->getData('password') ?? ''));
 
@@ -2540,5 +2600,83 @@ final class ApiController extends Controller
                 $this->app->moduleManager->get('Workflow')->runWorkflowFromHook($data);
             }
         }
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiContactCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateContactCreate($request))) {
+            $response->set('contact_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $contact = $this->createContactFromRequest($request);
+
+        $this->createModel($request->header->account, $contact, ContactMapper::class, 'account_contact', $request->getOrigin());
+
+        $this->createModelRelation(
+            $request->header->account,
+            (int) $request->getData('account'),
+            $contact->getId(),
+            AccountMapper::class, 'contacts', '', $request->getOrigin()
+        );
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Contact', 'Contact successfully created', $contact);
+    }
+
+    /**
+     * Validate contact element create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    public function validateContactCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['account'] = empty($request->getData('account')))
+            || ($val['type'] = !\is_numeric($request->getData('type')))
+            || ($val['content'] = empty($request->getData('content')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to create a account element from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return ContactElement
+     *
+     * @since 1.0.0
+     */
+    public function createContactFromRequest(RequestAbstract $request) : ContactElement
+    {
+        /** @var ContactElement $element */
+        $element = new ContactElement();
+        $element->setType((int) ($request->getData('type') ?? 0));
+        $element->setSubtype((int) ($request->getData('subtype') ?? 0));
+        $element->content = (string) ($request->getData('content') ?? '');
+        $element->account = (int) ($request->getData('account') ?? 0);
+
+        return $element;
     }
 }

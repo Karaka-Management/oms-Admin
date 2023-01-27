@@ -17,44 +17,44 @@ class DefaultPdf extends TCPDF
 
     //Page header
     public function Header() {
-    	if ($this->header_xobjid === false) {
-    		$this->header_xobjid = $this->startTemplate($this->w, 0);
+        if ($this->header_xobjid === false) {
+            $this->header_xobjid = $this->startTemplate($this->w, 0);
 
-	        // Set Logo
-	        $image_file = __DIR__ . '/../Web/Backend/img/logo.png';
-	        $this->Image($image_file, 15, 15, 15, 15, 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            // Set Logo
+            $image_file = __DIR__ . '/../Web/Backend/img/logo.png';
+            $this->Image($image_file, 15, 15, 15, 15, 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
-	        // Set Title
-	        $this->SetFont('helvetica', 'B', 20);
-	        $this->setX(15 + 15 + 3);
-	        $this->Cell(0, 14, $this->header_title, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+            // Set Title
+            $this->SetFont('helvetica', 'B', 20);
+            $this->setX(15 + 15 + 3);
+            $this->Cell(0, 14, $this->header_title, 0, false, 'L', 0, '', 0, false, 'T', 'M');
 
-	        $this->SetFont('helvetica', '', 10);
-	        $this->setX(15 + 15 + 3);
-	        $this->Cell(0, 26, $this->header_string, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+            $this->SetFont('helvetica', '', 10);
+            $this->setX(15 + 15 + 3);
+            $this->Cell(0, 26, $this->header_string, 0, false, 'L', 0, '', 0, false, 'T', 'M');
 
-	        $this->endTemplate();
-	    }
+            $this->endTemplate();
+        }
 
-	    $x  = 0;
-		$dx = 0;
+        $x  = 0;
+        $dx = 0;
 
-		if (!$this->header_xobj_autoreset AND $this->booklet AND (($this->page % 2) == 0)) {
-			// adjust margins for booklet mode
-			$dx = ($this->original_lMargin - $this->original_rMargin);
-		}
+        if (!$this->header_xobj_autoreset AND $this->booklet AND (($this->page % 2) == 0)) {
+            // adjust margins for booklet mode
+            $dx = ($this->original_lMargin - $this->original_rMargin);
+        }
 
-		if ($this->rtl) {
-			$x = $this->w + $dx;
-		} else {
-			$x = 0 + $dx;
-		}
+        if ($this->rtl) {
+            $x = $this->w + $dx;
+        } else {
+            $x = 0 + $dx;
+        }
 
-	    $this->printTemplate($this->header_xobjid, $x, 0, 0, 0, '', '', false);
-		if ($this->header_xobj_autoreset) {
-			// reset header xobject template at each page
-			$this->header_xobjid = false;
-		}
+        $this->printTemplate($this->header_xobjid, $x, 0, 0, 0, '', '', false);
+        if ($this->header_xobj_autoreset) {
+            // reset header xobject template at each page
+            $this->header_xobjid = false;
+        }
     }
 
     // Page footer

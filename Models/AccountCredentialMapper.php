@@ -51,7 +51,7 @@ final class AccountCredentialMapper extends AccountMapper
     /**
      * Model to use by the mapper.
      *
-     * @var string
+     * @var class-string
      * @since 1.0.0
      */
     public const MODEL = Account::class;

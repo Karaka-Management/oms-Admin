@@ -40,12 +40,36 @@ class DataChange
      */
     protected string $hash = '';
 
+    /**
+     * Data for the change
+     *
+     * @var string
+     * @since 1.0.0
+     */
     public string $data = '';
 
+    /**
+     * Change type
+     *
+     * @var string
+     * @since 1.0.0
+     */
     public string $type = '';
 
+    /**
+     * Created by account
+     *
+     * @var int
+     * @since 1.0.0
+     */
     public int $createdBy = 0;
 
+    /**
+     * Created at
+     *
+     * @var \DateTimeImmutable
+     * @since 1.0.0
+     */
     public \DateTimeImmutable $createdAt;
 
     /**
@@ -71,6 +95,13 @@ class DataChange
         return $this->id;
     }
 
+    /**
+     * Create hash for data change as identifier
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function reHash() : void
     {
         $this->hash = \random_bytes(64);

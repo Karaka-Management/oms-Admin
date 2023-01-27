@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
+use phpOMS\Stdlib\Base\Location;
+
 /**
  * Account class.
  *
@@ -55,4 +57,72 @@ class Account extends \phpOMS\Account\Account
      * @since 1.0.0
      */
     public ?\DateTimeImmutable $tempPasswordLimit = null;
+
+    /**
+     * Location data.
+     *
+     * @var Location[]
+     * @since 1.0.0
+     */
+    protected array $locations = [];
+
+    /**
+     * Contact data.
+     *
+     * @var Contact[]
+     * @since 1.0.0
+     */
+    protected array $contacts = [];
+
+    /**
+     * Get account locations.
+     *
+     * @return Location[]
+     *
+     * @since 1.0.0
+     */
+    public function getLocations() : array
+    {
+        return $this->locations;
+    }
+
+    /**
+     * Add location.
+     *
+     * @param Location $location Location
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function addLocation(Location $location) : void
+    {
+        $this->locations[] = $location;
+    }
+
+    /**
+     * Get account contact element.
+     *
+     * @return Contact[]
+     *
+     * @since 1.0.0
+     */
+    public function getContacts() : array
+    {
+        return $this->contacts;
+    }
+
+    /**
+     * Add contact element.
+     *
+     * @param Contact $contact Contact Element
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function addContact(Contact $contact) : void
+    {
+        $this->contacts[] = $contact;
+    }
 }

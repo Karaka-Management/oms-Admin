@@ -735,11 +735,6 @@
                 "primary": true,
                 "autoincrement": true
             },
-            "account_id_temp": {
-                "name": "account_id_temp",
-                "type": "VARCHAR(65)",
-                "null": false
-            },
             "account_status": {
                 "name": "account_status",
                 "type": "TINYINT",
@@ -807,14 +802,6 @@
                     "gdpr": true
                 }
             },
-            "account_email_temp": {
-                "name": "account_email_temp",
-                "type": "VARCHAR(70)",
-                "null": false,
-                "annotations": {
-                    "gdpr": true
-                }
-            },
             "account_tries": {
                 "name": "account_tries",
                 "type": "TINYINT",
@@ -839,40 +826,6 @@
                 "name": "account_created_at",
                 "type": "DATETIME",
                 "null": false
-            }
-        }
-    },
-    "account_address_rel": {
-        "name": "account_address_rel",
-        "fields": {
-            "account_address_rel_id": {
-                "name": "account_address_rel_id",
-                "type": "INT",
-                "null": false,
-                "primary": true,
-                "autoincrement": true
-            },
-            "account_address_rel_contact": {
-                "name": "account_address_rel_contact",
-                "type": "INT",
-                "null": false,
-                "foreignTable": "profile_contact",
-                "foreignKey": "profile_contact_id"
-            },
-            "account_address_rel_module": {
-                "name": "account_address_rel_module",
-                "type": "INT",
-                "null": true,
-                "default": null,
-                "foreignTable": "module",
-                "foreignKey": "module_id"
-            },
-            "account_address_rel_address": {
-                "name": "account_address_rel_address",
-                "type": "INT",
-                "null": false,
-                "foreignTable": "address",
-                "foreignKey": "address_id"
             }
         }
     },
@@ -908,7 +861,7 @@
             },
             "account_contact_module": {
                 "name": "account_contact_module",
-                "type": "INT",
+                "type": "VARCHAR(190)",
                 "null": true,
                 "default": null,
                 "foreignTable": "module",
@@ -920,6 +873,40 @@
                 "null": false,
                 "foreignTable": "account",
                 "foreignKey": "account_id"
+            }
+        }
+    },
+    "account_address_rel": {
+        "name": "account_address_rel",
+        "fields": {
+            "account_address_rel_id": {
+                "name": "account_address_rel_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "account_address_account": {
+                "name": "account_address_account",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
+            "account_address_rel_module": {
+                "name": "account_address_rel_module",
+                "type": "VARCHAR(190)",
+                "null": true,
+                "default": null,
+                "foreignTable": "module",
+                "foreignKey": "module_id"
+            },
+            "account_address_rel_address": {
+                "name": "account_address_rel_address",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "address",
+                "foreignKey": "address_id"
             }
         }
     },
