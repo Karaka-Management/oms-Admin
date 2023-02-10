@@ -886,8 +886,8 @@
                 "primary": true,
                 "autoincrement": true
             },
-            "account_address_account": {
-                "name": "account_address_account",
+            "account_address_rel_account": {
+                "name": "account_address_rel_account",
                 "type": "INT",
                 "null": false,
                 "foreignTable": "account",

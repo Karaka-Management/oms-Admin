@@ -66,8 +66,6 @@ class Contact
      */
     public int $order = 0;
 
-    public int $contact = 0;
-
     public int $account = 0;
 
     public string $module = '';

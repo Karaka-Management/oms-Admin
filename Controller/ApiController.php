@@ -23,6 +23,7 @@ use Modules\Admin\Models\AccountPermission;
 use Modules\Admin\Models\AccountPermissionMapper;
 use Modules\Admin\Models\App;
 use Modules\Admin\Models\AppMapper;
+use Modules\Admin\Models\Contact;
 use Modules\Admin\Models\ContactMapper;
 use Modules\Admin\Models\DataChange;
 use Modules\Admin\Models\DataChangeMapper;
@@ -121,10 +122,20 @@ final class ApiController extends Controller
             $this->app->sessionManager->set('UID', $login, true);
             $this->app->sessionManager->save();
             $response->set($request->uri->__toString(), new Reload());
+        } elseif ($login === LoginReturnType::NOT_ACTIVATED) {
+            $response->set($request->uri->__toString(), new Notify(
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'NOT_ACTIVATED'),
+                NotifyType::WARNING
+            ));
+        } elseif ($login === LoginReturnType::WRONG_INPUT_EXCEEDED) {
+            $response->set($request->uri->__toString(), new Notify(
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'WRONG_INPUT_EXCEEDED'),
+                NotifyType::WARNING
+            ));
         } else {
             $response->set($request->uri->__toString(), new Notify(
-                'Login failed due to wrong login information',
-                NotifyType::INFO
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'LOGIN_ERROR'),
+                NotifyType::WARNING
             ));
         }
     }
@@ -152,8 +163,8 @@ final class ApiController extends Controller
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
             'status'   => NotificationLevel::OK,
-            'title'    => 'Logout successfull',
-            'message'  => 'You are redirected to the login page',
+            'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'LogoutSuccessfulTitle'),
+            'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'LogoutSuccessfulMsg'),
             'response' => null,
         ]);
     }
@@ -235,8 +246,8 @@ final class ApiController extends Controller
             $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::ERROR,
-                'title'    => 'Password Reset',
-                'message'  => 'Password reset failed due to invalid login data or too many reset attemps.',
+                'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
+            'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetMsg'),
                 'response' => null,
             ]);
         }
@@ -288,8 +299,8 @@ final class ApiController extends Controller
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
             'status'   => NotificationLevel::OK,
-            'title'    => 'Password Reset',
-            'message'  => 'You received a pasword reset email.',
+            'title'    =>  $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
+            'message'  =>  $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetEmailMsg'),
             'response' => null,
         ]);
     }
@@ -326,8 +337,8 @@ final class ApiController extends Controller
             $response->header->status = RequestStatusCode::R_405;
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::OK,
-                'title'    => 'Password Reset',
-                'message'  => 'Invalid reset credentials (username/token).',
+                'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
+                'message'  =>  $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetInvalidMsg'),
                 'response' => null,
             ]);
 
@@ -416,21 +427,17 @@ final class ApiController extends Controller
      */
     public function apiSettingsGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        $id      = $request->getData('id');
-        $group   = $request->getData('group');
-        $account = $request->getData('account');
-
         $response->set(
             $request->uri->__toString(),
             [
                 'response' => $this->app->appSettings->get(
-                    $id !== null ? (int) $id : $id,
-                    $request->getData('name') ?? '',
-                    $request->getData('unit') ?? null,
-                    $request->getData('app') ?? null,
-                    $request->getData('module') ?? null,
-                    $group !== null ? (int) $group : $group,
-                    $account !== null ? (int) $account : $account
+                    $request->getData('id', 'int'),
+                    $request->getData('name'),
+                    $request->getData('unit', 'int'),
+                    $request->getData('app', 'int'),
+                    $request->getData('module'),
+                    $request->getData('group', 'int'),
+                    $request->getData('account', 'int')
                 ),
             ]
         );
@@ -461,7 +468,14 @@ final class ApiController extends Controller
 
         \file_put_contents(__DIR__ . '/../../../config.php', "<?php\ndeclare(strict_types=1);\nreturn " . ArrayParser::serializeArray($config) . ';');
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Config', 'Config successfully modified', $dataSettings);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $dataSettings
+        );
     }
 
     /**
@@ -519,7 +533,14 @@ final class ApiController extends Controller
             $this->updateModel($request->header->account, $old, $new, SettingMapper::class, 'settings',$request->getOrigin());
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Settings', 'Settings successfully modified', $dataSettings);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $dataSettings
+        );
     }
 
     /**
@@ -592,7 +613,14 @@ final class ApiController extends Controller
 
         AccountMapper::update()->execute($account);
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Password', 'Password successfully modified', $account);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $account
+        );
     }
 
     /**
@@ -663,7 +691,12 @@ final class ApiController extends Controller
 
             LocalizationMapper::update()->execute($account->l11n);
 
-            $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $account->l11n);
+            $this->fillJsonResponse(
+                $request, $response, NotificationLevel::OK,
+                '',
+                $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+                $account->l11n
+            );
 
             return;
         }
@@ -758,7 +791,12 @@ final class ApiController extends Controller
 
         LocalizationMapper::update()->execute($account->l11n);
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully modified', $account->l11n);
+        $this->fillJsonResponse(
+            $request, $response, NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $account->l11n
+        );
     }
 
     /**
@@ -786,7 +824,14 @@ final class ApiController extends Controller
             $status = $upload->upload($uploadedFiles, ['logo.png'], true);
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Design', 'Design successfully updated', []);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            []
+        );
     }
 
     /**
@@ -825,7 +870,14 @@ final class ApiController extends Controller
             $this->apiGroupCreate($newRequest, $response, $data);
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Application', 'Application successfully created', $app);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulCreate'),
+            $app
+        );
     }
 
     /**
@@ -969,7 +1021,15 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Admin\Models\Group $group */
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully returned', $group);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulReturn'),
+            $group
+        );
     }
 
     /**
@@ -991,7 +1051,15 @@ final class ApiController extends Controller
         $old = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $new = $this->updateGroupFromRequest($request, clone $old);
         $this->updateModel($request->header->account, $old, $new, GroupMapper::class, 'group', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully updated', $new);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $new
+        );
     }
 
     /**
@@ -1058,7 +1126,15 @@ final class ApiController extends Controller
 
         $group = $this->createGroupFromRequest($request);
         $this->createModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully created', $group);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulCreate'),
+            $group
+        );
     }
 
     /**
@@ -1099,7 +1175,14 @@ final class ApiController extends Controller
     {
         if (((int) $request->getData('id')) === 3) {
             // admin group cannot be deleted
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group cannot be deleted', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                'Group',
+                $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'InvalidDelete'),
+                []
+            );
 
             return;
         }
@@ -1107,7 +1190,15 @@ final class ApiController extends Controller
         /** @var \Modules\Admin\Models\Group $group */
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group successfully deleted', $group);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulDelete'),
+            $group
+        );
     }
 
     /**
@@ -1151,7 +1242,15 @@ final class ApiController extends Controller
     {
         /** @var Account $account */
         $account = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully returned', $account);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulReturn'),
+            $account
+        );
     }
 
     /**
@@ -1287,7 +1386,9 @@ final class ApiController extends Controller
 
         $this->createModel($request->header->account, $account, AccountCredentialMapper::class, 'account', $request->getOrigin());
         $this->createProfileForAccount($account, $request);
-        $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
+
+        $collection = $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
+        $this->createModel($request->header->account, $collection, CollectionMapper::class, 'collection', $request->getOrigin());
 
         // find default groups and create them
         $defaultGroups   = [];
@@ -1335,10 +1436,12 @@ final class ApiController extends Controller
             $request,
             $response,
             NotificationLevel::OK,
-            'Account',
-            'Account successfully created. Link: <a href="'
-                . (UriFactory::build('{/lang}/{/app}/admin/account/settings?{?}&id=' . $account->getId()))
-                . '">Account</a>',
+            $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'AccountCreateTitle'),
+            \str_replace(
+                '{url}',
+                UriFactory::build('{/lang}/{/app}/admin/account/settings?{?}&id=' . $account->getId()),
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'AccountCreateMsg'
+            )),
             $account
         );
     }
@@ -1373,7 +1476,15 @@ final class ApiController extends Controller
         );
 
         if ($allowed->content !== '1') {
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'Registration not allowed', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationNotAllowed'),
+                []
+            );
+
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1384,7 +1495,15 @@ final class ApiController extends Controller
         if ($request->hasData('password')
             && \preg_match($complexity->content, (string) $request->getData('password')) !== 1
         ) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'Invalid password format', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationInvalidPasswordFormat'),
+                []
+            );
+
             $response->header->status = RequestStatusCode::R_403;
 
             return;
@@ -1405,7 +1524,15 @@ final class ApiController extends Controller
             && $emailAccount->login !== null
             && AccountMapper::login($emailAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
         ) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Registration', 'Email already in use, use your login details to login or activate your account also for this service.', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::OK,
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationEmailInUse'),
+                []
+            );
+
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1418,7 +1545,15 @@ final class ApiController extends Controller
             && !($loginAccount instanceof NullAccount)
             && $loginAccount->getEmail() !== $request->getData('email')
         ) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'Login already in use with a different email', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationLoginInUse'),
+                []
+            );
+
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1472,14 +1607,30 @@ final class ApiController extends Controller
             if (empty($defaultGroupIds)
                 && $account->getStatus() === AccountStatus::ACTIVE
             ) {
-                $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'You are already registered, use your login data.', []);
+                $this->fillJsonResponse(
+                    $request,
+                    $response,
+                    NotificationLevel::ERROR,
+                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
+                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationAlreadyRegistered'),
+                    []
+                );
+
                 $response->header->status = RequestStatusCode::R_403;
 
                 return;
             } elseif (empty($defaultGroupIds)
                 && $account->getStatus() === AccountStatus::INACTIVE
             ) {
-                $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Registration', 'You are already registered, please activate your account through the email we sent you.', []);
+                $this->fillJsonResponse(
+                    $request,
+                    $response,
+                    NotificationLevel::ERROR,
+                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
+                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationNotActivated'),
+                    []
+                );
+
                 $response->header->status = RequestStatusCode::R_403;
 
                 return;
@@ -1520,7 +1671,14 @@ final class ApiController extends Controller
         // Create confirmation email
         // @todo: send email for activation
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Registration', 'We have sent you an email to confirm your registration.', $account);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
+            $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationSuccessful'),
+            $account
+        );
     }
 
     /**
@@ -1632,8 +1790,6 @@ final class ApiController extends Controller
         $collection->setPath('/Modules/Media/Files/Accounts/' . ((string) $id));
         $collection->createdBy = new NullAccount($createdBy);
 
-        CollectionMapper::create()->execute($collection);
-
         return $collection;
     }
 
@@ -1719,7 +1875,15 @@ final class ApiController extends Controller
         /** @var Account $account */
         $account = AccountMapper::get()->where('id', (int) ($request->getData('id')))->execute();
         $this->deleteModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully deleted', $account);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulDelete'),
+            $account
+        );
     }
 
     /**
@@ -1753,7 +1917,14 @@ final class ApiController extends Controller
             $this->createProfileForAccount($new, $request);
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account successfully updated', $new);
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $new
+        );
     }
 
     /**
@@ -1803,12 +1974,14 @@ final class ApiController extends Controller
         $status = (int) $request->getData('status');
 
         if (empty($module) || empty($status)) {
-            $response->set($request->uri->__toString(), [
-                'status'   => 'warning',
-                'title'    => 'Module',
-                'message'  => 'Invalid module or status',
-                'response' => [],
-            ]);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::WARNING,
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleStatusTitle'),
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'UnknownModuleOrStatusChange'),
+                []
+            );
 
             $response->header->status = RequestStatusCode::R_403;
             return;
@@ -1827,7 +2000,9 @@ final class ApiController extends Controller
         switch ($status) {
             case ModuleStatusUpdateType::ACTIVATE:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->activate($module);
-                $msg  = $done ? 'Module successfully activated.' : 'Module not activated.';
+                $msg  = $done
+                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleActivatedSuccessful')
+                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleActivatedFailure');
 
                 $new = clone $old;
                 $new->setStatus(ModuleStatusUpdateType::ACTIVATE);
@@ -1836,7 +2011,9 @@ final class ApiController extends Controller
                 break;
             case ModuleStatusUpdateType::DEACTIVATE:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->deactivate($module);
-                $msg  = $done ? 'Module successfully deactivated.' : 'Module not deactivated.';
+                $msg  = $done
+                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleDeactivatedSuccessful')
+                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleDeactivatedFailure');
 
                 $new = clone $old;
                 $new->setStatus(ModuleStatusUpdateType::DEACTIVATE);
@@ -1845,14 +2022,16 @@ final class ApiController extends Controller
                 break;
             case ModuleStatusUpdateType::INSTALL:
                 $done = $this->app->moduleManager->isInstalled($module) ? true : false;
-                $msg  = $done ? 'Module successfully installed.' : 'Module not installed.';
+                $msg  = $done
+                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledSuccessful')
+                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledFailure');
 
                 if ($done) {
                     break;
                 }
 
                 if (!\is_file(__DIR__ . '/../../../Modules/' . $module . '/info.json')) {
-                    $msg  = 'Status change for unknown module requested';
+                    $msg  = $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'UnknownModuleChange');
                     $done = false;
                     break;
                 }
@@ -1882,13 +2061,17 @@ final class ApiController extends Controller
 
                 $moduleObj->setStatus(ModuleStatus::AVAILABLE);
 
-                ModuleMapper::create()->execute($moduleObj);
+                $this->createModel($request->header->account, $moduleObj, ModuleMapper::class, 'module', $request->getOrigin());
 
                 $done = $this->app->moduleManager->install($module);
-                $msg  = $done ? 'Module successfully installed.' : 'Module not installed.';
+                $msg  = $done
+                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledSuccessful')
+                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledFailure');
 
+                $old = clone $moduleObj;
                 $moduleObj->setStatus(ModuleStatus::ACTIVE);
-                ModuleMapper::update()->execute($moduleObj);
+
+                $this->updateModel($request->header->account, $old, $moduleObj, ModuleMapper::class, 'module', $request->getOrigin());
 
                 $queryLoad = new Builder($this->app->dbPool->get('insert'));
                 $queryLoad->insert('module_load_pid', 'module_load_type', 'module_load_from', 'module_load_for', 'module_load_file')
@@ -1923,7 +2106,9 @@ final class ApiController extends Controller
                 break;
             case ModuleStatusUpdateType::UNINSTALL:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->uninstall($module);
-                $msg  = $done ? 'Module successfully uninstalled.' : 'Module not uninstalled.';
+                $msg  = $done
+                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleUninstalledSuccessful')
+                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleUninstalledFailure');
 
                 $new = clone $old;
                 $new->setStatus(ModuleStatusUpdateType::DELETE);
@@ -1932,7 +2117,7 @@ final class ApiController extends Controller
                 break;
             default:
                 $done                     = false;
-                $msg                      = 'Unknown module status change request.';
+                $msg                      = $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'UnknownModuleStatusChange');
                 $response->header->status = RequestStatusCode::R_400;
         }
 
@@ -1955,9 +2140,12 @@ final class ApiController extends Controller
         }
 
         $this->fillJsonResponse(
-            $request, $response,
+            $request,
+            $response,
             $done ? NotificationLevel::OK : NotificationLevel::WARNING,
-            'Module', $msg, []
+            $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleStatusTitle'),
+            $msg,
+            []
         );
     }
 
@@ -1978,7 +2166,15 @@ final class ApiController extends Controller
     {
         /** @var AccountPermission $account */
         $account = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully returned', $account);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulReturn'),
+            $account
+        );
     }
 
     /**
@@ -1998,7 +2194,15 @@ final class ApiController extends Controller
     {
         /** @var GroupPermission $group */
         $group = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully returned', $group);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulReturn'),
+            $group
+        );
     }
 
     /**
@@ -2021,13 +2225,28 @@ final class ApiController extends Controller
 
         if ($permission->getGroup() === 3) {
             // admin group cannot be deleted
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group permissions cannot be deleted', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                '',
+                $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'InvalidDelete'),
+                []
+            );
 
             return;
         }
 
         $this->deleteModel($request->header->account, $permission, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SucessfulDelete'),
+            $permission
+        );
     }
 
     /**
@@ -2048,7 +2267,15 @@ final class ApiController extends Controller
         /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully deleted', $permission);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SucessfulDelete'),
+            $permission
+        );
     }
 
     /**
@@ -2068,7 +2295,14 @@ final class ApiController extends Controller
     {
         if (((int) $request->getData('permissionref')) === 3) {
             // admin group cannot be deleted
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group permissions cannot get modified', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                'Group',
+                $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'InvalidUpdate'),
+                []
+            );
 
             return;
         }
@@ -2090,7 +2324,15 @@ final class ApiController extends Controller
         }
 
         $this->createModel($request->header->account, $permission, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Group', 'Group permission successfully created', $permission);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulCreate'),
+            $permission
+        );
     }
 
     /**
@@ -2125,7 +2367,15 @@ final class ApiController extends Controller
         }
 
         $this->createModel($request->header->account, $permission, AccountPermissionMapper::class, 'account-permission', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Account', 'Account permission successfully created', $permission);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulCreate'),
+            $permission
+        );
     }
 
     /**
@@ -2222,7 +2472,15 @@ final class ApiController extends Controller
         $new = $this->updatePermissionFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, AccountPermissionMapper::class, 'account-permission', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully updated', $new);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $new
+        );
     }
 
     /**
@@ -2245,7 +2503,14 @@ final class ApiController extends Controller
 
         if ($old->getGroup() === 3) {
             // admin group cannot be deleted
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Group', 'Admin group permissions cannot get modified', []);
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                'Group',
+                $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'InvalidUpdate'),
+                []
+            );
 
             return;
         }
@@ -2254,7 +2519,15 @@ final class ApiController extends Controller
         $new = $this->updatePermissionFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, GroupPermissionMapper::class, 'group-permission', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Permission', 'Permission successfully updated', $new);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
+            $new
+        );
     }
 
     /**
@@ -2557,7 +2830,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to make a call to the cli app
+     * Api method to forward an event to the cli app
      *
      * @param mixed ...$data Generic data
      *
@@ -2634,7 +2907,15 @@ final class ApiController extends Controller
             $contact->getId(),
             AccountMapper::class, 'contacts', '', $request->getOrigin()
         );
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Contact', 'Contact successfully created', $contact);
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SucessfulCreate'),
+            $contact
+        );
     }
 
     /**
@@ -2664,14 +2945,14 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ContactElement
+     * @return Contact
      *
      * @since 1.0.0
      */
-    public function createContactFromRequest(RequestAbstract $request) : ContactElement
+    public function createContactFromRequest(RequestAbstract $request) : Contact
     {
-        /** @var ContactElement $element */
-        $element = new ContactElement();
+        /** @var Contact $element */
+        $element = new Contact();
         $element->setType((int) ($request->getData('type') ?? 0));
         $element->setSubtype((int) ($request->getData('subtype') ?? 0));
         $element->content = (string) ($request->getData('content') ?? '');

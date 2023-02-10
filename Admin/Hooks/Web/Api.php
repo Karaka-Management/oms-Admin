@@ -13,7 +13,4 @@
 declare(strict_types=1);
 
 return [
-    '/.*/' => [
-        'callback' => ['\Modules\Admin\Controller\ApiController:cliEventCall'],
-    ],
 ];
