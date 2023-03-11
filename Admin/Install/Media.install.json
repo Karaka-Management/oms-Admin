@@ -62,6 +62,7 @@
         "virtualPath": "/Modules/Admin/Templates/Global",
         "user": 1
     },
+
     {
         "type": "upload",
         "create_collection": true,
@@ -76,44 +77,13 @@
     {
         "type": "upload",
         "create_collection": true,
-        "name": "Pdf Default Template",
+        "name": "Default Templates",
         "virtualPath": "/Modules/Admin/Templates/Global/Helper",
-        "path": "/Modules/Admin/Templates/Global/Helper/Pdf Default Template",
+        "path": "/Modules/Admin/Templates/Global/Helper/Default Templates",
         "files": [
-            "/Modules/Admin/Admin/Install/Media/PdfDefaultTemplate"
-        ],
-        "user": 1
-    },
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Word Default Template",
-        "virtualPath": "/Modules/Admin/Templates/Global/Helper",
-        "path": "/Modules/Admin/Templates/Global/Helper/Word Default Template",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/WordDefaultTemplate"
-        ],
-        "user": 1
-    },
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Word Plain Template",
-        "virtualPath": "/Modules/Admin/Templates/Global/Helper",
-        "path": "/Modules/Admin/Templates/Global/Helper/Word Plain Template",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/WordPlainTemplate"
-        ],
-        "user": 1
-    },
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Excel Default Template",
-        "virtualPath": "/Modules/Admin/Templates/Global/Helper",
-        "path": "/Modules/Admin/Templates/Global/Helper/Excel Default Template",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/ExcelDefaultTemplate"
+            "/Modules/Admin/Admin/Install/Media/PdfDefaultTemplate/pdfTemplate.pdf.php",
+            "/Modules/Admin/Admin/Install/Media/WordDefaultTemplate/docTemplate.doc.php",
+            "/Modules/Admin/Admin/Install/Media/ExcelDefaultTemplate/spreadsheetTemplate.xls.php"
         ],
         "user": 1
     },
@@ -183,66 +153,6 @@
         "files": [
             "/Modules/Admin/Admin/Install/Media/EmailExporter"
         ],
-        "user": 1
-    },
-
-    {
-        "type": "reference",
-        "name": "Assets",
-        "from": "/Modules/Admin/Templates/Global/Helper/Pdf Default Template",
-        "to": "/Modules/Admin/Templates/Global/Helper/Assets",
-        "user": 1
-    },
-    {
-        "type": "reference",
-        "name": "Assets",
-        "from": "/Modules/Admin/Templates/Global/Helper/Word Default Template",
-        "to": "/Modules/Admin/Templates/Global/Helper/Assets",
-        "user": 1
-    },
-    {
-        "type": "reference",
-        "name": "Assets",
-        "from": "/Modules/Admin/Templates/Global/Helper/Word Plain Template",
-        "to": "/Modules/Admin/Templates/Global/Helper/Assets",
-        "user": 1
-    },
-
-    {
-        "type": "reference",
-        "name": "Assets",
-        "from": "/Modules/Admin/Templates/Global/Helper/Excel Default Template",
-        "to": "/Modules/Admin/Templates/Global/Helper/Assets",
-        "user": 1
-    },
-
-    {
-        "type": "reference",
-        "name": "Helper",
-        "from": "/Modules/Admin/Templates/Global/Lists/Pdf List Exporter",
-        "to": "/Modules/Admin/Templates/Global/Helper/Pdf Default Template",
-        "user": 1
-    },
-    {
-        "type": "reference",
-        "name": "Helper",
-        "from": "/Modules/Admin/Templates/Global/Lists/Word List Exporter",
-        "to": "/Modules/Admin/Templates/Global/Helper/Word Default Template",
-        "user": 1
-    },
-    {
-        "type": "reference",
-        "name": "Helper",
-        "from": "/Modules/Admin/Templates/Global/Lists/Excel List Exporter",
-        "to": "/Modules/Admin/Templates/Global/Helper/Excel Default Template",
-        "user": 1
-    },
-
-    {
-        "type": "reference",
-        "name": "Helper",
-        "from": "/Modules/Admin/Templates/Global/Letters/Word Letter Exporter",
-        "to": "/Modules/Admin/Templates/Global/Helper/Word Default Template",
         "user": 1
     }
 ]

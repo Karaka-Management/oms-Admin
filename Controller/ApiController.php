@@ -116,7 +116,10 @@ final class ApiController extends Controller
     {
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
-        $login = AccountMapper::login((string) ($request->getData('user') ?? ''), (string) ($request->getData('pass') ?? ''));
+        $login = AccountMapper::login(
+            (string) ($request->getData('user') ?? ''),
+            (string) ($request->getData('pass') ?? '')
+        );
 
         if ($login >= LoginReturnType::OK) {
             $this->app->sessionManager->set('UID', $login, true);
@@ -181,26 +184,34 @@ final class ApiController extends Controller
         /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
             names: [
-                SettingsEnum::MAIL_SERVER_ADDR,
+                SettingsEnum::MAIL_SERVER_OUT,
+                SettingsEnum::MAIL_SERVER_PORT_OUT,
                 SettingsEnum::MAIL_SERVER_TYPE,
                 SettingsEnum::MAIL_SERVER_USER,
                 SettingsEnum::MAIL_SERVER_PASS,
                 SettingsEnum::MAIL_SERVER_TLS,
             ],
-            module: self::NAME
+            module: 'Admin'
         );
 
         $handler = new MailHandler();
-        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]->content ?? SubmitType::MAIL);
-        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS . '::' . self::NAME]->content ?? false);
+        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . ':::Admin']->content ?? SubmitType::MAIL);
+        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS . ':::Admin']->content ?? false);
 
-        if ((int) ($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . '::' . self::NAME]->content ?? SubmitType::MAIL) === SubmitType::SMTP) {
+        if (($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . ':::Admin']->content ?? SubmitType::MAIL) === SubmitType::SMTP) {
             $smtp          = new Smtp();
             $handler->smtp = $smtp;
+            $handler->useSMTPAuth = true;
         }
 
-        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER . '::' . self::NAME]->content ?? '';
-        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS . '::' . self::NAME]->content ?? '';
+        if (!empty($port = $emailSettings[SettingsEnum::MAIL_SERVER_PORT_OUT . ':::Admin']->content)) {
+            $handler->port = (int) $port;
+        }
+
+        $handler->host     = $emailSettings[SettingsEnum::MAIL_SERVER_OUT . ':::Admin']->content ?? 'localhost';
+        $handler->hostname = $emailSettings[SettingsEnum::MAIL_SERVER_OUT . ':::Admin']->content ?? '';
+        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER . ':::Admin']->content ?? '';
+        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS . ':::Admin']->content ?? '';
 
         return $handler;
     }
@@ -221,7 +232,9 @@ final class ApiController extends Controller
     public function apiForgot(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Admin\Models\Account $account */
-        $account = AccountMapper::get()->where('login', (string) $request->getData('login'))->execute();
+        $account = !empty($request->getData('login'))
+            ? AccountMapper::get()->where('login', (string) $request->getData('login'))->execute()
+            : AccountMapper::get()->where('email', (string) $request->getData('email'))->execute();
 
         /** @var \Model\Setting[] $forgotten */
         $forgotten = $this->app->appSettings->get(
@@ -254,12 +267,12 @@ final class ApiController extends Controller
 
         $token     = (string) \random_bytes(64);
         $handler   = $this->setUpServerMailHandler();
-        $resetLink = UriFactory::build('{/lang}/{/app}/{/backend}reset?user=' . $account->getId() . '&token=' . $token);
+        $resetLink = UriFactory::build('{/lang}/{/app}/reset?user=' . $account->getId() . '&token=' . $token);
 
         $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Karaka');
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Jingga');
         $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
-        $mail->subject = 'Karaka: Forgot Password';
+        $mail->subject = 'Jingga: Forgot Password';
         $mail->body    = '';
         $mail->msgHTML('Please reset your password at: <a href="' . $resetLink . '">' . $resetLink . '</a>');
 
@@ -368,9 +381,9 @@ final class ApiController extends Controller
         $loginLink = UriFactory::build('{/lang}/{/app}/{/backend}');
 
         $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Karaka');
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Jingga');
         $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
-        $mail->subject = 'Karaka: Password reset';
+        $mail->subject = 'Jingga: Password reset';
         $mail->body    = '';
         $mail->msgHTML('Your new password: <a href="' . $loginLink . '">' . $pass . '</a>'
                        . "\n\n"
@@ -530,7 +543,7 @@ final class ApiController extends Controller
                 ]
             ], false);
 
-            $this->updateModel($request->header->account, $old, $new, SettingMapper::class, 'settings',$request->getOrigin());
+            $this->updateModel($request->header->account, $old, $new, SettingMapper::class, 'settings', $request->getOrigin());
         }
 
         $this->fillJsonResponse(
@@ -1391,7 +1404,6 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $collection, CollectionMapper::class, 'collection', $request->getOrigin());
 
         // find default groups and create them
-        $defaultGroups   = [];
         $defaultGroupIds = [];
 
         if ($request->hasData('app')) {
@@ -1402,7 +1414,7 @@ final class ApiController extends Controller
                 module: 'Admin'
             );
 
-            $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
+            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
         }
 
         if ($request->hasData('unit')) {
@@ -1413,11 +1425,7 @@ final class ApiController extends Controller
                 module: 'Admin'
             );
 
-            $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
-        }
-
-        foreach ($defaultGroups as $group) {
-            $defaultGroupIds[] = $group->getId();
+            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
         }
 
         if (!empty($defaultGroupIds)) {
@@ -1461,12 +1469,20 @@ final class ApiController extends Controller
      */
     public function apiAccountRegister(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if ($request->header->account === 0) {
+            $request->header->account = 1;
+        }
+
         if (!empty($val = $this->validateRegistration($request))) {
             $response->set('account_registration', new FormValidation($val));
             $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
+
+        $app = AppMapper::get()
+            ->where('id', (int) $request->getData('app'))
+            ->execute();
 
         /** @var \Model\Setting $allowed */
         $allowed = $this->app->appSettings->get(
@@ -1565,33 +1581,28 @@ final class ApiController extends Controller
             $account = $loginAccount;
         }
 
-        $defaultGroups   = [];
-        $defaultGroupIds = [];
-
-        /** @var \Model\Setting $defaultGroupSettings */
-        $defaultGroupSettings = $this->app->appSettings->get(
-            names: SettingsEnum::APP_DEFAULT_GROUPS,
-            app:  (int) $request->getData('app'),
-            module: 'Admin'
-        );
-
-        $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
-
-        /** @var \Model\Setting $defaultGroupSettings */
-        $defaultGroupSettings = $this->app->appSettings->get(
-            names: SettingsEnum::UNIT_DEFAULT_GROUPS,
-            unit: (int) $request->getData('unit'),
-             module: 'Admin'
-        );
-
-        $defaultGroups = \array_merge($defaultGroups, \json_decode($defaultGroupSettings->content, true));
-
-        foreach ($defaultGroups as $group) {
-            $defaultGroupIds[] = $group->getId();
-        }
-
         // Already registered
         if ($account !== null) {
+            $defaultGroupIds = [];
+
+            /** @var \Model\Setting $defaultGroupSettings */
+            $defaultGroupSettings = $this->app->appSettings->get(
+                names: SettingsEnum::APP_DEFAULT_GROUPS,
+                app:  (int) $request->getData('app'),
+                module: 'Admin'
+            );
+
+            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+
+            /** @var \Model\Setting $defaultGroupSettings */
+            $defaultGroupSettings = $this->app->appSettings->get(
+                names: SettingsEnum::UNIT_DEFAULT_GROUPS,
+                unit: (int) $request->getData('unit'),
+                module: 'Admin'
+            );
+
+            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+
             /** @var Account $account */
             $account = AccountMapper::get()
                 ->with('groups')
@@ -1607,6 +1618,7 @@ final class ApiController extends Controller
             if (empty($defaultGroupIds)
                 && $account->getStatus() === AccountStatus::ACTIVE
             ) {
+                // Already set up
                 $this->fillJsonResponse(
                     $request,
                     $response,
@@ -1622,6 +1634,7 @@ final class ApiController extends Controller
             } elseif (empty($defaultGroupIds)
                 && $account->getStatus() === AccountStatus::INACTIVE
             ) {
+                // Account not active
                 $this->fillJsonResponse(
                     $request,
                     $response,
@@ -1639,6 +1652,7 @@ final class ApiController extends Controller
             // Create missing account / group relationships
             $this->createModelRelation($account->getId(), $account->getId(), $defaultGroupIds, AccountMapper::class, 'groups', 'registration', $request->getOrigin());
         } else {
+            // New account
             $request->setData('status', AccountStatus::INACTIVE);
             $request->setData('type', AccountType::USER);
             $request->setData('name1', !$request->hasData('name1')
@@ -1668,8 +1682,45 @@ final class ApiController extends Controller
             } while ($dataChange->getId() === 0 && $tries < 5);
         }
 
+        // Create client
+        if ($request->hasData('client')) {
+            $internalRequest = new HttpRequest();
+            $internalResponse = new HttpResponse();
+
+            $internalRequest->header->account = $account->getId();
+            $internalRequest->setData('account', $account->getId());
+            $internalRequest->setData('number', 100000 + $account->getId());
+            $internalRequest->setData('address', $request->getData('address') ?? '');
+            $internalRequest->setData('postal', $request->getData('postal') ?? '');
+            $internalRequest->setData('city', $request->getData('city') ?? '');
+            $internalRequest->setData('country', $request->getData('country') ?? '');
+            $internalRequest->setData('state', $request->getData('state') ?? '');
+
+            $this->app->moduleManager->get('ClientManagement')->apiClientCreate($internalRequest, $internalResponse);
+        }
+
         // Create confirmation email
-        // @todo: send email for activation
+        // @todo: adjust
+        // load base template for app
+        // load text content for login
+        // replace placeholders
+        // send email
+
+        $handler = $this->setUpServerMailHandler();
+
+        $emailSettings = $this->app->appSettings->get(
+            names: SettingsEnum::MAIL_SERVER_ADDR,
+            module: 'Admin'
+        );
+
+        $mail                      = new Email();
+        $mail->setFrom($emailSettings->content);
+        $mail->addTo((string) $request->getData('email'));
+        $mail->subject = 'Registration';
+        $mail->body    = "Hello,\nThank you very much for using our services at Jingga. Please click the following link to confirm your registration:\n\n" . UriFactory::build('{/base}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()) . "\n\nBest regards,\nJingga";
+        $mail->bodyAlt = $mail->body;
+
+        $handler->send($mail);
 
         $this->fillJsonResponse(
             $request,
@@ -2130,8 +2181,9 @@ final class ApiController extends Controller
                     $request->header->account,
                     $old, $new,
                     StringUtils::intHash(ModuleMapper::class), 'module-status',
-                    $module,
                     self::NAME,
+                    $module,
+                    '',
                     $request->getOrigin(),
                 ]
             );

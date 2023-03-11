@@ -58,6 +58,30 @@ else : ?>
                             <i class="filter fa fa-filter"></i>
                         </label>
                     <td class="wf-100"><?= $this->getHtml('Value'); ?>
+                    <td><?= $this->getHtml('Unit'); ?>
+                        <label for="settingsList-sort-5">
+                            <input type="radio" name="settingsList-sort" id="settingsList-sort-5">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="settingsList-sort-6">
+                            <input type="radio" name="settingsList-sort" id="settingsList-sort-6">
+                            <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
+                    <td><?= $this->getHtml('App'); ?>
+                        <label for="settingsList-sort-5">
+                            <input type="radio" name="settingsList-sort" id="settingsList-sort-5">
+                            <i class="sort-asc fa fa-chevron-up"></i>
+                        </label>
+                        <label for="settingsList-sort-6">
+                            <input type="radio" name="settingsList-sort" id="settingsList-sort-6">
+                            <i class="sort-desc fa fa-chevron-down"></i>
+                        </label>
+                        <label>
+                            <i class="filter fa fa-filter"></i>
+                        </label>
                     <td><?= $this->getHtml('Group'); ?>
                         <label for="settingsList-sort-7">
                             <input type="radio" name="settingsList-sort" id="settingsList-sort-7">
@@ -89,8 +113,22 @@ else : ?>
                 <tr tabindex="0">
                     <td><i class="fa fa-cogs"></i>
                     <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->getId(); ?>
-                    <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($setting->name); ?>
+                    <td data-label="<?= $this->getHtml('Name'); ?>">
+                        <?php
+                        $name = $setting->name;
+
+                        if ($this->getData('settings_class') !== null) {
+                            $name = $this->getData('settings_class')::getName($setting->name);
+
+                            if (!\is_string($name)) {
+                                $name= $setting->name;
+                            }
+                        }
+                        ?>
+                        <?= $this->printHtml($name); ?>
                     <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml($setting->content); ?>
+                    <td data-label="<?= $this->getHtml('Unit'); ?>"><?= $this->printHtml((string) $setting->unit); ?>
+                    <td data-label="<?= $this->getHtml('App'); ?>"><?= $this->printHtml((string) $setting->app); ?>
                     <td data-label="<?= $this->getHtml('Group'); ?>"><?= $this->printHtml($setting->group); ?>
                     <td data-label="<?= $this->getHtml('Account'); ?>"><?= $this->printHtml($setting->account); ?>
                 <?php endforeach; ?>

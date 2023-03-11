@@ -49,7 +49,6 @@ class Media
                 SettingsEnum::DEFAULT_LIST_EXPORTS,
                 (string) $media['collection'][4]['id'],
                 '\\d+',
-                unit: 1,
                 module: 'Admin'
             )
         );
@@ -60,7 +59,26 @@ class Media
                 SettingsEnum::DEFAULT_LETTERS,
                 (string) $media['collection'][5]['id'],
                 '\\d+',
-                unit: 1,
+                module: 'Admin'
+            )
+        );
+
+        SettingMapper::create()->execute(
+            new Setting(
+                0,
+                SettingsEnum::DEFAULT_ASSETS,
+                (string) $media['upload'][0]['id'],
+                '\\d+',
+                module: 'Admin'
+            )
+        );
+
+        SettingMapper::create()->execute(
+            new Setting(
+                0,
+                SettingsEnum::DEFAULT_TEMPLATES,
+                (string) $media['upload'][1]['id'],
+                '\\d+',
                 module: 'Admin'
             )
         );

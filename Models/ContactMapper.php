@@ -56,5 +56,5 @@ final class ContactMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='account_contact_id';
+    public const PRIMARYFIELD = 'account_contact_id';
 }

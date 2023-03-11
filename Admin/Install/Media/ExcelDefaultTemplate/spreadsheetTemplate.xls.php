@@ -1,15 +1,10 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../phpOMS/Autoloader.php';
-
-use phpOMS\Autoloader;
-Autoloader::addPath(__DIR__ . '/../Resources');
-
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooter;
 use PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
+use phpOMS\Autoloader;
 
 class DefaultExcel extends \PhpOffice\PhpSpreadsheet\Spreadsheet
 {

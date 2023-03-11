@@ -104,7 +104,7 @@ class DataChange
      */
     public function reHash() : void
     {
-        $this->hash = \random_bytes(64);
+        $this->hash = \bin2hex(\random_bytes(16));
     }
 
     /**

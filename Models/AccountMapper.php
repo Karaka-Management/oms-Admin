@@ -118,7 +118,7 @@ class AccountMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='account_id';
+    public const PRIMARYFIELD = 'account_id';
 
     /**
      * Created at column

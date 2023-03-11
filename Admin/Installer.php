@@ -78,21 +78,28 @@ final class Installer extends InstallerAbstract
      **/
     private static function installDefaultSettings() : void
     {
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_PATTERN, '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TRIES, '3', '\\d+', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TIMEOUT, '3', '\\d+', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_INTERVAL, '90', '\\d+', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_HISTORY, '3', '\\d+', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_STATUS, '1', '[0-3]', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_PATTERN, '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TRIES, '3', pattern: '/\\d+/', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TIMEOUT, '3', pattern: '/\\d+/', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_INTERVAL, '90', pattern: '/\\d+/', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_HISTORY, '3', pattern: '/\\d+/', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_STATUS, '1', pattern: '/[0-3]/', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_PATH, '', module: 'Admin'));
 
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_UNIT, '1', '\\d+', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_UNIT, '1', pattern: '/\\d+/', module: 'Admin'));
 
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', '[0-3]', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', pattern: '/[0-3]', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE, '', pattern: '/\\d*/', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE, '', pattern: '/\\d*/', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_MAIL_FAILED_TEMPLATE, '', pattern: '/\\d*/', module: 'Admin'));
 
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_LOCALIZATION, '1', '\\d+', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_LOCALIZATION, '1', pattern: '/\\d+/', module: 'Admin'));
 
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, 'admin@jingga.app', "(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])", module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_OUT, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PORT_OUT, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_IN, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PORT_IN, '', module: 'Admin'));
+        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, '', pattern: "/(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/", module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TYPE, SubmitType::MAIL, module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_USER, '', module: 'Admin'));
         SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PASS, '', module: 'Admin'));
@@ -107,7 +114,7 @@ final class Installer extends InstallerAbstract
             (OperatingSystem::getSystem() === SystemType::WIN
                 ? 'php.exe'
                 : 'php'
-            ) .' cli.php -v'
+            ) . ' ' . __DIR__ . '/../../../../Cli/cli.php -v'
         );
         $cmdResult = $cmdResult === null || $cmdResult === false ? '' : $cmdResult;
 

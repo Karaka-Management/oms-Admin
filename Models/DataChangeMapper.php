@@ -63,5 +63,5 @@ final class DataChangeMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='data_change_id';
+    public const PRIMARYFIELD = 'data_change_id';
 }

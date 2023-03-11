@@ -2,13 +2,6 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../phpOMS/Autoloader.php';
-
-use phpOMS\Autoloader;
-Autoloader::addPath(__DIR__ . '/../Resources');
-
-require_once __DIR__ . '/../Resources/tcpdf/tcpdf.php';
-
 class DefaultPdf extends TCPDF
 {
     public string $fontName = '';
@@ -21,7 +14,7 @@ class DefaultPdf extends TCPDF
             $this->header_xobjid = $this->startTemplate($this->w, 0);
 
             // Set Logo
-            $image_file = __DIR__ . '/../Web/Backend/img/logo.png';
+            $image_file = '/home/spl1nes/Orange-Management/Web/Backend/img/logo.png';
             $this->Image($image_file, 15, 15, 15, 15, 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
             // Set Title

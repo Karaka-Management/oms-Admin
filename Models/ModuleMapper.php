@@ -55,7 +55,7 @@ final class ModuleMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='module_id';
+    public const PRIMARYFIELD = 'module_id';
 
     public const AUTOINCREMENT = false;
 }

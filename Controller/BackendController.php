@@ -25,6 +25,7 @@ use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
 use Modules\Media\Models\MediaMapper;
 use phpOMS\Asset\AssetType;
+use phpOMS\Autoloader;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\OrderType;
 use phpOMS\Localization\NullLocalization;
@@ -562,13 +563,17 @@ final class BackendController extends Controller
 
         $id = (string) ($request->getData('id') ?? '');
 
+        $queryMapper =  AuditMapper::getAll()
+            ->with('createdBy')
+            ->where('module', $id);
+
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs', AuditMapper::getAll()->where('module', $id)->where('id', (int) $request->getData('audit'), '<')->limit(25)->execute());
+            $view->setData('auditlogs',$queryMapper->where('id', (int) $request->getData('audit'), '<')->limit(25)->execute());
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs', AuditMapper::getAll()->where('module', $id)->where('id', (int) $request->getData('audit'), '>')->limit(25)->execute());
+            $view->setData('auditlogs',$queryMapper->where('id', (int) $request->getData('audit'), '>')->limit(25)->execute());
         } else {
-            $view->setData('auditlogs', AuditMapper::getAll()->where('module', $id)->where('id', 0, '>')->limit(25)->execute());
+            $view->setData('auditlogs',$queryMapper->where('id', 0, '>')->limit(25)->execute());
         }
 
         return $view;
@@ -696,6 +701,13 @@ final class BackendController extends Controller
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
         }
 
+        $class = '\\Modules\\' . $request->getData('id') . '\\Models\\SettingsEnum';
+        if (!Autoloader::exists($class)) {
+            $class = null;
+        }
+
+        $view->setData('settings_class', $class);
+
         if ($request->getData('id') === 'Admin') {
             $view->setTemplate('/Modules/' . $request->getData('id') . '/Admin/Settings/Theme/Backend/settings');
         } elseif (\is_file(__DIR__ . '/../../' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings.tpl.php')) {
@@ -715,7 +727,7 @@ final class BackendController extends Controller
         );
 
         $view->setData('generalSettings', $generalSettings);
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION . '::Admin']->content)->execute());
+        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION . ':::Admin']->content)->execute());
 
         return $view;
     }

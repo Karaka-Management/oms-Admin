@@ -65,7 +65,7 @@ class ApiKeyMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='account_api_id';
+    public const PRIMARYFIELD = 'account_api_id';
 
     /**
      * Created at column

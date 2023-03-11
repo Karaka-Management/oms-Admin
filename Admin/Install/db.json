@@ -541,6 +541,14 @@
                 "default": null,
                 "null": true
             },
+            "unit_address": {
+                "name": "unit_address",
+                "type": "INT",
+                "default": null,
+                "null": true,
+                "foreignTable": "address",
+                "foreignKey": "address_id"
+            },
             "unit_parent": {
                 "name": "unit_parent",
                 "type": "INT",
@@ -554,6 +562,261 @@
                 "type": "TINYINT",
                 "default": null,
                 "null": true
+            }
+        }
+    },
+    "unit_address_rel": {
+        "name": "unit_address_rel",
+        "fields": {
+            "unit_address_rel_id": {
+                "name": "unit_address_rel_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_address_rel_unit": {
+                "name": "unit_address_rel_unit",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "unit",
+                "foreignKey": "unit_id"
+            },
+            "unit_address_rel_address": {
+                "name": "unit_address_rel_address",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "address",
+                "foreignKey": "address_id"
+            }
+        }
+    },
+    "unit_attr_type": {
+        "name": "unit_attr_type",
+        "fields": {
+            "unit_attr_type_id": {
+                "name": "unit_attr_type_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_attr_type_name": {
+                "name": "unit_attr_type_name",
+                "type": "VARCHAR(255)",
+                "null": false,
+                "unique": true
+            },
+            "unit_attr_type_datatype": {
+                "name": "unit_attr_type_datatype",
+                "type": "INT(11)",
+                "null": false
+            },
+            "unit_attr_type_fields": {
+                "name": "unit_attr_type_fields",
+                "type": "INT(11)",
+                "null": false
+            },
+            "unit_attr_type_custom": {
+                "name": "unit_attr_type_custom",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "unit_attr_type_required": {
+                "description": "Every item must have this attribute type if set to true.",
+                "name": "unit_attr_type_required",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "unit_attr_type_pattern": {
+                "description": "This is a regex validation pattern.",
+                "name": "unit_attr_type_pattern",
+                "type": "VARCHAR(255)",
+                "null": false
+            }
+        }
+    },
+    "unit_attr_type_l11n": {
+        "name": "unit_attr_type_l11n",
+        "fields": {
+            "unit_attr_type_l11n_id": {
+                "name": "unit_attr_type_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_attr_type_l11n_title": {
+                "name": "unit_attr_type_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "unit_attr_type_l11n_type": {
+                "name": "unit_attr_type_l11n_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "unit_attr_type",
+                "foreignKey": "unit_attr_type_id"
+            },
+            "unit_attr_type_l11n_lang": {
+                "name": "unit_attr_type_l11n_lang",
+                "type": "VARCHAR(2)",
+                "null": false,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            }
+        }
+    },
+    "unit_attr_value": {
+        "name": "unit_attr_value",
+        "fields": {
+            "unit_attr_value_id": {
+                "name": "unit_attr_value_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_attr_value_default": {
+                "name": "unit_attr_value_default",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "unit_attr_value_valueStr": {
+                "name": "unit_attr_value_valueStr",
+                "type": "VARCHAR(255)",
+                "null": true,
+                "default": null
+            },
+            "unit_attr_value_valueInt": {
+                "name": "unit_attr_value_valueInt",
+                "type": "INT(11)",
+                "null": true,
+                "default": null
+            },
+            "unit_attr_value_valueDec": {
+                "name": "unit_attr_value_valueDec",
+                "type": "DECIMAL(19,5)",
+                "null": true,
+                "default": null
+            },
+            "unit_attr_value_valueDat": {
+                "name": "unit_attr_value_valueDat",
+                "type": "DATETIME",
+                "null": true,
+                "default": null
+            },
+            "unit_attr_value_unit": {
+                "name": "unit_attr_value_unit",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "unit_attr_value_deptype": {
+                "name": "unit_attr_value_deptype",
+                "type": "INT(11)",
+                "null": true,
+                "default": null,
+                "foreignTable": "unit_attr_type",
+                "foreignKey": "unit_attr_type_id"
+            },
+            "unit_attr_value_depvalue": {
+                "name": "unit_attr_value_depvalue",
+                "type": "INT(11)",
+                "null": true,
+                "default": null,
+                "foreignTable": "unit_attr_value",
+                "foreignKey": "unit_attr_value_id"
+            }
+        }
+    },
+    "unit_attr_value_l11n": {
+        "name": "unit_attr_value_l11n",
+        "fields": {
+            "unit_attr_value_l11n_id": {
+                "name": "unit_attr_value_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_attr_value_l11n_title": {
+                "name": "unit_attr_value_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "unit_attr_value_l11n_value": {
+                "name": "unit_attr_value_l11n_value",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "unit_attr_value",
+                "foreignKey": "unit_attr_value_id"
+            },
+            "unit_attr_value_l11n_lang": {
+                "name": "unit_attr_value_l11n_lang",
+                "type": "VARCHAR(2)",
+                "null": false,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            }
+        }
+    },
+    "unit_attr_default": {
+        "name": "unit_attr_default",
+        "fields": {
+            "unit_attr_default_id": {
+                "name": "unit_attr_default_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_attr_default_type": {
+                "name": "unit_attr_default_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "unit_attr_type",
+                "foreignKey": "unit_attr_type_id"
+            },
+            "unit_attr_default_value": {
+                "name": "unit_attr_default_value",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "unit_attr_value",
+                "foreignKey": "unit_attr_value_id"
+            }
+        }
+    },
+    "unit_attr": {
+        "name": "unit_attr",
+        "fields": {
+            "unit_attr_id": {
+                "name": "unit_attr_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_attr_unit": {
+                "name": "unit_attr_unit",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "unit",
+                "foreignKey": "unit_id"
+            },
+            "unit_attr_type": {
+                "name": "unit_attr_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "unit_attr_type",
+                "foreignKey": "unit_attr_type_id"
+            },
+            "unit_attr_value": {
+                "name": "unit_attr_value",
+                "type": "INT(11)",
+                "null": true,
+                "default": null,
+                "foreignTable": "unit_attr_value",
+                "foreignKey": "unit_attr_value_id"
             }
         }
     },
@@ -826,6 +1089,55 @@
                 "name": "account_created_at",
                 "type": "DATETIME",
                 "null": false
+            }
+        }
+    },
+    "account_external": {
+        "name": "account_external",
+        "fields": {
+            "account_external_id": {
+                "name": "account_external_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "account_external_status": {
+                "name": "account_external_status",
+                "type": "TINYINT",
+                "null": false
+            },
+            "account_external_type": {
+                "name": "account_external_type",
+                "type": "INT",
+                "null": false
+            },
+            "account_external_subtype": {
+                "name": "account_external_subtype",
+                "type": "INT",
+                "null": false
+            },
+            "account_external_key": {
+                "name": "account_external_key",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "account_external_name": {
+                "name": "account_external_name",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "account_external_auth": {
+                "name": "account_external_auth",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "account_external_account": {
+                "name": "account_external_account",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
             }
         }
     },
@@ -1168,13 +1480,12 @@
             },
             "data_change_type": {
                 "name": "data_change_type",
-                "type": "VARCHAR(65)",
-                "null": false,
-                "unique": true
+                "type": "VARCHAR(64)",
+                "null": false
             },
             "data_change_hash": {
                 "name": "data_change_hash",
-                "type": "VARCHAR(65)",
+                "type": "VARCHAR(32)",
                 "null": false,
                 "unique": true
             },

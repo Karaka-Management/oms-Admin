@@ -130,7 +130,7 @@ final class LocalizationMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='l11n_id';
+    public const PRIMARYFIELD = 'l11n_id';
 
     /**
      * Model to use by the mapper.

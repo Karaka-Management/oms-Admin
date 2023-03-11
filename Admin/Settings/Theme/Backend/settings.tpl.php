@@ -63,7 +63,7 @@ echo $this->getData('nav')->render();
                             <div class="form-group">
                                 <label for="iOname"><?= $this->getHtml('OrganizationName'); ?></label>
                                 <select id="iOname" name="settings_1000000009">
-                                    <?php $unit = UnitMapper::get()->where('id', (int) $generalSettings[1000000009]->content)->execute(); ?>
+                                    <?php $unit = UnitMapper::get()->where('id', 1)->execute(); ?>
                                         <option value="<?= $unit->getId(); ?>"><?= $this->printHtml($unit->name); ?>
                                 </select>
                             </div>
@@ -103,7 +103,7 @@ echo $this->getData('nav')->render();
                                     <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="fa fa-info-circle"></i></i>
                                 </label>
 
-                                <input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001']->content); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
+                                <input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001:::Admin']->content); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
                             </div>
 
                             <div class="form-group">
@@ -112,7 +112,7 @@ echo $this->getData('nav')->render();
                                     <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries'); ?>"><i class="fa fa-info-circle"></i></i>
                                 </label>
 
-                                <input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($generalSettings['1000000005']->content); ?>" min="-1">
+                                <input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($generalSettings['1000000005:::Admin']->content); ?>" min="-1">
                             </div>
 
                             <div class="form-group">
@@ -121,7 +121,7 @@ echo $this->getData('nav')->render();
                                     <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod'); ?>"><i class="fa fa-info-circle"></i></i>
                                 </label>
 
-                                <input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($generalSettings['1000000002']->content); ?>">
+                                <input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($generalSettings['1000000002:::Admin']->content); ?>">
                             </div>
 
                             <div class="form-group">
@@ -130,7 +130,7 @@ echo $this->getData('nav')->render();
                                     <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval'); ?>"><i class="fa fa-info-circle"></i></i>
                                 </label>
 
-                                <input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($generalSettings['1000000003']->content); ?>">
+                                <input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($generalSettings['1000000003:::Admin']->content); ?>">
                             </div>
 
                             <div class="form-group">
@@ -139,7 +139,7 @@ echo $this->getData('nav')->render();
                                     <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory'); ?>"><i class="fa fa-info-circle"></i></i>
                                 </label>
 
-                                <input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($generalSettings['1000000004']->content); ?>">
+                                <input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($generalSettings['1000000004:::Admin']->content); ?>">
                             </div>
 
                         </div>
@@ -167,7 +167,7 @@ echo $this->getData('nav')->render();
 
                             <div class="form-group">
                                 <label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
-                                <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']->content); ?>" placeholder="&#xf040; /Logs">
+                                <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007:::Admin']->content); ?>" placeholder="&#xf040; /Logs">
                             </div>
                         </div>
                         <div class="portlet-foot">
@@ -728,6 +728,30 @@ echo $this->getData('nav')->render();
                                     <i class="filter fa fa-filter"></i>
                                 </label>
                             <td class="wf-100"><?= $this->getHtml('Value'); ?>
+                            <td><?= $this->getHtml('Unit'); ?>
+                                <label for="settingsList-sort-5">
+                                    <input type="radio" name="settingsList-sort" id="settingsList-sort-5">
+                                    <i class="sort-asc fa fa-chevron-up"></i>
+                                </label>
+                                <label for="settingsList-sort-6">
+                                    <input type="radio" name="settingsList-sort" id="settingsList-sort-6">
+                                    <i class="sort-desc fa fa-chevron-down"></i>
+                                </label>
+                                <label>
+                                    <i class="filter fa fa-filter"></i>
+                                </label>
+                            <td><?= $this->getHtml('App'); ?>
+                                <label for="settingsList-sort-5">
+                                    <input type="radio" name="settingsList-sort" id="settingsList-sort-5">
+                                    <i class="sort-asc fa fa-chevron-up"></i>
+                                </label>
+                                <label for="settingsList-sort-6">
+                                    <input type="radio" name="settingsList-sort" id="settingsList-sort-6">
+                                    <i class="sort-desc fa fa-chevron-down"></i>
+                                </label>
+                                <label>
+                                    <i class="filter fa fa-filter"></i>
+                                </label>
                             <td><?= $this->getHtml('Module'); ?>
                                 <label for="settingsList-sort-5">
                                     <input type="radio" name="settingsList-sort" id="settingsList-sort-5">
@@ -774,14 +798,28 @@ echo $this->getData('nav')->render();
                         <tr tabindex="0">
                             <td><i class="fa fa-cogs"></i>
                             <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->getId(); ?>
-                            <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($setting->name); ?>
-                            <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml($setting->content); ?>
+                            <td data-label="<?= $this->getHtml('Name'); ?>">
+                                <?php
+                                $name = $setting->name;
+
+                                if ($this->getData('settings_class') !== null) {
+                                    $name = $this->getData('settings_class')::getName($setting->name);
+
+                                    if (!\is_string($name)) {
+                                        $name= $setting->name;
+                                    }
+                                }
+                                ?>
+                                <?= $this->printHtml($name); ?>
+                            <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml((string) $setting->content); ?>
+                            <td data-label="<?= $this->getHtml('Unit'); ?>"><?= $this->printHtml((string) $setting->unit); ?>
+                            <td data-label="<?= $this->getHtml('App'); ?>"><?= $this->printHtml((string) $setting->app); ?>
                             <td data-label="<?= $this->getHtml('Module'); ?>"><?= $this->printHtml($setting->module); ?>
                             <td data-label="<?= $this->getHtml('Group'); ?>"><?= $this->printHtml((string) $setting->group); ?>
                             <td data-label="<?= $this->getHtml('Account'); ?>"><?= $this->printHtml((string) $setting->account); ?>
                         <?php endforeach; ?>
                         <?php if ($count === 0) : ?>
-                            <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                            <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                         <?php endif; ?>
                     </table>
                     </div>
@@ -794,11 +832,3 @@ echo $this->getData('nav')->render();
         </div>
     </div>
 </div>
-
-asdf
-
-// login status (normal, read_only, disabled)
-// default email settings for server (e.g. for forgot password)
-// some default pages (e.g. legal pages)
-// other settings defined during the installation (e.g. default unit ...)
-// maybe combine page Admin/Settings and the module settings into one page. Maybe make them reference each other or maybe completely remove the Admin/Settings page because it is available in the module settings!

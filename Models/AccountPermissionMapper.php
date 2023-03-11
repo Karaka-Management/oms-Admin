@@ -71,5 +71,5 @@ final class AccountPermissionMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='account_permission_id';
+    public const PRIMARYFIELD = 'account_permission_id';
 }

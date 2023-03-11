@@ -75,5 +75,5 @@ final class AddressMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='address_id';
+    public const PRIMARYFIELD = 'address_id';
 }

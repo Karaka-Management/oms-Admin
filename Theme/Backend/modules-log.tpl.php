@@ -58,11 +58,11 @@ echo $this->getData('nav')->render();
                     <tr tabindex="0" data-href="<?= $url; ?>">
                         <td><?= $audit->getId(); ?>
                         <td><?= $this->printHtml($audit->module); ?>
-                        <td><?= $audit->getType(); ?>
+                        <td><?= $audit->type; ?>
                         <td><?= $this->printHtml($audit->trigger); ?>
-                        <td><?= $this->printHtml($audit->content); ?>
+                        <td><?= $this->printHtml((string) $audit->content); ?>
                         <td><?= $this->printHtml($audit->createdBy->login); ?>
-                        <td><?= $this->printHtml($audit->ref); ?>
+                        <td><?= $this->printHtml((string) $audit->ref); ?>
                         <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                 <?php endforeach; ?>
                 <?php if ($count === 0) : ?>

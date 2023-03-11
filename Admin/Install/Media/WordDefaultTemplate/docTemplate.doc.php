@@ -1,11 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../phpOMS/Autoloader.php';
-
-use phpOMS\Autoloader;
-Autoloader::addPath(__DIR__ . '/../Resources');
-
 class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
     public function __construct()
     {

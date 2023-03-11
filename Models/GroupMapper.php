@@ -64,7 +64,7 @@ final class GroupMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='group_id';
+    public const PRIMARYFIELD = 'group_id';
 
     /**
      * Created at column

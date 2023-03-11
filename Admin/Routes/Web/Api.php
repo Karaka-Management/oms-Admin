@@ -18,9 +18,26 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
+    '^.*/admin/worker(\?.*|$)' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiDataChange',
+            'verb'       => RouteVerb::ANY,
+            'permission' => [
+            ],
+        ],
+    ],
+
     '^.*/login(\?.*|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiLogin',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+            ],
+        ],
+    ],
+    '^.*/signup(\?.*|$)' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountRegister',
             'verb'       => RouteVerb::SET,
             'permission' => [
             ],
