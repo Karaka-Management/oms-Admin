@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin\Template\Backend
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -85,7 +85,7 @@ echo $this->getData('nav')->render(); ?>
                 <tbody>
                     <?php $c = 0;
                         foreach ($groups as $key => $value) : ++$c;
-                            $url = UriFactory::build('{/lang}/{/app}/admin/group/settings?{?}&id=' . $value->getId());
+                            $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->getId());
 
                             $color                                                          = 'darkred';
                             if ($value->getStatus() === GroupStatus::ACTIVE) { $color       = 'green'; }

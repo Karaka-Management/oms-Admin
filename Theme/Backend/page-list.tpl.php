@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -21,8 +21,8 @@ use phpOMS\Uri\UriFactory;
  */
 $pages = $this->getData('pages') ?? [];
 
-$previous = empty($pages) ? 'admin/page/list' : '{/lang}/{/app}/admin/page/list?{?}&id=' . \reset($pages)->getId() . '&ptype=p';
-$next     = empty($pages) ? 'admin/page/list' : '{/lang}/{/app}/admin/page/list?{?}&id=' . \end($pages)->getId() . '&ptype=n';
+$previous = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&id=' . \reset($pages)->getId() . '&ptype=p';
+$next     = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&id=' . \end($pages)->getId() . '&ptype=n';
 
 echo $this->getData('nav')->render(); ?>
 
@@ -90,7 +90,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                     <tbody>
                         <?php $c                                                          = 0; foreach ($accounts as $key => $value) : ++$c;
-                        $url                                                              = UriFactory::build('{/lang}/{/app}/admin/account/settings?{?}&id=' . $value->getId());
+                        $url                                                              = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->getId());
                         $color                                                            = 'darkred';
                         if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }
                         elseif ($value->getStatus() === AccountStatus::INACTIVE) { $color = 'darkblue'; }

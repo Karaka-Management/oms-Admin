@@ -6,7 +6,7 @@
  *
  * @package   tests
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -93,7 +93,7 @@ trait ApiControllerAccountTrait
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->header->account = 1;
-        $request->setData('login', 'guest');
+        $request->setData('user', 'guest');
         $request->setData('password', 'guest');
         $request->setData('name1', 'Guest');
         $request->setData('email', 'test@email.com');
@@ -116,7 +116,7 @@ trait ApiControllerAccountTrait
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->header->account = 1;
-        $request->setData('login', 'guest2');
+        $request->setData('user', 'guest2');
         $request->setData('password', 'guest2');
         $request->setData('name1', 'Guest2');
         $request->setData('email', 'guest2@email.com');

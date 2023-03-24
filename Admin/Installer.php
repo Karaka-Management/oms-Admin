@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin\Admin
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -24,18 +24,20 @@ use phpOMS\DataStorage\Database\Connection\SQLiteConnection;
 use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Localization\Localization;
-use phpOMS\Message\Mail\SubmitType;
+use phpOMS\Message\Http\HttpRequest;
+use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\System\File\PathException;
 use phpOMS\System\OperatingSystem;
 use phpOMS\System\SystemType;
+use phpOMS\Uri\HttpUri;
 
 /**
  * Installer class.
  *
  * @package Modules\Admin\Admin
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
@@ -67,6 +69,11 @@ final class Installer extends InstallerAbstract
         self::installDefaultSettings();
 
         $sqlite->close();
+
+        $settings = include __DIR__ . '/Install/settings.php';
+        foreach ($settings as $setting) {
+            self::createSettings($app, $setting);
+        }
     }
 
     /**
@@ -78,38 +85,6 @@ final class Installer extends InstallerAbstract
      **/
     private static function installDefaultSettings() : void
     {
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_PATTERN, '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TRIES, '3', pattern: '/\\d+/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_TIMEOUT, '3', pattern: '/\\d+/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_INTERVAL, '90', pattern: '/\\d+/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::PASSWORD_HISTORY, '3', pattern: '/\\d+/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_STATUS, '1', pattern: '/[0-3]/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGGING_PATH, '', module: 'Admin'));
-
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_UNIT, '1', pattern: '/\\d+/', module: 'Admin'));
-
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_STATUS, '1', pattern: '/[0-3]', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE, '', pattern: '/\\d*/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE, '', pattern: '/\\d*/', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::LOGIN_MAIL_FAILED_TEMPLATE, '', pattern: '/\\d*/', module: 'Admin'));
-
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::DEFAULT_LOCALIZATION, '1', pattern: '/\\d+/', module: 'Admin'));
-
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_OUT, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PORT_OUT, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_IN, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PORT_IN, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_ADDR, '', pattern: "/(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/", module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TYPE, SubmitType::MAIL, module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_USER, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_PASS, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_CERT, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEY, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_KEYPASS, '', module: 'Admin'));
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::MAIL_SERVER_TLS, (string) false, module: 'Admin'));
-
-        SettingMapper::create()->execute(new Setting(0, SettingsEnum::GROUP_GENERATE_AUTOMATICALLY_APP, (string) true, module: 'Admin'));
-
         $cmdResult = \shell_exec(
             (OperatingSystem::getSystem() === SystemType::WIN
                 ? 'php.exe'
@@ -157,9 +132,9 @@ final class Installer extends InstallerAbstract
 
         foreach ($countries as $country) {
             $query->values(
-                $country['country_name'] === null ? null : \trim($country['country_name']),
-                $country['country_code2'] === null ? null : \trim($country['country_code2']),
-                $country['country_code3'] === null ? null : \trim($country['country_code3']),
+                $country['country_name'] === null ? null : \trim((string) $country['country_name']),
+                $country['country_code2'] === null ? null : \trim((string) $country['country_code2']),
+                $country['country_code3'] === null ? null : \trim((string) $country['country_code3']),
                 $country['country_numeric'],
                 $country['country_region'],
                 (int) $country['country_developed']
@@ -196,12 +171,12 @@ final class Installer extends InstallerAbstract
 
         foreach ($languages as $language) {
             $query->values(
-                $language['language_name'] === null ? null : \trim($language['language_name']),
-                $language['language_native'] === null ? null : \trim($language['language_native']),
-                $language['language_639_1'] === null ? null : \trim($language['language_639_1']),
-                $language['language_639_2T'] === null ? null : \trim($language['language_639_2T']),
-                $language['language_639_2B'] === null ? null : \trim($language['language_639_2B']),
-                $language['language_639_3'] === null ? null : \trim($language['language_639_3'])
+                $language['language_name'] === null ? null : \trim((string) $language['language_name']),
+                $language['language_native'] === null ? null : \trim((string) $language['language_native']),
+                $language['language_639_1'] === null ? null : \trim((string) $language['language_639_1']),
+                $language['language_639_2T'] === null ? null : \trim((string) $language['language_639_2T']),
+                $language['language_639_2B'] === null ? null : \trim((string) $language['language_639_2B']),
+                $language['language_639_3'] === null ? null : \trim((string) $language['language_639_3'])
             );
         }
 
@@ -236,13 +211,13 @@ final class Installer extends InstallerAbstract
         foreach ($currencies as $currency) {
             $query->values(
                 $currency['currency_id'],
-                $currency['currency_name'] === null ? null : \trim($currency['currency_name']),
-                $currency['currency_code'] === null ? null : \trim($currency['currency_code']),
-                $currency['currency_number'] === null ? null : \trim($currency['currency_number']),
-                $currency['currency_symbol'] === null ? null : \trim($currency['currency_symbol']),
+                $currency['currency_name'] === null ? null : \trim((string) $currency['currency_name']),
+                $currency['currency_code'] === null ? null : \trim((string) $currency['currency_code']),
+                $currency['currency_number'] === null ? null : \trim((string) $currency['currency_number']),
+                $currency['currency_symbol'] === null ? null : \trim((string) $currency['currency_symbol']),
                 $currency['currency_subunits'],
-                $currency['currency_decimal'] === null ? null : \trim($currency['currency_decimal']),
-                $currency['currency_countries'] === null ? null : \trim($currency['currency_countries'])
+                $currency['currency_decimal'] === null ? null : \trim((string) $currency['currency_decimal']),
+                $currency['currency_countries'] === null ? null : \trim((string) $currency['currency_countries'])
             );
         }
 
@@ -297,18 +272,41 @@ final class Installer extends InstallerAbstract
     /**
      * Create settings.
      *
-     * @param ApplicationAbstract $app     Database instance
-     * @param array               $setting Media info
+     * @param ApplicationAbstract $app  Database instance
+     * @param array               $data Setting data
      *
      * @return array
      *
      * @since 1.0.0
      */
-    private static function createSettings(ApplicationAbstract $app, array $setting) : array
+    private static function createSettings(ApplicationAbstract $app, array $data) : array
     {
-        unset($setting['type']);
-        $app->appSettings->create($setting);
+        /** @var \Modules\Admin\Controller\ApiController $module */
+        $module = $app->moduleManager->get('Admin');
 
-        return $setting;
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $request->setData('id', $data['id'] ?? 0);
+        $request->setData('name', $data['name'] ?? '');
+        $request->setData('content', $data['content'] ?? '');
+        $request->setData('pattern', $data['pattern'] ?? '');
+        $request->setData('unit', $data['unit'] ?? null);
+        $request->setData('app', $data['app'] ?? null);
+        $request->setData('module', $data['module'] ?? null);
+        $request->setData('group', $data['group'] ?? null);
+        $request->setData('account', $data['account'] ?? null);
+
+        $module->apiSettingsCreate($request, $response);
+
+        $responseData = $response->get('');
+        if (!\is_array($responseData)) {
+            return [];
+        }
+
+        return !\is_array($responseData['response'])
+            ? $responseData['response']->toArray()
+            : $responseData['response'];
     }
 }

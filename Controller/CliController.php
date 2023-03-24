@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -25,7 +25,7 @@ use phpOMS\Views\View;
  * This class is responsible for the basic admin activities such as managing accounts, groups, permissions and modules.
  *
  * @package Modules\Admin
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
@@ -76,9 +76,9 @@ final class CliController extends Controller
     public function cliRunEvent(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $event = $this->app->eventManager->triggerSimilar(
-            $request->getData('g'),
-            $request->getData('i'),
-            \json_decode($request->getData('d'), true)
+            $request->getDataString('g') ?? '',
+            $request->getDataString('i') ?? '',
+            $request->getDataJson('d')
         );
 
         $view = new View($this->app->l11nManager, $request, $response);

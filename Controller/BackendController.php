@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -42,7 +42,7 @@ use Web\Backend\Views\TableView;
  * This class is responsible for the basic admin activities such as managing accounts, groups, permissions and modules.
  *
  * @package Modules\Admin
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  * @codeCoverageIgnore
@@ -139,14 +139,14 @@ final class BackendController extends Controller
 
         $mapper = AccountMapper::getAll()->with('createdBy');
         $list   = AccountMapper::find(
-            search: $request->getData('search'),
+            search: $request->getDataString('search'),
             mapper: $mapper,
-            id: (int) ($request->getData('id') ?? 0),
-            secondaryId: (string) ($request->getData('subid') ?? ''),
-            type: $request->getData('pType'),
-            pageLimit: empty((int) ($request->getData('limit') ?? 0)) ? 100 : ((int) $request->getData('limit')),
-            sortBy: $request->getData('sort_by') ?? '',
-            sortOrder: $request->getData('sort_order') ?? OrderType::DESC,
+            id: $request->getDataInt('id') ?? 0,
+            secondaryId: $request->getDataString('subid') ?? '',
+            type: $request->getDataString('pType'),
+            pageLimit: empty($request->getDataInt('limit') ?? 0) ? 100 : ((int) $request->getData('limit')),
+            sortBy: $request->getDataString('sort_by') ?? '',
+            sortOrder: $request->getDataString('sort_order') ?? OrderType::DESC,
             searchFields: $searchField,
             filters: $filterField
         );
@@ -166,6 +166,7 @@ final class BackendController extends Controller
             $templateIds[] = (int) $template->content;
         }
 
+        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
         $mediaTemplates = MediaMapper::getAll()
             ->where('id', $templateIds, 'in')
             ->execute();
@@ -225,11 +226,11 @@ final class BackendController extends Controller
         // audit log
         if ($request->getData('ptype') === 'p') {
             $view->setData('auditlogs',
-                    AuditMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('audit') ?? 0), '<')->limit(25)->execute()
+                    AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '<')->limit(25)->execute()
                 );
         } elseif ($request->getData('ptype') === 'n') {
             $view->setData('auditlogs',
-                    AuditMapper::getAll()->with('createdBy')->where('id', (int) ($request->getData('audit') ?? 0), '>')->limit(25)->execute()
+                    AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '>')->limit(25)->execute()
                 );
         } else {
             $view->setData('auditlogs',
@@ -312,14 +313,14 @@ final class BackendController extends Controller
 
         $mapper = GroupMapper::getAll()->with('createdBy');
         $list   = GroupMapper::find(
-            search: $request->getData('search'),
+            search: $request->getDataString('search'),
             mapper: $mapper,
-            id: (int) ($request->getData('id') ?? 0),
-            secondaryId: (string) ($request->getData('subid') ?? ''),
-            type: $request->getData('pType'),
-            pageLimit: empty((int) ($request->getData('limit') ?? 0)) ? 100 : ((int) $request->getData('limit')),
-            sortBy: $request->getData('sort_by') ?? '',
-            sortOrder: $request->getData('sort_order') ?? OrderType::DESC,
+            id: $request->getDataInt('id') ?? 0,
+            secondaryId: $request->getDataString('subid') ?? '',
+            type: $request->getDataString('pType'),
+            pageLimit: empty($request->getDataInt('limit') ?? 0) ? 100 : ((int) $request->getData('limit')),
+            sortBy: $request->getDataString('sort_by') ?? '',
+            sortOrder: $request->getDataString('sort_order') ?? OrderType::DESC,
             searchFields: $searchField,
             filters: $filterField
         );
@@ -342,6 +343,7 @@ final class BackendController extends Controller
             $templateIds[] = (int) $template->content;
         }
 
+        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
         $mediaTemplates = MediaMapper::getAll()
             ->where('id', $templateIds, 'in')
             ->execute();
@@ -405,9 +407,9 @@ final class BackendController extends Controller
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs', $mapperQuery->where('id', (int) ($request->getData('audit') ?? 0), '<')->limit(25)->execute());
+            $view->setData('auditlogs', $mapperQuery->where('id', $request->getDataInt('audit') ?? 0, '<')->limit(25)->execute());
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs', $mapperQuery->where('id', (int) ($request->getData('audit') ?? 0), '>')->limit(25)->execute());
+            $view->setData('auditlogs', $mapperQuery->where('id', $request->getDataInt('audit') ?? 0, '>')->limit(25)->execute());
         } else {
             $view->setData('auditlogs', $mapperQuery->where('id', 0, '>')->limit(25)->execute());
         }
@@ -475,6 +477,7 @@ final class BackendController extends Controller
             $templateIds[] = (int) $template->content;
         }
 
+        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
         $mediaTemplates = MediaMapper::getAll()
             ->where('id', $templateIds, 'in')
             ->execute();
@@ -511,7 +514,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-info');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
-        $id = $request->getData('id') ?? '';
+        $id = $request->getDataString('id') ?? '';
         $view->setData('modules', $this->app->moduleManager->getAllModules());
         $view->setData('active', $this->app->moduleManager->getActiveModules());
         $view->setData('installed',$this->app->moduleManager->getInstalledModules());
@@ -561,7 +564,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-log');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
-        $id = (string) ($request->getData('id') ?? '');
+        $id = $request->getDataString('id') ?? '';
 
         $queryMapper =  AuditMapper::getAll()
             ->with('createdBy')
@@ -596,7 +599,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-route-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
-        $module = $request->getData('id') ?? '';
+        $module = $request->getDataString('id') ?? '';
         $view->setData('module', $module);
 
         $appPath      = __DIR__ . '/../../../Web';
@@ -645,7 +648,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-hook-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
-        $module = $request->getData('id') ?? '';
+        $module = $request->getDataString('id') ?? '';
         $view->setData('module', $module);
 
         $appPath     = __DIR__ . '/../../../Web';
@@ -693,7 +696,7 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
 
-        $id = $request->getData('id') ?? '';
+        $id = $request->getDataString('id') ?? '';
 
         /** @var null|\Model\NullSetting|\Model\Setting[] $settings */
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
@@ -710,8 +713,8 @@ final class BackendController extends Controller
 
         if ($request->getData('id') === 'Admin') {
             $view->setTemplate('/Modules/' . $request->getData('id') . '/Admin/Settings/Theme/Backend/settings');
-        } elseif (\is_file(__DIR__ . '/../../' . ($request->getData('id') ?? '') . '/Admin/Settings/Theme/Backend/settings.tpl.php')) {
-            return $this->app->moduleManager->get($request->getData('id') ?? '')
+        } elseif (\is_file(__DIR__ . '/../../' . ($request->getDataString('id') ?? '') . '/Admin/Settings/Theme/Backend/settings.tpl.php')) {
+            return $this->app->moduleManager->get($request->getDataString('id') ?? '')
                 ->viewModuleSettings($request, $response, $data);
         } else {
             $view->setTemplate('/Modules/Admin/Theme/Backend/modules-settings');
@@ -727,7 +730,7 @@ final class BackendController extends Controller
         );
 
         $view->setData('generalSettings', $generalSettings);
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION . ':::Admin']->content)->execute());
+        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content)->execute());
 
         return $view;
     }

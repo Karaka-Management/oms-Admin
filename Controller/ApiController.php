@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -42,6 +42,7 @@ use Modules\Admin\Models\SettingsEnum;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\UploadFile;
+use Modules\Messages\Models\EmailMapper;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
@@ -93,7 +94,7 @@ use phpOMS\Version\Version;
  * This class is responsible for the basic admin activities such as managing accounts, groups, permissions and modules.
  *
  * @package Modules\Admin
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
@@ -117,8 +118,8 @@ final class ApiController extends Controller
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
         $login = AccountMapper::login(
-            (string) ($request->getData('user') ?? ''),
-            (string) ($request->getData('pass') ?? '')
+            $request->getDataString('user') ?? '',
+            $request->getDataString('pass') ?? ''
         );
 
         if ($login >= LoginReturnType::OK) {
@@ -191,27 +192,42 @@ final class ApiController extends Controller
                 SettingsEnum::MAIL_SERVER_PASS,
                 SettingsEnum::MAIL_SERVER_TLS,
             ],
+            unit: $this->app->unitId,
             module: 'Admin'
         );
 
-        $handler = new MailHandler();
-        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . ':::Admin']->content ?? SubmitType::MAIL);
-        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS . ':::Admin']->content ?? false);
-
-        if (($emailSettings[SettingsEnum::MAIL_SERVER_TYPE . ':::Admin']->content ?? SubmitType::MAIL) === SubmitType::SMTP) {
-            $smtp          = new Smtp();
-            $handler->smtp = $smtp;
-            $handler->useSMTPAuth = true;
+        if (empty($emailSettings)) {
+            /** @var \Model\Setting[] $emailSettings */
+            $emailSettings = $this->app->appSettings->get(
+                names: [
+                    SettingsEnum::MAIL_SERVER_OUT,
+                    SettingsEnum::MAIL_SERVER_PORT_OUT,
+                    SettingsEnum::MAIL_SERVER_TYPE,
+                    SettingsEnum::MAIL_SERVER_USER,
+                    SettingsEnum::MAIL_SERVER_PASS,
+                    SettingsEnum::MAIL_SERVER_TLS,
+                ],
+                module: 'Admin'
+            );
         }
 
-        if (!empty($port = $emailSettings[SettingsEnum::MAIL_SERVER_PORT_OUT . ':::Admin']->content)) {
+        $handler = new MailHandler();
+        $handler->setMailer($emailSettings[SettingsEnum::MAIL_SERVER_TYPE]->content ?? SubmitType::MAIL);
+        $handler->useAutoTLS = (bool) ($emailSettings[SettingsEnum::MAIL_SERVER_TLS]->content ?? false);
+
+        if (($emailSettings[SettingsEnum::MAIL_SERVER_TYPE]->content ?? SubmitType::MAIL) === SubmitType::SMTP) {
+            $smtp          = new Smtp();
+            $handler->smtp = $smtp;
+        }
+
+        if (!empty($port = $emailSettings[SettingsEnum::MAIL_SERVER_PORT_OUT]->content)) {
             $handler->port = (int) $port;
         }
 
-        $handler->host     = $emailSettings[SettingsEnum::MAIL_SERVER_OUT . ':::Admin']->content ?? 'localhost';
-        $handler->hostname = $emailSettings[SettingsEnum::MAIL_SERVER_OUT . ':::Admin']->content ?? '';
-        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER . ':::Admin']->content ?? '';
-        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS . ':::Admin']->content ?? '';
+        $handler->host     = $emailSettings[SettingsEnum::MAIL_SERVER_OUT]->content ?? 'localhost';
+        $handler->hostname = $emailSettings[SettingsEnum::MAIL_SERVER_OUT]->content ?? '';
+        $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER]->content ?? '';
+        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '';
 
         return $handler;
     }
@@ -232,27 +248,20 @@ final class ApiController extends Controller
     public function apiForgot(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Admin\Models\Account $account */
-        $account = !empty($request->getData('login'))
-            ? AccountMapper::get()->where('login', (string) $request->getData('login'))->execute()
+        $account = !empty($request->getData('user'))
+            ? AccountMapper::get()->where('login', (string) $request->getData('user'))->execute()
             : AccountMapper::get()->where('email', (string) $request->getData('email'))->execute();
 
         /** @var \Model\Setting[] $forgotten */
         $forgotten = $this->app->appSettings->get(
             names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_COUNT],
-            module: self::NAME,
+            module: 'Admin',
             account: $account->getId()
         );
 
-        /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
-            names: [
-                SettingsEnum::MAIL_SERVER_ADDR,
-                SettingsEnum::MAIL_SERVER_CERT,
-                SettingsEnum::MAIL_SERVER_KEY,
-                SettingsEnum::MAIL_SERVER_KEYPASS,
-                SettingsEnum::MAIL_SERVER_TLS,
-            ],
-            module: self::NAME
+            names: SettingsEnum::MAIL_SERVER_ADDR,
+            module: 'Admin'
         );
 
         if ((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT]->content > 3) {
@@ -267,10 +276,10 @@ final class ApiController extends Controller
 
         $token     = (string) \random_bytes(64);
         $handler   = $this->setUpServerMailHandler();
-        $resetLink = UriFactory::build('{/lang}/{/app}/reset?user=' . $account->getId() . '&token=' . $token);
+        $resetLink = UriFactory::build('{/base}/reset?user=' . $account->getId() . '&token=' . $token);
 
         $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Jingga');
+        $mail->setFrom($emailSettings->content);
         $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
         $mail->subject = 'Jingga: Forgot Password';
         $mail->body    = '';
@@ -297,6 +306,7 @@ final class ApiController extends Controller
             ],
         ], true);
 
+        /*
         if (!empty($emailSettings[SettingsEnum::MAIL_SERVER_CERT]->content)
             && !empty($emailSettings[SettingsEnum::MAIL_SERVER_KEY]->content)
         ) {
@@ -306,6 +316,7 @@ final class ApiController extends Controller
                 $emailSettings[SettingsEnum::MAIL_SERVER_KEYPASS]->content
             );
         }
+        */
 
         $handler->send($mail);
 
@@ -378,7 +389,7 @@ final class ApiController extends Controller
         );
 
         $handler   = $this->setUpServerMailHandler();
-        $loginLink = UriFactory::build('{/lang}/{/app}/{/backend}');
+        $loginLink = UriFactory::build('{/base}/{/backend}');
 
         $mail = new Email();
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Jingga');
@@ -444,13 +455,13 @@ final class ApiController extends Controller
             $request->uri->__toString(),
             [
                 'response' => $this->app->appSettings->get(
-                    $request->getData('id', 'int'),
+                    $request->getDataInt('id'),
                     $request->getData('name'),
-                    $request->getData('unit', 'int'),
-                    $request->getData('app', 'int'),
+                    $request->getDataInt('unit'),
+                    $request->getDataInt('app'),
                     $request->getData('module'),
-                    $request->getData('group', 'int'),
-                    $request->getData('account', 'int')
+                    $request->getDataInt('group'),
+                    $request->getDataInt('account')
                 ),
             ]
         );
@@ -509,7 +520,7 @@ final class ApiController extends Controller
         $dataSettings = $request->getDataJson('settings');
 
         foreach ($dataSettings as $data) {
-            $id      = isset($data['id']) ? (int) $data['id'] : null;
+            $id      = isset($data['id']) && !empty($data['id']) ? (int) $data['id'] : null;
             $name    = $data['name'] ?? null;
             $content = $data['content'] ?? null;
             $unit    = $data['unit'] ?? null;
@@ -554,6 +565,86 @@ final class ApiController extends Controller
             $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulUpdate'),
             $dataSettings
         );
+    }
+
+    /**
+     * Api method for modifying settings
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiSettingsCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateSettingsCreate($request))) {
+            $response->set('setting_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $setting = $this->createSettingFromRequest($request);
+        $this->createModel($request->header->account, $setting, SettingMapper::class, 'setting', $request->getOrigin());
+
+        $this->fillJsonResponse(
+            $request,
+            $response,
+            NotificationLevel::OK,
+            '',
+            $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulCreate'),
+            $setting
+        );
+    }
+
+    /**
+     * Validate password update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateSettingsCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['name'] = empty($request->getData('name')))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to create group from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return Setting
+     *
+     * @since 1.0.0
+     */
+    private function createSettingFromRequest(RequestAbstract $request) : Setting
+    {
+        $setting = new Setting(
+            id: $request->getDataInt('id') ?? 0,
+            name: $request->getDataString('name') ?? '',
+            content: $request->getDataString('content') ?? '',
+            pattern: $request->getDataString('pattern') ?? '',
+            unit: $request->getDataInt('unit'),
+            app: $request->getDataInt('app'),
+            module: $request->getDataString('module'),
+            group: $request->getDataInt('group'),
+            account: $request->getDataInt('account')
+        );
+
+        return $setting;
     }
 
     /**
@@ -945,8 +1036,8 @@ final class ApiController extends Controller
     private function createApplicationFromRequest(RequestAbstract $request) : App
     {
         $app       = new App();
-        $app->name = (string) ($request->getData('name') ?? '');
-        $app->type = (int) ($request->getData('type') ?? ApplicationType::WEB);
+        $app->name = $request->getDataString('name') ?? '';
+        $app->type = $request->getDataInt('type') ?? ApplicationType::WEB;
 
         return $app;
     }
@@ -968,7 +1059,7 @@ final class ApiController extends Controller
     {
         $appManager = new ApplicationManager($this->app);
 
-        $app = \rtrim($request->getData('appSrc') ?? '', '/\\ ');
+        $app = \rtrim($request->getDataString('appSrc') ?? '', '/\\ ');
         if (!\is_dir(__DIR__ . '/../../../' . $app)) {
             $response->header->status = RequestStatusCode::R_400;
             return;
@@ -990,8 +1081,8 @@ final class ApiController extends Controller
         // handle app installation
         $result = $appManager->install(
             __DIR__ . '/../../../' . $app,
-            __DIR__ . '/../../../' . ($request->getData('appDest') ?? ''),
-            $request->getData('theme') ?? 'Default'
+            __DIR__ . '/../../../' . ($request->getDataString('appDest') ?? ''),
+            $request->getDataString('theme') ?? 'Default'
         );
 
         // handle providing
@@ -1087,7 +1178,7 @@ final class ApiController extends Controller
     private function updateGroupFromRequest(RequestAbstract $request, Group $group) : Group
     {
         $group->name = (string) ($request->getData('name') ?? $group->name);
-        $group->setStatus((int) ($request->getData('status') ?? $group->getStatus()));
+        $group->setStatus($request->getDataInt('status') ?? $group->getStatus());
         $group->description    = Markdown::parse((string) ($request->getData('description') ?? $group->descriptionRaw));
         $group->descriptionRaw = (string) ($request->getData('description') ?? $group->descriptionRaw);
 
@@ -1163,10 +1254,10 @@ final class ApiController extends Controller
     {
         $group            = new Group();
         $group->createdBy = new NullAccount($request->header->account);
-        $group->name      = (string) ($request->getData('name') ?? '');
-        $group->setStatus((int) ($request->getData('status') ?? GroupStatus::INACTIVE));
-        $group->description    = Markdown::parse((string) ($request->getData('description') ?? ''));
-        $group->descriptionRaw = (string) ($request->getData('description') ?? '');
+        $group->name      = $request->getDataString('name') ?? '';
+        $group->setStatus($request->getDataInt('status') ?? GroupStatus::INACTIVE);
+        $group->description    = Markdown::parse($request->getDataString('description') ?? '');
+        $group->descriptionRaw = $request->getDataString('description') ?? '';
 
         return $group;
     }
@@ -1233,7 +1324,7 @@ final class ApiController extends Controller
         $response->set(
             $request->uri->__toString(),
             \array_values(
-                GroupMapper::getAll()->where('name', '%' . ($request->getData('search') ?? '') . '%', 'LIKE')->execute()
+                GroupMapper::getAll()->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')->execute()
             )
         );
     }
@@ -1286,11 +1377,11 @@ final class ApiController extends Controller
             $request->uri->__toString(),
             \array_values(
                 AccountMapper::getAll()
-                    ->where('login', '%' . ($request->getData('search') ?? '') . '%', 'LIKE')
-                    ->where('email', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
-                    ->where('name1', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
-                    ->where('name2', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
-                    ->where('name3', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
+                    ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+                    ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+                    ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+                    ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+                    ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
                     ->execute()
             )
         );
@@ -1314,16 +1405,16 @@ final class ApiController extends Controller
         /** @var Account[] $accounts */
         $accounts = \array_values(
             AccountMapper::getAll()
-                ->where('login', '%' . ($request->getData('search') ?? '') . '%', 'LIKE')
-                ->where('email', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
-                ->where('name1', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
-                ->where('name2', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
-                ->where('name3', '%' . ($request->getData('search') ?? '') . '%', 'LIKE', 'OR')
+                ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+                ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+                ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+                ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+                ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
                 ->execute()
         );
 
         /** @var Group[] $groups */
-        $groups = \array_values(GroupMapper::getAll()->where('name', '%' . ($request->getData('search') ?? '') . '%', 'LIKE')->execute());
+        $groups = \array_values(GroupMapper::getAll()->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')->execute());
         $data   = [];
 
         foreach ($accounts as $account) {
@@ -1447,7 +1538,7 @@ final class ApiController extends Controller
             $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'AccountCreateTitle'),
             \str_replace(
                 '{url}',
-                UriFactory::build('{/lang}/{/app}/admin/account/settings?{?}&id=' . $account->getId()),
+                UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $account->getId()),
                 $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'AccountCreateMsg'
             )),
             $account
@@ -1480,6 +1571,7 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var \Modules\Admin\Models\App */
         $app = AppMapper::get()
             ->where('id', (int) $request->getData('app'))
             ->execute();
@@ -1530,7 +1622,7 @@ final class ApiController extends Controller
         $emailAccount = AccountMapper::get()->where('email', (string) $request->getData('email'))->execute();
 
         /** @var Account $loginAccount */
-        $loginAccount = AccountMapper::get()->where('login', (string) ($request->getData('login') ?? $request->getData('email')))->execute();
+        $loginAccount = AccountMapper::get()->where('login', (string) ($request->getData('user') ?? $request->getData('email')))->execute();
 
         /** @var null|Account $account */
         $account = null;
@@ -1653,15 +1745,24 @@ final class ApiController extends Controller
             $this->createModelRelation($account->getId(), $account->getId(), $defaultGroupIds, AccountMapper::class, 'groups', 'registration', $request->getOrigin());
         } else {
             // New account
-            $request->setData('status', AccountStatus::INACTIVE);
-            $request->setData('type', AccountType::USER);
+            $request->setData('status', AccountStatus::INACTIVE, true);
+            $request->setData('type', AccountType::USER, true);
             $request->setData('name1', !$request->hasData('name1')
-                ? \explode('@', $request->getData('email'))[0]
-                : $request->getData('name1')
-            );
-            $request->setData('login', $request->getData('login') ?? $request->getData('email'));
+                ? (!$request->hasData('user')
+                    ? \explode('@', $request->getDataString('email'))[0]
+                    : $request->getDataString('user')
+                )
+                : $request->getDataString('name1')
+                , true);
+
+            $request->setData('user', !$request->hasData('user')
+                ? $request->getDataString('email')
+                : $request->getDataString('user')
+                , true);
 
             $this->apiAccountCreate($request, $response, $data);
+
+            /** @var Account $account */
             $account = $response->get($request->uri->__toString())['response'];
 
             // Create confirmation pending entry
@@ -1684,17 +1785,18 @@ final class ApiController extends Controller
 
         // Create client
         if ($request->hasData('client')) {
-            $internalRequest = new HttpRequest();
+            $internalRequest  = new HttpRequest();
             $internalResponse = new HttpResponse();
 
             $internalRequest->header->account = $account->getId();
             $internalRequest->setData('account', $account->getId());
             $internalRequest->setData('number', 100000 + $account->getId());
-            $internalRequest->setData('address', $request->getData('address') ?? '');
-            $internalRequest->setData('postal', $request->getData('postal') ?? '');
-            $internalRequest->setData('city', $request->getData('city') ?? '');
-            $internalRequest->setData('country', $request->getData('country') ?? '');
-            $internalRequest->setData('state', $request->getData('state') ?? '');
+            $internalRequest->setData('address', $request->getDataString('address') ?? '');
+            $internalRequest->setData('postal', $request->getDataString('postal') ?? '');
+            $internalRequest->setData('city', $request->getDataString('city') ?? '');
+            $internalRequest->setData('country', $request->getDataString('country') ?? '');
+            $internalRequest->setData('state', $request->getDataString('state') ?? '');
+            $internalRequest->setData('vat_id', $request->getDataString('vat_id') ?? '');
 
             $this->app->moduleManager->get('ClientManagement')->apiClientCreate($internalRequest, $internalResponse);
         }
@@ -1709,16 +1811,46 @@ final class ApiController extends Controller
         $handler = $this->setUpServerMailHandler();
 
         $emailSettings = $this->app->appSettings->get(
-            names: SettingsEnum::MAIL_SERVER_ADDR,
+            names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE],
             module: 'Admin'
         );
 
-        $mail                      = new Email();
-        $mail->setFrom($emailSettings->content);
+        $mail = EmailMapper::get()
+            ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE])
+            ->execute();
+
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
         $mail->addTo((string) $request->getData('email'));
-        $mail->subject = 'Registration';
-        $mail->body    = "Hello,\nThank you very much for using our services at Jingga. Please click the following link to confirm your registration:\n\n" . UriFactory::build('{/base}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()) . "\n\nBest regards,\nJingga";
-        $mail->bodyAlt = $mail->body;
+
+        // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
+        // Maybe store the uri in the $app model? or store all urls in the config file
+        $mail->body = \str_replace(
+            [
+                '{confirmation_link}',
+                '{user_name}',
+            ],
+            [
+                UriFactory::hasQuery('/' . \strtolower($app->name))
+                    ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
+                    : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
+                $account->login
+            ],
+            $mail->body
+        );
+
+        $mail->bodyAlt = \str_replace(
+            [
+                '{confirmation_link}',
+                '{user_name}',
+            ],
+            [
+                UriFactory::hasQuery('/' . \strtolower($app->name))
+                    ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
+                    : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
+                $account->login
+            ],
+            $mail->bodyAlt
+        );
 
         $handler->send($mail);
 
@@ -1858,8 +1990,8 @@ final class ApiController extends Controller
      */
     private function createProfileForAccount(Account $account, RequestAbstract $request) : void
     {
-        if (((string) ($request->getData('password') ?? '')) === ''
-            || ((string) ($request->getData('login') ?? '')) === ''
+        if (($request->getDataString('password') ?? '') === ''
+            || ($request->getDataString('user') ?? '') === ''
         ) {
             return;
         }
@@ -1882,16 +2014,16 @@ final class ApiController extends Controller
     private function createAccountFromRequest(RequestAbstract $request) : Account
     {
         $account        = new Account();
-        $account->login = (string) ($request->getData('login') ?? '');
-        $account->name1 = (string) ($request->getData('name1') ?? '');
-        $account->name2 = (string) ($request->getData('name2') ?? '');
-        $account->name3 = (string) ($request->getData('name3') ?? '');
-        $account->setStatus((int) ($request->getData('status') ?? AccountStatus::INACTIVE));
-        $account->setType((int) ($request->getData('type') ?? AccountType::USER));
-        $account->setEmail((string) ($request->getData('email') ?? ''));
-        $account->generatePassword((string) ($request->getData('password') ?? ''));
+        $account->login = $request->getDataString('user') ?? '';
+        $account->name1 = $request->getDataString('name1') ?? '';
+        $account->name2 = $request->getDataString('name2') ?? '';
+        $account->name3 = $request->getDataString('name3') ?? '';
+        $account->setStatus($request->getDataInt('status') ?? AccountStatus::INACTIVE);
+        $account->setType($request->getDataInt('type') ?? AccountType::USER);
+        $account->setEmail($request->getDataString('email') ?? '');
+        $account->generatePassword($request->getDataString('password') ?? '');
 
-        if ($request->getData('locale') === null) {
+        if (!$request->hasData('locale')) {
             $account->l11n = Localization::fromJson(
                     $this->app->l11nServer === null ? $request->header->l11n->jsonSerialize() : $this->app->l11nServer->jsonSerialize()
                 );
@@ -1991,13 +2123,13 @@ final class ApiController extends Controller
      */
     private function updateAccountFromRequest(RequestAbstract $request, Account $account, bool $allowPassword = false) : Account
     {
-        $account->login = (string) ($request->getData('login') ?? $account->login);
+        $account->login = (string) ($request->getData('user') ?? $account->login);
         $account->name1 = (string) ($request->getData('name1') ?? $account->name1);
         $account->name2 = (string) ($request->getData('name2') ?? $account->name2);
         $account->name3 = (string) ($request->getData('name3') ?? $account->name3);
-        $account->setEmail((string) ($request->getData('email') ?? $account->getEmail()));
-        $account->setStatus((int) ($request->getData('status') ?? $account->getStatus()));
-        $account->setType((int) ($request->getData('type') ?? $account->getType()));
+        $account->setEmail($request->getDataString('email') ?? $account->getEmail());
+        $account->setStatus($request->getDataInt('status') ?? $account->getStatus());
+        $account->setType($request->getDataInt('type') ?? $account->getType());
 
         if ($allowPassword && !empty($request->getData('password'))) {
             $account->generatePassword((string) $request->getData('password'));
@@ -2021,7 +2153,7 @@ final class ApiController extends Controller
      */
     public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        $module = (string) ($request->getData('module') ?? '');
+        $module = $request->getDataString('module') ?? '';
         $status = (int) $request->getData('status');
 
         if (empty($module) || empty($status)) {
@@ -2492,11 +2624,11 @@ final class ApiController extends Controller
         $permission->setElement(empty($request->getData('permissionelement')) ? null : (int) $request->getData('permissionelement'));
         $permission->setComponent(empty($request->getData('permissioncomponent')) ? null : (int) $request->getData('permissioncomponent'));
         $permission->setPermission(
-            (int) ($request->getData('permissioncreate') ?? 0)
-                | (int) ($request->getData('permissionread') ?? 0)
-                | (int) ($request->getData('permissionupdate') ?? 0)
-                | (int) ($request->getData('permissiondelete') ?? 0)
-                | (int) ($request->getData('permissionpermission') ?? 0)
+            ($request->getDataInt('permissioncreate') ?? 0)
+                | ($request->getDataInt('permissionread') ?? 0)
+                | ($request->getDataInt('permissionupdate') ?? 0)
+                | ($request->getDataInt('permissiondelete') ?? 0)
+                | ($request->getDataInt('permissionpermission') ?? 0)
         );
 
         return $permission;
@@ -2600,11 +2732,11 @@ final class ApiController extends Controller
         $permission->setCategory(empty($request->getData('permissioncategory')) ? $permission->getCategory() : (int) $request->getData('permissioncategory'));
         $permission->setElement(empty($request->getData('permissionelement')) ? $permission->getElement() : (int) $request->getData('permissionelement'));
         $permission->setComponent(empty($request->getData('permissioncomponent')) ? $permission->getComponent() : (int) $request->getData('permissioncomponent'));
-        $permission->setPermission((int) ($request->getData('permissioncreate') ?? 0)
-            | (int) ($request->getData('permissionread') ?? 0)
-            | (int) ($request->getData('permissionupdate') ?? 0)
-            | (int) ($request->getData('permissiondelete') ?? 0)
-            | (int) ($request->getData('permissionpermission') ?? 0));
+        $permission->setPermission(($request->getDataInt('permissioncreate') ?? 0)
+            | ($request->getDataInt('permissionread') ?? 0)
+            | ($request->getDataInt('permissionupdate') ?? 0)
+            | ($request->getDataInt('permissiondelete') ?? 0)
+            | ($request->getDataInt('permissionpermission') ?? 0));
 
         return $permission;
     }
@@ -2823,7 +2955,7 @@ final class ApiController extends Controller
     {
         $this->apiUpdate([[
             'name'         => 'temp.json',
-            'download_url' => 'https://raw.githubusercontent.com/Karaka-Management/' . ($request->getData('url') ?? ''),
+            'download_url' => 'https://raw.githubusercontent.com/Karaka-Management/' . ($request->getDataString('url') ?? ''),
         ]]);
     }
 
@@ -2914,7 +3046,7 @@ final class ApiController extends Controller
             SystemUtils::runProc(
                 OperatingSystem::getSystem() === SystemType::WIN ? 'php.exe' : 'php',
                 \escapeshellarg($cliPath)
-                    . ' post:/admin/event '
+                    . ' /admin/event '
                     . '-g ' . \escapeshellarg($data[$count - 2] ?? '') . ' '
                     . '-i ' . \escapeshellarg($data[$count - 1] ?? '') . ' '
                     . '-d ' . \escapeshellarg($jsonData),
@@ -3005,10 +3137,10 @@ final class ApiController extends Controller
     {
         /** @var Contact $element */
         $element = new Contact();
-        $element->setType((int) ($request->getData('type') ?? 0));
-        $element->setSubtype((int) ($request->getData('subtype') ?? 0));
-        $element->content = (string) ($request->getData('content') ?? '');
-        $element->account = (int) ($request->getData('account') ?? 0);
+        $element->setType($request->getDataInt('type') ?? 0);
+        $element->setSubtype($request->getDataInt('subtype') ?? 0);
+        $element->content = $request->getDataString('content') ?? '';
+        $element->account = $request->getDataInt('account') ?? 0;
 
         return $element;
     }

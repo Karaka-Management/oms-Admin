@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin\Template\Backend
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -86,7 +86,7 @@ echo $this->getData('nav')->render(); ?>
                         <?php
                         $c = 0;
                         foreach ($accounts as $key => $value) : ++$c;
-                            $url   = UriFactory::build('{/lang}/{/app}/admin/account/settings?{?}&id=' . $value->getId());
+                            $url   = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->getId());
                             $color = 'darkred';
 
                             if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }

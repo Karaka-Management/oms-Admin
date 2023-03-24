@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin\Admin\Install
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -23,7 +23,7 @@ use phpOMS\Application\ApplicationAbstract;
  * Media class.
  *
  * @package Modules\Admin\Admin\Install
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
@@ -43,44 +43,35 @@ class Media
     {
         $media = \Modules\Media\Admin\Installer::installExternal($app, ['path' => __DIR__ . '/Media.install.json']);
 
-        SettingMapper::create()->execute(
-            new Setting(
-                0,
-                SettingsEnum::DEFAULT_LIST_EXPORTS,
-                (string) $media['collection'][4]['id'],
-                '\\d+',
-                module: 'Admin'
-            )
-        );
-
-        SettingMapper::create()->execute(
-            new Setting(
-                0,
-                SettingsEnum::DEFAULT_LETTERS,
-                (string) $media['collection'][5]['id'],
-                '\\d+',
-                module: 'Admin'
-            )
-        );
-
-        SettingMapper::create()->execute(
-            new Setting(
-                0,
-                SettingsEnum::DEFAULT_ASSETS,
-                (string) $media['upload'][0]['id'],
-                '\\d+',
-                module: 'Admin'
-            )
-        );
-
-        SettingMapper::create()->execute(
-            new Setting(
-                0,
-                SettingsEnum::DEFAULT_TEMPLATES,
-                (string) $media['upload'][1]['id'],
-                '\\d+',
-                module: 'Admin'
-            )
+        \Modules\Admin\Admin\Installer::installExternal($app,
+            [
+                'type' => 'setting',
+                'name' => SettingsEnum::DEFAULT_LIST_EXPORTS,
+                'content' => (string) $media['collection'][4]['id'],
+                'pattern' => '\\d+',
+                'module' => 'Admin'
+            ],
+            [
+                'type' => 'setting',
+                'name' => SettingsEnum::DEFAULT_LETTERS,
+                'content' => (string) $media['collection'][5]['id'],
+                'pattern' => '\\d+',
+                'module' => 'Admin'
+            ],
+            [
+                'type' => 'setting',
+                'name' => SettingsEnum::DEFAULT_ASSETS,
+                'content' => (string) $media['upload'][0]['id'],
+                'pattern' => '\\d+',
+                'module' => 'Admin'
+            ],
+            [
+                'type' => 'setting',
+                'name' => SettingsEnum::DEFAULT_TEMPLATES,
+                'content' => (string) $media['upload'][1]['id'],
+                'pattern' => '\\d+',
+                'module' => 'Admin'
+            ]
         );
     }
 }

@@ -19,7 +19,8 @@
     "dependencies": {},
     "providing": {
         "Media": "*",
-        "Navigation": "*"
+        "Navigation": "*",
+        "Messages": "*"
     },
     "load": [
         {

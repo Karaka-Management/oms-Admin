@@ -1,15 +1,94 @@
 <?php
-
+/**
+ * Karaka
+ *
+ * PHP Version 8.1
+ *
+ * @package   Modules\Media
+ * @copyright Dennis Eichhorn
+ * @license   OMS License 2.0
+ * @version   1.0.0
+ * @link      https://jingga.app
+ */
 declare(strict_types=1);
 
+/**
+ * Default PDF class.
+ *
+ * @package Modules\Media
+ * @license OMS License 2.0
+ * @link    https://jingga.app
+ * @since   1.0.0
+ */
 class DefaultPdf extends TCPDF
 {
+    /**
+     * Font
+     *
+     * @var string
+     * @since 1.0.0
+     */
     public string $fontName = '';
+
+    /**
+     * Font size
+     *
+     * @var int
+     * @since 1.0.0
+     */
     public int $fontSize = 8;
+
+    /**
+     * Side margins
+     *
+     * @var int
+     * @since 1.0.0
+     */
     public int $sideMargin = 15;
 
-    //Page header
-    public function Header() {
+    /**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
+    public function __construct()
+    {
+        parent::__construct('P', 'mm', 'A4', true, 'UTF-8', false);
+
+        $this->SetCreator("Jingga");
+
+        // set default header data
+        $this->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, 'Jingga', 'Business solutions made simple.');
+
+        // set header and footer fonts
+        $this->SetHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
+        $this->SetFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
+
+        // set default monospaced font
+        $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        $this->SetMargins(15, 30, 15);
+
+        // set auto page breaks
+        $this->SetAutoPageBreak(true, 25);
+
+        // set image scale factor
+        $this->SetImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // add a page
+        $this->AddPage();
+    }
+
+    /**
+     * Create header
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function Header() : void
+    {
         if ($this->header_xobjid === false) {
             $this->header_xobjid = $this->startTemplate($this->w, 0);
 
@@ -50,8 +129,15 @@ class DefaultPdf extends TCPDF
         }
     }
 
-    // Page footer
-    public function Footer() {
+    /**
+     * Create footer
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function Footer() : void
+    {
         $this->SetY(-25);
 
         $this->SetFont('helvetica', 'I', 7);
@@ -75,35 +161,6 @@ class DefaultPdf extends TCPDF
 
         $this->SetXY(25 + 45 + 35 + 15 + 40, -15, true);
         $this->MultiCell(35, 0, "www.jingga.app\ninfo@jingga.app\n+49 0152 ???????", 0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B');
-    }
-
-    public function __construct()
-    {
-        parent::__construct('P', 'mm', 'A4', true, 'UTF-8', false);
-
-        $this->SetCreator("Jingga");
-
-        // set default header data
-        $this->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, 'Jingga', 'Business solutions made simple.');
-
-        // set header and footer fonts
-        $this->SetHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
-        $this->SetFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
-
-        // set default monospaced font
-        $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-        // set margins
-        $this->SetMargins(15, 30, 15);
-
-        // set auto page breaks
-        $this->SetAutoPageBreak(true, 25);
-
-        // set image scale factor
-        $this->SetImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // add a page
-        $this->AddPage();
     }
 }
 

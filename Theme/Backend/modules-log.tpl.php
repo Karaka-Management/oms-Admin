@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin\Template\Backend
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -54,7 +54,7 @@ echo $this->getData('nav')->render();
                     <td><?= $this->getHtml('Date', 'Auditor'); ?>
                 <tbody>
                 <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                $url         = UriFactory::build('{/lang}/{/app}/admin/audit/single?{?}&id=' . $audit->getId()); ?>
+                $url         = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->getId()); ?>
                     <tr tabindex="0" data-href="<?= $url; ?>">
                         <td><?= $audit->getId(); ?>
                         <td><?= $this->printHtml($audit->module); ?>
