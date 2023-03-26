@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Modules\Admin\Models;
 
 /**
- * App model.
+ * Data change model.
  *
  * @package Modules\Admin\Models
  * @license OMS License 2.0

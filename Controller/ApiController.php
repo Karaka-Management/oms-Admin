@@ -127,20 +127,35 @@ final class ApiController extends Controller
             $this->app->sessionManager->save();
             $response->set($request->uri->__toString(), new Reload());
         } elseif ($login === LoginReturnType::NOT_ACTIVATED) {
-            $response->set($request->uri->__toString(), new Notify(
+            $response->header->status = RequestStatusCode::R_401;
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::WARNING,
+                '',
                 $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'NOT_ACTIVATED'),
-                NotifyType::WARNING
-            ));
+                null
+            );
         } elseif ($login === LoginReturnType::WRONG_INPUT_EXCEEDED) {
-            $response->set($request->uri->__toString(), new Notify(
+            $response->header->status = RequestStatusCode::R_401;
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::WARNING,
+                '',
                 $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'WRONG_INPUT_EXCEEDED'),
-                NotifyType::WARNING
-            ));
+                null
+            );
         } else {
-            $response->set($request->uri->__toString(), new Notify(
+            $response->header->status = RequestStatusCode::R_401;
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::WARNING,
+                '',
                 $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'LOGIN_ERROR'),
-                NotifyType::WARNING
-            ));
+                null
+            );
         }
     }
 
@@ -192,7 +207,6 @@ final class ApiController extends Controller
                 SettingsEnum::MAIL_SERVER_PASS,
                 SettingsEnum::MAIL_SERVER_TLS,
             ],
-            unit: $this->app->unitId,
             module: 'Admin'
         );
 
@@ -1565,8 +1579,16 @@ final class ApiController extends Controller
         }
 
         if (!empty($val = $this->validateRegistration($request))) {
-            $response->set('account_registration', new FormValidation($val));
             $response->header->status = RequestStatusCode::R_400;
+
+            $this->fillJsonResponse(
+                $request,
+                $response,
+                NotificationLevel::ERROR,
+                '',
+                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'FormDataInvalid'),
+                $val
+            );
 
             return;
         }
@@ -1584,6 +1606,8 @@ final class ApiController extends Controller
         );
 
         if ($allowed->content !== '1') {
+            $response->header->status = RequestStatusCode::R_400;
+
             $this->fillJsonResponse(
                 $request,
                 $response,
@@ -1603,6 +1627,8 @@ final class ApiController extends Controller
         if ($request->hasData('password')
             && \preg_match($complexity->content, (string) $request->getData('password')) !== 1
         ) {
+            $response->header->status = RequestStatusCode::R_400;
+
             $this->fillJsonResponse(
                 $request,
                 $response,
@@ -1632,6 +1658,8 @@ final class ApiController extends Controller
             && $emailAccount->login !== null
             && AccountMapper::login($emailAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
         ) {
+            $response->header->status = RequestStatusCode::R_400;
+
             $this->fillJsonResponse(
                 $request,
                 $response,
@@ -1653,6 +1681,8 @@ final class ApiController extends Controller
             && !($loginAccount instanceof NullAccount)
             && $loginAccount->getEmail() !== $request->getData('email')
         ) {
+            $response->header->status = RequestStatusCode::R_400;
+
             $this->fillJsonResponse(
                 $request,
                 $response,
@@ -1710,6 +1740,8 @@ final class ApiController extends Controller
             if (empty($defaultGroupIds)
                 && $account->getStatus() === AccountStatus::ACTIVE
             ) {
+                $response->header->status = RequestStatusCode::R_400;
+
                 // Already set up
                 $this->fillJsonResponse(
                     $request,
@@ -1726,6 +1758,8 @@ final class ApiController extends Controller
             } elseif (empty($defaultGroupIds)
                 && $account->getStatus() === AccountStatus::INACTIVE
             ) {
+                $response->header->status = RequestStatusCode::R_400;
+
                 // Account not active
                 $this->fillJsonResponse(
                     $request,

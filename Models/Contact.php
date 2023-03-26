@@ -40,7 +40,7 @@ class Contact
      * @var int
      * @since 1.0.0
      */
-    private int $type = 0;
+    private int $type = ContactType::EMAIL;
 
     /**
      * Contact element subtype.

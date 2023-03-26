@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 return ['Admin' => [
+    'FormDataInvalid'                    => 'Form data invalid, please check your input',
     'AccountCreateMsg'                   => 'Account successfully created. Link: <a href="{url}">Account</a>',
     'AccountCreateTitle'                 => 'Account',
     'LOGIN_ERROR'                        => 'Login failed due to wrong login information.',

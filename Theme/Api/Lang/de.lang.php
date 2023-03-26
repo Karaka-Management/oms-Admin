@@ -13,4 +13,5 @@
 declare(strict_types=1);
 
 return ['Admin' => [
+    'FormDataInvalid' => 'Fehlerahfte Formdaten, bitte prüfen Sie Ihre Eingabe',
 ]];
