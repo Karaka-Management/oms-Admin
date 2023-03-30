@@ -68,6 +68,14 @@ class App implements \JsonSerializable
     public int $type = ApplicationType::WEB;
 
     /**
+     * Default unit
+     *
+     * @var null|int
+     * @since 1.0.0
+     */
+    public ?int $defaultUnit = null;
+
+    /**
      * Get id
      *
      * @return int

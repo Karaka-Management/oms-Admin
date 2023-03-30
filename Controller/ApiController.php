@@ -68,8 +68,6 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
-use phpOMS\Model\Message\Notify;
-use phpOMS\Model\Message\NotifyType;
 use phpOMS\Model\Message\Reload;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
@@ -122,7 +120,7 @@ final class ApiController extends Controller
             $request->getDataString('pass') ?? ''
         );
 
-        if ($login >= LoginReturnType::OK) {
+        if ($login > LoginReturnType::OK) {
             $this->app->sessionManager->set('UID', $login, true);
             $this->app->sessionManager->save();
             $response->set($request->uri->__toString(), new Reload());
@@ -978,6 +976,7 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $app, AppMapper::class, 'application', $request->getOrigin());
 
         $this->createDefaultAppSettings($app, $request);
+
         /** @var \Model\Setting $setting */
         $setting = $this->app->appSettings->get(null, SettingsEnum::GROUP_GENERATE_AUTOMATICALLY_APP);
         if ($setting->content === '1') {
@@ -1049,9 +1048,10 @@ final class ApiController extends Controller
      */
     private function createApplicationFromRequest(RequestAbstract $request) : App
     {
-        $app       = new App();
-        $app->name = $request->getDataString('name') ?? '';
-        $app->type = $request->getDataInt('type') ?? ApplicationType::WEB;
+        $app              = new App();
+        $app->name        = $request->getDataString('name') ?? '';
+        $app->type        = $request->getDataInt('type') ?? ApplicationType::WEB;
+        $app->defaultUnit = $request->getDataInt('default_unit');
 
         return $app;
     }
@@ -1519,7 +1519,9 @@ final class ApiController extends Controller
                 module: 'Admin'
             );
 
-            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+            if (!empty($defaultGroupSettings)) {
+                $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+            }
         }
 
         if ($request->hasData('unit')) {
@@ -1530,7 +1532,9 @@ final class ApiController extends Controller
                 module: 'Admin'
             );
 
-            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+            if (!empty($defaultGroupSettings)) {
+                $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+            }
         }
 
         if (!empty($defaultGroupIds)) {
@@ -1645,10 +1649,14 @@ final class ApiController extends Controller
 
         // Check if account already exists
         /** @var Account $emailAccount */
-        $emailAccount = AccountMapper::get()->where('email', (string) $request->getData('email'))->execute();
+        $emailAccount = AccountMapper::get()
+            ->where('email', (string) $request->getData('email'))
+            ->execute();
 
         /** @var Account $loginAccount */
-        $loginAccount = AccountMapper::get()->where('login', (string) ($request->getData('user') ?? $request->getData('email')))->execute();
+        $loginAccount = AccountMapper::get()
+            ->where('login', (string) ($request->getData('user') ?? $request->getData('email')))
+            ->execute();
 
         /** @var null|Account $account */
         $account = null;
@@ -1705,31 +1713,39 @@ final class ApiController extends Controller
 
         // Already registered
         if ($account !== null) {
-            $defaultGroupIds = [];
-
-            /** @var \Model\Setting $defaultGroupSettings */
-            $defaultGroupSettings = $this->app->appSettings->get(
-                names: SettingsEnum::APP_DEFAULT_GROUPS,
-                app:  (int) $request->getData('app'),
-                module: 'Admin'
-            );
-
-            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
-
-            /** @var \Model\Setting $defaultGroupSettings */
-            $defaultGroupSettings = $this->app->appSettings->get(
-                names: SettingsEnum::UNIT_DEFAULT_GROUPS,
-                unit: (int) $request->getData('unit'),
-                module: 'Admin'
-            );
-
-            $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
-
             /** @var Account $account */
             $account = AccountMapper::get()
                 ->with('groups')
                 ->where('id', $account->getId())
                 ->execute();
+
+            $defaultGroupIds = [];
+
+            if ($request->hasData('app')) {
+                /** @var \Model\Setting $defaultGroupSettings */
+                $defaultGroupSettings = $this->app->appSettings->get(
+                    names: SettingsEnum::APP_DEFAULT_GROUPS,
+                    app:  (int) $request->getDataInt('app'),
+                    module: 'Admin'
+                );
+
+                if (!empty($defaultGroupSettings)) {
+                    $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+                }
+            }
+
+            if ($request->hasData('unit')) {
+                /** @var \Model\Setting $defaultGroupSettings */
+                $defaultGroupSettings = $this->app->appSettings->get(
+                    names: SettingsEnum::UNIT_DEFAULT_GROUPS,
+                    app:  (int) $request->getDataInt('unit'),
+                    module: 'Admin'
+                );
+
+                if (!empty($defaultGroupSettings)) {
+                    $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+                }
+            }
 
             foreach ($defaultGroupIds as $index => $id) {
                 if ($account->hasGroup($id)) {
@@ -1738,24 +1754,6 @@ final class ApiController extends Controller
             }
 
             if (empty($defaultGroupIds)
-                && $account->getStatus() === AccountStatus::ACTIVE
-            ) {
-                $response->header->status = RequestStatusCode::R_400;
-
-                // Already set up
-                $this->fillJsonResponse(
-                    $request,
-                    $response,
-                    NotificationLevel::ERROR,
-                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
-                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationAlreadyRegistered'),
-                    []
-                );
-
-                $response->header->status = RequestStatusCode::R_403;
-
-                return;
-            } elseif (empty($defaultGroupIds)
                 && $account->getStatus() === AccountStatus::INACTIVE
             ) {
                 $response->header->status = RequestStatusCode::R_400;
@@ -1775,8 +1773,18 @@ final class ApiController extends Controller
                 return;
             }
 
-            // Create missing account / group relationships
-            $this->createModelRelation($account->getId(), $account->getId(), $defaultGroupIds, AccountMapper::class, 'groups', 'registration', $request->getOrigin());
+            if (!empty($defaultGroupIds)) {
+                // Create missing account / group relationships
+                $this->createModelRelation(
+                    $account->getId(),
+                    $account->getId(),
+                    $defaultGroupIds,
+                    AccountMapper::class,
+                    'groups',
+                    'registration',
+                    $request->getOrigin()
+                );
+            }
         } else {
             // New account
             $request->setData('status', AccountStatus::INACTIVE, true);
@@ -1818,7 +1826,10 @@ final class ApiController extends Controller
         }
 
         // Create client
-        if ($request->hasData('client')) {
+        if ($request->hasData('client') && $account->getStatus() !== AccountStatus::ACTIVE) {
+            // @todo: only create if no client exists at the specified unit
+            // The check !== ACTIVE above is only a bad, wrong and specific solution to the problem
+
             $internalRequest  = new HttpRequest();
             $internalResponse = new HttpResponse();
 
@@ -1831,6 +1842,7 @@ final class ApiController extends Controller
             $internalRequest->setData('country', $request->getDataString('country') ?? '');
             $internalRequest->setData('state', $request->getDataString('state') ?? '');
             $internalRequest->setData('vat_id', $request->getDataString('vat_id') ?? '');
+            $internalRequest->setData('unit', $request->getDataInt('unit'));
 
             $this->app->moduleManager->get('ClientManagement')->apiClientCreate($internalRequest, $internalResponse);
         }
@@ -2126,14 +2138,6 @@ final class ApiController extends Controller
         $new = $this->updateAccountFromRequest($request, clone $old);
         $this->updateModel($request->header->account, $old, $new, AccountMapper::class, 'account', $request->getOrigin());
 
-        $profile = \Modules\Profile\Models\ProfileMapper::get()
-            ->where('account', $new->getId())
-            ->execute();
-
-        if ($profile instanceof \Modules\Profile\Models\NullProfile) {
-            $this->createProfileForAccount($new, $request);
-        }
-
         $this->fillJsonResponse(
             $request,
             $response,
@@ -2157,10 +2161,10 @@ final class ApiController extends Controller
      */
     private function updateAccountFromRequest(RequestAbstract $request, Account $account, bool $allowPassword = false) : Account
     {
-        $account->login = (string) ($request->getData('user') ?? $account->login);
-        $account->name1 = (string) ($request->getData('name1') ?? $account->name1);
-        $account->name2 = (string) ($request->getData('name2') ?? $account->name2);
-        $account->name3 = (string) ($request->getData('name3') ?? $account->name3);
+        $account->login = $request->getDataString('user') ?? $account->login;
+        $account->name1 = $request->getDataString('name1') ?? $account->name1;
+        $account->name2 = $request->getDataString('name2') ?? $account->name2;
+        $account->name3 = $request->getDataString('name3') ?? $account->name3;
         $account->setEmail($request->getDataString('email') ?? $account->getEmail());
         $account->setStatus($request->getDataInt('status') ?? $account->getStatus());
         $account->setType($request->getDataInt('type') ?? $account->getType());
@@ -2647,19 +2651,19 @@ final class ApiController extends Controller
     public function createPermissionFromRequest(RequestAbstract $request) : PermissionAbstract
     {
         /** @var AccountPermission|GroupPermission $permission */
-        $permission = ((int) $request->getData('permissionowner')) === PermissionOwner::GROUP
+        $permission = ($request->getDataInt('permissionowner')) === PermissionOwner::GROUP
             ? new GroupPermission((int) $request->getData('permissionref'))
             : new AccountPermission((int) $request->getData('permissionref'));
 
-        $permission->setUnit(empty($request->getData('permissionunit')) ? null : (int) $request->getData('permissionunit'));
-        $permission->setApp(empty($request->getData('permissionapp')) ? null : (string) $request->getData('permissionapp'));
-        $permission->setModule(empty($request->getData('permissionmodule')) ? null : (string) $request->getData('permissionmodule'));
-        $permission->setCategory(empty($request->getData('permissioncategory')) ? null : (int) $request->getData('permissioncategory'));
-        $permission->setElement(empty($request->getData('permissionelement')) ? null : (int) $request->getData('permissionelement'));
-        $permission->setComponent(empty($request->getData('permissioncomponent')) ? null : (int) $request->getData('permissioncomponent'));
+        $permission->setUnit($request->getDataInt('permissionunit'));
+        $permission->setApp($request->getDataString('permissionapp'));
+        $permission->setModule($request->getDataString('permissionmodule'));
+        $permission->setCategory($request->getDataInt('permissioncategory'));
+        $permission->setElement($request->getDataInt('permissionelement'));
+        $permission->setComponent($request->getDataInt('permissioncomponent'));
         $permission->setPermission(
-            ($request->getDataInt('permissioncreate') ?? 0)
-                | ($request->getDataInt('permissionread') ?? 0)
+            ($request->getDataInt('permissionread') ?? 0)
+                | ($request->getDataInt('permissioncreate') ?? 0)
                 | ($request->getDataInt('permissionupdate') ?? 0)
                 | ($request->getDataInt('permissiondelete') ?? 0)
                 | ($request->getDataInt('permissionpermission') ?? 0)
