@@ -42,7 +42,7 @@ class GroupPermission extends PermissionAbstract
      *
      * @param int         $group      Group id
      * @param null|int    $unit       Unit to check (null if all are acceptable)
-     * @param null|string $app        App to check  (null if all are acceptable)
+     * @param null|int    $app        App to check  (null if all are acceptable)
      * @param null|string $module     Module to check  (null if all are acceptable)
      * @param null|string $from       Module providing this permission
      * @param null|int    $category   Category (e.g. customer) (null if all are acceptable)
@@ -55,7 +55,7 @@ class GroupPermission extends PermissionAbstract
     public function __construct(
         int $group = 0,
         int $unit = null,
-        string $app = null,
+        int $app = null,
         string $module = null,
         string $from = null,
         int $category = null,

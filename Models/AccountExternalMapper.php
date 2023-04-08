@@ -39,7 +39,7 @@ class AccountMapper extends DataMapperFactory
         'account_external_id'                  => ['name' => 'account_external_id',           'type' => 'int',      'internal' => 'id'],
         'account_external_status'              => ['name' => 'account_external_status',       'type' => 'int',      'internal' => 'status'],
         'account_external_type'                => ['name' => 'account_external_type',         'type' => 'int',      'internal' => 'type'],
-        'account_external_subtype'               => ['name' => 'account_external_subtype',        'type' => 'int',   'internal' => 'subtype',],
+        'account_external_subtype'               => ['name' => 'account_external_subtype',        'type' => 'int',   'internal' => 'subtype'],
         'account_external_key'               => ['name' => 'account_external_key',        'type' => 'string',   'internal' => 'key'],
         'account_external_name'               => ['name' => 'account_external_name',        'type' => 'string',   'internal' => 'name'],
         'account_external_auth'               => ['name' => 'account_external_auth',        'type' => 'string',   'internal' => 'auth', ],

@@ -239,16 +239,23 @@ final class Installer extends InstallerAbstract
      */
     public static function installExternal(ApplicationAbstract $app, array $data) : array
     {
-        if (!\is_file($data['path'] ?? '')) {
+        if (!\is_file($data['path'] ?? '') && !isset($data['data'])) {
             throw new PathException($data['path'] ?? '');
         }
 
-        $adminFile = \file_get_contents($data['path'] ?? '');
-        if ($adminFile === false) {
-            throw new PathException($data['path'] ?? ''); // @codeCoverageIgnore
+        $adminData = [];
+
+        if (isset($data['path'])) {
+            $adminFile = \file_get_contents($data['path'] ?? '');
+            if ($adminFile === false) {
+                throw new PathException($data['path'] ?? ''); // @codeCoverageIgnore
+            }
+
+            $adminData = \json_decode($adminFile, true) ?? [];
+        } elseif (isset($data['data'])) {
+            $adminData = $data['data'];
         }
 
-        $adminData = \json_decode($adminFile, true) ?? [];
         if (!\is_array($adminData)) {
             throw new \Exception(); // @codeCoverageIgnore
         }

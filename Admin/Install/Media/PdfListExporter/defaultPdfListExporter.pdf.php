@@ -22,7 +22,8 @@ $data  = $this->getData('data') ?? [];
 
 include $media->getSourceByName('template.php')->getAbsolutePath();
 
-$excel = new DefaultPdf();
+/** @phpstan-import-type DefaultPdf from ../../../../Admin/Install/Media/PdfDefaultTemplate/pdfTemplate.pdf.php */
+$pdf = new DefaultPdf();
 
 $topPos = $pdf->getY();
 

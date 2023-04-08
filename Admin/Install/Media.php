@@ -45,32 +45,36 @@ class Media
 
         \Modules\Admin\Admin\Installer::installExternal($app,
             [
-                'type' => 'setting',
-                'name' => SettingsEnum::DEFAULT_LIST_EXPORTS,
-                'content' => (string) $media['collection'][4]['id'],
-                'pattern' => '\\d+',
-                'module' => 'Admin'
-            ],
-            [
-                'type' => 'setting',
-                'name' => SettingsEnum::DEFAULT_LETTERS,
-                'content' => (string) $media['collection'][5]['id'],
-                'pattern' => '\\d+',
-                'module' => 'Admin'
-            ],
-            [
-                'type' => 'setting',
-                'name' => SettingsEnum::DEFAULT_ASSETS,
-                'content' => (string) $media['upload'][0]['id'],
-                'pattern' => '\\d+',
-                'module' => 'Admin'
-            ],
-            [
-                'type' => 'setting',
-                'name' => SettingsEnum::DEFAULT_TEMPLATES,
-                'content' => (string) $media['upload'][1]['id'],
-                'pattern' => '\\d+',
-                'module' => 'Admin'
+                'data' => [
+                    [
+                        'type' => 'setting',
+                        'name' => SettingsEnum::DEFAULT_LIST_EXPORTS,
+                        'content' => (string) $media['collection'][4]['id'],
+                        'pattern' => '\\d+',
+                        'module' => 'Admin'
+                    ],
+                    [
+                        'type' => 'setting',
+                        'name' => SettingsEnum::DEFAULT_LETTERS,
+                        'content' => (string) $media['collection'][5]['id'],
+                        'pattern' => '\\d+',
+                        'module' => 'Admin'
+                    ],
+                    [
+                        'type' => 'setting',
+                        'name' => SettingsEnum::DEFAULT_ASSETS,
+                        'content' => (string) $media['upload'][0]['id'],
+                        'pattern' => '\\d+',
+                        'module' => 'Admin'
+                    ],
+                    [
+                        'type' => 'setting',
+                        'name' => SettingsEnum::DEFAULT_TEMPLATES,
+                        'content' => (string) $media['upload'][1]['id'],
+                        'pattern' => '\\d+',
+                        'module' => 'Admin'
+                    ]
+                ]
             ]
         );
     }

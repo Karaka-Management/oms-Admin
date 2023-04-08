@@ -122,7 +122,6 @@ final class ApiController extends Controller
 
         if ($login > LoginReturnType::OK) {
             $this->app->sessionManager->set('UID', $login, true);
-            $this->app->sessionManager->save();
             $response->set($request->uri->__toString(), new Reload());
         } elseif ($login === LoginReturnType::NOT_ACTIVATED) {
             $response->header->status = RequestStatusCode::R_401;
@@ -260,7 +259,7 @@ final class ApiController extends Controller
     public function apiForgot(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var \Modules\Admin\Models\Account $account */
-        $account = !empty($request->getData('user'))
+        $account = $request->hasData('user')
             ? AccountMapper::get()->where('login', (string) $request->getData('user'))->execute()
             : AccountMapper::get()->where('email', (string) $request->getData('email'))->execute();
 
@@ -367,7 +366,7 @@ final class ApiController extends Controller
         $token = $forgotten[SettingsEnum::LOGIN_FORGOTTEN_TOKEN]->content;
 
         if ($date->getTimestamp() < \time() - 60 * 10
-            || empty($request->getData('token'))
+            || !$request->hasData('token')
             || $request->getData('token') !== $token
         ) {
             $response->header->status = RequestStatusCode::R_405;
@@ -626,7 +625,7 @@ final class ApiController extends Controller
     private function validateSettingsCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name'] = empty($request->getData('name')))) {
+        if (($val['name'] = !$request->hasData('name'))) {
             return $val;
         }
 
@@ -751,9 +750,9 @@ final class ApiController extends Controller
     private function validatePasswordUpdate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['oldpass'] = empty($request->getData('oldpass')))
-            || ($val['newpass'] = empty($request->getData('newpass')))
-            || ($val['reppass'] = empty($request->getData('reppass')))
+        if (($val['oldpass'] = !$request->hasData('oldpass'))
+            || ($val['newpass'] = !$request->hasData('newpass'))
+            || ($val['reppass'] = !$request->hasData('reppass'))
         ) {
             return $val;
         }
@@ -783,7 +782,7 @@ final class ApiController extends Controller
             && !$this->app->accountManager->get($accountId)->hasPermission(
                 PermissionType::MODIFY,
                 $this->app->unitId,
-                $this->app->appName,
+                $this->app->appId,
                 self::NAME,
                 PermissionCategory::ACCOUNT_SETTINGS,
                 $accountId
@@ -1030,7 +1029,7 @@ final class ApiController extends Controller
     private function validateApplicationCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name'] = empty($request->getData('name')))) {
+        if (($val['name'] = !$request->hasData('name'))) {
             return $val;
         }
 
@@ -1211,7 +1210,7 @@ final class ApiController extends Controller
     private function validateGroupCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name'] = empty($request->getData('name')))
+        if (($val['name'] = !$request->hasData('name'))
             || ($val['status'] = !GroupStatus::isValidValue((int) $request->getData('status')))
         ) {
             return $val;
@@ -1467,10 +1466,10 @@ final class ApiController extends Controller
     private function validateAccountCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name1'] = empty($request->getData('name1')))
+        if (($val['name1'] = !$request->hasData('name1'))
             || ($val['type'] = !AccountType::isValidValue((int) $request->getData('type')))
             || ($val['status'] = !AccountStatus::isValidValue((int) $request->getData('status')))
-            || ($val['email'] = !empty($request->getData('email')) && !EmailValidator::isValid((string) $request->getData('email')))
+            || ($val['email'] = $request->hasData('email') && !EmailValidator::isValid((string) $request->getData('email')))
         ) {
             return $val;
         }
@@ -1501,9 +1500,11 @@ final class ApiController extends Controller
         }
 
         $account = $this->createAccountFromRequest($request);
-
         $this->createModel($request->header->account, $account, AccountCredentialMapper::class, 'account', $request->getOrigin());
-        $this->createProfileForAccount($account, $request);
+
+        if ($request->hasData('create_profile')) {
+            $this->createProfileForAccount($account, $request);
+        }
 
         $collection = $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
         $this->createModel($request->header->account, $collection, CollectionMapper::class, 'collection', $request->getOrigin());
@@ -1789,6 +1790,7 @@ final class ApiController extends Controller
             // New account
             $request->setData('status', AccountStatus::INACTIVE, true);
             $request->setData('type', AccountType::USER, true);
+            $request->setData('create_profile', (string) true);
             $request->setData('name1', !$request->hasData('name1')
                 ? (!$request->hasData('user')
                     ? \explode('@', $request->getDataString('email'))[0]
@@ -1826,33 +1828,28 @@ final class ApiController extends Controller
         }
 
         // Create client
-        if ($request->hasData('client') && $account->getStatus() !== AccountStatus::ACTIVE) {
-            // @todo: only create if no client exists at the specified unit
-            // The check !== ACTIVE above is only a bad, wrong and specific solution to the problem
+        if ($request->hasData('client')) {
+            $client = $this->app->moduleManager->get('ClientManagement')
+                ->findClientForAccount($account->getId(), $request->getDataInt('unit'));
 
-            $internalRequest  = new HttpRequest();
-            $internalResponse = new HttpResponse();
+            if ($client === null) {
+                $internalRequest  = new HttpRequest();
+                $internalResponse = new HttpResponse();
 
-            $internalRequest->header->account = $account->getId();
-            $internalRequest->setData('account', $account->getId());
-            $internalRequest->setData('number', 100000 + $account->getId());
-            $internalRequest->setData('address', $request->getDataString('address') ?? '');
-            $internalRequest->setData('postal', $request->getDataString('postal') ?? '');
-            $internalRequest->setData('city', $request->getDataString('city') ?? '');
-            $internalRequest->setData('country', $request->getDataString('country') ?? '');
-            $internalRequest->setData('state', $request->getDataString('state') ?? '');
-            $internalRequest->setData('vat_id', $request->getDataString('vat_id') ?? '');
-            $internalRequest->setData('unit', $request->getDataInt('unit'));
+                $internalRequest->header->account = $account->getId();
+                $internalRequest->setData('account', $account->getId());
+                $internalRequest->setData('number', 100000 + $account->getId());
+                $internalRequest->setData('address', $request->getDataString('address') ?? '');
+                $internalRequest->setData('postal', $request->getDataString('postal') ?? '');
+                $internalRequest->setData('city', $request->getDataString('city') ?? '');
+                $internalRequest->setData('country', $request->getDataString('country'));
+                $internalRequest->setData('state', $request->getDataString('state') ?? '');
+                $internalRequest->setData('vat_id', $request->getDataString('vat_id') ?? '');
+                $internalRequest->setData('unit', $request->getDataInt('unit'));
 
-            $this->app->moduleManager->get('ClientManagement')->apiClientCreate($internalRequest, $internalResponse);
+                $this->app->moduleManager->get('ClientManagement')->apiClientCreate($internalRequest, $internalResponse);
+            }
         }
-
-        // Create confirmation email
-        // @todo: adjust
-        // load base template for app
-        // load text content for login
-        // replace placeholders
-        // send email
 
         $handler = $this->setUpServerMailHandler();
 
@@ -1861,6 +1858,7 @@ final class ApiController extends Controller
             module: 'Admin'
         );
 
+        /** @var \Modules\Messages\Models\Email $mail */
         $mail = EmailMapper::get()
             ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE])
             ->execute();
@@ -1922,11 +1920,11 @@ final class ApiController extends Controller
     private function validateRegistration(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['email'] = !empty($request->getData('email'))
+        if (($val['email'] = $request->hasData('email')
                 && !EmailValidator::isValid((string) $request->getData('email')))
-            || ($val['unit'] = empty($request->getData('unit')))
-            || ($val['app'] = empty($request->getData('app')))
-            || ($val['password'] = empty($request->getData('password')))
+            || ($val['unit'] = !$request->hasData('unit'))
+            || ($val['app'] = !$request->hasData('app'))
+            || ($val['password'] = !$request->hasData('password'))
         ) {
             return $val;
         }
@@ -1993,7 +1991,7 @@ final class ApiController extends Controller
     private function validateDataChange(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['hash'] = empty($request->getData('hash')))) {
+        if (($val['hash'] = !$request->hasData('hash'))) {
             return $val;
         }
 
@@ -2169,7 +2167,7 @@ final class ApiController extends Controller
         $account->setStatus($request->getDataInt('status') ?? $account->getStatus());
         $account->setType($request->getDataInt('type') ?? $account->getType());
 
-        if ($allowPassword && !empty($request->getData('password'))) {
+        if ($allowPassword && $request->hasData('password')) {
             $account->generatePassword((string) $request->getData('password'));
         }
 
@@ -2656,7 +2654,7 @@ final class ApiController extends Controller
             : new AccountPermission((int) $request->getData('permissionref'));
 
         $permission->setUnit($request->getDataInt('permissionunit'));
-        $permission->setApp($request->getDataString('permissionapp'));
+        $permission->setApp($request->getDataInt('permissionapp'));
         $permission->setModule($request->getDataString('permissionmodule'));
         $permission->setCategory($request->getDataInt('permissioncategory'));
         $permission->setElement($request->getDataInt('permissionelement'));
@@ -2764,12 +2762,12 @@ final class ApiController extends Controller
      */
     private function updatePermissionFromRequest(RequestAbstract $request, PermissionAbstract $permission) : PermissionAbstract
     {
-        $permission->setUnit(empty($request->getData('permissionunit')) ? $permission->getUnit() : (int) $request->getData('permissionunit'));
-        $permission->setApp(empty($request->getData('permissionapp')) ? $permission->getApp() : (string) $request->getData('permissionapp'));
-        $permission->setModule(empty($request->getData('permissionmodule')) ? $permission->getModule() : (string) $request->getData('permissionmodule'));
-        $permission->setCategory(empty($request->getData('permissioncategory')) ? $permission->getCategory() : (int) $request->getData('permissioncategory'));
-        $permission->setElement(empty($request->getData('permissionelement')) ? $permission->getElement() : (int) $request->getData('permissionelement'));
-        $permission->setComponent(empty($request->getData('permissioncomponent')) ? $permission->getComponent() : (int) $request->getData('permissioncomponent'));
+        $permission->setUnit($request->getDataInt('permissionunit') ?? $permission->getUnit());
+        $permission->setApp($request->getDataInt('permissionapp') ?? $permission->getApp());
+        $permission->setModule($request->getDataString('permissionmodule') ?? $permission->getModule());
+        $permission->setCategory($request->getDataInt('permissioncategory') ?? $permission->getCategory());
+        $permission->setElement($request->getDataInt('permissionelement') ?? $permission->getElement());
+        $permission->setComponent($request->getDataInt('permissioncomponent') ?? $permission->getComponent());
         $permission->setPermission(($request->getDataInt('permissioncreate') ?? 0)
             | ($request->getDataInt('permissionread') ?? 0)
             | ($request->getDataInt('permissionupdate') ?? 0)
@@ -3152,9 +3150,9 @@ final class ApiController extends Controller
     public function validateContactCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['account'] = empty($request->getData('account')))
+        if (($val['account'] = !$request->hasData('account'))
             || ($val['type'] = !\is_numeric($request->getData('type')))
-            || ($val['content'] = empty($request->getData('content')))
+            || ($val['content'] = !$request->hasData('content'))
         ) {
             return $val;
         }

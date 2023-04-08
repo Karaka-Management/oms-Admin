@@ -19,6 +19,8 @@ declare(strict_types=1);
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @phpstan-import-type TCPDF from ../../../../../Resources/tcpdf.php
  */
 class DefaultPdf extends TCPDF
 {
@@ -46,6 +48,43 @@ class DefaultPdf extends TCPDF
      */
     public int $sideMargin = 15;
 
+    public string $language = 'en';
+
+    public array $lang = [
+        'en' => [
+            'Page' => 'Page',
+            'CEO' => 'CEO',
+            'TaxOffice' => 'Tax office',
+            'TaxNumber' => 'Tax number',
+            'Swift' => 'BIC',
+            'BankAccount' => 'Account',
+        ],
+        'de' => [
+            'Page' => 'Seite',
+            'CEO' => 'Geschäftsführer',
+            'TaxOffice' => 'Finanzamt',
+            'TaxNumber' => 'Steuernummer',
+            'Swift' => 'BIC',
+            'BankAccount' => 'IBAN',
+        ]
+    ];
+
+    public array $attributes = [
+        'legal_name' => '',
+        'address' => '',
+        'city' => '',
+        'country' => '',
+        'ceo' => '',
+        'tax_office' => '',
+        'tax_number' => '',
+        'bank_name' => '',
+        'swift' => '',
+        'bank_account' => '',
+        'website' => '',
+        'email' => '',
+        'phone' => '',
+    ];
+
     /**
      * Constructor.
      *
@@ -55,29 +94,24 @@ class DefaultPdf extends TCPDF
     {
         parent::__construct('P', 'mm', 'A4', true, 'UTF-8', false);
 
-        $this->SetCreator("Jingga");
-
         // set default header data
-        $this->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, 'Jingga', 'Business solutions made simple.');
+        $this->setHeaderData('', 15, 'Jingga', 'Business solutions made simple.');
 
         // set header and footer fonts
-        $this->SetHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
-        $this->SetFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
+        $this->setHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
+        $this->setFooterFont([PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA]);
 
         // set default monospaced font
-        $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $this->setDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // set margins
-        $this->SetMargins(15, 30, 15);
+        $this->setMargins(15, 30, 15);
 
         // set auto page breaks
-        $this->SetAutoPageBreak(true, 25);
+        $this->setAutoPageBreak(true, 25);
 
         // set image scale factor
-        $this->SetImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // add a page
-        $this->AddPage();
+        $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
     }
 
     /**
@@ -93,15 +127,21 @@ class DefaultPdf extends TCPDF
             $this->header_xobjid = $this->startTemplate($this->w, 0);
 
             // Set Logo
-            $image_file = '/home/spl1nes/Orange-Management/Web/Backend/img/logo.png';
-            $this->Image($image_file, 15, 15, 15, 15, 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            if (!empty($this->header_logo)) {
+                $this->Image(
+                    $this->header_logo,
+                    15, 15,
+                    $this->header_logo_width, 0,
+                    'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false
+                );
+            }
 
             // Set Title
-            $this->SetFont('helvetica', 'B', 20);
+            $this->setFont('helvetica', 'B', 20);
             $this->setX(15 + 15 + 3);
             $this->Cell(0, 14, $this->header_title, 0, false, 'L', 0, '', 0, false, 'T', 'M');
 
-            $this->SetFont('helvetica', '', 10);
+            $this->setFont('helvetica', '', 10);
             $this->setX(15 + 15 + 3);
             $this->Cell(0, 26, $this->header_string, 0, false, 'L', 0, '', 0, false, 'T', 'M');
 
@@ -138,50 +178,52 @@ class DefaultPdf extends TCPDF
      */
     public function Footer() : void
     {
-        $this->SetY(-25);
+        $this->setY(-25);
 
-        $this->SetFont('helvetica', 'I', 7);
-        $this->Cell($this->getPageWidth() - 22, 0, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+        $this->setFont('helvetica', 'I', 7);
+        $this->Cell($this->getPageWidth() - 22, 0, $this->lang[$this->language]['Page'] . ' '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
         $this->Ln();
         $this->Ln();
 
         $this->SetFillColor(245, 245, 245);
-        $this->SetX(0);
+        $this->setX(0);
         $this->Cell($this->getPageWidth(), 25, '', 0, 0, 'L', true, '', 0, false, 'T', 'T');
 
-        $this->SetFont('helvetica', '', 7);
-        $this->SetXY(15 + 10, -15, true);
-        $this->MultiCell(30, 0, "Jingga e.K.\nGartenstr. 26\n61206 Woellstadt", 0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B');
+        $this->setFont('helvetica', '', 7);
+        $this->setXY(15 + 10, -15, true);
+        $this->MultiCell(
+            30, 0,
+            $this->attributes['legal_name'] . "\n"
+            . $this->attributes['address'] . "\n"
+            . $this->attributes['city'],
+            0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B'
+        );
 
-        $this->SetXY(25 + 15 + 20, -15, true);
-        $this->MultiCell(40, 0, "Geschäftsführer: Dennis Eichhorn\nFinanzamt: HRB ???\nUSt Id: DE ??????????", 0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B');
+        $this->setXY(25 + 15 + 20, -15, true);
+        $this->MultiCell(
+            40, 0,
+            $this->lang[$this->language]['CEO']. ': ' . $this->attributes['ceo'] . "\n"
+            . $this->lang[$this->language]['TaxOffice']. ': ' . $this->attributes['tax_office'] . "\n"
+            . $this->lang[$this->language]['TaxNumber']. ': ' . $this->attributes['tax_number'],
+            0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B'
+        );
 
-        $this->SetXY(25 + 45 + 15 + 30, -15, true);
-        $this->MultiCell(35, 0, "Volksbank Mittelhessen\nBIC: ??????????\nIBAN: ???????????", 0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B');
+        $this->setXY(25 + 45 + 15 + 30, -15, true);
+        $this->MultiCell(
+            35, 0,
+            $this->attributes['bank_name'] . "\n"
+            . $this->lang[$this->language]['Swift']. ': ' . $this->attributes['swift'] . "\n"
+            . $this->lang[$this->language]['BankAccount']. ': ' . $this->attributes['bank_account'],
+            0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B'
+        );
 
-        $this->SetXY(25 + 45 + 35 + 15 + 40, -15, true);
-        $this->MultiCell(35, 0, "www.jingga.app\ninfo@jingga.app\n+49 0152 ???????", 0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B');
+        $this->setXY(25 + 45 + 35 + 15 + 40, -15, true);
+        $this->MultiCell(
+            35, 0,
+            $this->attributes['website'] . "\n"
+            . $this->attributes['email'] . "\n"
+            . $this->attributes['phone'],
+            0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B'
+        );
     }
 }
-
-/*
-[
-    'company' => '',
-    'slogan' => '',
-    'company_full' => '',
-    'address' => '',
-    'ciry' => '',
-    'manager' => '',
-    'tax_office' => '',
-    'tax_id' => '',
-    'tax_vat' => '',
-    'bank_name' => '',
-    'bank_bic' => '',
-    'bank_iban' => '',
-    'website' => '',
-    'email' => '',
-    'phone' => '',
-    'creator' => '',
-    'date' => '',
-]
-*/

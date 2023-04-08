@@ -16,7 +16,7 @@
             },
             "country_code2": {
                 "name": "country_code2",
-                "type": "VARCHAR(2)",
+                "type": "VARCHAR(3)",
                 "null": false,
                 "unique": true
             },
@@ -930,7 +930,7 @@
             "group_permission_app": {
                 "description": "@todo: consider to use int as value and create foreign key",
                 "name": "group_permission_app",
-                "type": "VARCHAR(255)",
+                "type": "INT",
                 "default": null,
                 "null": true
             },
@@ -1308,7 +1308,7 @@
             },
             "account_permission_app": {
                 "name": "account_permission_app",
-                "type": "VARCHAR(255)",
+                "type": "INT",
                 "default": null,
                 "null": true
             },

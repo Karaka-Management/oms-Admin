@@ -123,7 +123,7 @@ final class BackendController extends Controller
 
             $member = \prev($split);
 
-            if (!empty($request->getData('accountslist-f-' . $member . '-f1'))) {
+            if ($request->hasData('accountslist-f-' . $member . '-f1')) {
                 $filterField[$member] = [
                     'type'   => $type,
                     'value1' => $request->getData('accountslist-f-' . $member . '-f1'),
@@ -297,7 +297,7 @@ final class BackendController extends Controller
 
             $member = \prev($split);
 
-            if (!empty($request->getData('groupslist-f-' . $member . '-f1'))) {
+            if ($request->hasData('groupslist-f-' . $member . '-f1')) {
                 $filterField[$member] = [
                     'type'   => $type,
                     'value1' => $request->getData('groupslist-f-' . $member . '-f1'),
