@@ -4,7 +4,7 @@
  *
  * PHP Version 8.1
  *
- * @package   Modules\Admin
+ * @package   Modules\Media
  * @copyright Dennis Eichhorn
  * @license   OMS License 2.0
  * @version   1.0.0
@@ -15,9 +15,10 @@ declare(strict_types=1);
 $data = $this->getData('data') ?? [];
 
 $out = \fopen('php://output', 'w');
+if ($out !== false) {
+    foreach ($data as $row) {
+        \fputcsv($out, $row);
+    }
 
-foreach ($data as $row) {
-    fputcsv($out, $row);
+    \fclose($out);
 }
-
-\fclose($out);

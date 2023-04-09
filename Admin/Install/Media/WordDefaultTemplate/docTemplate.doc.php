@@ -1,7 +1,32 @@
 <?php
+/**
+ * Karaka
+ *
+ * PHP Version 8.1
+ *
+ * @package   Modules\Media
+ * @copyright Dennis Eichhorn
+ * @license   OMS License 2.0
+ * @version   1.0.0
+ * @link      https://jingga.app
+ */
 declare(strict_types=1);
 
-class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
+/**
+ * Default Word class.
+ *
+ * @package Modules\Media
+ * @license OMS License 2.0
+ * @link    https://jingga.app
+ * @since   1.0.0
+ */
+class DefaultWord extends \PhpOffice\PhpWord\PhpWord
+{
+    /**
+     * Constructor.
+     *
+     * @since 1.0.0
+     */
     public function __construct()
     {
         parent::__construct();
@@ -32,7 +57,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         $table->addCell(1300)->addImage(__DIR__ . '/../Web/Backend/img/logo.png', ['width' => 50, 'height' => 50]);
 
         //second column
-        $cell = $table->addCell(8700, ['valign' => 'bottom']);
+        $cell    = $table->addCell(8700, ['valign' => 'bottom']);
         $textrun = $cell->addTextRun();
         $textrun->addText('Jingga', ['name' => 'helvetica', 'bold' => true, 'size' => 20]);
 
@@ -51,7 +76,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         // columns
         $cell = $table->addCell(500);
 
-        $cell = $table->addCell(2000);
+        $cell    = $table->addCell(2000);
         $textrun = $cell->addTextRun();
         $textrun->addText('Jingga e.K.', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();
@@ -59,7 +84,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         $textrun = $cell->addTextRun();
         $textrun->addText('61206 Woellstadt', ['name' => 'helvetica', 'size' => 7]);
 
-        $cell = $table->addCell(2700);
+        $cell    = $table->addCell(2700);
         $textrun = $cell->addTextRun();
         $textrun->addText('Geschäftsführer: Dennis Eichhorn', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();
@@ -67,7 +92,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         $textrun = $cell->addTextRun();
         $textrun->addText('USt Id: DE ??????????', ['name' => 'helvetica', 'size' => 7]);
 
-        $cell = $table->addCell(2700);
+        $cell    = $table->addCell(2700);
         $textrun = $cell->addTextRun();
         $textrun->addText('Volksbank Mittelhessen', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();
@@ -75,7 +100,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         $textrun = $cell->addTextRun();
         $textrun->addText('IBAN: ???????????', ['name' => 'helvetica', 'size' => 7]);
 
-        $cell = $table->addCell(2100);
+        $cell    = $table->addCell(2100);
         $textrun = $cell->addTextRun();
         $textrun->addText('www.jingga.app', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();
@@ -98,14 +123,14 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         ]);
 
         $header = $section->addHeader();
-        $table = $header->addTable();
+        $table  = $header->addTable();
         $table->addRow();
 
         // first column
         $table->addCell(1300)->addImage(__DIR__ . '/../Web/Backend/img/logo.png', ['width' => 50, 'height' => 50]);
 
         //second column
-        $cell = $table->addCell(8700, ['valign' => 'bottom']);
+        $cell    = $table->addCell(8700, ['valign' => 'bottom']);
         $textrun = $cell->addTextRun();
         $textrun->addText('Jingga', ['name' => 'helvetica', 'bold' => true, 'size' => 20]);
 
@@ -122,7 +147,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         // columns
         $cell = $table->addCell(500);
 
-        $cell = $table->addCell(2000);
+        $cell    = $table->addCell(2000);
         $textrun = $cell->addTextRun();
         $textrun->addText('Jingga e.K.', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();
@@ -130,7 +155,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         $textrun = $cell->addTextRun();
         $textrun->addText('61206 Woellstadt', ['name' => 'helvetica', 'size' => 7]);
 
-        $cell = $table->addCell(2700);
+        $cell    = $table->addCell(2700);
         $textrun = $cell->addTextRun();
         $textrun->addText('Geschäftsführer: Dennis Eichhorn', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();
@@ -138,7 +163,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         $textrun = $cell->addTextRun();
         $textrun->addText('USt Id: DE ??????????', ['name' => 'helvetica', 'size' => 7]);
 
-        $cell = $table->addCell(2700);
+        $cell    = $table->addCell(2700);
         $textrun = $cell->addTextRun();
         $textrun->addText('Volksbank Mittelhessen', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();
@@ -146,7 +171,7 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord {
         $textrun = $cell->addTextRun();
         $textrun->addText('IBAN: ???????????', ['name' => 'helvetica', 'size' => 7]);
 
-        $cell = $table->addCell(2100);
+        $cell    = $table->addCell(2100);
         $textrun = $cell->addTextRun();
         $textrun->addText('www.jingga.app', ['name' => 'helvetica', 'size' => 7]);
         $textrun = $cell->addTextRun();

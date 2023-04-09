@@ -20,7 +20,7 @@ declare(strict_types=1);
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @phpstan-import-type TCPDF from ../../../../../Resources/tcpdf.php
+ * @phpstan-import-type TCPDF from ../../../../../Resources/tcpdf/tcpdf.php
  */
 class DefaultPdf extends TCPDF
 {

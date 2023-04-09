@@ -1333,12 +1333,15 @@ final class ApiController extends Controller
      */
     public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        /** @var \Modules\Admin\Models\Group[] $groups */
+        $groups = GroupMapper::getAll()
+            ->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->execute();
+
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
             $request->uri->__toString(),
-            \array_values(
-                GroupMapper::getAll()->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')->execute()
-            )
+            \array_values($groups)
         );
     }
 
@@ -1385,18 +1388,19 @@ final class ApiController extends Controller
      */
     public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        /** @var \Modules\Admin\Models\Account[] $accounts */
+        $accounts =  AccountMapper::getAll()
+            ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->execute();
+
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
             $request->uri->__toString(),
-            \array_values(
-                AccountMapper::getAll()
-                    ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
-                    ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                    ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                    ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                    ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                    ->execute()
-            )
+            \array_values($accounts)
         );
     }
 
@@ -1416,19 +1420,15 @@ final class ApiController extends Controller
     public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account[] $accounts */
-        $accounts = \array_values(
-            AccountMapper::getAll()
-                ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
-                ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-                ->execute()
-        );
+        $accounts = AccountMapper::getAll()
+            ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->execute();
 
-        /** @var Group[] $groups */
-        $groups = \array_values(GroupMapper::getAll()->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')->execute());
-        $data   = [];
+        $data = [];
 
         foreach ($accounts as $account) {
             /** @var array $temp */
@@ -1438,6 +1438,11 @@ final class ApiController extends Controller
 
             $data[] = $temp;
         }
+
+        /** @var Group[] $groups */
+        $groups = GroupMapper::getAll()
+            ->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->execute();
 
         foreach ($groups as $group) {
             /** @var array $temp */
@@ -1731,7 +1736,10 @@ final class ApiController extends Controller
                 );
 
                 if (!empty($defaultGroupSettings)) {
-                    $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+                    $defaultGroupIds = \array_merge(
+                        $defaultGroupIds,
+                        \json_decode($defaultGroupSettings->content, true)
+                    );
                 }
             }
 
@@ -1744,7 +1752,10 @@ final class ApiController extends Controller
                 );
 
                 if (!empty($defaultGroupSettings)) {
-                    $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+                    $defaultGroupIds = \array_merge(
+                        $defaultGroupIds,
+                        \json_decode($defaultGroupSettings->content, true)
+                    );
                 }
             }
 
@@ -2069,10 +2080,12 @@ final class ApiController extends Controller
 
         if (!$request->hasData('locale')) {
             $account->l11n = Localization::fromJson(
-                    $this->app->l11nServer === null ? $request->header->l11n->jsonSerialize() : $this->app->l11nServer->jsonSerialize()
+                    $this->app->l11nServer === null
+                        ? $request->header->l11n->jsonSerialize()
+                        : $this->app->l11nServer->jsonSerialize()
                 );
         } else {
-            $locale = \explode('_', $request->getData('locale'));
+            $locale = \explode('_', $request->getdataString('locale') ?? '');
 
             $account->l11n
                 ->loadFromLanguage(
@@ -3069,6 +3082,7 @@ final class ApiController extends Controller
         if ($cliEventHandling) {
             $count = \count($data);
 
+            /** @var string $cliPath */
             $cliPath = \realpath(__DIR__ . '/../../../cli.php');
             if ($cliPath === false) {
                 return;

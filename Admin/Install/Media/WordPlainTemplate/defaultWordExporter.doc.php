@@ -18,6 +18,7 @@ use phpOMS\Autoloader;
 
 Autoloader::addPath(__DIR__ . '/../Resources');
 
+/** @var \phpOMS\Views\View $this */
 $media = $this->getData('media');
 $data  = $this->getData('data') ?? [];
 
@@ -29,6 +30,11 @@ $section = $word->createFirstPage();
 $file = \tempnam(\sys_get_temp_dir(), 'oms_');
 $writer->save($file);
 
-echo \file_get_contents($file);
+if ($file !== false) {
+    $content = \file_get_contents($file);
+    if ($content !== false) {
+        echo $content;
+    }
+}
 
 \unlink($file);
