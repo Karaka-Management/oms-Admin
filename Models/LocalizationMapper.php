@@ -27,6 +27,9 @@ use phpOMS\Localization\Localization;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @template T of Localization
+ * @extends DataMapperFactory<T>
  */
 final class LocalizationMapper extends DataMapperFactory
 {
@@ -135,7 +138,7 @@ final class LocalizationMapper extends DataMapperFactory
     /**
      * Model to use by the mapper.
      *
-     * @var class-string
+     * @var class-string<T>
      * @since 1.0.0
      */
     public const MODEL = Localization::class;

@@ -23,6 +23,9 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @template T of DataChange
+ * @extends DataMapperFactory<T>
  */
 final class DataChangeMapper extends DataMapperFactory
 {
@@ -44,7 +47,7 @@ final class DataChangeMapper extends DataMapperFactory
     /**
      * Model to use by the mapper.
      *
-     * @var class-string
+     * @var class-string<T>
      * @since 1.0.0
      */
     public const MODEL = DataChange::class;

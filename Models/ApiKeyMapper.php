@@ -26,6 +26,9 @@ use phpOMS\DataStorage\Database\Query\Builder;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @template T of ApiKey
+ * @extends DataMapperFactory<T>
  */
 class ApiKeyMapper extends DataMapperFactory
 {
@@ -46,7 +49,7 @@ class ApiKeyMapper extends DataMapperFactory
     /**
      * Model to use by the mapper.
      *
-     * @var class-string
+     * @var class-string<T>
      * @since 1.0.0
      */
     public const MODEL = ApiKey::class;
