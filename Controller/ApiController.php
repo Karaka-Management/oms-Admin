@@ -2273,7 +2273,7 @@ final class ApiController extends Controller
 
                 // install dependencies
                 $dependencies = $moduleInfo->getDependencies();
-                foreach ($dependencies as $key => $version) {
+                foreach ($dependencies as $key => $_) {
                     $iResponse                 = new HttpResponse();
                     $iRequest                  = new HttpRequest(new HttpUri(''));
                     $iRequest->header->account = 1;
