@@ -1903,7 +1903,7 @@ final class ApiController extends Controller
         /** @var \Modules\Messages\Models\Email $mail */
         $mail = EmailMapper::get()
             ->with('l11n')
-            ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE])
+            ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE]->content)
             ->where('l11n/language', $response->getLanguage())
             ->execute();
 
