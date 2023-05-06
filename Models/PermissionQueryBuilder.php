@@ -50,7 +50,7 @@ final class PermissionQueryBuilder
      *
      * @var int
      */
-    private int $account = 0;
+    public int $account = 0;
 
     /**
      * Unit ids.

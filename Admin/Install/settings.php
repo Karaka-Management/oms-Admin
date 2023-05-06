@@ -146,6 +146,7 @@ return [
         'name'    => SettingsEnum::MAIL_SERVER_PASS,
         'content' => '',
         'module'  => 'Admin',
+        'encrypted' => true,
     ],
     [
         'type'    => 'setting',
@@ -158,12 +159,14 @@ return [
         'name'    => SettingsEnum::MAIL_SERVER_KEY,
         'content' => '',
         'module'  => 'Admin',
+        'encrypted' => true,
     ],
     [
         'type'    => 'setting',
         'name'    => SettingsEnum::MAIL_SERVER_KEYPASS,
         'content' => '',
         'module'  => 'Admin',
+        'encrypted' => true,
     ],
     [
         'type'    => 'setting',

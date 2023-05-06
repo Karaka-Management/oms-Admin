@@ -25,8 +25,7 @@ use phpOMS\Stdlib\Base\Enum;
  * @since   1.0.0
  */
 abstract class SettingsEnum extends Enum
-{
-    /* Logging settings */
+{    /* Logging settings */
     public const PASSWORD_PATTERN = '1000000001';
 
     public const LOGIN_TIMEOUT = '1000000002';

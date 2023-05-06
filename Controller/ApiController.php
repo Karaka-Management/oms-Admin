@@ -36,7 +36,6 @@ use Modules\Admin\Models\Module;
 use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
-use Modules\Admin\Models\NullDataChange;
 use Modules\Admin\Models\PermissionCategory;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Media\Models\Collection;
@@ -71,6 +70,7 @@ use phpOMS\Model\Message\FormValidation;
 use phpOMS\Model\Message\Reload;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
+use phpOMS\Security\EncryptionHelper;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
 use phpOMS\System\OperatingSystem;
@@ -238,7 +238,9 @@ final class ApiController extends Controller
         $handler->host     = $emailSettings[SettingsEnum::MAIL_SERVER_OUT]->content ?? 'localhost';
         $handler->hostname = $emailSettings[SettingsEnum::MAIL_SERVER_OUT]->content ?? '';
         $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER]->content ?? '';
-        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '';
+        $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS]->isEncrypted && !empty($_SERVER['OMS_PRIVATE_KEY_I'] ?? '')
+            ? EncryptionHelper::decryptShared($emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '', $_SERVER['OMS_PRIVATE_KEY_I'])
+            : $emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '';
 
         return $handler;
     }
@@ -267,7 +269,7 @@ final class ApiController extends Controller
         $forgotten = $this->app->appSettings->get(
             names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_COUNT],
             module: 'Admin',
-            account: $account->getId()
+            account: $account->id
         );
 
         $emailSettings = $this->app->appSettings->get(
@@ -287,7 +289,7 @@ final class ApiController extends Controller
 
         $token     = (string) \random_bytes(64);
         $handler   = $this->setUpServerMailHandler();
-        $resetLink = UriFactory::build('{/base}/reset?user=' . $account->getId() . '&token=' . $token);
+        $resetLink = UriFactory::build('{/base}/reset?user=' . $account->id . '&token=' . $token);
 
         $mail = new Email();
         $mail->setFrom($emailSettings->content);
@@ -300,19 +302,19 @@ final class ApiController extends Controller
             [
                 'name'    => SettingsEnum::LOGIN_FORGOTTEN_DATE,
                 'module'  => self::NAME,
-                'account' => $account->getId(),
+                'account' => $account->id,
                 'content' => (string) \time(),
             ],
             [
                 'name'    => SettingsEnum::LOGIN_FORGOTTEN_COUNT,
                 'module'  => self::NAME,
-                'account' => $account->getId(),
+                'account' => $account->id,
                 'content' => (string) (((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT]->content) + 1),
             ],
             [
                 'name'    => SettingsEnum::LOGIN_FORGOTTEN_TOKEN,
                 'module'  => self::NAME,
-                'account' => $account->getId(),
+                'account' => $account->id,
                 'content' => $token,
             ],
         ], true);
@@ -415,13 +417,13 @@ final class ApiController extends Controller
             [
                 'name'    => SettingsEnum::LOGIN_FORGOTTEN_COUNT,
                 'module'  => self::NAME,
-                'account' => $account->getId(),
+                'account' => $account->id,
                 'content' => '0',
             ],
             [
                 'name'    => SettingsEnum::LOGIN_FORGOTTEN_TOKEN,
                 'module'  => self::NAME,
-                'account' => $account->getId(),
+                'account' => $account->id,
                 'content' => '',
             ],
         ], true);
@@ -537,31 +539,59 @@ final class ApiController extends Controller
             $unit    = $data['unit'] ?? null;
             $app     = $data['app'] ?? null;
             $module  = $data['module'] ?? null;
+            $pattern  = $data['pattern'] ?? '';
+            $encrypted  = $data['encrypted'] ?? null;
             $group   = isset($data['group']) ? (int) $data['group'] : null;
             $account = isset($data['account']) ? (int) $data['account'] : null;
 
             /** @var \Model\Setting $old */
             $old = $this->app->appSettings->get($id, $name, $unit, $app, $module, $group, $account);
+            if ($old->id === 0) {
+                $internalResponse = new HttpResponse();
+                $internalRequest = new HttpRequest($request->uri);
+
+                $internalRequest->header->account = $request->header->account;
+                $internalRequest->setData('id', $id);
+                $internalRequest->setData('name', $name);
+                $internalRequest->setData('content', $content);
+                $internalRequest->setData('pattern', $pattern);
+                $internalRequest->setData('unit', $unit);
+                $internalRequest->setData('app', $app);
+                $internalRequest->setData('module', $module);
+                $internalRequest->setData('group', $group);
+                $internalRequest->setData('account', $account);
+                $internalRequest->setData('encrypted', $encrypted);
+
+                $this->apiSettingsCreate($internalRequest, $internalResponse, $data);
+
+                continue;
+            }
+
             $new = clone $old;
 
             $new->name    = $name ?? $new->name;
-            $new->content = $content ?? $new->content;
+            $new->isEncrypted = $encrypted ?? $new->isEncrypted;
+            $new->content = $new->isEncrypted && !empty($content) && !empty($_SERVER['OMS_PRIVATE_KEY_I'] ?? '')
+                ? EncryptionHelper::encryptShared($content, $_SERVER['OMS_PRIVATE_KEY_I'])
+                : $content ?? $new->content;
             $new->unit    = $unit ?? $new->unit;
             $new->app     = $app ?? $new->app;
             $new->module  = $module ?? $new->module;
             $new->group   = $group ?? $new->group;
             $new->account = $account ?? $new->account;
 
+            // @todo: this function call seems stupid, it should just pass the $new object.
             $this->app->appSettings->set([
                 [
-                    'id'      => $new->getId(),
+                    'id'      => $new->id,
                     'name'    => $new->name,
                     'content' => $new->content,
                     'unit'    => $new->unit,
                     'app'     => $new->app,
                     'module'  => $new->module,
                     'group'   => $new->group,
-                    'account' => $new->account
+                    'account' => $new->account,
+                    'isEncrypted' => $new->isEncrypted,
                 ]
             ], false);
 
@@ -652,7 +682,8 @@ final class ApiController extends Controller
             app: $request->getDataInt('app'),
             module: $request->getDataString('module'),
             group: $request->getDataInt('group'),
-            account: $request->getDataInt('account')
+            account: $request->getDataInt('account'),
+            isEncrypted: $request->getDataBool('encrypted') ?? false
         );
 
         return $setting;
@@ -1009,8 +1040,8 @@ final class ApiController extends Controller
     private function createDefaultAppSettings(App $app, RequestAbstract $request) : void
     {
         $settings   = [];
-        $settings[] = new Setting(0, SettingsEnum::REGISTRATION_ALLOWED, '0', '\\d+', app: $app->getId(), module: 'Admin');
-        $settings[] = new Setting(0, SettingsEnum::APP_DEFAULT_GROUPS, '[]', app: $app->getId(), module: 'Admin');
+        $settings[] = new Setting(0, SettingsEnum::REGISTRATION_ALLOWED, '0', '\\d+', app: $app->id, module: 'Admin');
+        $settings[] = new Setting(0, SettingsEnum::APP_DEFAULT_GROUPS, '[]', app: $app->id, module: 'Admin');
 
         foreach ($settings as $setting) {
             $this->createModel($request->header->account, $setting, SettingMapper::class, 'setting', $request->getOrigin());
@@ -1511,7 +1542,7 @@ final class ApiController extends Controller
             $this->createProfileForAccount($account, $request);
         }
 
-        $collection = $this->createMediaDirForAccount($account->getId(), $account->login ?? '', $request->header->account);
+        $collection = $this->createMediaDirForAccount($account->id, $account->login ?? '', $request->header->account);
         $this->createModel($request->header->account, $collection, CollectionMapper::class, 'collection', $request->getOrigin());
 
         // find default groups and create them
@@ -1545,8 +1576,8 @@ final class ApiController extends Controller
 
         if (!empty($defaultGroupIds)) {
             $this->createModelRelation(
-                $account->getId(),
-                $account->getId(),
+                $account->id,
+                $account->id,
                 $defaultGroupIds,
                 AccountMapper::class,
                 'groups',
@@ -1562,7 +1593,7 @@ final class ApiController extends Controller
             $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'AccountCreateTitle'),
             \str_replace(
                 '{url}',
-                UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $account->getId()),
+                UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $account->id),
                 $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'AccountCreateMsg'
             )),
             $account
@@ -1668,7 +1699,7 @@ final class ApiController extends Controller
         $account = null;
 
         // email already in use
-        if (!($emailAccount instanceof NullAccount)
+        if ($emailAccount->id > 0
             && $emailAccount->login !== null
             && AccountMapper::login($emailAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
         ) {
@@ -1686,13 +1717,13 @@ final class ApiController extends Controller
             $response->header->status = RequestStatusCode::R_400;
 
             return;
-        } elseif (!($emailAccount instanceof NullAccount)) {
+        } elseif ($emailAccount->id > 0) {
             $account = $emailAccount;
         }
 
         // login already in use by different email
         if ($account === null
-            && !($loginAccount instanceof NullAccount)
+            && $loginAccount->id > 0
             && $loginAccount->getEmail() !== $request->getData('email')
         ) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1710,7 +1741,7 @@ final class ApiController extends Controller
 
             return;
         } elseif ($account === null
-            && !($loginAccount instanceof NullAccount)
+            && $loginAccount->id > 0
             && $loginAccount->login !== null
             && AccountMapper::login($loginAccount->login, (string) $request->getData('password')) !== LoginReturnType::OK
         ) {
@@ -1722,7 +1753,7 @@ final class ApiController extends Controller
             /** @var Account $account */
             $account = AccountMapper::get()
                 ->with('groups')
-                ->where('id', $account->getId())
+                ->where('id', $account->id)
                 ->execute();
 
             $defaultGroupIds = [];
@@ -1788,8 +1819,8 @@ final class ApiController extends Controller
             if (!empty($defaultGroupIds)) {
                 // Create missing account / group relationships
                 $this->createModelRelation(
-                    $account->getId(),
-                    $account->getId(),
+                    $account->id,
+                    $account->id,
                     $defaultGroupIds,
                     AccountMapper::class,
                     'groups',
@@ -1823,7 +1854,7 @@ final class ApiController extends Controller
             // Create confirmation pending entry
             $dataChange            = new DataChange();
             $dataChange->type      = 'account';
-            $dataChange->createdBy = $account->getId();
+            $dataChange->createdBy = $account->id;
 
             $dataChange->data = \json_encode([
                 'status' => AccountStatus::ACTIVE
@@ -1832,24 +1863,24 @@ final class ApiController extends Controller
             $tries = 0;
             do {
                 $dataChange->reHash();
-                $this->createModel($account->getId(), $dataChange, DataChangeMapper::class, 'datachange', $request->getOrigin());
+                $this->createModel($account->id, $dataChange, DataChangeMapper::class, 'datachange', $request->getOrigin());
 
                 ++$tries;
-            } while ($dataChange->getId() === 0 && $tries < 5);
+            } while ($dataChange->id === 0 && $tries < 5);
         }
 
         // Create client
         if ($request->hasData('client')) {
             $client = $this->app->moduleManager->get('ClientManagement')
-                ->findClientForAccount($account->getId(), $request->getDataInt('unit'));
+                ->findClientForAccount($account->id, $request->getDataInt('unit'));
 
             if ($client === null) {
                 $internalRequest  = new HttpRequest();
                 $internalResponse = new HttpResponse();
 
-                $internalRequest->header->account = $account->getId();
-                $internalRequest->setData('account', $account->getId());
-                $internalRequest->setData('number', 100000 + $account->getId());
+                $internalRequest->header->account = $account->id;
+                $internalRequest->setData('account', $account->id);
+                $internalRequest->setData('number', 100000 + $account->id);
                 $internalRequest->setData('address', $request->getDataString('address') ?? '');
                 $internalRequest->setData('postal', $request->getDataString('postal') ?? '');
                 $internalRequest->setData('city', $request->getDataString('city') ?? '');
@@ -1871,11 +1902,18 @@ final class ApiController extends Controller
 
         /** @var \Modules\Messages\Models\Email $mail */
         $mail = EmailMapper::get()
+            ->with('l11n')
             ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE])
+            ->where('l11n/language', $response->getLanguage())
             ->execute();
 
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
         $mail->addTo((string) $request->getData('email'));
+
+        // @todo: load default l11n if no translation is available
+        $mailL11n = $mail->getL11nByLanguage($response->getLanguage());
+
+        $mail->subject = $mailL11n->subject;
 
         // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
         // Maybe store the uri in the $app model? or store all urls in the config file
@@ -1890,7 +1928,7 @@ final class ApiController extends Controller
                     : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
                 $account->login
             ],
-            $mail->body
+            $mailL11n->body
         );
 
         $mail->bodyAlt = \str_replace(
@@ -1904,7 +1942,7 @@ final class ApiController extends Controller
                     : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
                 $account->login
             ],
-            $mail->bodyAlt
+            $mailL11n->bodyAlt
         );
 
         $handler->send($mail);
@@ -1968,7 +2006,7 @@ final class ApiController extends Controller
 
         /** @var DataChange $dataChange */
         $dataChange = DataChangeMapper::get()->where('hash', (string) $request->getData('hash'))->execute();
-        if ($dataChange instanceof NullDataChange) {
+        if ($dataChange->id === 0) {
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -3063,53 +3101,6 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to forward an event to the cli app
-     *
-     * @param mixed ...$data Generic data
-     *
-     * @return void
-     *
-     * @api
-     *
-     * @since 1.0.0
-     */
-    public function cliEventCall(mixed ...$data) : void
-    {
-        /** @var \Model\Setting $setting */
-        $setting          = $this->app->appSettings->get(null, SettingsEnum::CLI_ACTIVE);
-        $cliEventHandling = (bool) ($setting->content ?? false);
-
-        if ($cliEventHandling) {
-            $count = \count($data);
-
-            /** @var string $cliPath */
-            $cliPath = \realpath(__DIR__ . '/../../../cli.php');
-            if ($cliPath === false) {
-                return;
-            }
-
-            $jsonData = \json_encode($data);
-            if ($jsonData === false) {
-                $jsonData = '{}';
-            }
-
-            SystemUtils::runProc(
-                OperatingSystem::getSystem() === SystemType::WIN ? 'php.exe' : 'php',
-                \escapeshellarg($cliPath)
-                    . ' /admin/event '
-                    . '-g ' . \escapeshellarg($data[$count - 2] ?? '') . ' '
-                    . '-i ' . \escapeshellarg($data[$count - 1] ?? '') . ' '
-                    . '-d ' . \escapeshellarg($jsonData),
-                true
-            );
-        } else {
-            if ($this->app->moduleManager->isActive('Workflow')) {
-                $this->app->moduleManager->get('Workflow')->runWorkflowFromHook($data);
-            }
-        }
-    }
-
-    /**
      * Routing end-point for application behaviour.
      *
      * @param RequestAbstract  $request  Request
@@ -3138,7 +3129,7 @@ final class ApiController extends Controller
         $this->createModelRelation(
             $request->header->account,
             (int) $request->getData('account'),
-            $contact->getId(),
+            $contact->id,
             AccountMapper::class, 'contacts', '', $request->getOrigin()
         );
 

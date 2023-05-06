@@ -62,7 +62,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                     <label for="iOname"><?= $this->getHtml('OrganizationName'); ?></label>
                                     <select id="iOname" name="settings_1000000009">
                                         <?php $unit = UnitMapper::get()->where('id', (int) $generalSettings[1000000009])->execute(); ?>
-                                            <option value="<?= $unit->getId(); ?>"><?= $this->printHtml($unit->name); ?>
+                                            <option value="<?= $unit->id; ?>"><?= $this->printHtml($unit->name); ?>
                                     </select>
                                 </div>
                             </div>
@@ -710,14 +710,14 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                     </label>
                             <tbody>
                             <?php $count          = 0;
-                                $previousSettings = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \reset($settings)->getId() . '&ptype=p';
-                                $nextSettings     = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \end($settings)->getId() . '&ptype=n';
+                                $previousSettings = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \reset($settings)->id . '&ptype=p';
+                                $nextSettings     = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \end($settings)->id . '&ptype=n';
 
                                 foreach ($settings as $key => $setting) : ++$count;
                             ?>
                             <tr tabindex="0">
                                 <td><i class="fa fa-cogs"></i>
-                                <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->getId(); ?>
+                                <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->id; ?>
                                 <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($setting->name); ?>
                                 <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml($setting->content); ?>
                                 <td data-label="<?= $this->getHtml('Module'); ?>"><?= $this->printHtml($setting->module); ?>

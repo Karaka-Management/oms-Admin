@@ -39,7 +39,7 @@ trait ApiControllerPermissionTrait
 
         $this->module->apiAddGroupPermission($request, $response);
         self::assertEquals('ok', $response->get('')['status']);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -75,7 +75,7 @@ trait ApiControllerPermissionTrait
         $this->module->apiGroupPermissionGet($request, $response);
 
         self::assertGreaterThan(0, $response->get('')['response']->getGroup());
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -94,13 +94,13 @@ trait ApiControllerPermissionTrait
 
         $this->module->apiAddGroupPermission($request, $response);
         self::assertEquals('ok', $response->get('')['status']);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
 
         // test delete
-        $request->setData('id', $response->get('')['response']->getId());
+        $request->setData('id', $response->get('')['response']->id);
         $this->module->apiGroupPermissionDelete($request, $response);
 
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -155,7 +155,7 @@ trait ApiControllerPermissionTrait
         $this->module->apiGroupPermissionUpdate($request, $response);
 
         self::assertEquals(PermissionType::READ, $response->get('')['response']->getPermission());
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
 
         $request->setData('permissioncreate', PermissionType::CREATE);
         $request->setData('permissionupdate', PermissionType::MODIFY);
@@ -181,7 +181,7 @@ trait ApiControllerPermissionTrait
 
         $this->module->apiAddAccountPermission($request, $response);
         self::assertEquals('ok', $response->get('')['status']);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -200,7 +200,7 @@ trait ApiControllerPermissionTrait
         $this->module->apiAccountPermissionGet($request, $response);
 
         self::assertEquals(1, $response->get('')['response']->getAccount());
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -219,13 +219,13 @@ trait ApiControllerPermissionTrait
 
         $this->module->apiAddAccountPermission($request, $response);
         self::assertEquals('ok', $response->get('')['status']);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
 
         // test delete
-        $request->setData('id', $response->get('')['response']->getId());
+        $request->setData('id', $response->get('')['response']->id);
         $this->module->apiAccountPermissionDelete($request, $response);
 
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -280,6 +280,6 @@ trait ApiControllerPermissionTrait
         $this->module->apiAccountPermissionUpdate($request, $response);
 
         self::assertEquals(PermissionType::READ, $response->get('')['response']->getPermission());
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 }

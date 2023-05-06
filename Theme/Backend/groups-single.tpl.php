@@ -28,10 +28,10 @@ $audits      = $this->getData('auditlogs') ?? [];
 
 $previous = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
-    : 'admin/group/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
+    : 'admin/group/settings?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
 $next     = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
-    : 'admin/group/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
+    : 'admin/group/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
 echo $this->getData('nav')->render(); ?>
 
@@ -55,7 +55,7 @@ echo $this->getData('nav')->render(); ?>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iGid"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <input id="iGid" name="id" type="text" value="<?= $group->getId(); ?>" disabled>
+                                    <input id="iGid" name="id" type="text" value="<?= $group->id; ?>" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="iGname"><?= $this->getHtml('Name'); ?></label>
@@ -118,7 +118,7 @@ echo $this->getData('nav')->render(); ?>
                                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                     <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                             <tbody>
-                                <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; $url = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->getId()); ?>
+                                <?php $c = 0; foreach ($accounts as $key => $value) : ++$c; $url = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->id); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $value->name1; ?> <?= $value->name2; ?></a>
@@ -209,7 +209,7 @@ echo $this->getData('nav')->render(); ?>
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="permissionref" value="<?= $group->getId(); ?>">
+                                <input type="hidden" name="permissionref" value="<?= $group->id; ?>">
                                 <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP; ?>">
                                 <input type="submit" class="cancel hidden" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                                 <input type="submit" class="update hidden" value="<?= $this->getHtml('Update', '0', '0'); ?>">
@@ -268,7 +268,7 @@ echo $this->getData('nav')->render(); ?>
                                     <tr>
                                         <td><a href="#"><i class="fa fa-times"></i></a>
                                         <td><i class="fa fa-cogs update btn"></i>
-                                        <td><?= $value->getId(); ?>
+                                        <td><?= $value->id; ?>
                                         <td data-tpl-text="/unit" data-tpl-value="/unit"><?= $value->getUnit(); ?>
                                         <td data-tpl-text="/app" data-tpl-value="/app"><?= $value->getApp(); ?>
                                         <td data-tpl-text="/module" data-tpl-value="/module"><?= $value->getModule(); ?>
@@ -320,11 +320,11 @@ echo $this->getData('nav')->render(); ?>
                                 <td><?= $this->getHtml('Date', 'Auditor'); ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                            $url         = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->getId()); ?>
+                            $url         = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id); ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
-                                    <td><?= $audit->getId(); ?>
+                                    <td><?= $audit->id; ?>
                                     <td><?= $this->printHtml($audit->module); ?>
-                                    <td><?= $audit->getType(); ?>
+                                    <td><?= $audit->type; ?>
                                     <td><?= $this->printHtml($audit->trigger); ?>
                                     <td><?= $this->printHtml($audit->createdBy->login); ?>
                                     <td><?= $this->printHtml($audit->ref); ?>

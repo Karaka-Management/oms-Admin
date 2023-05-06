@@ -30,7 +30,7 @@ class AccountExternal
      * @var int
      * @since 1.0.0
      */
-    protected int $id = 0;
+    public int $id = 0;
 
     /**
      * External type.
@@ -38,7 +38,7 @@ class AccountExternal
      * @var int
      * @since 1.0.0
      */
-    private int $type = AccountExternalType::PAYMENT;
+    public int $type = AccountExternalType::PAYMENT;
 
     /**
      * External subtype.
@@ -54,7 +54,7 @@ class AccountExternal
      * @var int
      * @since 1.0.0
      */
-    private int $status = AccountExternalStatus::ACTIVATE;
+    public int $status = AccountExternalStatus::ACTIVATE;
 
     /**
      * External key

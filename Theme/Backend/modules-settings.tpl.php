@@ -112,7 +112,7 @@ else : ?>
                 ?>
                 <tr tabindex="0">
                     <td><i class="fa fa-cogs"></i>
-                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->getId(); ?>
+                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->id; ?>
                     <td data-label="<?= $this->getHtml('Name'); ?>">
                         <?php
                         $name = $setting->name;

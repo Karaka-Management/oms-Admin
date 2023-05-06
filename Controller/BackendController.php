@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
-use Model\NullSetting;
 use Model\SettingMapper;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
@@ -28,7 +27,6 @@ use phpOMS\Asset\AssetType;
 use phpOMS\Autoloader;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\OrderType;
-use phpOMS\Localization\NullLocalization;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Utils\Parser\Markdown\Markdown;
@@ -207,7 +205,7 @@ final class BackendController extends Controller
 
         /** @var \Modules\Admin\Models\Account $account */
         $account = AccountMapper::get()->with('groups')->with('l11n')->where('id', (int) $request->getData('id'))->execute();
-        if ($account->l11n instanceof NullLocalization) {
+        if ($account->l11n->id === 0) {
             $account->l11n->loadFromLanguage($request->getLanguage());
         }
 
@@ -700,7 +698,7 @@ final class BackendController extends Controller
 
         /** @var null|\Model\NullSetting|\Model\Setting[] $settings */
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
-        if (!($settings instanceof NullSetting)) {
+        if ($settings->id > 0) {
             $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
         }
 

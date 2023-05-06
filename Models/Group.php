@@ -54,7 +54,7 @@ class Group extends \phpOMS\Account\Group
      * @var Account[]
      * @since 1.0.0
      */
-    protected array $accounts = [];
+    public array $accounts = [];
 
     /**
      * Constructor

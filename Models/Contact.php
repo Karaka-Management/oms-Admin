@@ -32,7 +32,7 @@ class Contact
      * @var int
      * @since 1.0.0
      */
-    protected int $id = 0;
+    public int $id = 0;
 
     /**
      * Contact element type.
@@ -40,7 +40,7 @@ class Contact
      * @var int
      * @since 1.0.0
      */
-    private int $type = ContactType::EMAIL;
+    public int $type = ContactType::EMAIL;
 
     /**
      * Contact element subtype.

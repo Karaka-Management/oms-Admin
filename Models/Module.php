@@ -73,7 +73,7 @@ class Module
      * @var int
      * @since 1.0.0
      */
-    protected int $status = ModuleStatus::INACTIVE;
+    public int $status = ModuleStatus::INACTIVE;
 
     /**
      * Created at.

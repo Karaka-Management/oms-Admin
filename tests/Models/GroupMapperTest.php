@@ -42,7 +42,7 @@ final class GroupMapperTest extends \PHPUnit\Framework\TestCase
         $permissions = GroupMapper::getPermissionForModule('Admin');
 
         foreach ($permissions as $p) {
-            if ($p->getId() === $groupId) {
+            if ($p->id === $groupId) {
                 self::assertTrue(true);
                 return;
             }

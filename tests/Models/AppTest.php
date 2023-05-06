@@ -31,6 +31,6 @@ final class AppTest extends \PHPUnit\Framework\TestCase
     public function testDefault() : void
     {
         $account = new App();
-        self::assertEquals(0, $account->getId());
+        self::assertEquals(0, $account->id);
     }
 }

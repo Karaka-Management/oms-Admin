@@ -73,6 +73,12 @@ class AccountMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const HAS_MANY = [
+        'permissions' => [
+            'mapper'   => AccountPermissionMapper::class,
+            'table'    => 'account_permission',
+            'external' => null,
+            'self'     => 'account_permission_account',
+        ],
         'groups' => [
             'mapper'   => GroupMapper::class,
             'table'    => 'account_group',
@@ -142,37 +148,19 @@ class AccountMapper extends DataMapperFactory
      */
     public static function getWithPermissions(int $id) : Account
     {
+        if ($id < 1) {
+            return new NullAccount();
+        }
+
         /** @var \Modules\Admin\Models\Account $account */
         $account = self::get()
             ->with('groups')
             ->with('groups/permissions')
+            ->with('permissions')
             ->with('l11n')
             ->where('id', $id)
+            ->where('permission/element', null)
             ->execute();
-
-        $groups = \array_keys($account->getGroups());
-
-        /** @var \Modules\Admin\Models\GroupPermission[] $groupPermissions */
-        $groupPermissions = empty($groups)
-            ? []
-            : GroupPermissionMapper::getAll()
-                ->where('group', \array_keys($account->getGroups()), 'in')
-                ->where('element', null)
-                ->execute();
-
-        foreach ($groupPermissions as $permission) {
-            $account->addPermission($permission);
-        }
-
-        /** @var \Modules\Admin\Models\AccountPermission[] $accountPermissions */
-        $accountPermissions = AccountPermissionMapper::getAll()
-            ->where('account', $id)
-            ->where('element', null)
-            ->execute();
-
-        foreach ($accountPermissions as $permission) {
-            $account->addPermission($permission);
-        }
 
         return $account;
     }

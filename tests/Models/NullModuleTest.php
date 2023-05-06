@@ -37,6 +37,6 @@ final class NullModuleTest extends \PHPUnit\Framework\TestCase
     public function testId() : void
     {
         $null = new NullModule('Test');
-        self::assertEquals('Test', $null->getId());
+        self::assertEquals('Test', $null->id);
     }
 }

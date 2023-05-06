@@ -47,10 +47,10 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         $account->setType(AccountType::USER);
 
         $id = AccountMapper::create()->execute($account);
-        self::assertGreaterThan(0, $account->getId());
-        self::assertEquals($id, $account->getId());
+        self::assertGreaterThan(0, $account->id);
+        self::assertEquals($id, $account->id);
 
-        $accountR = AccountMapper::get()->where('id', $account->getId())->execute();
+        $accountR = AccountMapper::get()->where('id', $account->id)->execute();
         self::assertEquals($account->createdAt->format('Y-m-d'), $accountR->createdAt->format('Y-m-d'));
         self::assertEquals($account->login, $accountR->login);
         self::assertEquals($account->name1, $accountR->name1);

@@ -86,7 +86,7 @@ echo $this->getData('nav')->render(); ?>
                         <?php
                         $c = 0;
                         foreach ($accounts as $key => $value) : ++$c;
-                            $url   = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->getId());
+                            $url   = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->id);
                             $color = 'darkred';
 
                             if ($value->getStatus() === AccountStatus::ACTIVE) { $color       = 'green'; }
@@ -95,7 +95,7 @@ echo $this->getData('nav')->render(); ?>
                             elseif ($value->getStatus() === AccountStatus::BANNED) { $color   = 'red'; }
                         ?>
                 <tr tabindex="0" data-href="<?= $url; ?>">
-                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                    <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $value->id; ?></a>
                     <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status'. $value->getStatus()); ?></span></a>
                     <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($this->renderUserName('%3$s %2$s %1$s', [$value->name1, $value->name2, $value->name3, $value->login])); ?></a>
                     <td data-label="<?= $this->getHtml('Activity'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->getLastActive()->format('Y-m-d H:i:s')); ?></a>

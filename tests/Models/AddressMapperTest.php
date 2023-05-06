@@ -44,10 +44,10 @@ final class AddressMapperTest extends \PHPUnit\Framework\TestCase
         $address->setGeo(['lat' => 12.1, 'long' => 11.2,]);
 
         $id = AddressMapper::create()->execute($address);
-        self::assertGreaterThan(0, $address->getId());
-        self::assertEquals($id, $address->getId());
+        self::assertGreaterThan(0, $address->id);
+        self::assertEquals($id, $address->id);
 
-        $addressR = AddressMapper::get()->where('id', $address->getId())->execute();
+        $addressR = AddressMapper::get()->where('id', $address->id)->execute();
         self::assertEquals($address->name, $addressR->name);
         self::assertEquals($address->addition, $addressR->addition);
         self::assertEquals($address->getType(), $addressR->getType());

@@ -42,10 +42,10 @@ $l11n        = $account->l11n;
 
 $previous = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/account/settings?id={?id}#{\#}'
-    : 'admin/account/settings?{?}&audit=' . \reset($audits)->getId() . '&ptype=p#{\#}';
+    : 'admin/account/settings?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
 $next     = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/account/settings?id={?id}#{\#}'
-    : 'admin/account/settings?{?}&audit=' . \end($audits)->getId() . '&ptype=n#{\#}';
+    : 'admin/account/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
 echo $this->getData('nav')->render(); ?>
 
@@ -70,7 +70,7 @@ echo $this->getData('nav')->render(); ?>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <input id="iId" name="iaccount-idlist" type="text" value="<?= $account->getId(); ?>" disabled>
+                                    <input id="iId" name="iaccount-idlist" type="text" value="<?= $account->id; ?>" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="iType"><?= $this->getHtml('Type'); ?></label>
@@ -169,7 +169,7 @@ echo $this->getData('nav')->render(); ?>
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input name="account" type="hidden" value="<?= $account->getId(); ?>">
+                                <input name="account" type="hidden" value="<?= $account->id; ?>">
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
                         </form>
@@ -190,11 +190,11 @@ echo $this->getData('nav')->render(); ?>
                                     $c      = 0;
                                     $groups = $account->getGroups();
                                     foreach ($groups as $key => $value) : ++$c;
-                                        $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->getId());
+                                        $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id);
                                 ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
@@ -282,7 +282,7 @@ echo $this->getData('nav')->render(); ?>
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="permissionref" value="<?= $account->getId(); ?>">
+                                <input type="hidden" name="permissionref" value="<?= $account->id; ?>">
                                 <input type="hidden" name="permissionowner" value="<?= PermissionOwner::ACCOUNT; ?>">
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
@@ -317,7 +317,7 @@ echo $this->getData('nav')->render(); ?>
                                     <tr>
                                         <td><a href="#"><i class="fa fa-times"></i></a>
                                         <td><a href="#"><i class="fa fa-cogs"></i></a>
-                                        <td><?= $value->getId(); ?>
+                                        <td><?= $value->id; ?>
                                         <td><?= $value->getUnit(); ?>
                                         <td><?= $value->getApp(); ?>
                                         <td><?= $value->getModule(); ?>
@@ -404,7 +404,7 @@ echo $this->getData('nav')->render(); ?>
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="account_id" value="<?= $account->getId(); ?>">
+                                <input type="hidden" name="account_id" value="<?= $account->id; ?>">
                                 <input id="iSubmitLocalization" name="submitLocalization" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
                             </div>
                         </form>
@@ -827,10 +827,10 @@ echo $this->getData('nav')->render(); ?>
                             <tbody>
                             <?php $count = 0;
                             foreach ($audits as $key => $audit) : ++$count;
-                                $url = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->getId());
+                                $url = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id);
                             ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
-                                    <td><?= $audit->getId(); ?>
+                                    <td><?= $audit->id; ?>
                                     <td><?= $this->printHtml($audit->module); ?>
                                     <td><?= $audit->type; ?>
                                     <td><?= $this->printHtml($audit->trigger); ?>

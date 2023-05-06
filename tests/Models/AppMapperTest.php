@@ -39,10 +39,10 @@ final class AppMapperTest extends \PHPUnit\Framework\TestCase
         $app->status = ApplicationStatus::NORMAL;
 
         $id = AppMapper::create()->execute($app);
-        self::assertGreaterThan(0, $app->getId());
-        self::assertEquals($id, $app->getId());
+        self::assertGreaterThan(0, $app->id);
+        self::assertEquals($id, $app->id);
 
-        $appR = AppMapper::get()->where('id', $app->getId())->execute();
+        $appR = AppMapper::get()->where('id', $app->id)->execute();
         self::assertEquals($app->name, $appR->name);
         self::assertEquals($app->theme, $appR->theme);
         self::assertEquals($app->status, $appR->status);

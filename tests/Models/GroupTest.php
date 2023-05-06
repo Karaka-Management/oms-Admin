@@ -42,7 +42,7 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
     public function testDefault() : void
     {
         self::assertEquals((new \DateTime('now'))->format('Y-m-d'), $this->group->createdAt->format('Y-m-d'));
-        self::assertEquals(0, $this->group->createdBy->getId());
+        self::assertEquals(0, $this->group->createdBy->id);
         self::assertEquals('', $this->group->descriptionRaw);
         self::assertEquals([], $this->group->getAccounts());
     }
@@ -66,6 +66,6 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
     public function testCreatorInputOutput() : void
     {
         $this->group->createdBy = new NullAccount(3);
-        self::assertEquals(3, $this->group->createdBy->getId());
+        self::assertEquals(3, $this->group->createdBy->id);
     }
 }

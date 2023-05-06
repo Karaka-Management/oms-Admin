@@ -304,6 +304,7 @@ final class Installer extends InstallerAbstract
         $request->setData('module', $data['module'] ?? null);
         $request->setData('group', $data['group'] ?? null);
         $request->setData('account', $data['account'] ?? null);
+        $request->setData('encrypted', $data['encrypted'] ?? false);
 
         $module->apiSettingsCreate($request, $response);
 

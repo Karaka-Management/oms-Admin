@@ -39,7 +39,7 @@ trait ApiControllerAccountTrait
         $this->module->apiAccountGet($request, $response);
 
         self::assertEquals('admin', $response->get('')['response']->login);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -61,7 +61,7 @@ trait ApiControllerAccountTrait
         $this->module->apiAccountGet($request, $response);
 
         self::assertEquals('oms@karaka.de', $response->get('')['response']->getEmail());
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -103,7 +103,7 @@ trait ApiControllerAccountTrait
         $this->module->apiAccountCreate($request, $response);
 
         self::assertEquals('guest', $response->get('')['response']->login);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -127,7 +127,7 @@ trait ApiControllerAccountTrait
         $this->module->apiAccountCreate($request, $response);
 
         self::assertEquals('guest2', $response->get('')['response']->login);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -148,10 +148,10 @@ trait ApiControllerAccountTrait
         $request->setData('status', AccountStatus::INACTIVE);
 
         $this->module->apiAccountCreate($request, $response);
-        $request->setData('id', $response->get('')['response']->getId());
+        $request->setData('id', $response->get('')['response']->id);
         $this->module->apiAccountDelete($request, $response);
 
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**

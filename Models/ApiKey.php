@@ -32,7 +32,7 @@ class ApiKey
      * @var int
      * @since 1.0.0
      */
-    protected int $id = 0;
+    public int $id = 0;
 
     /**
      * Names.
@@ -48,7 +48,7 @@ class ApiKey
      * @var int
      * @since 1.0.0
      */
-    protected int $status = AccountStatus::INACTIVE;
+    public int $status = AccountStatus::INACTIVE;
 
     /**
      * Creator.
