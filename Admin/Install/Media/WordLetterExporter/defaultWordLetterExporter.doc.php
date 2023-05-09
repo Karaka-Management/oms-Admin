@@ -28,7 +28,7 @@ $word    = new DefaultWord();
 $section = $word->createFirstPage();
 
 $file = \tempnam(\sys_get_temp_dir(), 'oms_');
-$writer->save($file);
+//$writer->save($file);
 
 $content = \file_get_contents($file);
 if ($content !== false) {

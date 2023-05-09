@@ -70,6 +70,9 @@ class DefaultPdf extends TCPDF
     ];
 
     public array $attributes = [
+        'logo' => __DIR__ . '/../Web/Backend/img/logo.png',
+        'title_name' => 'Jingga',
+        'slogan' => 'Business solutions made simple.',
         'legal_name' => '',
         'address' => '',
         'city' => '',
@@ -95,7 +98,7 @@ class DefaultPdf extends TCPDF
         parent::__construct('P', 'mm', 'A4', true, 'UTF-8', false);
 
         // set default header data
-        $this->setHeaderData('', 15, 'Jingga', 'Business solutions made simple.');
+        $this->setHeaderData('', 15, $this->attributes['title_name'], $this->attributes['slogan']);
 
         // set header and footer fonts
         $this->setHeaderFont([PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN]);
