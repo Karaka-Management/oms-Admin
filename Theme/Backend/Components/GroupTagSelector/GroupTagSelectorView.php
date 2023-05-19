@@ -36,7 +36,7 @@ class GroupTagSelectorView extends View
      * @var string
      * @since 1.0.0
      */
-    private string $id = '';
+    public string $id = '';
 
     /**
      * Is required?

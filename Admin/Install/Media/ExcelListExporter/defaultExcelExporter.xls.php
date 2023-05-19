@@ -29,7 +29,8 @@ $excel = new DefaultExcel();
 
 foreach ($data as $i => $row) {
     foreach ($row as $j => $cell) {
-        $excel->getActiveSheet()->setCellValueByColumnAndRow($j + 1, $i + 1, $cell);
+        // @todo: fix 26 column overflow.
+        $excel->getActiveSheet()->setCellValue(\chr(64 + $j + 1) . ($i + 1), $cell);
     }
 }
 
