@@ -86,6 +86,16 @@
                 "foreignTable": "country",
                 "foreignKey": "country_code2"
             },
+            "address_lat": {
+                "name": "address_lat",
+                "type": "DECIMAL(10,6)",
+                "null": false
+            },
+            "address_lon": {
+                "name": "address_lon",
+                "type": "DECIMAL(10,6)",
+                "null": false
+            },
             "address_type": {
                 "name": "address_type",
                 "type": "INT",

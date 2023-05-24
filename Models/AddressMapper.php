@@ -44,8 +44,10 @@ final class AddressMapper extends DataMapperFactory
         'address_postal'   => ['name' => 'address_postal',  'type' => 'string', 'internal' => 'postal'],
         'address_state'    => ['name' => 'address_state',   'type' => 'string', 'internal' => 'state'],
         'address_city'     => ['name' => 'address_city',    'type' => 'string', 'internal' => 'city'],
-        'address_country'  => ['name' => 'address_country', 'type' => 'string',    'internal' => 'country'],
+        'address_country'  => ['name' => 'address_country', 'type' => 'string', 'internal' => 'country'],
         'address_type'     => ['name' => 'address_type', 'type' => 'int',    'internal' => 'type'],
+        'address_lat'     => ['name' => 'address_lat', 'type' => 'float',    'internal' => 'lat'],
+        'address_lon'     => ['name' => 'address_lon', 'type' => 'float',    'internal' => 'lon'],
     ];
 
     /**
