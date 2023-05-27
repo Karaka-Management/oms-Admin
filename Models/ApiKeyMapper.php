@@ -126,7 +126,7 @@ class ApiKeyMapper extends DataMapperFactory
                 ->execute();
 
             return (int) $result['account_id'];
-        } catch (\Exception $e) {
+        } catch (\Exception $_) {
             return LoginReturnType::FAILURE; // @codeCoverageIgnore
         }
     }

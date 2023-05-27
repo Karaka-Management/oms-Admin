@@ -247,7 +247,7 @@ class AccountMapper extends DataMapperFactory
                 ->execute();
 
             return LoginReturnType::WRONG_PASSWORD;
-        } catch (\Exception $e) {
+        } catch (\Exception $_) {
             return LoginReturnType::FAILURE; // @codeCoverageIgnore
         }
     }

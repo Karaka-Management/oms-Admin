@@ -89,7 +89,7 @@ final class Installer extends InstallerAbstract
             (OperatingSystem::getSystem() === SystemType::WIN
                 ? 'php.exe'
                 : 'php'
-            ) . ' ' . __DIR__ . '/../../../../Cli/cli.php -v'
+            ) . ' ' . __DIR__ . '/../../../../cli.php -v'
         );
         $cmdResult = $cmdResult === null || $cmdResult === false ? '' : $cmdResult;
 
@@ -312,8 +312,8 @@ final class Installer extends InstallerAbstract
             return [];
         }
 
-        return !\is_array($responseData['response'])
-            ? $responseData['response']->toArray()
-            : $responseData['response'];
+        return \is_array($responseData['response'])
+            ? $responseData['response']
+            : $responseData['response']->toArray();
     }
 }

@@ -699,7 +699,7 @@ final class BackendController extends Controller
         /** @var null|\Model\NullSetting|\Model\Setting[] $settings */
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
         if ($settings->id > 0) {
-            $view->setData('settings', !\is_array($settings) ? [$settings] : $settings);
+            $view->setData('settings', \is_array($settings) ? $settings : [$settings]);
         }
 
         $class = '\\Modules\\' . $request->getData('id') . '\\Models\\SettingsEnum';

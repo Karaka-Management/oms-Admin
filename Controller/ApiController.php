@@ -2176,7 +2176,7 @@ final class ApiController extends Controller
 
                 break;
             case ModuleStatusUpdateType::INSTALL:
-                $done = $this->app->moduleManager->isInstalled($module) ? true : false;
+                $done = $this->app->moduleManager->isInstalled($module);
                 $msg  = $done
                     ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledSuccessful')
                     : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledFailure');

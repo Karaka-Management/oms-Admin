@@ -25,11 +25,11 @@ use phpOMS\Stdlib\Base\AddressType;
  */
 final class AddressMapperTest extends \PHPUnit\Framework\TestCase
 {
-	/**
-	 * @covers Modules\Admin\Models\AddressMapper
-	 * @group module
-	 */
-	public function testCR() : void
+    /**
+     * @covers Modules\Admin\Models\AddressMapper
+     * @group module
+     */
+    public function testCR() : void
     {
         $address = new Address();
 
