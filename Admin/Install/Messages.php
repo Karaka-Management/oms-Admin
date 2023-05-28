@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Admin\Install;
 
-use Model\Setting;
-use Model\SettingMapper;
 use Modules\Admin\Models\SettingsEnum;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Message\Http\HttpRequest;
@@ -51,22 +49,22 @@ class Messages
 
         $settings = [
             [
-                'id' => null,
-                'name' => SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE,
+                'id'      => null,
+                'name'    => SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE,
                 'content' => (string) $messages['email_template'][0]['id'],
-                'module' => 'Admin',
+                'module'  => 'Admin',
             ],
             [
-                'id' => null,
-                'name' => SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE,
+                'id'      => null,
+                'name'    => SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE,
                 'content' => (string) $messages['email_template'][1]['id'],
-                'module' => 'Admin',
+                'module'  => 'Admin',
             ],
             [
-                'id' => null,
-                'name' => SettingsEnum::LOGIN_MAIL_FAILED_TEMPLATE,
+                'id'      => null,
+                'name'    => SettingsEnum::LOGIN_MAIL_FAILED_TEMPLATE,
                 'content' => (string) $messages['email_template'][2]['id'],
-                'module' => 'Admin',
+                'module'  => 'Admin',
             ],
         ];
 

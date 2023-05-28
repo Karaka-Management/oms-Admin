@@ -279,7 +279,7 @@ final class ApiController extends Controller
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::ERROR,
                 'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
-            'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetMsg'),
+            'message'      => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetMsg'),
                 'response' => null,
             ]);
         }
@@ -333,8 +333,8 @@ final class ApiController extends Controller
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
             'status'   => NotificationLevel::OK,
-            'title'    =>  $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
-            'message'  =>  $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetEmailMsg'),
+            'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
+            'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetEmailMsg'),
             'response' => null,
         ]);
     }
@@ -372,7 +372,7 @@ final class ApiController extends Controller
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::OK,
                 'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
-                'message'  =>  $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetInvalidMsg'),
+                'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetInvalidMsg'),
                 'response' => null,
             ]);
 
@@ -523,22 +523,22 @@ final class ApiController extends Controller
         $dataSettings = $request->getDataJson('settings');
 
         foreach ($dataSettings as $data) {
-            $id      = isset($data['id']) && !empty($data['id']) ? (int) $data['id'] : null;
-            $name    = $data['name'] ?? null;
-            $content = $data['content'] ?? null;
-            $unit    = $data['unit'] ?? null;
-            $app     = $data['app'] ?? null;
-            $module  = $data['module'] ?? null;
-            $pattern  = $data['pattern'] ?? '';
-            $encrypted  = $data['encrypted'] ?? null;
-            $group   = isset($data['group']) ? (int) $data['group'] : null;
-            $account = isset($data['account']) ? (int) $data['account'] : null;
+            $id        = isset($data['id']) && !empty($data['id']) ? (int) $data['id'] : null;
+            $name      = $data['name'] ?? null;
+            $content   = $data['content'] ?? null;
+            $unit      = $data['unit'] ?? null;
+            $app       = $data['app'] ?? null;
+            $module    = $data['module'] ?? null;
+            $pattern   = $data['pattern'] ?? '';
+            $encrypted = $data['encrypted'] ?? null;
+            $group     = isset($data['group']) ? (int) $data['group'] : null;
+            $account   = isset($data['account']) ? (int) $data['account'] : null;
 
             /** @var \Model\Setting $old */
             $old = $this->app->appSettings->get($id, $name, $unit, $app, $module, $group, $account);
             if ($old->id === 0) {
                 $internalResponse = new HttpResponse();
-                $internalRequest = new HttpRequest($request->uri);
+                $internalRequest  = new HttpRequest($request->uri);
 
                 $internalRequest->header->account = $request->header->account;
                 $internalRequest->setData('id', $id);
@@ -559,30 +559,30 @@ final class ApiController extends Controller
 
             $new = clone $old;
 
-            $new->name    = $name ?? $new->name;
+            $new->name        = $name ?? $new->name;
             $new->isEncrypted = $encrypted ?? $new->isEncrypted;
-            $new->content = $new->isEncrypted && !empty($content) && !empty($_SERVER['OMS_PRIVATE_KEY_I'] ?? '')
+            $new->content     = $new->isEncrypted && !empty($content) && !empty($_SERVER['OMS_PRIVATE_KEY_I'] ?? '')
                 ? EncryptionHelper::encryptShared($content, $_SERVER['OMS_PRIVATE_KEY_I'])
                 : $content ?? $new->content;
-            $new->unit    = $unit ?? $new->unit;
-            $new->app     = $app ?? $new->app;
-            $new->module  = $module ?? $new->module;
-            $new->group   = $group ?? $new->group;
-            $new->account = $account ?? $new->account;
+            $new->unit        = $unit ?? $new->unit;
+            $new->app         = $app ?? $new->app;
+            $new->module      = $module ?? $new->module;
+            $new->group       = $group ?? $new->group;
+            $new->account     = $account ?? $new->account;
 
             // @todo: this function call seems stupid, it should just pass the $new object.
             $this->app->appSettings->set([
                 [
-                    'id'      => $new->id,
-                    'name'    => $new->name,
-                    'content' => $new->content,
-                    'unit'    => $new->unit,
-                    'app'     => $new->app,
-                    'module'  => $new->module,
-                    'group'   => $new->group,
-                    'account' => $new->account,
+                    'id'          => $new->id,
+                    'name'        => $new->name,
+                    'content'     => $new->content,
+                    'unit'        => $new->unit,
+                    'app'         => $new->app,
+                    'module'      => $new->module,
+                    'group'       => $new->group,
+                    'account'     => $new->account,
                     'isEncrypted' => $new->isEncrypted,
-                ]
+                ],
             ], false);
 
             $this->updateModel($request->header->account, $old, $new, SettingMapper::class, 'settings', $request->getOrigin());
@@ -1758,7 +1758,7 @@ final class ApiController extends Controller
             $dataChange->createdBy = $account->id;
 
             $dataChange->data = \json_encode([
-                'status' => AccountStatus::ACTIVE
+                'status' => AccountStatus::ACTIVE,
             ]);
 
             $tries = 0;
@@ -1827,7 +1827,7 @@ final class ApiController extends Controller
                 UriFactory::hasQuery('/' . \strtolower($app->name))
                     ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
                     : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                $account->login
+                $account->login,
             ],
             $mailL11n->body
         );
@@ -1841,7 +1841,7 @@ final class ApiController extends Controller
                 UriFactory::hasQuery('/' . \strtolower($app->name))
                     ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
                     : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                $account->login
+                $account->login,
             ],
             $mailL11n->bodyAlt
         );

@@ -52,40 +52,40 @@ class DefaultPdf extends TCPDF
 
     public array $lang = [
         'en' => [
-            'Page' => 'Page',
-            'CEO' => 'CEO',
-            'TaxOffice' => 'Tax office',
-            'TaxNumber' => 'Tax number',
-            'Swift' => 'BIC',
+            'Page'        => 'Page',
+            'CEO'         => 'CEO',
+            'TaxOffice'   => 'Tax office',
+            'TaxNumber'   => 'Tax number',
+            'Swift'       => 'BIC',
             'BankAccount' => 'Account',
         ],
         'de' => [
-            'Page' => 'Seite',
-            'CEO' => 'Geschäftsführer',
-            'TaxOffice' => 'Finanzamt',
-            'TaxNumber' => 'Steuernummer',
-            'Swift' => 'BIC',
+            'Page'        => 'Seite',
+            'CEO'         => 'Geschäftsführer',
+            'TaxOffice'   => 'Finanzamt',
+            'TaxNumber'   => 'Steuernummer',
+            'Swift'       => 'BIC',
             'BankAccount' => 'IBAN',
-        ]
+        ],
     ];
 
     public array $attributes = [
-        'logo' => __DIR__ . '/../Web/Backend/img/logo.png',
-        'title_name' => 'Jingga',
-        'slogan' => 'Business solutions made simple.',
-        'legal_name' => '',
-        'address' => '',
-        'city' => '',
-        'country' => '',
-        'ceo' => '',
-        'tax_office' => '',
-        'tax_number' => '',
-        'bank_name' => '',
-        'swift' => '',
+        'logo'         => __DIR__ . '/../Web/Backend/img/logo.png',
+        'title_name'   => 'Jingga',
+        'slogan'       => 'Business solutions made simple.',
+        'legal_name'   => '',
+        'address'      => '',
+        'city'         => '',
+        'country'      => '',
+        'ceo'          => '',
+        'tax_office'   => '',
+        'tax_number'   => '',
+        'bank_name'    => '',
+        'swift'        => '',
         'bank_account' => '',
-        'website' => '',
-        'email' => '',
-        'phone' => '',
+        'website'      => '',
+        'email'        => '',
+        'phone'        => '',
     ];
 
     /**
@@ -154,7 +154,7 @@ class DefaultPdf extends TCPDF
         $x  = 0;
         $dx = 0;
 
-        if (!$this->header_xobj_autoreset AND $this->booklet AND (($this->page % 2) == 0)) {
+        if (!$this->header_xobj_autoreset && $this->booklet && (($this->page % 2) == 0)) {
             // adjust margins for booklet mode
             $dx = ($this->original_lMargin - $this->original_rMargin);
         }

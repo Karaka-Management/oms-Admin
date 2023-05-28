@@ -41,7 +41,7 @@ final class ContactMapper extends DataMapperFactory
         'account_contact_subtype' => ['name' => 'account_contact_subtype', 'type' => 'int', 'internal' => 'subtype'],
         'account_contact_order'   => ['name' => 'account_contact_order', 'type' => 'int', 'internal' => 'order'],
         'account_contact_content' => ['name' => 'account_contact_content', 'type' => 'string', 'internal' => 'content'],
-        'account_contact_module' => ['name' => 'account_contact_module', 'type' => 'string', 'internal' => 'module'],
+        'account_contact_module'  => ['name' => 'account_contact_module', 'type' => 'string', 'internal' => 'module'],
         'account_contact_account' => ['name' => 'account_contact_account', 'type' => 'int', 'internal' => 'account'],
     ];
 

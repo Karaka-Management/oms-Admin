@@ -42,40 +42,40 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord
 
     public array $lang = [
         'en' => [
-            'Page' => 'Page',
-            'CEO' => 'CEO',
-            'TaxOffice' => 'Tax office',
-            'TaxNumber' => 'Tax number',
-            'Swift' => 'BIC',
+            'Page'        => 'Page',
+            'CEO'         => 'CEO',
+            'TaxOffice'   => 'Tax office',
+            'TaxNumber'   => 'Tax number',
+            'Swift'       => 'BIC',
             'BankAccount' => 'Account',
         ],
         'de' => [
-            'Page' => 'Seite',
-            'CEO' => 'Geschäftsführer',
-            'TaxOffice' => 'Finanzamt',
-            'TaxNumber' => 'Steuernummer',
-            'Swift' => 'BIC',
+            'Page'        => 'Seite',
+            'CEO'         => 'Geschäftsführer',
+            'TaxOffice'   => 'Finanzamt',
+            'TaxNumber'   => 'Steuernummer',
+            'Swift'       => 'BIC',
             'BankAccount' => 'IBAN',
-        ]
+        ],
     ];
 
     public array $attributes = [
-        'logo' => __DIR__ . '/../Web/Backend/img/logo.png',
-        'title_name' => 'Jingga',
-        'slogan' => 'Business solutions made simple.',
-        'legal_name' => '',
-        'address' => '',
-        'city' => '',
-        'country' => '',
-        'ceo' => '',
-        'tax_office' => '',
-        'tax_number' => '',
-        'bank_name' => '',
-        'swift' => '',
+        'logo'         => __DIR__ . '/../Web/Backend/img/logo.png',
+        'title_name'   => 'Jingga',
+        'slogan'       => 'Business solutions made simple.',
+        'legal_name'   => '',
+        'address'      => '',
+        'city'         => '',
+        'country'      => '',
+        'ceo'          => '',
+        'tax_office'   => '',
+        'tax_number'   => '',
+        'bank_name'    => '',
+        'swift'        => '',
         'bank_account' => '',
-        'website' => '',
-        'email' => '',
-        'phone' => '',
+        'website'      => '',
+        'email'        => '',
+        'phone'        => '',
     ];
 
     /**
@@ -94,9 +94,9 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord
     public function createFirstPage()
     {
         $section = $this->addSection([
-            'marginLeft' => 1000,
-            'marginRight' => 1000,
-            'marginTop' => 2000,
+            'marginLeft'   => 1000,
+            'marginRight'  => 1000,
+            'marginTop'    => 2000,
             'marginBottom' => 2000,
         //    'headerHeight' => 50,
         //    'footerHeight' => 50,
@@ -170,9 +170,9 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord
     public function createSecondPage()
     {
         $section = $this->addSection([
-            'marginLeft' => 1000,
-            'marginRight' => 1000,
-            'marginTop' => 2000,
+            'marginLeft'   => 1000,
+            'marginRight'  => 1000,
+            'marginTop'    => 2000,
             'marginBottom' => 2000,
         //    'headerHeight' => 50,
         //    'footerHeight' => 50,

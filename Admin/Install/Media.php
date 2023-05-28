@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Admin\Install;
 
-use Model\Setting;
-use Model\SettingMapper;
 use Modules\Admin\Models\SettingsEnum;
 use phpOMS\Application\ApplicationAbstract;
 
@@ -47,34 +45,34 @@ class Media
             [
                 'data' => [
                     [
-                        'type' => 'setting',
-                        'name' => SettingsEnum::DEFAULT_LIST_EXPORTS,
+                        'type'    => 'setting',
+                        'name'    => SettingsEnum::DEFAULT_LIST_EXPORTS,
                         'content' => (string) $media['collection'][4]['id'],
                         'pattern' => '\\d+',
-                        'module' => 'Admin'
+                        'module'  => 'Admin',
                     ],
                     [
-                        'type' => 'setting',
-                        'name' => SettingsEnum::DEFAULT_LETTERS,
+                        'type'    => 'setting',
+                        'name'    => SettingsEnum::DEFAULT_LETTERS,
                         'content' => (string) $media['collection'][5]['id'],
                         'pattern' => '\\d+',
-                        'module' => 'Admin'
+                        'module'  => 'Admin',
                     ],
                     [
-                        'type' => 'setting',
-                        'name' => SettingsEnum::DEFAULT_ASSETS,
+                        'type'    => 'setting',
+                        'name'    => SettingsEnum::DEFAULT_ASSETS,
                         'content' => (string) $media['upload'][0]['id'],
                         'pattern' => '\\d+',
-                        'module' => 'Admin'
+                        'module'  => 'Admin',
                     ],
                     [
-                        'type' => 'setting',
-                        'name' => SettingsEnum::DEFAULT_TEMPLATES,
+                        'type'    => 'setting',
+                        'name'    => SettingsEnum::DEFAULT_TEMPLATES,
                         'content' => (string) $media['upload'][1]['id'],
                         'pattern' => '\\d+',
-                        'module' => 'Admin'
-                    ]
-                ]
+                        'module'  => 'Admin',
+                    ],
+                ],
             ]
         );
     }

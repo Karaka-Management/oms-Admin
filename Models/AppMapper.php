@@ -36,11 +36,11 @@ final class AppMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'app_id'     => ['name' => 'app_id',     'type' => 'int',    'internal' => 'id'],
-        'app_name'   => ['name' => 'app_name',   'type' => 'string', 'internal' => 'name'],
-        'app_theme'  => ['name' => 'app_theme',  'type' => 'string', 'internal' => 'theme'],
-        'app_status' => ['name' => 'app_status', 'type' => 'int',    'internal' => 'status'],
-        'app_type'   => ['name' => 'app_type', 'type' => 'int',    'internal' => 'type'],
+        'app_id'             => ['name' => 'app_id',     'type' => 'int',    'internal' => 'id'],
+        'app_name'           => ['name' => 'app_name',   'type' => 'string', 'internal' => 'name'],
+        'app_theme'          => ['name' => 'app_theme',  'type' => 'string', 'internal' => 'theme'],
+        'app_status'         => ['name' => 'app_status', 'type' => 'int',    'internal' => 'status'],
+        'app_type'           => ['name' => 'app_type', 'type' => 'int',    'internal' => 'type'],
         'app_unit_default'   => ['name' => 'app_unit_default', 'type' => 'int',    'internal' => 'defaultUnit'],
     ];
 

@@ -29,6 +29,6 @@ return ['Navigation' => [
     'Pages'       => 'Pages',
     'Permissions' => 'Permissions',
     'Routes'      => 'Routes',
-    'Hooks'      => 'Hooks',
+    'Hooks'       => 'Hooks',
     'Settings'    => 'Settings',
 ]];
