@@ -178,7 +178,7 @@ echo $this->getData('nav')->render(); ?>
 
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table id="groupTable" class="default">
                             <thead>
                                 <tr>
@@ -294,7 +294,7 @@ echo $this->getData('nav')->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div style="overflow-x:auto;">
                             <table id="accountPermissions" class="default">
                                 <thead>
@@ -813,7 +813,7 @@ echo $this->getData('nav')->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table class="default fixed">
                             <thead>
                             <tr>

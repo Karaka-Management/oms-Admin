@@ -111,7 +111,7 @@ echo $this->getData('nav')->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Accounts'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Accounts'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table class="default">
                             <thead>
                                 <tr>
@@ -221,7 +221,7 @@ echo $this->getData('nav')->render(); ?>
 
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
                             <table id="groupPermissions" class="default"
                                 data-update-content="tbody"
@@ -307,7 +307,7 @@ echo $this->getData('nav')->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table class="default fixed">
                             <thead>
                             <tr>
