@@ -19,11 +19,11 @@ use phpOMS\Uri\UriFactory;
  * @var \phpOMS\Views\View $this
  */
 
-$modules   = $this->getData('modules') ?? [];
-$active    = $this->getData('active') ?? [];
-$installed = $this->getData('installed') ?? [];
+$modules   = $this->data['modules'] ?? [];
+$active    = $this->data['active'] ?? [];
+$installed = $this->data['installed'] ?? [];
 
-$tableView            = $this->getData('tableView');
+$tableView            = $this->data['tableView'];
 $tableView->id        = 'moduleList';
 $tableView->baseUri   = 'admin/module/list';
 $tableView->exportUri = '{/api}admin/module/list/export';

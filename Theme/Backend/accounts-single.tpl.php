@@ -35,9 +35,9 @@ use phpOMS\Utils\Converter\WeightType;
 /**
  * @var \phpOMS\Views\View $this
  */
-$account     = $this->getData('account');
-$permissions = $this->getData('permissions');
-$audits      = $this->getData('auditlogs') ?? [];
+$account     = $this->data['account'];
+$permissions = $this->data['permissions'];
+$audits      = $this->data['auditlogs'] ?? [];
 $l11n        = $account->l11n;
 
 $previous = empty($audits)
@@ -47,7 +47,7 @@ $next     = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/account/settings?id={?id}#{\#}'
     : 'admin/account/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div id="iaccount-tabs" class="tabview tab-2 url-rewrite">
     <div class="box wf-100 col-xs-12">

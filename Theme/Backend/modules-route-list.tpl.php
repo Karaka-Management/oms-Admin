@@ -17,10 +17,10 @@ use phpOMS\Router\RouteVerb;
 /**
  * @var \phpOMS\Views\View $this
  */
-$routes = $this->getData('routes') ?? [];
+$routes = $this->data['routes'] ?? [];
 $module = $this->getData('module') ?? '';
 
-echo $this->getData('nav')->render();
+echo $this->data['nav']->render();
 ?>
 
 <div class="row">

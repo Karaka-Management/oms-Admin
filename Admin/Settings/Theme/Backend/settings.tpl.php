@@ -17,8 +17,8 @@ use phpOMS\Application\ApplicationStatus;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Uri\UriFactory;
 
-$generalSettings = $this->getData('generalSettings') ?? [];
-$settings        = $this->getData('settings') ?? [];
+$generalSettings = $this->data['generalSettings'] ?? [];
+$settings        = $this->data['settings'] ?? [];
 
 $countryCodes    = \phpOMS\Localization\ISO3166TwoEnum::getConstants();
 $countries       = \phpOMS\Localization\ISO3166NameEnum::getConstants();
@@ -39,7 +39,7 @@ $serverModes = ApplicationStatus::getConstants();
 
 $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 
-echo $this->getData('nav')->render();
+echo $this->data['nav']->render();
 ?>
 
 <div id="iSettings" class="tabview tab-2 url-rewrite">

@@ -15,10 +15,10 @@ declare(strict_types=1);
 /**
  * @var \phpOMS\Views\View $this
  */
-$hooks  = $this->getData('hooks') ?? [];
+$hooks  = $this->data['hooks'] ?? [];
 $module = $this->getData('module') ?? '';
 
-echo $this->getData('nav')->render();
+echo $this->data['nav']->render();
 ?>
 
 <div class="row">

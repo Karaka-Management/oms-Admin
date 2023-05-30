@@ -15,14 +15,14 @@ declare(strict_types=1);
 /**
  * @var \phpOMS\Views\View $this
  */
-$settings = $this->getData('settings') ?? [];
+$settings = $this->data['settings'] ?? [];
 
-echo $this->getData('nav')->render();
+echo $this->data['nav']->render();
 
 if ($this->hasData('settingsTpl')
     && \is_file($this->getData('settingsTpl'))
 ) :
-    include $this->getData('settingsTpl');
+    include $this->data['settingsTpl'];
 else : ?>
 <div class="row">
     <div class="col-xs-12">

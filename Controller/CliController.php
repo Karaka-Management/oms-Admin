@@ -84,7 +84,7 @@ final class CliController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Cli/event-result');
 
-        $view->setData('event', $event);
+        $view->data['event'] = $event;
 
         return $view;
     }

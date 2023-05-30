@@ -19,10 +19,10 @@ use phpOMS\Uri\UriFactory;
  * @var \phpOMS\Views\View            $this
  * @var \Modules\Admin\Models\Group[] $groups
  */
-$groups      = $this->getData('groups') ?? [];
-$memberCount = $this->getData('memberCount') ?? [];
+$groups      = $this->data['groups'] ?? [];
+$memberCount = $this->data['memberCount'] ?? [];
 
-$tableView            = $this->getData('tableView');
+$tableView            = $this->data['tableView'];
 $tableView->id        = 'groupsList';
 $tableView->baseUri   = 'admin/group/list';
 $tableView->exportUri = '{/api}admin/group/list/export';
@@ -39,7 +39,7 @@ $next = $tableView->getNextLink(
     $this->getData('hasNext') ?? false
 );
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-12">

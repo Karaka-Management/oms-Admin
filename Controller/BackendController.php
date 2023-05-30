@@ -100,7 +100,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response);
 
         $searchFieldData = $request->getLike('.*\-p\-.*');
         $searchField     = [];
@@ -133,7 +133,7 @@ final class BackendController extends Controller
         }
 
         $pageLimit = 25;
-        $view->addData('pageLimit', $pageLimit);
+        $view->data['pageLimit'] = $pageLimit;
 
         $mapper = AccountMapper::getAll()->with('createdBy');
         $list   = AccountMapper::find(
@@ -149,7 +149,7 @@ final class BackendController extends Controller
             filters: $filterField
         );
 
-        $view->setData('accounts', $list['data']);
+        $view->data['accounts'] = $list['data'];
 
         /** @var \Model\Setting[] $exportTemplates */
         $exportTemplates = $this->app->appSettings->get(
@@ -181,7 +181,7 @@ final class BackendController extends Controller
         $tableView->setData('hasPrevious', $list['hasPrevious']);
         $tableView->setData('hasNext', $list['hasNext']);
 
-        $view->addData('tableView', $tableView);
+        $view->data['tableView'] = $tableView;
 
         return $view;
     }
@@ -201,7 +201,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-single');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response);
 
         /** @var \Modules\Admin\Models\Account $account */
         $account = AccountMapper::get()->with('groups')->with('l11n')->where('id', (int) $request->getData('id'))->execute();
@@ -209,31 +209,25 @@ final class BackendController extends Controller
             $account->l11n->loadFromLanguage($request->header->l11n->language);
         }
 
-        $view->addData('account', $account);
+        $view->data['account'] = $account;
 
         /** @var \Modules\Admin\Models\AccountPermission[] $permissions */
         $permissions = AccountPermissionMapper::getAll()
             ->where('account', (int) $request->getData('id'))
             ->execute();
 
-        $view->addData('permissions', $permissions);
+        $view->data['permissions'] = $permissions;
 
         $accGrpSelector = new \Modules\Admin\Theme\Backend\Components\GroupTagSelector\GroupTagSelectorView($this->app->l11nManager, $request, $response);
-        $view->addData('grpSelector', $accGrpSelector);
+        $view->data['grpSelector'] = $accGrpSelector;
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs',
-                    AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '<')->limit(25)->execute()
-                );
+            $view->data['auditlogs'] = AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '<')->limit(25)->execute();
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs',
-                    AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '>')->limit(25)->execute()
-                );
+            $view->data['auditlogs'] = AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '>')->limit(25)->execute();
         } else {
-            $view->setData('auditlogs',
-                    AuditMapper::getAll()->with('createdBy')->where('id', 0, '>')->limit(25)->execute()
-                );
+            $view->data['auditlogs'] = AuditMapper::getAll()->with('createdBy')->where('id', 0, '>')->limit(25)->execute();
         }
 
         return $view;
@@ -254,7 +248,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-create');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response);
 
         return $view;
     }
@@ -274,7 +268,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response);
 
         $searchFieldData = $request->getLike('.*\-p\-.*');
         $searchField     = [];
@@ -307,7 +301,7 @@ final class BackendController extends Controller
         }
 
         $pageLimit = 25;
-        $view->addData('pageLimit', $pageLimit);
+        $view->data['pageLimit'] = $pageLimit;
 
         $mapper = GroupMapper::getAll()->with('createdBy');
         $list   = GroupMapper::find(
@@ -323,10 +317,10 @@ final class BackendController extends Controller
             filters: $filterField
         );
 
-        $view->setData('groups', $list['data']);
+        $view->data['groups'] = $list['data'];
 
         $memberCount = GroupMapper::countMembers();
-        $view->setData('memberCount', $memberCount);
+        $view->data['memberCount'] = $memberCount;
 
         /** @var \Model\Setting[] $exportTemplates */
         $exportTemplates = $this->app->appSettings->get(
@@ -358,7 +352,7 @@ final class BackendController extends Controller
         $tableView->setData('hasPrevious', $list['hasPrevious']);
         $tableView->setData('hasNext', $list['hasNext']);
 
-        $view->addData('tableView', $tableView);
+        $view->data['tableView'] = $tableView;
 
         return $view;
     }
@@ -378,23 +372,27 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-single');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
-        $view->addData('group',
-            GroupMapper::get()->with('accounts')->where('id', (int) $request->getData('id'))->execute()
-        );
+
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')
+            ->createNavigationMid(1000103001, $request, $response);
+
+        $view->data['group'] = GroupMapper::get()
+            ->with('accounts')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
 
         /** @var \Modules\Admin\Models\GroupPermission[] $permissions */
         $permissions = GroupPermissionMapper::getAll()
             ->where('group', (int) $request->getData('id'))
             ->execute();
 
-        $view->addData('permissions', $permissions);
+        $view->data['permissions'] = $permissions;
 
         $accGrpSelector = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
-        $view->addData('accGrpSelector', $accGrpSelector);
+        $view->data['accGrpSelector'] = $accGrpSelector;
 
         $editor = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
-        $view->addData('editor', $editor);
+        $view->data['editor'] = $editor;
 
         $mapperQuery = AuditMapper::getAll()
             ->with('createdBy')
@@ -405,11 +403,11 @@ final class BackendController extends Controller
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs', $mapperQuery->where('id', $request->getDataInt('audit') ?? 0, '<')->limit(25)->execute());
+            $view->data['auditlogs'] = $mapperQuery->where('id', $request->getDataInt('audit') ?? 0, '<')->limit(25)->execute();
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs', $mapperQuery->where('id', $request->getDataInt('audit') ?? 0, '>')->limit(25)->execute());
+            $view->data['auditlogs'] = $mapperQuery->where('id', $request->getDataInt('audit') ?? 0, '>')->limit(25)->execute();
         } else {
-            $view->setData('auditlogs', $mapperQuery->where('id', 0, '>')->limit(25)->execute());
+            $view->data['auditlogs'] = $mapperQuery->where('id', 0, '>')->limit(25)->execute();
         }
 
         return $view;
@@ -430,10 +428,10 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-create');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000103001, $request, $response);
 
         $editor = new \Modules\Editor\Theme\Backend\Components\Editor\BaseView($this->app->l11nManager, $request, $response);
-        $view->addData('editor', $editor);
+        $view->data['editor'] = $editor;
 
         return $view;
     }
@@ -452,15 +450,15 @@ final class BackendController extends Controller
     public function viewModuleList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         /** @var \phpOMS\Model\Html\Head $head */
-        $head = $response->get('Content')->getData('head');
+        $head = $response->get('Content')->head;
         $head->addAsset(AssetType::CSS, 'Modules/Admin/Theme/Backend/css/styles.css?v=1.0.0');
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-list');
 
-        $view->setData('modules', $this->app->moduleManager->getAllModules());
-        $view->setData('active', $this->app->moduleManager->getActiveModules());
-        $view->setData('installed', $this->app->moduleManager->getInstalledModules());
+        $view->data['modules'] = $this->app->moduleManager->getAllModules();
+        $view->data['active'] = $this->app->moduleManager->getActiveModules();
+        $view->data['installed'] = $this->app->moduleManager->getInstalledModules();
 
         /** @var \Model\Setting[] $exportTemplates */
         $exportTemplates = $this->app->appSettings->get(
@@ -490,7 +488,7 @@ final class BackendController extends Controller
         $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
         $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
 
-        $view->addData('tableView', $tableView);
+        $view->data['tableView'] = $tableView;
 
         return $view;
     }
@@ -510,13 +508,13 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-info');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 
         $id = $request->getDataString('id') ?? '';
-        $view->setData('modules', $this->app->moduleManager->getAllModules());
-        $view->setData('active', $this->app->moduleManager->getActiveModules());
-        $view->setData('installed',$this->app->moduleManager->getInstalledModules());
-        $view->setData('id', $id);
+        $view->data['modules'] = $this->app->moduleManager->getAllModules();
+        $view->data['active'] = $this->app->moduleManager->getActiveModules();
+        $view->data['installed'] = $this->app->moduleManager->getInstalledModules();
+        $view->data['id'] = $id;
 
         $type     = 'Help';
         $page     = 'introduction';
@@ -540,7 +538,7 @@ final class BackendController extends Controller
         $toParse = $path === false ? '' : \file_get_contents($path);
         $content = Markdown::parse($toParse === false ? '' : $toParse);
 
-        $view->setData('introduction', $content);
+        $view->data['introduction'] = $content;
 
         return $view;
     }
@@ -560,7 +558,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-log');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 
         $id = $request->getDataString('id') ?? '';
 
@@ -570,11 +568,11 @@ final class BackendController extends Controller
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->setData('auditlogs',$queryMapper->where('id', (int) $request->getData('audit'), '<')->limit(25)->execute());
+            $view->data['auditlogs',$queryMapper->where('id'] = (int) $request->getData('audit'), '<')->limit(25)->execute();
         } elseif ($request->getData('ptype') === 'n') {
-            $view->setData('auditlogs',$queryMapper->where('id', (int) $request->getData('audit'), '>')->limit(25)->execute());
+            $view->data['auditlogs',$queryMapper->where('id'] = (int) $request->getData('audit'), '>')->limit(25)->execute();
         } else {
-            $view->setData('auditlogs',$queryMapper->where('id', 0, '>')->limit(25)->execute());
+            $view->data['auditlogs',$queryMapper->where('id'] = 0, '>')->limit(25)->execute();
         }
 
         return $view;
@@ -595,10 +593,10 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-route-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 
         $module = $request->getDataString('id') ?? '';
-        $view->setData('module', $module);
+        $view->data['module'] = $module;
 
         $appPath      = __DIR__ . '/../../../Web';
         $activeRoutes = [];
@@ -624,7 +622,7 @@ final class BackendController extends Controller
             $activeRoutes['Socket'] = include __DIR__ . '/../../../Socket/Routes.php';
         }
 
-        $view->setData('routes', $activeRoutes);
+        $view->data['routes'] = $activeRoutes;
 
         return $view;
     }
@@ -644,10 +642,10 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-hook-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 
         $module = $request->getDataString('id') ?? '';
-        $view->setData('module', $module);
+        $view->data['module'] = $module;
 
         $appPath     = __DIR__ . '/../../../Web';
         $activeHooks = [];
@@ -673,7 +671,7 @@ final class BackendController extends Controller
             $activeHooks['Socket'] = include __DIR__ . '/../../../Socket/Hooks.php';
         }
 
-        $view->setData('hooks', $activeHooks);
+        $view->data['hooks'] = $activeHooks;
 
         return $view;
     }
@@ -692,14 +690,14 @@ final class BackendController extends Controller
     public function viewModuleSettings(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 
         $id = $request->getDataString('id') ?? '';
 
         /** @var null|\Model\NullSetting|\Model\Setting[] $settings */
         $settings = SettingMapper::getAll()->where('module', $id)->execute();
         if ($settings->id > 0) {
-            $view->setData('settings', \is_array($settings) ? $settings : [$settings]);
+            $view->data['settings'] = \is_array($settings) ? $settings : [$settings];
         }
 
         $class = '\\Modules\\' . $request->getData('id') . '\\Models\\SettingsEnum';
@@ -707,7 +705,7 @@ final class BackendController extends Controller
             $class = null;
         }
 
-        $view->setData('settings_class', $class);
+        $view->data['settings_class'] = $class;
 
         if ($request->getData('id') === 'Admin') {
             $view->setTemplate('/Modules/' . $request->getData('id') . '/Admin/Settings/Theme/Backend/settings');
@@ -727,8 +725,8 @@ final class BackendController extends Controller
             module: 'Admin'
         );
 
-        $view->setData('generalSettings', $generalSettings);
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content)->execute());
+        $view->data['generalSettings'] = $generalSettings;
+        $view->data['defaultlocalization'] = LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content)->execute();
 
         return $view;
     }

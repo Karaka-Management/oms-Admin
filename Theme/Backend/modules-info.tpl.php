@@ -18,13 +18,13 @@ use phpOMS\Uri\UriFactory;
 /**
  * @var \phpOMS\Views\View $this
  */
-$modules   = $this->getData('modules');
-$active    = $this->getData('active');
-$installed = $this->getData('installed');
-$id        = $this->getData('id');
+$modules   = $this->data['modules'];
+$active    = $this->data['active'];
+$installed = $this->data['installed'];
+$id        = $this->data['id'];
 
 if (isset($installed[$id])) {
-    echo $this->getData('nav')->render();
+    echo $this->data['nav']->render();
 }
 ?>
 
@@ -93,7 +93,7 @@ if (isset($installed[$id])) {
     <div class="col-xs-12 col-md-8">
         <div class="portlet">
             <div class="portlet-body">
-                <article><?= $this->getData('introduction'); ?></article>
+                <article><?= $this->data['introduction']; ?></article>
             </div>
         </div>
     </div>

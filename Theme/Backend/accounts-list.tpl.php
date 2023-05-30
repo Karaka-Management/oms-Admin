@@ -19,9 +19,9 @@ use phpOMS\Uri\UriFactory;
  * @var \phpOMS\Views\View              $this
  * @var \Modules\Admin\Models\Account[] $accounts
  */
-$accounts = $this->getData('accounts') ?? [];
+$accounts = $this->data['accounts'] ?? [];
 
-$tableView            = $this->getData('tableView');
+$tableView            = $this->data['tableView'];
 $tableView->id        = 'accountsList';
 $tableView->baseUri   = 'admin/account/list';
 $tableView->exportUri = '{/api}admin/account/list/export';
@@ -38,7 +38,7 @@ $next = $tableView->getNextLink(
     $this->getData('hasNext') ?? false
 );
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-12">

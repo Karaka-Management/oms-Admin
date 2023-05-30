@@ -21,10 +21,10 @@ use phpOMS\Uri\UriFactory;
 /**
  * @var \phpOMS\Views\View $this
  */
-$group       = $this->getData('group');
-$permissions = $this->getData('permissions');
+$group       = $this->data['group'];
+$permissions = $this->data['permissions'];
 $accounts    = $group->getAccounts();
-$audits      = $this->getData('auditlogs') ?? [];
+$audits      = $this->data['auditlogs'] ?? [];
 
 $previous = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
@@ -33,7 +33,7 @@ $next     = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
     : 'admin/group/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div id="igroup-tabs" class="tabview tab-2 url-rewrite">
     <div class="box wf-100 col-xs-12">

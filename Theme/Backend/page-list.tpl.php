@@ -19,12 +19,12 @@ use phpOMS\Uri\UriFactory;
  * @var \phpOMS\Views\View           $this
  * @var \Modules\Admin\Models\Page[] $pages
  */
-$pages = $this->getData('pages') ?? [];
+$pages = $this->data['pages'] ?? [];
 
 $previous = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&id=' . \reset($pages)->id . '&ptype=p';
 $next     = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&id=' . \end($pages)->id . '&ptype=n';
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-12">
