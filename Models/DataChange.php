@@ -84,18 +84,6 @@ class DataChange
     }
 
     /**
-     * Get id
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getId() : int
-    {
-        return $this->id;
-    }
-
-    /**
      * Create hash for data change as identifier
      *
      * @return void
