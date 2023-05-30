@@ -206,7 +206,7 @@ final class BackendController extends Controller
         /** @var \Modules\Admin\Models\Account $account */
         $account = AccountMapper::get()->with('groups')->with('l11n')->where('id', (int) $request->getData('id'))->execute();
         if ($account->l11n->id === 0) {
-            $account->l11n->loadFromLanguage($request->getLanguage());
+            $account->l11n->loadFromLanguage($request->header->l11n->language);
         }
 
         $view->addData('account', $account);
@@ -520,7 +520,7 @@ final class BackendController extends Controller
 
         $type     = 'Help';
         $page     = 'introduction';
-        $basePath = __DIR__ . '/../../' . $request->getData('id') . '/Docs/' . $type . '/' . $request->getLanguage();
+        $basePath = __DIR__ . '/../../' . $request->getData('id') . '/Docs/' . $type . '/' . $request->header->l11n->language;
         $path     = \realpath($basePath . '/' . $page . '.md');
 
         if ($path === false) {

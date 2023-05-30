@@ -77,13 +77,13 @@ trait ApiControllerSettingsTrait
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
         $l11n = $response->get('')['response'];
-        self::assertEquals($l11n->getLanguage(), 'de');
+        self::assertEquals($l11n->language, 'de');
 
         $request->setData('localization_load', 'en_US', true);
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
         $l11n = $response->get('')['response'];
-        self::assertEquals($l11n->getLanguage(), 'en');
+        self::assertEquals($l11n->language, 'en');
     }
 
     /**

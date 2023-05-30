@@ -390,7 +390,7 @@ echo $this->getData('nav')->render(); ?>
                                     <label for="iLanguages"><?= $this->getHtml('Language'); ?></label>
                                     <select id="iLanguages" name="settings_language">
                                         <?php foreach ($languages as $code => $language) : $code = \strtolower(\substr($code, 1)); ?>
-                                        <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                        <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>

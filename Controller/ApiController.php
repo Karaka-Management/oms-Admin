@@ -127,7 +127,7 @@ final class ApiController extends Controller
                 $response,
                 NotificationLevel::WARNING,
                 '',
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'NOT_ACTIVATED'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'NOT_ACTIVATED'),
                 null
             );
         } elseif ($login === LoginReturnType::WRONG_INPUT_EXCEEDED) {
@@ -137,7 +137,7 @@ final class ApiController extends Controller
                 $response,
                 NotificationLevel::WARNING,
                 '',
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'WRONG_INPUT_EXCEEDED'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'WRONG_INPUT_EXCEEDED'),
                 null
             );
         } else {
@@ -147,7 +147,7 @@ final class ApiController extends Controller
                 $response,
                 NotificationLevel::WARNING,
                 '',
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'LOGIN_ERROR'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'LOGIN_ERROR'),
                 null
             );
         }
@@ -176,8 +176,8 @@ final class ApiController extends Controller
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
             'status'   => NotificationLevel::OK,
-            'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'LogoutSuccessfulTitle'),
-            'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'LogoutSuccessfulMsg'),
+            'title'    => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'LogoutSuccessfulTitle'),
+            'message'  => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'LogoutSuccessfulMsg'),
             'response' => null,
         ]);
     }
@@ -278,8 +278,8 @@ final class ApiController extends Controller
             $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::ERROR,
-                'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
-            'message'      => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetMsg'),
+                'title'    => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'PasswordResetTitle'),
+            'message'      => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'PasswordResetMsg'),
                 'response' => null,
             ]);
         }
@@ -333,8 +333,8 @@ final class ApiController extends Controller
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
             'status'   => NotificationLevel::OK,
-            'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
-            'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetEmailMsg'),
+            'title'    => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'PasswordResetTitle'),
+            'message'  => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'PasswordResetEmailMsg'),
             'response' => null,
         ]);
     }
@@ -371,8 +371,8 @@ final class ApiController extends Controller
             $response->header->status = RequestStatusCode::R_405;
             $response->set($request->uri->__toString(), [
                 'status'   => NotificationLevel::OK,
-                'title'    => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetTitle'),
-                'message'  => $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'PasswordResetInvalidMsg'),
+                'title'    => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'PasswordResetTitle'),
+                'message'  => $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'PasswordResetInvalidMsg'),
                 'response' => null,
             ]);
 
@@ -1495,7 +1495,7 @@ final class ApiController extends Controller
             \str_replace(
                 '{url}',
                 UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $account->id),
-                $this->app->l11nManager->getText($response->getLanguage(), '0', '0', 'SuccessfulCreate'
+                $this->app->l11nManager->getText($response->header->l11n->language, '0', '0', 'SuccessfulCreate'
             )),
             $account
         );
@@ -1528,7 +1528,7 @@ final class ApiController extends Controller
                 $response,
                 NotificationLevel::ERROR,
                 '',
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'FormDataInvalid'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'FormDataInvalid'),
                 $val
             );
 
@@ -1554,8 +1554,8 @@ final class ApiController extends Controller
                 $request,
                 $response,
                 NotificationLevel::ERROR,
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationNotAllowed'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationNotAllowed'),
                 []
             );
 
@@ -1575,8 +1575,8 @@ final class ApiController extends Controller
                 $request,
                 $response,
                 NotificationLevel::ERROR,
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationInvalidPasswordFormat'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationInvalidPasswordFormat'),
                 []
             );
 
@@ -1610,8 +1610,8 @@ final class ApiController extends Controller
                 $request,
                 $response,
                 NotificationLevel::OK,
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationEmailInUse'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationEmailInUse'),
                 []
             );
 
@@ -1633,8 +1633,8 @@ final class ApiController extends Controller
                 $request,
                 $response,
                 NotificationLevel::ERROR,
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationLoginInUse'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationTitle'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationLoginInUse'),
                 []
             );
 
@@ -1707,8 +1707,8 @@ final class ApiController extends Controller
                     $request,
                     $response,
                     NotificationLevel::ERROR,
-                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
-                    $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationNotActivated'),
+                    $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationTitle'),
+                    $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationNotActivated'),
                     []
                 );
 
@@ -1805,14 +1805,14 @@ final class ApiController extends Controller
         $mail = EmailMapper::get()
             ->with('l11n')
             ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE]->content)
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
         $mail->addTo((string) $request->getData('email'));
 
         // @todo: load default l11n if no translation is available
-        $mailL11n = $mail->getL11nByLanguage($response->getLanguage());
+        $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
 
         $mail->subject = $mailL11n->subject;
 
@@ -1852,8 +1852,8 @@ final class ApiController extends Controller
             $request,
             $response,
             NotificationLevel::OK,
-            $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationTitle'),
-            $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'RegistrationSuccessful'),
+            $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationTitle'),
+            $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'RegistrationSuccessful'),
             $account
         );
     }
@@ -2133,8 +2133,8 @@ final class ApiController extends Controller
                 $request,
                 $response,
                 NotificationLevel::WARNING,
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleStatusTitle'),
-                $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'UnknownModuleOrStatusChange'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleStatusTitle'),
+                $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'UnknownModuleOrStatusChange'),
                 []
             );
 
@@ -2156,8 +2156,8 @@ final class ApiController extends Controller
             case ModuleStatusUpdateType::ACTIVATE:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->activate($module);
                 $msg  = $done
-                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleActivatedSuccessful')
-                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleActivatedFailure');
+                    ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleActivatedSuccessful')
+                    : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleActivatedFailure');
 
                 $new = clone $old;
                 $new->setStatus(ModuleStatusUpdateType::ACTIVATE);
@@ -2167,8 +2167,8 @@ final class ApiController extends Controller
             case ModuleStatusUpdateType::DEACTIVATE:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->deactivate($module);
                 $msg  = $done
-                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleDeactivatedSuccessful')
-                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleDeactivatedFailure');
+                    ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleDeactivatedSuccessful')
+                    : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleDeactivatedFailure');
 
                 $new = clone $old;
                 $new->setStatus(ModuleStatusUpdateType::DEACTIVATE);
@@ -2178,15 +2178,15 @@ final class ApiController extends Controller
             case ModuleStatusUpdateType::INSTALL:
                 $done = $this->app->moduleManager->isInstalled($module);
                 $msg  = $done
-                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledSuccessful')
-                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledFailure');
+                    ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleInstalledSuccessful')
+                    : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleInstalledFailure');
 
                 if ($done) {
                     break;
                 }
 
                 if (!\is_file(__DIR__ . '/../../../Modules/' . $module . '/info.json')) {
-                    $msg  = $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'UnknownModuleChange');
+                    $msg  = $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'UnknownModuleChange');
                     $done = false;
                     break;
                 }
@@ -2220,8 +2220,8 @@ final class ApiController extends Controller
 
                 $done = $this->app->moduleManager->install($module);
                 $msg  = $done
-                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledSuccessful')
-                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleInstalledFailure');
+                    ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleInstalledSuccessful')
+                    : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleInstalledFailure');
 
                 $old = clone $moduleObj;
                 $moduleObj->setStatus(ModuleStatus::ACTIVE);
@@ -2262,8 +2262,8 @@ final class ApiController extends Controller
             case ModuleStatusUpdateType::UNINSTALL:
                 $done = $module === 'Admin' ? false : $this->app->moduleManager->uninstall($module);
                 $msg  = $done
-                    ? $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleUninstalledSuccessful')
-                    : $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleUninstalledFailure');
+                    ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleUninstalledSuccessful')
+                    : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleUninstalledFailure');
 
                 $new = clone $old;
                 $new->setStatus(ModuleStatusUpdateType::DELETE);
@@ -2272,7 +2272,7 @@ final class ApiController extends Controller
                 break;
             default:
                 $done                     = false;
-                $msg                      = $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'UnknownModuleStatusChange');
+                $msg                      = $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'UnknownModuleStatusChange');
                 $response->header->status = RequestStatusCode::R_400;
         }
 
@@ -2299,7 +2299,7 @@ final class ApiController extends Controller
             $request,
             $response,
             $done ? NotificationLevel::OK : NotificationLevel::WARNING,
-            $this->app->l11nManager->getText($response->getLanguage(), 'Admin', 'Api', 'ModuleStatusTitle'),
+            $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleStatusTitle'),
             $msg,
             []
         );
