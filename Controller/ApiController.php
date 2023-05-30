@@ -607,7 +607,7 @@ final class ApiController extends Controller
     public function apiSettingsCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateSettingsCreate($request))) {
-            $response->set('setting_create', new FormValidation($val));
+            $response->data['setting_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -681,7 +681,7 @@ final class ApiController extends Controller
     {
         // has required data
         if (!empty($val = $this->validatePasswordUpdate($request))) {
-            $response->set('password_update', new FormValidation($val));
+            $response->data['password_update'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -920,7 +920,7 @@ final class ApiController extends Controller
      */
     public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        $uploadedFiles = $request->getFiles();
+        $uploadedFiles = $request->files;
 
         if (!empty($uploadedFiles)) {
             $upload                   = new UploadFile();
@@ -949,7 +949,7 @@ final class ApiController extends Controller
     public function apiApplicationCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateApplicationCreate($request))) {
-            $response->set('application_create', new FormValidation($val));
+            $response->data['application_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1198,7 +1198,7 @@ final class ApiController extends Controller
     public function apiGroupCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateGroupCreate($request))) {
-            $response->set('group_create', new FormValidation($val));
+            $response->data['group_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1430,7 +1430,7 @@ final class ApiController extends Controller
     public function apiAccountCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateAccountCreate($request))) {
-            $response->set('account_create', new FormValidation($val));
+            $response->data['account_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1899,7 +1899,7 @@ final class ApiController extends Controller
     public function apiDataChange(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateDataChange($request))) {
-            $response->set('data_change', new FormValidation($val));
+            $response->data['data_change'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -2418,7 +2418,7 @@ final class ApiController extends Controller
         }
 
         if (!empty($val = $this->validatePermissionCreate($request))) {
-            $response->set('permission_create', new FormValidation($val));
+            $response->data['permission_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -2427,7 +2427,7 @@ final class ApiController extends Controller
         $permission = $this->createPermissionFromRequest($request);
 
         if (!($permission instanceof GroupPermission)) {
-            $response->set('permission_create', new FormValidation($val));
+            $response->data['permission_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -2453,7 +2453,7 @@ final class ApiController extends Controller
     public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
-            $response->set('permission_create', new FormValidation($val));
+            $response->data['permission_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -2462,7 +2462,7 @@ final class ApiController extends Controller
         $permission = $this->createPermissionFromRequest($request);
 
         if (!($permission instanceof AccountPermission)) {
-            $response->set('permission_create', new FormValidation($val));
+            $response->data['permission_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -2916,7 +2916,7 @@ final class ApiController extends Controller
     public function apiContactCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateContactCreate($request))) {
-            $response->set('contact_create', new FormValidation($val));
+            $response->data['contact_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
