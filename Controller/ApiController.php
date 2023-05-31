@@ -608,7 +608,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateSettingsCreate($request))) {
             $response->data['setting_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status         = RequestStatusCode::R_400;
 
             return;
         }
@@ -682,7 +682,7 @@ final class ApiController extends Controller
         // has required data
         if (!empty($val = $this->validatePasswordUpdate($request))) {
             $response->data['password_update'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status          = RequestStatusCode::R_400;
 
             return;
         }
@@ -950,7 +950,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateApplicationCreate($request))) {
             $response->data['application_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status             = RequestStatusCode::R_400;
 
             return;
         }
@@ -1199,7 +1199,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateGroupCreate($request))) {
             $response->data['group_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status       = RequestStatusCode::R_400;
 
             return;
         }
@@ -1431,7 +1431,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateAccountCreate($request))) {
             $response->data['account_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status         = RequestStatusCode::R_400;
 
             return;
         }
@@ -1900,7 +1900,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateDataChange($request))) {
             $response->data['data_change'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status      = RequestStatusCode::R_400;
 
             return;
         }
@@ -2419,7 +2419,7 @@ final class ApiController extends Controller
 
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->data['permission_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status            = RequestStatusCode::R_400;
 
             return;
         }
@@ -2428,7 +2428,7 @@ final class ApiController extends Controller
 
         if (!($permission instanceof GroupPermission)) {
             $response->data['permission_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status            = RequestStatusCode::R_400;
 
             return;
         }
@@ -2454,7 +2454,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->data['permission_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status            = RequestStatusCode::R_400;
 
             return;
         }
@@ -2463,7 +2463,7 @@ final class ApiController extends Controller
 
         if (!($permission instanceof AccountPermission)) {
             $response->data['permission_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status            = RequestStatusCode::R_400;
 
             return;
         }
@@ -2917,7 +2917,7 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateContactCreate($request))) {
             $response->data['contact_create'] = new FormValidation($val);
-            $response->header->status = RequestStatusCode::R_400;
+            $response->header->status         = RequestStatusCode::R_400;
 
             return;
         }

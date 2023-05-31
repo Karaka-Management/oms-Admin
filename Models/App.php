@@ -75,7 +75,6 @@ class App implements \JsonSerializable
      */
     public ?int $defaultUnit = null;
 
-
     /**
      * {@inheritdoc}
      */
