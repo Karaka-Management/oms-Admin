@@ -522,7 +522,7 @@ final class BackendController extends Controller
         $path     = \realpath($basePath . '/' . $page . '.md');
 
         if ($path === false) {
-            $basePath = __DIR__ . '/../../' . $request->getData('id') . '/Docs/' . $type . '/' . $this->app->l11nServer->getLanguage();
+            $basePath = __DIR__ . '/../../' . $request->getData('id') . '/Docs/' . $type . '/' . $this->app->l11nServer->language;
             $path     = \realpath($basePath . '/' . $page . '.md');
         }
 
@@ -568,11 +568,11 @@ final class BackendController extends Controller
 
         // audit log
         if ($request->getData('ptype') === 'p') {
-            $view->data['auditlogs',$queryMapper->where('id'] = (int) $request->getData('audit'), '<')->limit(25)->execute();
+            $view->data['auditlogs'] = $queryMapper->where('id', (int) $request->getData('audit'), '<')->limit(25)->execute();
         } elseif ($request->getData('ptype') === 'n') {
-            $view->data['auditlogs',$queryMapper->where('id'] = (int) $request->getData('audit'), '>')->limit(25)->execute();
+            $view->data['auditlogs'] = $queryMapper->where('id', (int) $request->getData('audit'), '>')->limit(25)->execute();
         } else {
-            $view->data['auditlogs',$queryMapper->where('id'] = 0, '>')->limit(25)->execute();
+            $view->data['auditlogs'] = $queryMapper->where('id', 0, '>')->limit(25)->execute();
         }
 
         return $view;

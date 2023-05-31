@@ -2028,7 +2028,7 @@ final class ApiController extends Controller
 
             $account->l11n
                 ->loadFromLanguage(
-                    $locale[0] ?? $this->app->l11nServer->getLanguage(),
+                    $locale[0] ?? $this->app->l11nServer->language,
                     $locale[1] ?? $this->app->l11nServer->getCountry()
                 );
         }
