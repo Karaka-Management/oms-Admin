@@ -50,7 +50,7 @@ $next     = empty($audits)
 echo $this->data['nav']->render(); ?>
 
 <div id="iaccount-tabs" class="tabview tab-2 url-rewrite">
-    <div class="box wf-100 col-xs-12">
+    <div class="box">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
             <li><label for="c-tab-2"><?= $this->getHtml('Groups'); ?></label></li>
