@@ -269,12 +269,12 @@ echo $this->data['nav']->render(); ?>
                                         <td><a href="#"><i class="fa fa-times"></i></a>
                                         <td><i class="fa fa-cogs update btn"></i>
                                         <td><?= $value->id; ?>
-                                        <td data-tpl-text="/unit" data-tpl-value="/unit"><?= $value->getUnit(); ?>
-                                        <td data-tpl-text="/app" data-tpl-value="/app"><?= $value->getApp(); ?>
-                                        <td data-tpl-text="/module" data-tpl-value="/module"><?= $value->getModule(); ?>
-                                        <td data-tpl-text="/type" data-tpl-value="/type"><?= $value->getCategory(); ?>
-                                        <td data-tpl-text="/ele" data-tpl-value="/ele"><?= $value->getElement(); ?>
-                                        <td data-tpl-text="/comp" data-tpl-value="/comp"><?= $value->getComponent(); ?>
+                                        <td data-tpl-text="/unit" data-tpl-value="/unit"><?= $this->printHtml($value->unit); ?>
+                                        <td data-tpl-text="/app" data-tpl-value="/app"><?= $this->printHtml($value->app); ?>
+                                        <td data-tpl-text="/module" data-tpl-value="/module"><?= $this->printHtml($value->module); ?>
+                                        <td data-tpl-text="/type" data-tpl-value="/type"><?= $this->printHtml($value->category); ?>
+                                        <td data-tpl-text="/ele" data-tpl-value="/ele"><?= $this->printHtml($value->element); ?>
+                                        <td data-tpl-text="/comp" data-tpl-value="/comp"><?= $this->printHtml($value->component); ?>
                                         <td>
                                             <?php if ((PermissionType::CREATE | $permission) === $permission) : ?>
                                                 <span data-tpl-text="/perm/c" data-tpl-value="/perm/c" data-value="<?= PermissionType::CREATE; ?>">C</span>

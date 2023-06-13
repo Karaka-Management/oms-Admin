@@ -38,8 +38,20 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord
      */
     public int $fontSize = 8;
 
+    /**
+     * Doc language
+     *
+     * @var string
+     * @since 1.0.0
+     */
     public string $language = 'en';
 
+    /**
+     * Localization
+     *
+     * @var array
+     * @since 1.0.0
+     */
     public array $lang = [
         'en' => [
             'Page'        => 'Page',
@@ -59,6 +71,12 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord
         ],
     ];
 
+    /**
+     * Attributes
+     *
+     * @var string[]
+     * @since 1.0.0
+     */
     public array $attributes = [
         'logo'         => __DIR__ . '/../Web/Backend/img/logo.png',
         'title_name'   => 'Jingga',
@@ -91,6 +109,13 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord
         $this->addTableStyle('FooterTableStyle', $generalTableStyle);
     }
 
+    /**
+     * Create the first page
+     *
+     * @return \PhpOffice\PhpWord\Element\Section
+     *
+     * @since 1.0.0
+     */
     public function createFirstPage()
     {
         $section = $this->addSection([
@@ -167,6 +192,13 @@ class DefaultWord extends \PhpOffice\PhpWord\PhpWord
         return $section;
     }
 
+    /**
+     * Create second page
+     *
+     * @return \PhpOffice\PhpWord\Element\Section
+     *
+     * @since 1.0.0
+     */
     public function createSecondPage()
     {
         $section = $this->addSection([

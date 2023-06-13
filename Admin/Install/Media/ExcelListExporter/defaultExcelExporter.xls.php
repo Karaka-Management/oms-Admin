@@ -35,13 +35,14 @@ foreach ($data as $i => $row) {
 }
 
 $file = \tempnam(\sys_get_temp_dir(), 'oms_');
+if ($file !== false) {
+    $writer = IOFactory::createWriter($excel, 'Xlsx');
+    $writer->save($file);
 
-$writer = IOFactory::createWriter($excel, 'Xlsx');
-$writer->save($file);
+    $content = \file_get_contents($file);
+    if ($content !== false) {
+        echo $content;
+    }
 
-$content = \file_get_contents($file);
-if ($content !== false) {
-    echo $content;
+    \unlink($file);
 }
-
-\unlink($file);

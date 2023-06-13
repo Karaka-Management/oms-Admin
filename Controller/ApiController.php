@@ -800,7 +800,7 @@ final class ApiController extends Controller
             ->execute();
 
         if (($request->getData('localization_load') ?? '-1') !== '-1') {
-            $locale = \explode('_', $request->getData('localization_load'));
+            $locale = \explode('_', $request->getData('localization_load') ?? '');
             $old    = clone $account->l11n;
 
             $account->l11n->loadFromLanguage($locale[0], $locale[1]);
@@ -1458,7 +1458,12 @@ final class ApiController extends Controller
             );
 
             if (!empty($defaultGroupSettings)) {
-                $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+                $temp = \json_decode($defaultGroupSettings->content, true);
+                if (!\is_array($temp)) {
+                    $temp = [];
+                }
+
+                $defaultGroupIds = \array_merge($defaultGroupIds, $temp);
             }
         }
 
@@ -1471,7 +1476,12 @@ final class ApiController extends Controller
             );
 
             if (!empty($defaultGroupSettings)) {
-                $defaultGroupIds = \array_merge($defaultGroupIds, \json_decode($defaultGroupSettings->content, true));
+                $temp = \json_decode($defaultGroupSettings->content, true);
+                if (!\is_array($temp)) {
+                    $temp = [];
+                }
+
+                $defaultGroupIds = \array_merge($defaultGroupIds, $temp);
             }
         }
 
@@ -1668,9 +1678,14 @@ final class ApiController extends Controller
                 );
 
                 if (!empty($defaultGroupSettings)) {
+                    $temp = \json_decode($defaultGroupSettings->content, true);
+                    if (!\is_array($temp)) {
+                        $temp = [];
+                    }
+
                     $defaultGroupIds = \array_merge(
                         $defaultGroupIds,
-                        \json_decode($defaultGroupSettings->content, true)
+                        $temp
                     );
                 }
             }
@@ -1684,9 +1699,14 @@ final class ApiController extends Controller
                 );
 
                 if (!empty($defaultGroupSettings)) {
+                    $temp = \json_decode($defaultGroupSettings->content, true);
+                    if (!\is_array($temp)) {
+                        $temp = [];
+                    }
+
                     $defaultGroupIds = \array_merge(
                         $defaultGroupIds,
-                        \json_decode($defaultGroupSettings->content, true)
+                        $temp
                     );
                 }
             }
@@ -1736,7 +1756,7 @@ final class ApiController extends Controller
             $request->setData('create_profile', (string) true);
             $request->setData('name1', !$request->hasData('name1')
                 ? (!$request->hasData('user')
-                    ? \explode('@', $request->getDataString('email'))[0]
+                    ? \explode('@', $request->getDataString('email') ?? '')[0]
                     : $request->getDataString('user')
                 )
                 : $request->getDataString('name1')
@@ -1768,6 +1788,61 @@ final class ApiController extends Controller
 
                 ++$tries;
             } while ($dataChange->id === 0 && $tries < 5);
+
+            $handler = $this->setUpServerMailHandler();
+
+            /** @var \Model\Setting[] $emailSettings */
+            $emailSettings = $this->app->appSettings->get(
+                names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE],
+                module: 'Admin'
+            );
+
+            /** @var \Modules\Messages\Models\Email $mail */
+            $mail = EmailMapper::get()
+                ->with('l11n')
+                ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE]->content)
+                ->where('l11n/language', $response->header->l11n->language)
+                ->execute();
+
+            $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
+            $mail->addTo((string) $request->getData('email'));
+
+            // @todo: load default l11n if no translation is available
+            $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
+
+            $mail->subject = $mailL11n->subject;
+
+            // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
+            // Maybe store the uri in the $app model? or store all urls in the config file
+            $mail->body = \str_replace(
+                [
+                    '{confirmation_link}',
+                    '{user_name}',
+                ],
+                [
+                    UriFactory::hasQuery('/' . \strtolower($app->name))
+                        ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
+                        : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
+                    $account->login,
+                ],
+                $mailL11n->body
+            );
+
+            $mail->bodyAlt = \str_replace(
+                [
+                    '{confirmation_link}',
+                    '{user_name}',
+                ],
+                [
+                    UriFactory::hasQuery('/' . \strtolower($app->name))
+                        ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
+                        : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
+                    $account->login,
+                ],
+                $mailL11n->bodyAlt
+            );
+
+            $handler->send($mail);
         }
 
         // Create client
@@ -1793,60 +1868,6 @@ final class ApiController extends Controller
                 $this->app->moduleManager->get('ClientManagement')->apiClientCreate($internalRequest, $internalResponse);
             }
         }
-
-        $handler = $this->setUpServerMailHandler();
-
-        $emailSettings = $this->app->appSettings->get(
-            names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE],
-            module: 'Admin'
-        );
-
-        /** @var \Modules\Messages\Models\Email $mail */
-        $mail = EmailMapper::get()
-            ->with('l11n')
-            ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE]->content)
-            ->where('l11n/language', $response->header->l11n->language)
-            ->execute();
-
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
-        $mail->addTo((string) $request->getData('email'));
-
-        // @todo: load default l11n if no translation is available
-        $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
-
-        $mail->subject = $mailL11n->subject;
-
-        // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
-        // Maybe store the uri in the $app model? or store all urls in the config file
-        $mail->body = \str_replace(
-            [
-                '{confirmation_link}',
-                '{user_name}',
-            ],
-            [
-                UriFactory::hasQuery('/' . \strtolower($app->name))
-                    ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
-                    : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                $account->login,
-            ],
-            $mailL11n->body
-        );
-
-        $mail->bodyAlt = \str_replace(
-            [
-                '{confirmation_link}',
-                '{user_name}',
-            ],
-            [
-                UriFactory::hasQuery('/' . \strtolower($app->name))
-                    ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
-                    : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                $account->login,
-            ],
-            $mailL11n->bodyAlt
-        );
-
-        $handler->send($mail);
 
         $this->fillJsonResponse(
             $request,
@@ -2029,7 +2050,7 @@ final class ApiController extends Controller
             $account->l11n
                 ->loadFromLanguage(
                     $locale[0] ?? $this->app->l11nServer->language,
-                    $locale[1] ?? $this->app->l11nServer->getCountry()
+                    $locale[1] ?? $this->app->l11nServer->country
                 );
         }
 
@@ -2527,12 +2548,12 @@ final class ApiController extends Controller
             ? new GroupPermission((int) $request->getData('permissionref'))
             : new AccountPermission((int) $request->getData('permissionref'));
 
-        $permission->setUnit($request->getDataInt('permissionunit'));
-        $permission->setApp($request->getDataInt('permissionapp'));
-        $permission->setModule($request->getDataString('permissionmodule'));
-        $permission->setCategory($request->getDataInt('permissioncategory'));
-        $permission->setElement($request->getDataInt('permissionelement'));
-        $permission->setComponent($request->getDataInt('permissioncomponent'));
+        $permission->unit      = $request->getDataInt('permissionunit');
+        $permission->app       = $request->getDataInt('permissionapp');
+        $permission->module    = $request->getDataString('permissionmodule');
+        $permission->category  = $request->getDataInt('permissioncategory');
+        $permission->element   = $request->getDataInt('permissionelement');
+        $permission->component = $request->getDataInt('permissioncomponent');
         $permission->setPermission(
             ($request->getDataInt('permissionread') ?? 0)
                 | ($request->getDataInt('permissioncreate') ?? 0)
@@ -2613,12 +2634,12 @@ final class ApiController extends Controller
      */
     private function updatePermissionFromRequest(RequestAbstract $request, PermissionAbstract $permission) : PermissionAbstract
     {
-        $permission->setUnit($request->getDataInt('permissionunit') ?? $permission->getUnit());
-        $permission->setApp($request->getDataInt('permissionapp') ?? $permission->getApp());
-        $permission->setModule($request->getDataString('permissionmodule') ?? $permission->getModule());
-        $permission->setCategory($request->getDataInt('permissioncategory') ?? $permission->getCategory());
-        $permission->setElement($request->getDataInt('permissionelement') ?? $permission->getElement());
-        $permission->setComponent($request->getDataInt('permissioncomponent') ?? $permission->getComponent());
+        $permission->unit      = $request->getDataInt('permissionunit') ?? $permission->unit;
+        $permission->app       = $request->getDataInt('permissionapp') ?? $permission->app;
+        $permission->module    = $request->getDataString('permissionmodule') ?? $permission->module;
+        $permission->category  = $request->getDataInt('permissioncategory') ?? $permission->category;
+        $permission->element   = $request->getDataInt('permissionelement') ?? $permission->element;
+        $permission->component = $request->getDataInt('permissioncomponent') ?? $permission->component;
         $permission->setPermission(($request->getDataInt('permissioncreate') ?? 0)
             | ($request->getDataInt('permissionread') ?? 0)
             | ($request->getDataInt('permissionupdate') ?? 0)

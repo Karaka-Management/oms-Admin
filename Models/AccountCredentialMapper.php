@@ -21,6 +21,9 @@ namespace Modules\Admin\Models;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @template T of Account
+ * @extends AccountMapper<T>
  */
 final class AccountCredentialMapper extends AccountMapper
 {

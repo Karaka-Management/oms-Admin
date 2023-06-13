@@ -12,7 +12,8 @@
  */
 declare(strict_types=1);
 
-$data = $this->getData('data') ?? [];
+/** @var \phpOMS\Views\View $this */
+$data = $this->data['data'] ?? [];
 
 $out = \fopen('php://output', 'w');
 if ($out !== false) {

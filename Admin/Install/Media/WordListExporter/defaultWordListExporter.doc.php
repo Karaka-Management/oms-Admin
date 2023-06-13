@@ -52,6 +52,10 @@ $tbl .= '</table>';
 \PhpOffice\PhpWord\Shared\Html::addHtml($section, $tbl, false, false);
 
 $file = \tempnam(\sys_get_temp_dir(), 'oms_');
+if ($file === false) {
+    return '';
+}
+
 $writer->save($file);
 
 echo \file_get_contents($file);

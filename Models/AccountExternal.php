@@ -46,7 +46,7 @@ class AccountExternal
      * @var int
      * @since 1.0.0
      */
-    private int $subtype = AccountExternalSubtype::STRIPE;
+    public int $subtype = AccountExternalSubtype::STRIPE;
 
     /**
      * External status.

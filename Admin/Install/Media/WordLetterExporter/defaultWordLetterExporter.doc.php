@@ -30,9 +30,11 @@ $section = $word->createFirstPage();
 $file = \tempnam(\sys_get_temp_dir(), 'oms_');
 //$writer->save($file);
 
-$content = \file_get_contents($file);
-if ($content !== false) {
-    echo $content;
-}
+if ($file !== false) {
+    $content = \file_get_contents($file);
+    if ($content !== false) {
+        echo $content;
+    }
 
-\unlink($file);
+    \unlink($file);
+}

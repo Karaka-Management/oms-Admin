@@ -35,6 +35,6 @@ if ($file !== false) {
     if ($content !== false) {
         echo $content;
     }
-}
 
-\unlink($file);
+    \unlink($file);
+}

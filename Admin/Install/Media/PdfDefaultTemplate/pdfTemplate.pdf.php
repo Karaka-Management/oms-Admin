@@ -15,12 +15,14 @@ declare(strict_types=1);
 /**
  * Default PDF class.
  *
+ * The TCPDF class must be included previously in the parent code.
+ *
  * @package Modules\Media
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @phpstan-import-type TCPDF from ../../../../../Resources/tcpdf/tcpdf.php
+ * @link ../../../../../../Resources/tcpdf/tcpdf.php
  */
 class DefaultPdf extends TCPDF
 {

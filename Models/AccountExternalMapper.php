@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @template T of AccoutExternal
+ * @template T of AccountExternal
  * @extends DataMapperFactory<T>
  */
 class AccountExternalMapper extends DataMapperFactory

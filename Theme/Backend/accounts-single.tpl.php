@@ -318,12 +318,12 @@ echo $this->data['nav']->render(); ?>
                                         <td><a href="#"><i class="fa fa-times"></i></a>
                                         <td><a href="#"><i class="fa fa-cogs"></i></a>
                                         <td><?= $value->id; ?>
-                                        <td><?= $value->getUnit(); ?>
-                                        <td><?= $value->getApp(); ?>
-                                        <td><?= $value->getModule(); ?>
-                                        <td><?= $value->getCategory(); ?>
-                                        <td><?= $value->getElement(); ?>
-                                        <td><?= $value->getComponent(); ?>
+                                        <td><?= $this->printHtml($value->unit); ?>
+                                        <td><?= $this->printHtml($value->app); ?>
+                                        <td><?= $this->printHtml($value->module); ?>
+                                        <td><?= $this->printHtml($value->category); ?>
+                                        <td><?= $this->printHtml($value->element); ?>
+                                        <td><?= $this->printHtml($value->component); ?>
                                         <td>
                                             <?= (PermissionType::CREATE | $permission) === $permission ? 'C' : ''; ?>
                                             <?= (PermissionType::READ | $permission) === $permission ? 'R' : ''; ?>
