@@ -167,45 +167,45 @@ echo $this->data['nav']->render(); ?>
                                 </div>
                                 <div class="form-group">
                                     <label><?= $this->getHtml('Permission'); ?></label>
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionCreate">
-                                                <input id="iPermissionCreate" type="checkbox" name="permissioncreate" value="<?= PermissionType::CREATE; ?>" data-tpl-text="/perm/c" data-tpl-value="/perm/c">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Create'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionCreate">
+                                            <input id="iPermissionCreate" type="checkbox" name="permissioncreate" value="<?= PermissionType::CREATE; ?>" data-tpl-text="/perm/c" data-tpl-value="/perm/c">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Create'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionRead">
-                                                <input id="iPermissionRead" type="checkbox" name="permissionread" value="<?= PermissionType::READ; ?>" data-tpl-text="/perm/r" data-tpl-value="/perm/r">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Read'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionRead">
+                                            <input id="iPermissionRead" type="checkbox" name="permissionread" value="<?= PermissionType::READ; ?>" data-tpl-text="/perm/r" data-tpl-value="/perm/r">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Read'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionUpdate">
-                                                <input id="iPermissionUpdate" type="checkbox" name="permissionupdate" value="<?= PermissionType::MODIFY; ?>" data-tpl-text="/perm/u" data-tpl-value="/perm/u">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Update'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionUpdate">
+                                            <input id="iPermissionUpdate" type="checkbox" name="permissionupdate" value="<?= PermissionType::MODIFY; ?>" data-tpl-text="/perm/u" data-tpl-value="/perm/u">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Update'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionDelete">
-                                                <input id="iPermissionDelete" type="checkbox" name="permissiondelete" value="<?= PermissionType::DELETE; ?>" data-tpl-text="/perm/d" data-tpl-value="/perm/d">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Delete'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionDelete">
+                                            <input id="iPermissionDelete" type="checkbox" name="permissiondelete" value="<?= PermissionType::DELETE; ?>" data-tpl-text="/perm/d" data-tpl-value="/perm/d">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Delete'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionPermission">
-                                                <input id="iPermissionPermission" type="checkbox" name="permissionpermission" value="<?= PermissionType::PERMISSION; ?>" data-tpl-text="/perm/p" data-tpl-value="/perm/p">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Permission'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionPermission">
+                                            <input id="iPermissionPermission" type="checkbox" name="permissionpermission" value="<?= PermissionType::PERMISSION; ?>" data-tpl-text="/perm/p" data-tpl-value="/perm/p">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Permission'); ?>
+                                        </label>
+                                    </span>
                                 </div>
                             </div>
                             <div class="portlet-foot">

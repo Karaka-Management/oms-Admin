@@ -159,7 +159,8 @@ class AccountMapper extends DataMapperFactory
             ->with('permissions')
             ->with('l11n')
             ->where('id', $id)
-            ->where('permission/element', null)
+            ->where('permissions/element', null)
+            ->where('groups/permissions/element', null)
             ->execute();
 
         return $account;

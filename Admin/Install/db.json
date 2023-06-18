@@ -981,6 +981,13 @@
                 "default": null,
                 "null": true
             },
+            "group_permission_defaultcperm": {
+                "description": "Default permissions a user receives when creating (only relevant if hascreate is true, if null => CRU)",
+                "name": "group_permission_defaultcperm",
+                "type": "VARCHAR(5)",
+                "default": null,
+                "null": true
+            },
             "group_permission_hasmodify": {
                 "name": "group_permission_hasmodify",
                 "type": "TINYINT(1)",
@@ -996,6 +1003,13 @@
             "group_permission_haspermission": {
                 "name": "group_permission_haspermission",
                 "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "group_permission_defaultpperm": {
+                "description": "Default permissions a user is allowed to change (only relevant if haspermission is true, if null => all)",
+                "name": "group_permission_defaultpperm",
+                "type": "TEXT",
                 "default": null,
                 "null": true
             }
@@ -1359,6 +1373,13 @@
                 "default": null,
                 "null": true
             },
+            "account_permission_defaultcperm": {
+                "description": "Default permissions a user receives when creating (only relevant if hascreate is true, if null => CRU)",
+                "name": "account_permission_defaultcperm",
+                "type": "VARCHAR(5)",
+                "default": null,
+                "null": true
+            },
             "account_permission_hasmodify": {
                 "name": "account_permission_hasmodify",
                 "type": "TINYINT(1)",
@@ -1374,6 +1395,13 @@
             "account_permission_haspermission": {
                 "name": "account_permission_haspermission",
                 "type": "TINYINT(1)",
+                "default": null,
+                "null": true
+            },
+            "account_permission_defaultpperm": {
+                "description": "Default permissions a user is allowed to change (only relevant if haspermission is true, if null => all)",
+                "name": "account_permission_defaultpperm",
+                "type": "TEXT",
                 "default": null,
                 "null": true
             }
