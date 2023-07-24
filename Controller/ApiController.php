@@ -1115,7 +1115,6 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Admin\Models\Group $group */
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
-
         $this->createStandardReturnResponse($request, $response, $group);
     }
 
@@ -1245,6 +1244,13 @@ final class ApiController extends Controller
      */
     public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if (!empty($val = $this->validateGroupDelete($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
         if (((int) $request->getData('id')) === 3) {
             // admin group cannot be deleted
             $this->createInvalidDeleteResponse($request, $response, []);
@@ -1256,6 +1262,27 @@ final class ApiController extends Controller
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $group);
+    }
+
+    /**
+     * Validate Group delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateGroupDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
     }
 
     /**
@@ -2381,6 +2408,13 @@ final class ApiController extends Controller
      */
     public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if (!empty($val = $this->validateGroupPermissionDelete($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
         /** @var GroupPermission $permission */
         $permission = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
 
@@ -2410,6 +2444,13 @@ final class ApiController extends Controller
      */
     public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if (!empty($val = $this->validateAccountPermissionDelete($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
         /** @var AccountPermission $permission */
         $permission = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
@@ -2431,16 +2472,16 @@ final class ApiController extends Controller
      */
     public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        if (((int) $request->getData('permissionref')) === 3) {
-            // admin group cannot be deleted
-            $this->createInvalidUpdateResponse($request, $response, []);
+        if (!empty($val = $this->validatePermissionCreate($request))) {
+            $response->data['permission_create'] = new FormValidation($val);
+            $response->header->status            = RequestStatusCode::R_400;
 
             return;
         }
 
-        if (!empty($val = $this->validatePermissionCreate($request))) {
-            $response->data['permission_create'] = new FormValidation($val);
-            $response->header->status            = RequestStatusCode::R_400;
+        if (((int) $request->getData('permissionref')) === 3) {
+            // admin group cannot be deleted
+            $this->createInvalidUpdateResponse($request, $response, []);
 
             return;
         }
@@ -2580,6 +2621,13 @@ final class ApiController extends Controller
      */
     public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if (!empty($val = $this->validateAccountPermissionUpdate($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
         /** @var AccountPermission $old */
         $old = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
 
@@ -2605,6 +2653,13 @@ final class ApiController extends Controller
      */
     public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if (!empty($val = $this->validateGroupPermissionUpdate($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
         /** @var GroupPermission $old */
         $old = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
 
@@ -2998,5 +3053,503 @@ final class ApiController extends Controller
         $element->account = $request->getDataInt('account') ?? 0;
 
         return $element;
+    }
+
+    /**
+     * Api method to delete Settings
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiSettingsDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateSettingsDelete($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $settings = SettingMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $settings, SettingMapper::class, 'settings', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $settings);
+    }
+
+    /**
+     * Validate Settings delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateSettingsDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update Application
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiApplicationUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateApplicationUpdate($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        /** @var App $old */
+        $old = AppMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateApplicationFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, AppMapper::class, 'application', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update Application from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param App     $new     Model to modify
+     *
+     * @return App
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateApplicationFromRequest(RequestAbstract $request, App $new) : App
+    {
+        return $new;
+    }
+
+    /**
+     * Validate Application update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateApplicationUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete Application
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiApplicationDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateApplicationDelete($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        /** @var \Modules\Admin\Models\Application $application */
+        $application = AppMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $application, AppMapper::class, 'application', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $application);
+    }
+
+    /**
+     * Validate Application delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateApplicationDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Validate GroupPermission update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateGroupPermissionUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Validate GroupPermission delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateGroupPermissionDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to update AccountPermission from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param AccountPermission     $new     Model to modify
+     *
+     * @return AccountPermission
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateAccountPermissionFromRequest(RequestAbstract $request, AccountPermission $new) : AccountPermission
+    {
+        return $new;
+    }
+
+    /**
+     * Validate AccountPermission update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateAccountPermissionUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Validate AccountPermission delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateAccountPermissionDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update Contact
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiContactUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateContactUpdate($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        /** @var Contact $old */
+        $old = ContactMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateContactFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, ContactMapper::class, 'contact', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to update Contact from request.
+     *
+     * @param RequestAbstract  $request Request
+     * @param Contact     $new     Model to modify
+     *
+     * @return Contact
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    public function updateContactFromRequest(RequestAbstract $request, Contact $new) : Contact
+    {
+        return $new;
+    }
+
+    /**
+     * Validate Contact update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateContactUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete Contact
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiContactDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateContactDelete($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        /** @var \Modules\Admin\Models\Contact $contact */
+        $contact = ContactMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $contact, ContactMapper::class, 'contact', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $contact);
+    }
+
+    /**
+     * Validate Contact delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateContactDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create Data
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiDataChangeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateDataChangeCreate($request))) {
+            $response->data['data_create'] = new FormValidation($val);
+            $response->header->status           = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $data = $this->createDataChangeFromRequest($request);
+        $this->createModel($request->header->account, $data, DataChangeMapper::class, 'data', $request->getOrigin());
+        $this->createStandardCreateResponse($request, $response, $data);
+    }
+
+    /**
+     * Method to create DataChange from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return DataChange
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function createDataChangeFromRequest(RequestAbstract $request) : DataChange
+    {
+        $data = new DataChange();
+
+        return $data;
+    }
+
+    /**
+     * Validate Data create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateDataChangeCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (false) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to delete DataChange
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiDataChangeDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateDataChangeDelete($request))) {
+            $response->data[$request->uri->__toString()] = new FormValidation($val);
+            $response->header->status                     = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        /** @var \Modules\Admin\Models\DataChange $data */
+        $data = DataChangeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModel($request->header->account, $data, DataChangeMapper::class, 'data', $request->getOrigin());
+        $this->createStandardDeleteResponse($request, $response, $data);
+    }
+
+    /**
+     * Validate DataChange delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo: implement
+     *
+     * @since 1.0.0
+     */
+    private function validateDataChangeDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
     }
 }
