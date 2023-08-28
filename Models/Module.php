@@ -124,6 +124,8 @@ class Module
      *
      * @return void
      *
+     * @throws InvalidEnumValue
+     *
      * @since 1.0.0
      */
     public function setStatus(int $status) : void

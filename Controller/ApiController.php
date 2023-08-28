@@ -1152,10 +1152,10 @@ final class ApiController extends Controller
      */
     private function updateGroupFromRequest(RequestAbstract $request, Group $group) : Group
     {
-        $group->name = (string) ($request->getData('name') ?? $group->name);
+        $group->name = $request->getDataString('name') ?? $group->name;
         $group->setStatus($request->getDataInt('status') ?? $group->getStatus());
-        $group->description    = Markdown::parse((string) ($request->getData('description') ?? $group->descriptionRaw));
-        $group->descriptionRaw = (string) ($request->getData('description') ?? $group->descriptionRaw);
+        $group->description    = Markdown::parse($request->getDataString('description') ?? $group->descriptionRaw);
+        $group->descriptionRaw = $request->getDataString('description') ?? $group->descriptionRaw;
 
         return $group;
     }
@@ -2100,7 +2100,7 @@ final class ApiController extends Controller
     public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         /** @var Account $account */
-        $account = AccountMapper::get()->where('id', (int) ($request->getData('id')))->execute();
+        $account = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $account);
     }

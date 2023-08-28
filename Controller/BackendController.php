@@ -398,7 +398,7 @@ final class BackendController extends Controller
             ->with('createdBy')
             ->where('module', self::NAME)
             ->where('type', StringUtils::intHash(GroupMapper::class))
-            ->where('ref', (string) ($request->getData('id') ?? '0'))
+            ->where('ref', $request->getDataString('id') ?? '0')
             ->limit(25);
 
         // audit log
