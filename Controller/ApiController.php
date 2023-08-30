@@ -3136,8 +3136,8 @@ final class ApiController extends Controller
     /**
      * Method to update Application from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param App              $new     Model to modify
+     * @param RequestAbstract $request Request
+     * @param App             $new     Model to modify
      *
      * @return App
      *

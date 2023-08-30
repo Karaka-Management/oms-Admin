@@ -14,10 +14,9 @@ declare(strict_types=1);
 
 use phpOMS\Account\PermissionType;
 use phpOMS\Localization\ISO639Enum;
-use phpOMS\Uri\UriFactory;
 
 $permissions = $this->permissions;
-$categories = ISO639Enum::getConstants();
+$categories  = ISO639Enum::getConstants();
 
 ?>
 
@@ -188,7 +187,7 @@ $categories = ISO639Enum::getConstants();
                 </div>
             </div>
             <div class="portlet-foot">
-                <input type="Submit" value="<?= $this->getHtml('Add', '0', '0') ?>">
+                <input type="Submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
             </div>
         </section>
     </div>
