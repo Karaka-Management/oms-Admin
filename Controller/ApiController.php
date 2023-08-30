@@ -3137,7 +3137,7 @@ final class ApiController extends Controller
      * Method to update Application from request.
      *
      * @param RequestAbstract  $request Request
-     * @param App     $new     Model to modify
+     * @param App              $new     Model to modify
      *
      * @return App
      *
@@ -3265,8 +3265,8 @@ final class ApiController extends Controller
     /**
      * Method to update AccountPermission from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param AccountPermission     $new     Model to modify
+     * @param RequestAbstract   $request Request
+     * @param AccountPermission $new     Model to modify
      *
      * @return AccountPermission
      *
@@ -3354,8 +3354,8 @@ final class ApiController extends Controller
     /**
      * Method to update Contact from request.
      *
-     * @param RequestAbstract  $request Request
-     * @param Contact     $new     Model to modify
+     * @param RequestAbstract $request Request
+     * @param Contact         $new     Model to modify
      *
      * @return Contact
      *
