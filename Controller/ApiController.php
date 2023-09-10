@@ -269,11 +269,6 @@ final class ApiController extends Controller
             account: $account->id
         );
 
-        $emailSettings = $this->app->appSettings->get(
-            names: SettingsEnum::MAIL_SERVER_ADDR,
-            module: 'Admin'
-        );
-
         if ((int) $forgotten[SettingsEnum::LOGIN_FORGOTTEN_COUNT]->content > 3) {
             $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
             $response->set($request->uri->__toString(), [
@@ -288,12 +283,54 @@ final class ApiController extends Controller
         $handler   = $this->setUpServerMailHandler();
         $resetLink = UriFactory::build('{/base}/reset?user=' . $account->id . '&token=' . $token);
 
-        $mail = new Email();
-        $mail->setFrom($emailSettings->content);
-        $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
-        $mail->subject = 'Jingga: Forgot Password';
-        $mail->body    = '';
-        $mail->msgHTML('Please reset your password at: <a href="' . $resetLink . '">' . $resetLink . '</a>');
+        /** @var \Model\Setting[] $emailSettings */
+        $emailSettings = $this->app->appSettings->get(
+            names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE],
+            module: 'Admin'
+        );
+
+        /** @var \Modules\Messages\Models\Email $mail */
+        $mail = EmailMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE]->content)
+            ->where('l11n/language', $response->header->l11n->language)
+            ->execute();
+
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
+        $mail->addTo($account->email);
+
+        // @todo: load default l11n if no translation is available
+        $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
+
+        $mail->subject = $mailL11n->subject;
+
+        // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
+        // Maybe store the uri in the $app model? or store all urls in the config file
+        $mail->body = \str_replace(
+            [
+                '{reset_link}',
+                '{user_name}',
+            ],
+            [
+                $resetLink,
+                $account->login,
+            ],
+            $mailL11n->body
+        );
+
+        $mail->bodyAlt = \str_replace(
+            [
+                '{reset_link}',
+                '{user_name}',
+            ],
+            [
+                $resetLink,
+                $account->login,
+            ],
+            $mailL11n->bodyAlt
+        );
+
+        $handler->send($mail);
 
         $this->app->appSettings->set([
             [
@@ -328,7 +365,7 @@ final class ApiController extends Controller
         }
         */
 
-        $handler->send($mail);
+        // $handler->send($mail);
 
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
@@ -386,29 +423,56 @@ final class ApiController extends Controller
 
         AccountMapper::update()->execute($account);
 
+        $handler = $this->setUpServerMailHandler();
+
         /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
-            names: [
-                SettingsEnum::MAIL_SERVER_ADDR,
-                SettingsEnum::MAIL_SERVER_CERT,
-                SettingsEnum::MAIL_SERVER_KEY,
-                SettingsEnum::MAIL_SERVER_KEYPASS,
-                SettingsEnum::MAIL_SERVER_TLS,
-            ],
-            module: self::NAME
+            names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE],
+            module: 'Admin'
         );
 
-        $handler   = $this->setUpServerMailHandler();
-        $loginLink = UriFactory::build('{/base}/{/backend}');
+        /** @var \Modules\Messages\Models\Email $mail */
+        $mail = EmailMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $emailSettings[SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE]->content)
+            ->where('l11n/language', $response->header->l11n->language)
+            ->execute();
 
-        $mail = new Email();
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content, 'Jingga');
-        $mail->addTo($account->getEmail(), \trim($account->name1 . ' ' . $account->name2 . ' ' . $account->name3));
-        $mail->subject = 'Jingga: Password reset';
-        $mail->body    = '';
-        $mail->msgHTML('Your new password: <a href="' . $loginLink . '">' . $pass . '</a>'
-                       . "\n\n"
-                       . 'Please remember to change your password after logging in!');
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
+        $mail->addTo($account->email);
+
+        // @todo: load default l11n if no translation is available
+        $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
+
+        $mail->subject = $mailL11n->subject;
+
+        // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
+        // Maybe store the uri in the $app model? or store all urls in the config file
+        $mail->body = \str_replace(
+            [
+                '{new_password}',
+                '{user_name}',
+            ],
+            [
+                $pass,
+                $account->login,
+            ],
+            $mailL11n->body
+        );
+
+        $mail->bodyAlt = \str_replace(
+            [
+                '{new_password}',
+                '{user_name}',
+            ],
+            [
+                $pass,
+                $account->login,
+            ],
+            $mailL11n->bodyAlt
+        );
+
+        $handler->send($mail);
 
         $this->app->appSettings->set([
             [

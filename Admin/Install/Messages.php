@@ -66,6 +66,12 @@ class Messages
                 'content' => (string) $messages['email_template'][2]['id'],
                 'module'  => 'Admin',
             ],
+            [
+                'id'      => null,
+                'name'    => SettingsEnum::LOGIN_MAIL_RESET_PASSWORD_TEMPLATE,
+                'content' => (string) $messages['email_template'][3]['id'],
+                'module'  => 'Admin',
+            ],
         ];
 
         $response = new HttpResponse();

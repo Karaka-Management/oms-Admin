@@ -69,6 +69,8 @@ abstract class SettingsEnum extends Enum
 
     public const LOGIN_MAIL_FAILED_TEMPLATE = '1000000108';
 
+    public const LOGIN_MAIL_RESET_PASSWORD_TEMPLATE = '1000000109';
+
     /* Mail server settings */
     public const MAIL_SERVER_OUT = '1000000201';
 

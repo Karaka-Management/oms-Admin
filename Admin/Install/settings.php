@@ -93,6 +93,13 @@ return [
     ],
     [
         'type'    => 'setting',
+        'name'    => SettingsEnum::LOGIN_MAIL_RESET_PASSWORD_TEMPLATE,
+        'content' => '',
+        'pattern' => '/\\d*/',
+        'module'  => 'Admin',
+    ],
+    [
+        'type'    => 'setting',
         'name'    => SettingsEnum::DEFAULT_LOCALIZATION,
         'content' => '1',
         'pattern' => '/\\d+/',
