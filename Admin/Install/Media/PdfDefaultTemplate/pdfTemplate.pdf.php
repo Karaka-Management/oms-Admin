@@ -59,7 +59,7 @@ class DefaultPdf extends TCPDF
             'TaxOffice'   => 'Tax office',
             'TaxNumber'   => 'Tax number',
             'Swift'       => 'BIC',
-            'BankAccount' => 'Account',
+            'BankAccount' => 'IBAN',
         ],
         'de' => [
             'Page'        => 'Seite',
