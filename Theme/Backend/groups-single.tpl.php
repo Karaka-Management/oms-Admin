@@ -137,20 +137,47 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                 <div class="portlet">
-                        <form id="fGroupAddPermission" action="<?= UriFactory::build('{/api}admin/group/permission'); ?>" method="put">
+                        <form id="permissionForm"
+                            action="<?= UriFactory::build('{/api}admin/group/permission'); ?>"
+                            data-ui-container="#permissionTable tbody"
+                            data-add-form="permissionForm"
+                            data-add-tpl="#permissionTable tbody .oms-add-tpl-permission"
+                            method="put">
                             <div class="portlet-head"><?= $this->getHtml('Permissions'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
+                                    <label for="iPermissionId"><?= $this->getHtml('ID', '0', '0'); ?></label>
+                                    <input id="iPermissionId" name="permissionref" type="text" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                </div>
+                                <div class="form-group">
                                     <label for="iPermissionUnit"><?= $this->getHtml('Unit'); ?></label>
-                                    <input id="iPermissionUnit" name="permissionunit" type="text" data-tpl-text="/unit" data-tpl-value="/unit">
+                                    <select id="iPermissionUnit" name="permissionunit" data-tpl-text="/unit" data-tpl-value="/unit">
+                                        <option value="">
+                                        <?php
+                                        foreach ($this->data['units'] as $unit) : ?>
+                                            <option value="<?= $unit->id; ?>"><?= $this->printHtml($unit->name); ?>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionApp"><?= $this->getHtml('App'); ?></label>
-                                    <input id="iPermissionApp" name="permissionapp" type="text" data-tpl-text="/app" data-tpl-value="/app">
+                                    <select id="iPermissionApp" name="permissionapp" data-tpl-text="/app" data-tpl-value="/app">
+                                        <option value="">
+                                        <?php
+                                        foreach ($this->data['apps'] as $app) : ?>
+                                            <option value="<?= $app->id; ?>"><?= $this->printHtml($app->name); ?>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionModule"><?= $this->getHtml('Module'); ?></label>
-                                    <input id="iPermissionModule" name="permissionmodule" type="text" data-tpl-text="/module" data-tpl-value="/module">
+                                    <select id="iPermissionModule" name="permissionmodule" data-tpl-text="/module" data-tpl-value="/module">
+                                        <option value="">
+                                        <?php
+                                        foreach ($this->data['modules'] as $module) : ?>
+                                            <option value="<?= $module->name; ?>"><?= $this->printHtml($module->name); ?>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionType"><?= $this->getHtml('Type'); ?></label>
@@ -208,11 +235,11 @@ echo $this->data['nav']->render(); ?>
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="permissionref" value="<?= $group->id; ?>">
                                 <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP; ?>">
-                                <input type="submit" class="cancel hidden" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
-                                <input type="submit" class="update hidden" value="<?= $this->getHtml('Update', '0', '0'); ?>">
-                                <input type="submit" class="save" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+
+                                <input id="bPermissionAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input id="bPermissionSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                                <input type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                             </div>
                         </form>
                     </div>
@@ -222,15 +249,13 @@ echo $this->data['nav']->render(); ?>
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
-                            <table id="groupPermissions" class="default"
-                                data-update-content="tbody"
-                                data-update-element="tr"
+                            <table id="permissionTable" class="default"
                                 data-tag="form"
-                                data-update-form="fGroupAddPermission"
-                                data-table-form="fGroupAddPermission">
+                                data-ui-element="tr"
+                                data-add-tpl=".oms-add-tpl-permission"
+                                data-update-form="permissionForm">
                                 <thead>
                                     <tr>
-                                        <td>
                                         <td>
                                         <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                         <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
@@ -241,10 +266,10 @@ echo $this->data['nav']->render(); ?>
                                         <td><?= $this->getHtml('Comp'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                         <td class="wf-100"><?= $this->getHtml('Perm'); ?>
                                 <tbody>
-                                    <template>
-                                        <tr>
-                                            <td><a href="#"><i class="fa fa-times"></i></a>
-                                            <td><a href="#"><i class="fa fa-cogs"></i></a>
+                                    <template class="oms-add-tpl-permission">
+                                        <tr data-id="" draggable="false">
+                                            <td><i class="fa fa-times btn remove-form"></i>
+                                                <i class="fa fa-cogs btn update-form"></i>
                                             <td></td>
                                             <td data-tpl-text="/unit" data-tpl-value="/unit" data-value=""></td>
                                             <td data-tpl-text="/app" data-tpl-value="/app" data-value=""></td>
@@ -264,13 +289,13 @@ echo $this->data['nav']->render(); ?>
                                     <?php $c = 0;
                                     foreach ($permissions as $key => $value) : ++$c;
                                         $permission = $value->getPermission(); ?>
-                                    <tr>
-                                        <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><i class="fa fa-cogs update btn"></i>
-                                        <td><?= $value->id; ?>
-                                        <td data-tpl-text="/unit" data-tpl-value="/unit"><?= $this->printHtml((string) $value->unit); ?>
-                                        <td data-tpl-text="/app" data-tpl-value="/app"><?= $this->printHtml((string) $value->app); ?>
-                                        <td data-tpl-text="/module" data-tpl-value="/module"><?= $this->printHtml($value->module); ?>
+                                    <tr data-id="<?= $value->id; ?>">
+                                        <td><i class="fa fa-times btn remove-form"></i>
+                                            <i class="fa fa-cogs btn update-form"></i>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
+                                        <td data-tpl-text="/unit" data-tpl-value="/unit" data-value="<?= $this->printHtml((string) $value->unit); ?>"><?= $this->printHtml(isset($this->data['units'][$value->unit]) ? $this->data['units'][$value->unit]->name : ''); ?>
+                                        <td data-tpl-text="/app" data-tpl-value="/app" data-value="<?= $this->printHtml((string) $value->app); ?>"><?= $this->printHtml(isset($this->data['apps'][$value->app]) ? $this->data['apps'][$value->app]->name : ''); ?>
+                                        <td data-tpl-text="/module" data-tpl-value="/module" data-value="<?= $this->printHtml($value->module); ?>"><?= $this->printHtml($value->module); ?>
                                         <td data-tpl-text="/type" data-tpl-value="/type"><?= $this->printHtml((string) $value->category); ?>
                                         <td data-tpl-text="/ele" data-tpl-value="/ele"><?= $this->printHtml((string) $value->element); ?>
                                         <td data-tpl-text="/comp" data-tpl-value="/comp"><?= $this->printHtml((string) $value->component); ?>

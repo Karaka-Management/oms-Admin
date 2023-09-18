@@ -17,12 +17,15 @@ namespace Modules\Admin\Controller;
 use Model\SettingMapper;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermissionMapper;
+use Modules\Admin\Models\AppMapper;
 use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermissionMapper;
 use Modules\Admin\Models\LocalizationMapper;
+use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
 use Modules\Media\Models\MediaMapper;
+use Modules\Organization\Models\UnitMapper;
 use phpOMS\Asset\AssetType;
 use phpOMS\Autoloader;
 use phpOMS\Contract\RenderableInterface;
@@ -387,6 +390,10 @@ final class BackendController extends Controller
             ->execute();
 
         $view->data['permissions'] = $permissions;
+
+        $view->data['units']   = UnitMapper::getAll()->execute();
+        $view->data['apps']    = AppMapper::getAll()->execute();
+        $view->data['modules'] = ModuleMapper::getAll()->execute();
 
         $accGrpSelector               = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
         $view->data['accGrpSelector'] = $accGrpSelector;
