@@ -42,7 +42,7 @@ $audits = $this->data['audits'] ?? [];
 
 $tableView            = $this->data['tableView'];
 $tableView->id        = 'auditList';
-$tableView->baseUri   = '{/base}/admin/audit/list';
+$tableView->baseUri   = '{/base}/admin/account/settings?id=' . $account->id;
 $tableView->exportUri = '{/api}auditor/list/export';
 $tableView->setObjects($audits);
 
