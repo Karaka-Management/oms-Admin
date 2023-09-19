@@ -2783,11 +2783,39 @@ final class ApiController extends Controller
      */
     public function apiAddGroupToAccount(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if (!empty($val = $this->validateAddGroupToAccount($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidAddResponse($request, $response, $val);
+
+            return;
+        }
+
         $account = (int) $request->getData('account');
-        $groups  = \array_map('intval', $request->getDataList('igroup-idlist'));
+        $groups  = [$request->getDataInt('account-list') ?? 0];
 
         $this->createModelRelation($request->header->account, $account, $groups, AccountMapper::class, 'groups', 'account-group', $request->getOrigin());
         $this->createStandardAddResponse($request, $response, $groups);
+    }
+
+    /**
+     * Validate adding a group to an account request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateAddGroupToAccount(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['account'] = !$request->hasData('account'))
+            || ($val['accountlist'] = !$request->hasData('account-list'))
+        ) {
+            return $val;
+        }
+
+        return [];
     }
 
     /**
@@ -2805,11 +2833,39 @@ final class ApiController extends Controller
      */
     public function apiAddAccountToGroup(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        if (!empty($val = $this->validateAddAccountToGroup($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidAddResponse($request, $response, $val);
+
+            return;
+        }
+
         $group    = (int) $request->getData('group');
-        $accounts = \array_map('intval', $request->getDataList('iaccount-idlist'));
+        $accounts = [$request->getDataInt('group-list') ?? 0];
 
         $this->createModelRelation($request->header->account, $group, $accounts, GroupMapper::class, 'accounts', 'group-account', $request->getOrigin());
         $this->createStandardAddResponse($request, $response, $accounts);
+    }
+
+    /**
+     * Validate adding an account to a group request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateAddAccountToGroup(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['group'] = !$request->hasData('group'))
+            || ($val['grouplist'] = !$request->hasData('group-list'))
+        ) {
+            return $val;
+        }
+
+        return [];
     }
 
     /**

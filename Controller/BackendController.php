@@ -221,17 +221,94 @@ final class BackendController extends Controller
 
         $view->data['permissions'] = $permissions;
 
+        $view->data['units']   = UnitMapper::getAll()->execute();
+        $view->data['apps']    = AppMapper::getAll()->execute();
+        $view->data['modules'] = ModuleMapper::getAll()->execute();
+
         $accGrpSelector            = new \Modules\Admin\Theme\Backend\Components\GroupTagSelector\GroupTagSelectorView($this->app->l11nManager, $request, $response);
         $view->data['grpSelector'] = $accGrpSelector;
 
-        // audit log
-        if ($request->getData('ptype') === 'p') {
-            $view->data['auditlogs'] = AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '<')->limit(25)->execute();
-        } elseif ($request->getData('ptype') === 'n') {
-            $view->data['auditlogs'] = AuditMapper::getAll()->with('createdBy')->where('id', $request->getDataInt('audit') ?? 0, '>')->limit(25)->execute();
-        } else {
-            $view->data['auditlogs'] = AuditMapper::getAll()->with('createdBy')->where('id', 0, '>')->limit(25)->execute();
+        // Auditor log
+        $searchFieldData = $request->getLike('.*\-p\-.*');
+        $searchField     = [];
+        foreach ($searchFieldData as $key => $data) {
+            if ($data === '1') {
+                $split  = \explode('-', $key);
+                $member =  \end($split);
+
+                $searchField[] = $member;
+            }
         }
+
+        $filterFieldData = $request->getLike('.*\-f\-.*?\-t');
+        $filterField     = [];
+        foreach ($filterFieldData as $key => $type) {
+            $split = \explode('-', $key);
+            \end($split);
+
+            $member = \prev($split);
+
+            if ($request->hasData('auditlist-f-' . $member . '-f1')) {
+                $filterField[$member] = [
+                    'type'   => $type,
+                    'value1' => $request->getData('auditlist-f-' . $member . '-f1'),
+                    'logic1' => $request->getData('auditlist-f-' . $member . '-o1'),
+                    'value2' => $request->getData('auditlist-f-' . $member . '-f2'),
+                    'logic2' => $request->getData('auditlist-f-' . $member . '-o2'),
+                ];
+            }
+        }
+
+        $pageLimit               = 25;
+        $view->data['pageLimit'] = $pageLimit;
+
+        $mapper = AuditMapper::getAll()->with('createdBy');
+
+        /** @var \Modules\Auditor\Models\Audit[] $list */
+        $list = AuditMapper::find(
+            search: $request->getDataString('search'),
+            mapper: $mapper,
+            id: $request->getDataInt('id') ?? 0,
+            secondaryId: $request->getDataString('subid') ?? '',
+            type: $request->getDataString('pType'),
+            pageLimit: empty($request->getDataInt('limit') ?? 0) ? 100 : $request->getDataInt('limit'),
+            sortBy: $request->getDataString('sort_by') ?? '',
+            sortOrder: $request->getDataString('sort_order') ?? OrderType::DESC,
+            searchFields: $searchField,
+            filters: $filterField
+        );
+
+        $view->data['audits'] = $list['data'];
+
+        /** @var \Model\Setting[] $exportTemplates */
+        $exportTemplates = $this->app->appSettings->get(
+            names: [SettingsEnum::DEFAULT_LIST_EXPORTS],
+            module: 'Admin'
+        );
+
+        $templateIds = [];
+        foreach ($exportTemplates as $template) {
+            $templateIds[] = (int) $template->content;
+        }
+
+        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
+        $mediaTemplates = MediaMapper::getAll()
+            ->where('id', $templateIds, 'in')
+            ->execute();
+
+        $tableView         = new TableView($this->app->l11nManager, $request, $response);
+        $tableView->module = 'Auditor';
+        $tableView->theme  = 'Backend';
+        $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
+        $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
+        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
+        $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
+        $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
+        $tableView->setData('hasPrevious', $list['hasPrevious']);
+        $tableView->setData('hasNext', $list['hasNext']);
+
+        $view->data['tableView'] = $tableView;
 
         return $view;
     }

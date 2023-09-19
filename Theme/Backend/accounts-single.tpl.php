@@ -22,7 +22,6 @@ use phpOMS\Localization\ISO4217Enum;
 use phpOMS\Localization\ISO639Enum;
 use phpOMS\Localization\ISO8601EnumArray;
 use phpOMS\Localization\TimeZoneEnumArray;
-use phpOMS\Message\Http\HttpHeader;
 use phpOMS\System\File\Local\Directory;
 use phpOMS\Uri\UriFactory;
 use phpOMS\Utils\Converter\AreaType;
@@ -37,15 +36,26 @@ use phpOMS\Utils\Converter\WeightType;
  */
 $account     = $this->data['account'];
 $permissions = $this->data['permissions'];
-$audits      = $this->data['auditlogs'] ?? [];
 $l11n        = $account->l11n;
 
-$previous = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/account/settings?id={?id}#{\#}'
-    : 'admin/account/settings?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
-$next     = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/account/settings?id={?id}#{\#}'
-    : 'admin/account/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
+$audits = $this->data['audits'] ?? [];
+
+$tableView            = $this->data['tableView'];
+$tableView->id        = 'auditList';
+$tableView->baseUri   = '{/base}/admin/audit/list';
+$tableView->exportUri = '{/api}auditor/list/export';
+$tableView->setObjects($audits);
+
+$previous = $tableView->getPreviousLink(
+    $this->request,
+    empty($tableView->objects) || !$this->getData('hasPrevious') ? null : \reset($tableView->objects)
+);
+
+$next = $tableView->getNextLink(
+    $this->request,
+    empty($tableView->objects) ? null : \end($tableView->objects),
+    $this->getData('hasNext') ?? false
+);
 
 echo $this->data['nav']->render(); ?>
 
@@ -132,7 +142,7 @@ echo $this->data['nav']->render(); ?>
                                                 <input id="iPassword" name="password" type="password">
                                             </span>
                                         </div>
-                                        <div class="ipt-second"> or <button><?= $this->getHtml('Reset'); ?></button></div>
+                                        <div class="ipt-second"><div class="nowrap"> or <button><?= $this->getHtml('Reset'); ?></button></div></div>
                                     </div>
                                 </div>
                             </div>
@@ -210,96 +220,126 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
-                        <form id="fAccountAddPermission" action="<?= UriFactory::build('{/api}admin/account/permission'); ?>" method="put">
-                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?></div>
-                        <div class="portlet-body">
+                <div class="portlet">
+                        <form id="permissionForm"
+                            action="<?= UriFactory::build('{/api}admin/account/permission'); ?>"
+                            data-ui-container="#permissionTable tbody"
+                            data-add-form="permissionForm"
+                            data-add-tpl="#permissionTable tbody .oms-add-tpl-permission"
+                            method="put">
+                            <div class="portlet-head"><?= $this->getHtml('Permissions'); ?></div>
+                            <div class="portlet-body">
+                                <div class="form-group">
+                                    <label for="iPermissionId"><?= $this->getHtml('ID', '0', '0'); ?></label>
+                                    <input id="iPermissionId" name="permissionref" type="text" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                </div>
                                 <div class="form-group">
                                     <label for="iPermissionUnit"><?= $this->getHtml('Unit'); ?></label>
-                                    <input id="iPermissionUnit" name="permissionunit" type="text">
+                                    <select id="iPermissionUnit" name="permissionunit" data-tpl-text="/unit" data-tpl-value="/unit">
+                                        <option value="">
+                                        <?php
+                                        foreach ($this->data['units'] as $unit) : ?>
+                                            <option value="<?= $unit->id; ?>"><?= $this->printHtml($unit->name); ?>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionApp"><?= $this->getHtml('App'); ?></label>
-                                    <input id="iPermissionApp" name="permissionapp" type="text">
+                                    <select id="iPermissionApp" name="permissionapp" data-tpl-text="/app" data-tpl-value="/app">
+                                        <option value="">
+                                        <?php
+                                        foreach ($this->data['apps'] as $app) : ?>
+                                            <option value="<?= $app->id; ?>"><?= $this->printHtml($app->name); ?>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionModule"><?= $this->getHtml('Module'); ?></label>
-                                    <input id="iPermissionModule" name="permissionmodule" type="text">
+                                    <select id="iPermissionModule" name="permissionmodule" data-tpl-text="/module" data-tpl-value="/module">
+                                        <option value="">
+                                        <?php
+                                        foreach ($this->data['modules'] as $module) : ?>
+                                            <option value="<?= $module->name; ?>"><?= $this->printHtml($module->name); ?>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionType"><?= $this->getHtml('Type'); ?></label>
-                                    <input id="iPermissionType" name="permissiontype" type="text">
+                                    <input id="iPermissionType" name="permissiontype" type="text" data-tpl-text="/type" data-tpl-value="/type">
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionElement"><?= $this->getHtml('Element'); ?></label>
-                                    <input id="iPermissionElement" name="permissionelement" type="text">
+                                    <input id="iPermissionElement" name="permissionelement" type="text" data-tpl-text="/ele" data-tpl-value="/ele">
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionComponent"><?= $this->getHtml('Component'); ?></label>
-                                    <input id="iPermissionComponent" name="permissioncomponent" type="text">
+                                    <input id="iPermissionComponent" name="permissioncomponent" type="text" data-tpl-text="/comp" data-tpl-value="/comp">
                                 </div>
                                 <div class="form-group">
                                     <label><?= $this->getHtml('Permission'); ?></label>
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionCreate">
-                                                <input id="iPermissionCreate" type="checkbox" name="permissioncreate" value="<?= PermissionType::CREATE; ?>">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Create'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionCreate">
+                                            <input id="iPermissionCreate" type="checkbox" name="permissioncreate" value="<?= PermissionType::CREATE; ?>" data-tpl-text="/perm/c" data-tpl-value="/perm/c">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Create'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionRead">
-                                                <input id="iPermissionRead" type="checkbox" name="permissionread" value="<?= PermissionType::READ; ?>">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Read'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionRead">
+                                            <input id="iPermissionRead" type="checkbox" name="permissionread" value="<?= PermissionType::READ; ?>" data-tpl-text="/perm/r" data-tpl-value="/perm/r">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Read'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionUpdate">
-                                                <input id="iPermissionUpdate" type="checkbox" name="permissionupdate" value="<?= PermissionType::MODIFY; ?>">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Update'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionUpdate">
+                                            <input id="iPermissionUpdate" type="checkbox" name="permissionupdate" value="<?= PermissionType::MODIFY; ?>" data-tpl-text="/perm/u" data-tpl-value="/perm/u">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Update'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionDelete">
-                                                <input id="iPermissionDelete" type="checkbox" name="permissiondelete" value="<?= PermissionType::DELETE; ?>">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Delete'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionDelete">
+                                            <input id="iPermissionDelete" type="checkbox" name="permissiondelete" value="<?= PermissionType::DELETE; ?>" data-tpl-text="/perm/d" data-tpl-value="/perm/d">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Delete'); ?>
+                                        </label>
+                                    </span>
 
-                                        <span class="checkbox">
-                                            <label class="checkbox" for="iPermissionPermission">
-                                                <input id="iPermissionPermission" type="checkbox" name="permissionpermission" value="<?= PermissionType::PERMISSION; ?>">
-                                                <span class="checkmark"></span>
-                                                <?= $this->getHtml('Permission'); ?>
-                                            </label>
-                                        </span>
+                                    <span class="checkbox">
+                                        <label class="checkbox" for="iPermissionPermission">
+                                            <input id="iPermissionPermission" type="checkbox" name="permissionpermission" value="<?= PermissionType::PERMISSION; ?>" data-tpl-text="/perm/p" data-tpl-value="/perm/p">
+                                            <span class="checkmark"></span>
+                                            <?= $this->getHtml('Permission'); ?>
+                                        </label>
+                                    </span>
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="permissionref" value="<?= $account->id; ?>">
-                                <input type="hidden" name="permissionowner" value="<?= PermissionOwner::ACCOUNT; ?>">
-                                <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP; ?>">
+
+                                <input id="bPermissionAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input id="bPermissionSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                                <input type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12 col-md-6">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="lni lni-download download btn end-xs"></i></div>
-                        <div style="overflow-x:auto;">
-                            <table id="accountPermissions" class="default">
+                        <div class="slider">
+                            <table id="permissionTable" class="default"
+                                data-tag="form"
+                                data-ui-element="tr"
+                                data-add-tpl=".oms-add-tpl-permission"
+                                data-update-form="permissionForm">
                                 <thead>
                                     <tr>
-                                        <td>
                                         <td>
                                         <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                         <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
@@ -310,29 +350,68 @@ echo $this->data['nav']->render(); ?>
                                         <td><?= $this->getHtml('Comp'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                         <td class="wf-100"><?= $this->getHtml('Perm'); ?>
                                 <tbody>
+                                    <template class="oms-add-tpl-permission">
+                                        <tr data-id="" draggable="false">
+                                            <td><i class="fa fa-cogs btn update-form"></i>
+                                                <input id="permissionTable-remove-0" type="checkbox" class="hidden">
+                                                <label for="permissionTable-remove-0" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                                <span class="checked-visibility">
+                                                    <label for="permissionTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                    <label for="permissionTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                                </span>
+                                            <td></td>
+                                            <td data-tpl-text="/unit" data-tpl-value="/unit" data-value=""></td>
+                                            <td data-tpl-text="/app" data-tpl-value="/app" data-value=""></td>
+                                            <td data-tpl-text="/module" data-tpl-value="/module" data-value=""></td>
+                                            <td data-tpl-text="/type" data-tpl-value="/type" data-value=""></td>
+                                            <td data-tpl-text="/ele" data-tpl-value="/ele" data-value=""></td>
+                                            <td data-tpl-text="/comp" data-tpl-value="/comp" data-value=""></td>
+                                            <td>
+                                                <span data-tpl-text="/perm/c" data-tpl-value="/perm/c" data-value=""><span>
+                                                <span data-tpl-text="/perm/r" data-tpl-value="/perm/r" data-value=""><span>
+                                                <span data-tpl-text="/perm/u" data-tpl-value="/perm/u" data-value=""><span>
+                                                <span data-tpl-text="/perm/d" data-tpl-value="/perm/d" data-value=""><span>
+                                                <span data-tpl-text="/perm/p" data-tpl-value="/perm/p" data-value=""><span>
+                                            </td>
+                                        </tr>
+                                    </template>
                                     <?php $c = 0;
-                                        foreach ($permissions as $key => $value) : ++$c;
-                                            $permission = $value->getPermission();
-                                    ?>
-                                    <tr>
-                                        <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><a href="#"><i class="fa fa-cogs"></i></a>
-                                        <td><?= $value->id; ?>
-                                        <td><?= $this->printHtml($value->unit); ?>
-                                        <td><?= $this->printHtml($value->app); ?>
-                                        <td><?= $this->printHtml($value->module); ?>
-                                        <td><?= $this->printHtml($value->category); ?>
-                                        <td><?= $this->printHtml($value->element); ?>
-                                        <td><?= $this->printHtml($value->component); ?>
+                                    foreach ($permissions as $key => $value) : ++$c;
+                                        $permission = $value->getPermission(); ?>
+                                    <tr data-id="<?= $value->id; ?>">
+                                        <td><i class="fa fa-cogs btn update-form"></i>
+                                            <input id="permissionTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                            <label for="permissionTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                            <span class="checked-visibility">
+                                                <label for="permissionTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="permissionTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
+                                        <td data-tpl-text="/unit" data-tpl-value="/unit" data-value="<?= $this->printHtml((string) $value->unit); ?>"><?= $this->printHtml(isset($this->data['units'][$value->unit]) ? $this->data['units'][$value->unit]->name : ''); ?>
+                                        <td data-tpl-text="/app" data-tpl-value="/app" data-value="<?= $this->printHtml((string) $value->app); ?>"><?= $this->printHtml(isset($this->data['apps'][$value->app]) ? $this->data['apps'][$value->app]->name : ''); ?>
+                                        <td data-tpl-text="/module" data-tpl-value="/module" data-value="<?= $this->printHtml($value->module); ?>"><?= $this->printHtml($value->module); ?>
+                                        <td data-tpl-text="/type" data-tpl-value="/type"><?= $this->printHtml((string) $value->category); ?>
+                                        <td data-tpl-text="/ele" data-tpl-value="/ele"><?= $this->printHtml((string) $value->element); ?>
+                                        <td data-tpl-text="/comp" data-tpl-value="/comp"><?= $this->printHtml((string) $value->component); ?>
                                         <td>
-                                            <?= (PermissionType::CREATE | $permission) === $permission ? 'C' : ''; ?>
-                                            <?= (PermissionType::READ | $permission) === $permission ? 'R' : ''; ?>
-                                            <?= (PermissionType::MODIFY | $permission) === $permission ? 'U' : ''; ?>
-                                            <?= (PermissionType::DELETE | $permission) === $permission ? 'D' : ''; ?>
-                                            <?= (PermissionType::PERMISSION | $permission) === $permission ? 'P' : ''; ?>
+                                            <?php if ((PermissionType::CREATE | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/c" data-tpl-value="/perm/c" data-value="<?= PermissionType::CREATE; ?>">C</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::READ | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/r" data-tpl-value="/perm/r" data-value="<?= PermissionType::READ; ?>">R</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::MODIFY | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/u" data-tpl-value="/perm/u" data-value="<?= PermissionType::MODIFY; ?>">U</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::DELETE | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/d" data-tpl-value="/perm/d" data-value="<?= PermissionType::DELETE; ?>">D</span>
+                                            <?php endif; ?>
+                                            <?php if ((PermissionType::PERMISSION | $permission) === $permission) : ?>
+                                                <span data-tpl-text="/perm/p" data-tpl-value="/perm/p" data-value="<?= PermissionType::PERMISSION; ?>">P</span>
+                                            <?php endif; ?>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
-                                        <tr><td colspan="10" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                    <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                                     <?php endif; ?>
                             </table>
                         </div>
@@ -382,7 +461,7 @@ echo $this->data['nav']->render(); ?>
                                     <label for="iCountries"><?= $this->getHtml('Country'); ?></label>
                                     <select id="iCountries" name="settings_country">
                                         <?php foreach ($countryCodes as $code3 => $code2) : ?>
-                                        <option value="<?= $this->printHtml($code2); ?>"<?= $this->printHtml($code2 === $l11n->getCountry() ? ' selected' : ''); ?>><?= $this->printHtml($countries[$code3]); ?>
+                                        <option value="<?= $this->printHtml($code2); ?>"<?= $this->printHtml($code2 === $l11n->country ? ' selected' : ''); ?>><?= $this->printHtml($countries[$code3]); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -810,45 +889,69 @@ echo $this->data['nav']->render(); ?>
 
         <input type="radio" id="c-tab-5" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-5' ? ' checked' : ''; ?>>
         <div class="tab">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="lni lni-download download btn end-xs"></i></div>
-                        <table class="default fixed">
-                            <thead>
-                            <tr>
-                                <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                <td><?= $this->getHtml('Module', 'Auditor'); ?>
-                                <td><?= $this->getHtml('Type', 'Auditor'); ?>
-                                <td><?= $this->getHtml('Trigger', 'Auditor'); ?>
-                                <td><?= $this->getHtml('By', 'Auditor'); ?>
-                                <td><?= $this->getHtml('Ref', 'Auditor'); ?>
-                                <td><?= $this->getHtml('Date', 'Auditor'); ?>
-                            <tbody>
-                            <?php $count = 0;
-                            foreach ($audits as $key => $audit) : ++$count;
-                                $url = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id);
-                            ?>
-                                <tr tabindex="0" data-href="<?= $url; ?>">
-                                    <td><?= $audit->id; ?>
-                                    <td><?= $this->printHtml($audit->module); ?>
-                                    <td><?= $audit->type; ?>
-                                    <td><?= $this->printHtml($audit->trigger); ?>
-                                    <td><?= $this->printHtml($audit->createdBy->login); ?>
-                                    <td><?= $this->printHtml($audit->ref); ?>
-                                    <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
-                            <?php endforeach; ?>
-                            <?php if ($count === 0) : ?>
-                                <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                            <?php endif; ?>
-                        </table>
-                        <div class="portlet-foot">
-                            <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
-                            <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
-                        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="portlet">
+                    <div class="portlet-head"><?= $tableView->renderTitle($this->getHtml('Audits', 'Auditor', 'Backend')); ?></div>
+                    <div class="slider">
+                    <table id="<?= $tableView->id; ?>" class="default sticky">
+                        <thead>
+                        <tr>
+                            <td><?= $tableView->renderHeaderElement('id',  $this->getHtml('ID', '0', '0'), 'number'); ?>
+                            <td><?= $tableView->renderHeaderElement('module', $this->getHtml('Module', 'Auditor', 'Backend'), 'text'); ?>
+                            <td><?= $tableView->renderHeaderElement('action', $this->getHtml('Action', 'Auditor', 'Backend'), 'select',
+                                [
+                                    'create' => $this->getHtml('CREATE', 'Auditor', 'Backend'),
+                                    'modify' => $this->getHtml('UPDATE', 'Auditor', 'Backend'),
+                                    'delete' => $this->getHtml('DELETE', 'Auditor', 'Backend'),
+                                ],
+                                false // don't render sort
+                            ); ?>
+                            <td><?= $tableView->renderHeaderElement('type', $this->getHtml('Type', 'Auditor', 'Backend'), 'number'); ?>
+                            <td class="wf-100"><?= $tableView->renderHeaderElement('trigger', $this->getHtml('Trigger', 'Auditor', 'Backend'), 'text'); ?>
+                            <td><?= $tableView->renderHeaderElement('createdBy', $this->getHtml('By', 'Auditor', 'Backend'), 'text'); ?>
+                            <td><?= $tableView->renderHeaderElement('ref', $this->getHtml('Ref', 'Auditor', 'Backend'), 'text', [], true, true, false); ?>
+                            <td><?= $tableView->renderHeaderElement('createdAt', $this->getHtml('Date', 'Auditor', 'Backend'), 'date'); ?>
+                        <tbody>
+                        <?php
+                        $count = 0;
+                        foreach ($audits as $key => $audit) : ++$count;
+                            $url = UriFactory::build('{/base}/admin/audit/single?id=' . $audit->id); ?>
+                            <tr tabindex="0" data-href="<?= $url; ?>">
+                                <td><?= $audit->id; ?>
+                                <td><?= $this->printHtml($audit->module); ?>
+                                <td><?php if ($audit->old === null) : echo $this->getHtml('CREATE', 'Auditor', 'Backend'); ?>
+                                    <?php elseif ($audit->old !== null && $audit->new !== null) : echo $this->getHtml('UPDATE', 'Auditor', 'Backend'); ?>
+                                    <?php elseif ($audit->new === null) : echo $this->getHtml('DELETE', 'Auditor', 'Backend'); ?>
+                                    <?php else : echo $this->getHtml('UNKNOWN', 'Auditor', 'Backend'); ?>
+                                    <?php endif; ?>
+                                <td><?= $this->printHtml((string) $audit->type); ?>
+                                <td><?= $this->printHtml($audit->trigger); ?>
+                                <td><a class="content" href="<?= UriFactory::build('{/base}/admin/account/settings?id=' . $audit->createdBy->id); ?>"><?= $this->printHtml(
+                                        $this->renderUserName('%3$s %2$s %1$s', [$audit->createdBy->name1, $audit->createdBy->name2, $audit->createdBy->name3, $audit->createdBy->login])
+                                    ); ?></a>
+                                <td><?= $this->printHtml((string) $audit->ref); ?>
+                                <td><?= $audit->createdAt->format('Y-m-d H:i:s'); ?>
+                        <?php endforeach; ?>
+                        <?php if ($count === 0) : ?>
+                            <tr><td colspan="8" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                        <?php endif; ?>
+                    </table>
                     </div>
+                    <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
+                        <div class="portlet-foot">
+                            <?php if ($this->getData('hasPrevious')) : ?>
+                                <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><i class="fa fa-chevron-left"></i></a>
+                            <?php endif; ?>
+                            <?php if ($this->getData('hasNext')) : ?>
+                                <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><i class="fa fa-chevron-right"></i></a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
+        </div>
+
         </div>
     </div>
 </div>
