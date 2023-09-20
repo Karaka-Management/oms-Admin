@@ -786,7 +786,7 @@ final class ApiController extends Controller
 
         // test password complexity
         /** @var \Model\Setting $complexity */
-        $complexity = $this->app->appSettings->get(names: [SettingsEnum::PASSWORD_PATTERN], module: 'Admin');
+        $complexity = $this->app->appSettings->get(names: SettingsEnum::PASSWORD_PATTERN, module: 'Admin');
         if (\preg_match($complexity->content, (string) $request->getData('newpass')) !== 1) {
             $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
             $response->header->status = RequestStatusCode::R_403;
@@ -1666,7 +1666,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Model\Setting $complexity */
-        $complexity = $this->app->appSettings->get(names: [SettingsEnum::PASSWORD_PATTERN], module: 'Admin');
+        $complexity = $this->app->appSettings->get(names: SettingsEnum::PASSWORD_PATTERN, module: 'Admin');
         if ($request->hasData('password')
             && \preg_match($complexity->content, (string) $request->getData('password')) !== 1
         ) {
