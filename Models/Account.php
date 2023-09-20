@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Models;
 
-use phpOMS\Stdlib\Base\Location;
-
 /**
  * Account class.
  *
@@ -61,7 +59,7 @@ class Account extends \phpOMS\Account\Account
     /**
      * Location data.
      *
-     * @var Location[]
+     * @var Address[]
      * @since 1.0.0
      */
     public array $locations = [];

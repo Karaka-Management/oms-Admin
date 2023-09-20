@@ -1938,7 +1938,7 @@ final class ApiController extends Controller
 
         // Create client
         if ($request->hasData('client')) {
-            $client = $this->app->moduleManager->get('ClientManagement')
+            $client = $this->app->moduleManager->get('ClientManagement', 'Api')
                 ->findClientForAccount($account->id, $request->getDataInt('unit'));
 
             if ($client === null) {
@@ -1956,7 +1956,7 @@ final class ApiController extends Controller
                 $internalRequest->setData('vat_id', $request->getDataString('vat_id') ?? '');
                 $internalRequest->setData('unit', $request->getDataInt('unit'));
 
-                $this->app->moduleManager->get('ClientManagement')->apiClientCreate($internalRequest, $internalResponse);
+                $this->app->moduleManager->get('ClientManagement', 'Api')->apiClientCreate($internalRequest, $internalResponse);
             }
         }
 
