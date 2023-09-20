@@ -1643,7 +1643,7 @@ final class ApiController extends Controller
 
         /** @var \Model\Setting $allowed */
         $allowed = $this->app->appSettings->get(
-            names: [SettingsEnum::REGISTRATION_ALLOWED],
+            names: SettingsEnum::REGISTRATION_ALLOWED,
             app: (int) $request->getData('app'),
             module: 'Admin'
         );
