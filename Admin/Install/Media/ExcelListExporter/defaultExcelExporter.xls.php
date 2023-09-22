@@ -16,6 +16,7 @@ require_once __DIR__ . '/../phpOMS/Autoloader.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use phpOMS\Autoloader;
+use phpOMS\Utils\StringUtils;
 
 Autoloader::addPath(__DIR__ . '/../Resources');
 
@@ -30,7 +31,7 @@ $excel = new DefaultExcel();
 foreach ($data as $i => $row) {
     foreach ($row as $j => $cell) {
         // @todo: fix 26 column overflow.
-        $excel->getActiveSheet()->setCellValue(\chr(64 + $j + 1) . ($i + 1), $cell);
+        $excel->getActiveSheet()->setCellValue(StringUtils::intToAlphabet($j + 1) . ($i + 1), $cell);
     }
 }
 
