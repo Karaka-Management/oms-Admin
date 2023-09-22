@@ -23,7 +23,7 @@ namespace Modules\Admin\Models;
  * @since   1.0.0
  *
  * @template T of Account
- * @extends AccountMapper<T>
+ * @extends AccountMapper<Account>
  */
 final class AccountCredentialMapper extends AccountMapper
 {

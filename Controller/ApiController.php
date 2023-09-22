@@ -530,10 +530,10 @@ final class ApiController extends Controller
             [
                 'response' => $this->app->appSettings->get(
                     $request->getDataInt('id'),
-                    $request->getData('name'),
+                    $request->getDataString('name'),
                     $request->getDataInt('unit'),
                     $request->getDataInt('app'),
-                    $request->getData('module'),
+                    $request->getDataString('module'),
                     $request->getDataInt('group'),
                     $request->getDataInt('account')
                 ),
@@ -863,8 +863,8 @@ final class ApiController extends Controller
             ->where('id', $accountId)
             ->execute();
 
-        if (($request->getData('localization_load') ?? '-1') !== '-1') {
-            $locale = \explode('_', $request->getData('localization_load') ?? '');
+        if (($request->getDataString('localization_load') ?? '-1') !== '-1') {
+            $locale = \explode('_', $request->getDataString('localization_load') ?? '');
             $old    = clone $account->l11n;
 
             $account->l11n->loadFromLanguage($locale[0], $locale[1]);
@@ -2032,7 +2032,11 @@ final class ApiController extends Controller
                 $new = clone $old;
 
                 $data = \json_decode($dataChange->data, true);
-                $new->setStatus((int) $data['status']);
+                if (!\is_array($data)) {
+                    break;
+                }
+
+                $new->setStatus((int) ($data['status'] ?? -1));
 
                 $this->updateModel($dataChange->createdBy, $old, $new, AccountMapper::class, 'datachange', $request->getOrigin());
                 $this->deleteModel($dataChange->createdBy, $dataChange, DataChangeMapper::class, 'datachange', $request->getOrigin());
@@ -3313,7 +3317,7 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var \Modules\Admin\Models\Application $application */
+        /** @var \Modules\Admin\Models\App $application */
         $application = AppMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $application, AppMapper::class, 'application', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $application);

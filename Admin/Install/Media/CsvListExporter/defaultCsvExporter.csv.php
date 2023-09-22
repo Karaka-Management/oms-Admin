@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 /** @var \phpOMS\Views\View $this */
+/** @var array $data */
 $data = $this->data['data'] ?? [];
 
 $out = \fopen('php://output', 'w');

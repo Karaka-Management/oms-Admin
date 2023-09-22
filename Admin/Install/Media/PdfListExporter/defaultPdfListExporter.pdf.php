@@ -19,6 +19,7 @@ use phpOMS\Autoloader;
 Autoloader::addPath(__DIR__ . '/../Resources');
 
 /** @var \phpOMS\Views\View $this */
+/** @var \Modules\Media\Models\Collection $media */
 $media = $this->data['media'];
 
 /** @var array<array> $data */

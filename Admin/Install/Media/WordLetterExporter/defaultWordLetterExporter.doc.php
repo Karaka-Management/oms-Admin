@@ -19,8 +19,11 @@ use phpOMS\Autoloader;
 Autoloader::addPath(__DIR__ . '/../Resources');
 
 /** @var \phpOMS\Views\View $this */
+/** @var \Modules\Media\Models\Collection $media */
 $media = $this->data['media'];
-$data  = $this->data['data'] ?? [];
+
+/** @var array $data */
+$data = $this->data['data'] ?? [];
 
 include $media->getSourceByName('template.php')->getAbsolutePath();
 

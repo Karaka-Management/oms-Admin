@@ -71,7 +71,7 @@ class BaseView extends View
     public function render(mixed ...$data) : string
     {
         /** @var array{0:string, 1?:string, 2?:string} $data */
-        $this->form        = $data[0];
+        $this->id          = $data[0];
         $this->name        = $data[1] ?? 'UNDEFINED';
         $this->virtualPath = $data[2] ?? $this->virtualPath;
         $this->permissions = $data[3] ?? $this->permissions;
