@@ -46,10 +46,8 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
             'country' => 'XX',
             'address' => '',
             'state'   => '',
-            'geo'     => [
-                'lat'  => 0,
-                'long' => 0,
-            ],
+            'lat'       => 0.0,
+            'lon'       => 0.0,
             'name'      => '',
             'addition'  => '',
         ];

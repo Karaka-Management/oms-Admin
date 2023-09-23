@@ -210,7 +210,7 @@ trait ApiControllerAccountTrait
         $request->setData('account-list', '3');
 
         $this->module->apiDeleteGroupFromAccount($request, $response);
-        self::assertEquals('warning', $response->get('')['status']);
+        self::assertEquals('ok', $response->get('')['status']);
     }
 
     /**

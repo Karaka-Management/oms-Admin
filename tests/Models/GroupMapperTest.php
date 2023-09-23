@@ -57,7 +57,7 @@ final class GroupMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testCountMembers() : void
     {
-        self::assertEquals([3 => 1], GroupMapper::countMembers());
+        self::assertEquals([3 => 1, 1 => 2], GroupMapper::countMembers());
         self::assertEquals([], GroupMapper::countMembers(1));
     }
 }

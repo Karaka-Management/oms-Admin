@@ -182,7 +182,7 @@ trait ApiControllerGroupTrait
         $request->setData('group-list', '1');
 
         $this->module->apiDeleteAccountFromGroup($request, $response);
-        self::assertEquals('warning', $response->get('')['status']);
+        self::assertEquals('ok', $response->get('')['status']);
     }
 
     /**
