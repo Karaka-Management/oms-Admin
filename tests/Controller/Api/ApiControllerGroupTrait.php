@@ -156,7 +156,7 @@ trait ApiControllerGroupTrait
 
         $request->header->account = 1;
         $request->setData('group', 1);
-        $request->setData('iaccount-idlist', '1');
+        $request->setData('group-list', '1');
 
         $this->module->apiAddAccountToGroup($request, $response);
         self::assertEquals('ok', $response->get('')['status']);
@@ -179,7 +179,7 @@ trait ApiControllerGroupTrait
 
         $request->header->account = 1;
         $request->setData('group', 3);
-        $request->setData('iaccount-idlist', '1');
+        $request->setData('group-list', '1');
 
         $this->module->apiDeleteAccountFromGroup($request, $response);
         self::assertEquals('warning', $response->get('')['status']);

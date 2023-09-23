@@ -68,10 +68,8 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
             'country' => 'Country',
             'address' => 'Some address here',
             'state'   => 'This is a state 123',
-            'geo'     => [
-                'lat'  => 12.1,
-                'long' => 11.2,
-            ],
+            'lat'       => 12.1,
+            'lon'       => 11.2,
             'name'      => 'name',
             'addition'  => 'addition',
         ];
@@ -98,10 +96,8 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
             'country' => 'Country',
             'address' => 'Some address here',
             'state'   => 'This is a state 123',
-            'geo'     => [
-                'lat'  => 12.1,
-                'long' => 11.2,
-            ],
+            'lat'       => 12.1,
+            'lon'       => 11.2,
             'name'      => 'name',
             'addition'  => 'addition',
         ];
