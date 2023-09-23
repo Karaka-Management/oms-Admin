@@ -41,7 +41,8 @@ final class AddressMapperTest extends \PHPUnit\Framework\TestCase
         $address->address = 'Some address here';
         $address->state   = 'This is a state 123';
         $address->setCountry('DE');
-        $address->setGeo(['lat' => 12.1, 'long' => 11.2,]);
+        $address->lat = 12.1;
+        $address->lon = 11.2;
 
         $id = AddressMapper::create()->execute($address);
         self::assertGreaterThan(0, $address->id);

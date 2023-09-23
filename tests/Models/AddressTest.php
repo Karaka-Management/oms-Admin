@@ -84,7 +84,8 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->address = 'Some address here';
         $this->address->state   = 'This is a state 123';
         $this->address->setCountry('Country');
-        $this->address->setGeo(['lat' => 12.1, 'long' => 11.2,]);
+        $this->address->lat = 12.1;
+        $this->address->lon = 11.2;
 
         self::assertEquals($expected, $this->address->toArray());
     }
@@ -113,7 +114,8 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->address = 'Some address here';
         $this->address->state   = 'This is a state 123';
         $this->address->setCountry('Country');
-        $this->address->setGeo(['lat' => 12.1, 'long' => 11.2,]);
+        $this->address->lat = 12.1;
+        $this->address->lon = 11.2;
 
         self::assertEquals($expected, $this->address->jsonSerialize());
         self::assertEquals(\json_encode($this->address->jsonSerialize()), $this->address->serialize());
@@ -122,17 +124,15 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
     public function testUnserialize() : void
     {
         $expected = [
-            'postal'  => '0123456789',
-            'city'    => 'city',
-            'country' => 'Country',
-            'address' => 'Some address here',
-            'state'   => 'This is a state 123',
-            'geo'     => [
-                'lat'  => 12.1,
-                'long' => 11.2,
-            ],
-            'name'      => 'name',
-            'addition'  => 'addition',
+            'postal'   => '0123456789',
+            'city'     => 'city',
+            'country'  => 'Country',
+            'address'  => 'Some address here',
+            'state'    => 'This is a state 123',
+            'lat'      => 12.1,
+            'lon'      => 11.2,
+            'name'     => 'name',
+            'addition' => 'addition',
         ];
 
         $this->address->unserialize(\json_encode($expected));
