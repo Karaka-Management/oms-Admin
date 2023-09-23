@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Фронт',
     'General'     => 'Загальний',
     'Groups'      => 'Групи',
+    'Hooks'       => '',
     'Info'        => 'Інформація',
     'List'        => 'Список',
     'Log'         => 'Журнал',

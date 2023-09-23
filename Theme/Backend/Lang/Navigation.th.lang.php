@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'ด้านหน้า',
     'General'     => 'ทั่วไป',
     'Groups'      => 'กลุ่ม',
+    'Hooks'       => '',
     'Info'        => 'ข้อมูล',
     'List'        => 'รายการ',
     'Log'         => 'บันทึก',

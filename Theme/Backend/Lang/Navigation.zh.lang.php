@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => '正面',
     'General'     => '一般的',
     'Groups'      => '团体',
+    'Hooks'       => '',
     'Info'        => '信息',
     'List'        => '列表',
     'Log'         => '日志',

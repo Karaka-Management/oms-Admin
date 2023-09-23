@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Přední',
     'General'     => 'Všeobecné',
     'Groups'      => 'Skupiny',
+    'Hooks'       => '',
     'Info'        => 'Info.',
     'List'        => 'Seznam',
     'Log'         => 'Log',

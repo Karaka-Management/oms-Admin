@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => '앞',
     'General'     => '일반적인',
     'Groups'      => '여러 떼',
+    'Hooks'       => '',
     'Info'        => '정보',
     'List'        => '목록',
     'Log'         => '통나무',

@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Davanti',
     'General'     => 'Generale',
     'Groups'      => 'Gruppi',
+    'Hooks'       => '',
     'Info'        => 'Informazioni',
     'List'        => 'Elenco',
     'Log'         => 'Tronco d\'albero',

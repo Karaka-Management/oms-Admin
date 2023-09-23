@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'フロント',
     'General'     => '全般的',
     'Groups'      => '団体',
+    'Hooks'       => '',
     'Info'        => '情報',
     'List'        => 'リスト',
     'Log'         => 'ログ',

@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Edestä',
     'General'     => 'Yleinen',
     'Groups'      => 'Ryhmät',
+    'Hooks'       => '',
     'Info'        => 'Tiedot',
     'List'        => 'Lista',
     'Log'         => 'Hirsi',

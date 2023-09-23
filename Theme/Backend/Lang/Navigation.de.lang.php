@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Vorderseite',
     'General'     => 'Allgemein',
     'Groups'      => 'Gruppen',
+    'Hooks'       => '',
     'Info'        => 'Die Info',
     'List'        => 'Aufführen',
     'Log'         => 'Protokoll',

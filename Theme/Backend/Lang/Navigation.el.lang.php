@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Εμπρός',
     'General'     => 'Γενικός',
     'Groups'      => 'Ομάδες',
+    'Hooks'       => '',
     'Info'        => 'Πληροφορία',
     'List'        => 'Λίστα',
     'Log'         => 'Κούτσουρο',

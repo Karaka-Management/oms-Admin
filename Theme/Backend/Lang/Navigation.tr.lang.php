@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Ön',
     'General'     => 'Genel',
     'Groups'      => 'Gruplar',
+    'Hooks'       => '',
     'Info'        => 'Bilgi',
     'List'        => 'Liste',
     'Log'         => 'Kayıt',

@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Främre',
     'General'     => 'Allmän',
     'Groups'      => 'Grupp',
+    'Hooks'       => '',
     'Info'        => 'Info',
     'List'        => 'Lista',
     'Log'         => 'Logga',

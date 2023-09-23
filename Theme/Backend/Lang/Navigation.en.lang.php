@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Front',
     'General'     => 'General',
     'Groups'      => 'Groups',
+    'Hooks'       => 'Hooks',
     'Info'        => 'Info',
     'List'        => 'List',
     'Log'         => 'Log',
@@ -29,6 +30,5 @@ return ['Navigation' => [
     'Pages'       => 'Pages',
     'Permissions' => 'Permissions',
     'Routes'      => 'Routes',
-    'Hooks'       => 'Hooks',
     'Settings'    => 'Settings',
 ]];

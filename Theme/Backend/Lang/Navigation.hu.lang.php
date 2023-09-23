@@ -20,6 +20,7 @@ return ['Navigation' => [
     'Front'       => 'Elülső',
     'General'     => 'Tábornok',
     'Groups'      => 'Csoportok',
+    'Hooks'       => '',
     'Info'        => 'Információ',
     'List'        => 'Lista',
     'Log'         => 'Napló',
