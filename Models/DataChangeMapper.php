@@ -38,7 +38,7 @@ final class DataChangeMapper extends DataMapperFactory
     public const COLUMNS = [
         'data_change_id'         => ['name' => 'data_change_id',     'type' => 'int',    'internal' => 'id'],
         'data_change_type'       => ['name' => 'data_change_type',   'type' => 'string', 'internal' => 'type'],
-        'data_change_hash'       => ['name' => 'data_change_hash',   'type' => 'string', 'internal' => 'hash'],
+        'data_change_hash'       => ['name' => 'data_change_hash',   'type' => 'string', 'internal' => 'hash', 'private' => true],
         'data_change_data'       => ['name' => 'data_change_data',  'type' => 'string', 'internal' => 'data'],
         'data_change_created_by' => ['name' => 'data_change_created_by', 'type' => 'int',    'internal' => 'createdBy'],
         'data_change_created_at' => ['name' => 'data_change_created_at', 'type' => 'DateTimeImmutable',    'internal' => 'createdAt'],
