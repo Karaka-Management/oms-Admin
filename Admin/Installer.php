@@ -63,6 +63,8 @@ final class Installer extends InstallerAbstract
             'database' => __DIR__ . '/../../../phpOMS/Localization/Defaults/localization.sqlite',
         ]);
 
+        $sqlite->connect();
+
         self::installCountries($sqlite, $app->dbPool);
         self::installLanguages($sqlite, $app->dbPool);
         self::installCurrencies($sqlite, $app->dbPool);
