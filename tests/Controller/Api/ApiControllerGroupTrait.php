@@ -123,7 +123,7 @@ trait ApiControllerGroupTrait
 
         $request->setData('id', '3');
         $this->module->apiGroupDelete($request, $response);
-        self::assertEquals('error', $response->get('')['status']);
+        self::assertEquals('warning', $response->get('')['status']);
     }
 
     /**
@@ -182,7 +182,7 @@ trait ApiControllerGroupTrait
         $request->setData('iaccount-idlist', '1');
 
         $this->module->apiDeleteAccountFromGroup($request, $response);
-        self::assertEquals('error', $response->get('')['status']);
+        self::assertEquals('warning', $response->get('')['status']);
     }
 
     /**

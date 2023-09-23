@@ -48,7 +48,7 @@ class Contact
      * @var int
      * @since 1.0.0
      */
-    private int $subtype = 0;
+    public int $subtype = 0;
 
     /**
      * Content.

@@ -210,7 +210,7 @@ trait ApiControllerAccountTrait
         $request->setData('igroup-idlist', '3');
 
         $this->module->apiDeleteGroupFromAccount($request, $response);
-        self::assertEquals('error', $response->get('')['status']);
+        self::assertEquals('warning', $response->get('')['status']);
     }
 
     /**

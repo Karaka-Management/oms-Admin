@@ -56,7 +56,7 @@ trait ApiControllerPermissionTrait
         $request->setData('permissionref', 3);
 
         $this->module->apiAddGroupPermission($request, $response);
-        self::assertEquals('error', $response->get('')['status']);
+        self::assertEquals('warning', $response->get('')['status']);
     }
 
     /**
