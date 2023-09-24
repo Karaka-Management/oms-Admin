@@ -41,11 +41,11 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
     public function testDefault() : void
     {
         $expected = [
-            'postal'  => '',
-            'city'    => '',
-            'country' => 'XX',
-            'address' => '',
-            'state'   => '',
+            'postal'    => '',
+            'city'      => '',
+            'country'   => 'XX',
+            'address'   => '',
+            'state'     => '',
             'lat'       => 0.0,
             'lon'       => 0.0,
             'name'      => '',
@@ -61,11 +61,11 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
     public function testToArray() : void
     {
         $expected = [
-            'postal'  => '0123456789',
-            'city'    => 'city',
-            'country' => 'Country',
-            'address' => 'Some address here',
-            'state'   => 'This is a state 123',
+            'postal'    => '0123456789',
+            'city'      => 'city',
+            'country'   => 'Country',
+            'address'   => 'Some address here',
+            'state'     => 'This is a state 123',
             'lat'       => 12.1,
             'lon'       => 11.2,
             'name'      => 'name',
@@ -89,11 +89,11 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
     public function testJsonSerialize() : void
     {
         $expected = [
-            'postal'  => '0123456789',
-            'city'    => 'city',
-            'country' => 'Country',
-            'address' => 'Some address here',
-            'state'   => 'This is a state 123',
+            'postal'    => '0123456789',
+            'city'      => 'city',
+            'country'   => 'Country',
+            'address'   => 'Some address here',
+            'state'     => 'This is a state 123',
             'lat'       => 12.1,
             'lon'       => 11.2,
             'name'      => 'name',
