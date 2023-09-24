@@ -3584,7 +3584,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $data = $this->createDataChangeFromRequest($request);
+        $data = $this->createDataChangeFromRequest();
         $this->createModel($request->header->account, $data, DataChangeMapper::class, 'data', $request->getOrigin());
         $this->createStandardCreateResponse($request, $response, $data);
     }
@@ -3592,15 +3592,13 @@ final class ApiController extends Controller
     /**
      * Method to create DataChange from request.
      *
-     * @param RequestAbstract $request Request
-     *
      * @return DataChange
      *
      * @todo: implement
      *
      * @since 1.0.0
      */
-    private function createDataChangeFromRequest(RequestAbstract $request) : DataChange
+    private function createDataChangeFromRequest() : DataChange
     {
         $data = new DataChange();
 
@@ -3621,7 +3619,7 @@ final class ApiController extends Controller
     private function validateDataChangeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (false) {
+        if (($val['id'] = ($request->header->account < 1))) {
             return $val;
         }
 
