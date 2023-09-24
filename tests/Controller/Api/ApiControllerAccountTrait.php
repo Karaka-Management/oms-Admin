@@ -244,7 +244,7 @@ trait ApiControllerAccountTrait
         $request->setData('pass', 'invalid');
 
         $this->module->apiLogin($request, $response);
-        self::assertInstanceOf('\phpOMS\Model\Message\Notify', $response->get(''));
+        self::assertEquals('warning', $response->get('')['status']);
     }
 
     /**
