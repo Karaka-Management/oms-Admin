@@ -31,6 +31,9 @@ $word    = new DefaultWord();
 $section = $word->createFirstPage();
 
 $file = \tempnam(\sys_get_temp_dir(), 'oms_');
+if ($file === false) {
+    return;
+}
 
 $writer = \PhpOffice\PhpWord\IOFactory::createWriter($word, 'Word2007');
 $writer->save($file);
