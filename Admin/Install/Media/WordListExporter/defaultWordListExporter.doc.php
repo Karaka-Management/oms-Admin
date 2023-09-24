@@ -57,6 +57,7 @@ if ($file === false) {
     return '';
 }
 
+$writer = \PhpOffice\PhpWord\IOFactory::createWriter($word, 'Word2007');
 $writer->save($file);
 
 echo \file_get_contents($file);
