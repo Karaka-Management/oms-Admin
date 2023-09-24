@@ -712,7 +712,7 @@ final class ApiController extends Controller
      */
     private function createSettingFromRequest(RequestAbstract $request) : Setting
     {
-        $setting = new Setting(
+        return new Setting(
             id: $request->getDataInt('id') ?? 0,
             name: $request->getDataString('name') ?? '',
             content: $request->getDataString('content') ?? '',
@@ -724,8 +724,6 @@ final class ApiController extends Controller
             account: $request->getDataInt('account'),
             isEncrypted: $request->getDataBool('encrypted') ?? false
         );
-
-        return $setting;
     }
 
     /**
@@ -1845,17 +1843,17 @@ final class ApiController extends Controller
             $request->setData('status', AccountStatus::INACTIVE, true);
             $request->setData('type', AccountType::USER, true);
             $request->setData('create_profile', (string) true);
-            $request->setData('name1', !$request->hasData('name1')
-                ? (!$request->hasData('user')
-                    ? \explode('@', $request->getDataString('email') ?? '')[0]
-                    : $request->getDataString('user')
+            $request->setData('name1', $request->hasData('name1')
+                ? ($request->getDataString('name1')
                 )
-                : $request->getDataString('name1')
+                : ($request->hasData('user')
+                    ? $request->getDataString('user')
+                    : \explode('@', $request->getDataString('email') ?? '')[0])
                 , true);
 
-            $request->setData('user', !$request->hasData('user')
-                ? $request->getDataString('email')
-                : $request->getDataString('user')
+            $request->setData('user', $request->hasData('user')
+                ? $request->getDataString('user')
+                : $request->getDataString('email')
                 , true);
 
             $this->apiAccountCreate($request, $response, $data);
@@ -3600,9 +3598,7 @@ final class ApiController extends Controller
      */
     private function createDataChangeFromRequest() : DataChange
     {
-        $data = new DataChange();
-
-        return $data;
+        return new DataChange();
     }
 
     /**

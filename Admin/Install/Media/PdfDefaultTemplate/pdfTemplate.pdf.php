@@ -161,11 +161,7 @@ class DefaultPdf extends TCPDF
             $dx = ($this->original_lMargin - $this->original_rMargin);
         }
 
-        if ($this->rtl) {
-            $x = $this->w + $dx;
-        } else {
-            $x = 0 + $dx;
-        }
+        $x = $this->rtl ? $this->w + $dx : 0 + $dx;
 
         $this->printTemplate($this->header_xobjid, $x, 0, 0, 0, '', '', false);
         if ($this->header_xobj_autoreset) {
