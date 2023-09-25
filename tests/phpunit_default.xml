@@ -19,6 +19,7 @@
       <directory>../**/Admin/Hooks*</directory>
       <directory>../**/Admin/Install*</directory>
       <directory>../Media/Files*</directory>
+      <directory>../tests/Admin*</directory>
     </exclude>
     <report>
       <clover outputFile="coverage.xml"/>
@@ -26,9 +27,6 @@
     </report>
   </coverage>
   <testsuites>
-    <testsuite name="Install">
-      <directory>../MainRepository/Install/tests*</directory>
-    </testsuite>
     <testsuite name="Module">
       <directory>../tests*</directory>
     </testsuite>
