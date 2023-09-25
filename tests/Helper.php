@@ -22,9 +22,9 @@ use phpOMS\Utils\RnG\Email;
 use phpOMS\Utils\RnG\Text;
 
 class Helper {
-    public static function createAccounts(int $n = 10)
+    public static function createAccounts(int $n = 10) : void
     {
-        $LOREM = \array_slice(Text::LOREM_IPSUM, 0, 25);
+        $LOREM       = \array_slice(Text::LOREM_IPSUM, 0, 25);
         $LOREM_COUNT = \count($LOREM) - 1;
 
         for ($i = 0; $i < $n; ++$i) {
