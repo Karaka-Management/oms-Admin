@@ -22,10 +22,12 @@ use phpOMS\Utils\RnG\Email;
 use phpOMS\Utils\RnG\Text;
 
 class Helper {
-    public static function createAccounts(int $n = 10) : void
+    public static function createAccounts(int $n = 10) : array
     {
         $LOREM       = \array_slice(Text::LOREM_IPSUM, 0, 25);
         $LOREM_COUNT = \count($LOREM) - 1;
+
+        $accounts = [];
 
         for ($i = 0; $i < $n; ++$i) {
             $account = new Account();
@@ -40,6 +42,10 @@ class Helper {
             $account->setType(AccountType::USER);
 
             AccountMapper::create()->execute($account);
+
+            $accounts[] = $account;
         }
+
+        return $accounts;
     }
 }
