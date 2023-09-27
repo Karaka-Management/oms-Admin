@@ -100,7 +100,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -108,7 +108,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiLogin(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiLogin(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
@@ -158,7 +158,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -166,7 +166,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiLogout(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiLogout(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
@@ -247,7 +247,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -255,7 +255,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiForgot(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiForgot(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Account $account */
         $account = $request->hasData('user')
@@ -381,7 +381,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -389,7 +389,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiResetPassword(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiResetPassword(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Model\Setting[] $forgotten */
         $forgotten = $this->app->appSettings->get(
@@ -515,7 +515,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -523,7 +523,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSettingsGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $response->set(
             $request->uri->__toString(),
@@ -546,7 +546,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -554,7 +554,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAppConfigSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAppConfigSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $dataSettings = $request->getDataJson('settings');
 
@@ -574,7 +574,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -582,7 +582,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSettingsSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $dataSettings = $request->getDataJson('settings');
 
@@ -660,7 +660,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -668,7 +668,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSettingsCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateSettingsCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -731,7 +731,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -739,7 +739,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsAccountPasswordSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSettingsAccountPasswordSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         // has required data
         if (!empty($val = $this->validatePasswordUpdate($request))) {
@@ -826,7 +826,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -834,7 +834,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $requestAccount = $request->header->account;
         $accountId      = (int) $request->getData('account_id');
@@ -972,7 +972,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -980,7 +980,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $uploadedFiles = $request->files;
 
@@ -1000,7 +1000,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1008,7 +1008,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiApplicationCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiApplicationCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateApplicationCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1099,7 +1099,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1107,7 +1107,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiInstallApplication(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $appManager = new ApplicationManager($this->app);
 
@@ -1165,7 +1165,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1173,7 +1173,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Group $group */
         $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1185,7 +1185,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1193,7 +1193,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Group $old */
         $old = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1248,7 +1248,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1256,7 +1256,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateGroupCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1296,7 +1296,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1304,7 +1304,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateGroupDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1352,7 +1352,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1360,7 +1360,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Group[] $groups */
         $groups = GroupMapper::getAll()
@@ -1379,7 +1379,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1387,7 +1387,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var Account $account */
         $account = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -1399,7 +1399,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1407,7 +1407,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Account[] $accounts */
         $accounts =  AccountMapper::getAll()
@@ -1430,7 +1430,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1438,7 +1438,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountGroupFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var Account[] $accounts */
         $accounts = AccountMapper::getAll()
@@ -1508,7 +1508,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1516,7 +1516,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateAccountCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1605,7 +1605,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -1613,7 +1613,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountRegister(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountRegister(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if ($request->header->account === 0) {
             $request->header->account = 1;
@@ -1997,7 +1997,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2006,7 +2006,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiDataChange(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiDataChange(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateDataChange($request))) {
             $response->data['data_change'] = new FormValidation($val);
@@ -2155,7 +2155,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2163,7 +2163,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var Account $account */
         $account = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -2176,7 +2176,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2184,7 +2184,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var Account $old */
         $old = AccountMapper::get()
@@ -2229,7 +2229,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2237,7 +2237,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiModuleStatusUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $module = $request->getDataString('module') ?? '';
         $status = (int) $request->getData('status');
@@ -2424,7 +2424,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2432,7 +2432,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var AccountPermission $account */
         $account = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -2444,7 +2444,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2452,7 +2452,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var GroupPermission $group */
         $group = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
@@ -2464,7 +2464,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2472,7 +2472,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupPermissionDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateGroupPermissionDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2500,7 +2500,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2508,7 +2508,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountPermissionDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateAccountPermissionDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2528,7 +2528,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2536,7 +2536,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAddGroupPermission(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2570,7 +2570,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2578,7 +2578,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2677,7 +2677,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2685,7 +2685,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAccountPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateAccountPermissionUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2709,7 +2709,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2717,7 +2717,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiGroupPermissionUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateGroupPermissionUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2775,7 +2775,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2783,7 +2783,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddGroupToAccount(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAddGroupToAccount(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateAddGroupToAccount($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2825,7 +2825,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2833,7 +2833,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiAddAccountToGroup(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiAddAccountToGroup(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateAddAccountToGroup($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -2875,7 +2875,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2883,7 +2883,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiDeleteGroupFromAccount(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiDeleteGroupFromAccount(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $account = (int) $request->getData('account');
         $groups  = \array_map('intval', $request->getDataList('igroup-idlist'));
@@ -2904,7 +2904,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2912,7 +2912,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiDeleteAccountFromGroup(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiDeleteAccountFromGroup(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $group    = (int) $request->getData('group');
         $accounts = \array_map('intval', $request->getDataList('iaccount-idlist'));
@@ -2933,7 +2933,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2941,7 +2941,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiReInit(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiReInit(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $directories = \glob(__DIR__ . '/../../../Web/*', \GLOB_ONLYDIR);
 
@@ -2976,7 +2976,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -2984,7 +2984,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         // this is only a temp... in the future this logic will change but for current purposes this is the easiest way to implement updates
         $request = new HttpRequest(new HttpUri('https://api.github.com/repos/Karaka/Updates/contents'));
@@ -3028,7 +3028,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3036,7 +3036,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiUpdateFile(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiUpdateFile(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $this->apiUpdate([[
             'name'         => 'temp.json',
@@ -3103,7 +3103,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3111,7 +3111,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiContactCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiContactCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateContactCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -3182,7 +3182,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3190,7 +3190,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiSettingsDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiSettingsDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateSettingsDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -3230,7 +3230,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3238,7 +3238,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiApplicationUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiApplicationUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateApplicationUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -3298,7 +3298,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3306,7 +3306,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiApplicationDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiApplicationDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateApplicationDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -3448,7 +3448,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3456,7 +3456,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiContactUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiContactUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateContactUpdate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -3516,7 +3516,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3524,7 +3524,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiContactDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiContactDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateContactDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -3565,7 +3565,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3573,7 +3573,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiDataChangeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiDataChangeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateDataChangeCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -3627,7 +3627,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -3635,7 +3635,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiDataChangeDelete(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiDataChangeDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateDataChangeDelete($request))) {
             $response->header->status = RequestStatusCode::R_400;
