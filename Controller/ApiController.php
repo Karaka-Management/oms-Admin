@@ -2098,16 +2098,18 @@ final class ApiController extends Controller
      */
     private function createProfileForAccount(Account $account, RequestAbstract $request) : void
     {
+        // @todo: why do we need the following lines?
         if (($request->getDataString('password') ?? '') === ''
             || ($request->getDataString('user') ?? '') === ''
         ) {
             return;
         }
 
-        $this->app->moduleManager->get('Profile')->apiProfileCreateDbEntry(
-            new \Modules\Profile\Models\Profile($account),
-            $request
-        );
+        $request->setData('iaccount-idlist', $account->id);
+
+        $internalResponse = new HttpResponse();
+
+        $this->app->moduleManager->get('Profile', 'Api')->apiProfileCreate($request, $internalResponse);
     }
 
     /**
