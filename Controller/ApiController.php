@@ -1859,7 +1859,7 @@ final class ApiController extends Controller
             $this->apiAccountCreate($request, $response, $data);
 
             /** @var Account $account */
-            $account = $response->get($request->uri->__toString())['response'];
+            $account = $response->getDataArray($request->uri->__toString())['response'];
 
             // Create confirmation pending entry
             $dataChange            = new DataChange();
