@@ -1865,10 +1865,7 @@ final class ApiController extends Controller
             $dataChange            = new DataChange();
             $dataChange->type      = 'account';
             $dataChange->createdBy = $account->id;
-
-            $dataChange->data = \json_encode([
-                'status' => AccountStatus::ACTIVE,
-            ]);
+            $dataChange->data      = '{"status": ' . AccountStatus::ACTIVE . '}';
 
             $tries = 0;
             do {
@@ -2136,8 +2133,8 @@ final class ApiController extends Controller
         if (!$request->hasData('locale')) {
             $account->l11n = Localization::fromJson(
                     $this->app->l11nServer === null
-                        ? $request->header->l11n->jsonSerialize()
-                        : $this->app->l11nServer->jsonSerialize()
+                        ? $request->header->l11n->toArray()
+                        : $this->app->l11nServer->toArray()
                 );
         } else {
             $locale = \explode('_', $request->getdataString('locale') ?? '');
