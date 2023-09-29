@@ -144,11 +144,11 @@ class DefaultPdf extends TCPDF
             // Set Title
             $this->setFont('helvetica', 'B', 20);
             $this->setX(15 + 15 + 3);
-            $this->Cell(0, 14, $this->header_title, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+            $this->Cell(0, 14, $this->header_title, 0, 0, 'L', false, '', 0, false, 'T', 'M');
 
             $this->setFont('helvetica', '', 10);
             $this->setX(15 + 15 + 3);
-            $this->Cell(0, 26, $this->header_string, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+            $this->Cell(0, 26, $this->header_string, 0, 0, 'L', false, '', 0, false, 'T', 'M');
 
             $this->endTemplate();
         }
@@ -182,7 +182,7 @@ class DefaultPdf extends TCPDF
         $this->setY(-25);
 
         $this->setFont('helvetica', 'I', 7);
-        $this->Cell($this->getPageWidth() - 22, 0, $this->lang[$this->language]['Page'] . ' '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+        $this->Cell($this->getPageWidth() - 22, 0, $this->lang[$this->language]['Page'] . ' '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, 0, 'R', false, '', 0, false, 'T', 'M');
         $this->Ln();
         $this->Ln();
 
