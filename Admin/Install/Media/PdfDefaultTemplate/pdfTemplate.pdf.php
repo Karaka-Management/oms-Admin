@@ -22,7 +22,7 @@ declare(strict_types=1);
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @link ../../../../../../Resources/tcpdf/tcpdf.php
+ * @link ../../../../../../Resources/tcpdf/TCPDF.php
  */
 class DefaultPdf extends TCPDF
 {
