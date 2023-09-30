@@ -50,8 +50,20 @@ class DefaultPdf extends TCPDF
      */
     public int $sideMargin = 15;
 
+    /**
+     * Template language
+     *
+     * @var string
+     * @since 1.0.0
+     */
     public string $language = 'en';
 
+    /**
+     * Language components
+     *
+     * @var array<string, array<string, string>>
+     * @since 1.0.0
+     */
     public array $lang = [
         'en' => [
             'Page'        => 'Page',
@@ -71,6 +83,12 @@ class DefaultPdf extends TCPDF
         ],
     ];
 
+    /**
+     * Bill attributes
+     *
+     * @var array<string, string>
+     * @since 1.0.0
+     */
     public array $attributes = [
         'logo'         => __DIR__ . '/../Web/Backend/img/logo.png',
         'title_name'   => 'Jingga',
