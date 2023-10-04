@@ -152,6 +152,28 @@ class AccountMapper extends DataMapperFactory
             return new NullAccount();
         }
 
+        /*
+            select *
+            from account
+            left join l11n on account.account_localization = l11n.l11n_id
+            where account.account_id = ((int) $id);
+        */
+
+        /*
+            select *
+            from account_permission
+            where account_permission.account_permission_account = ((int) $id)
+        */
+
+        /*
+            select group_id, group_name, group_permission.*
+            from `group`
+            join group_permission on `group`.group_id = group_permission.group_permission_group
+            join account_group on group_permission.group_permission_group = account_group.account_group_group
+				AND account_group.account_group_account = ((int) $id)
+			where `group`.group_status = 1;
+        */
+
         /** @var \Modules\Admin\Models\Account $account */
         $account = self::get()
             ->with('groups')
