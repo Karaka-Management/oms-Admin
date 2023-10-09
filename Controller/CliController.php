@@ -14,9 +14,11 @@ declare(strict_types=1);
 
 namespace Modules\Admin\Controller;
 
+use Model\SettingMapper;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
+use phpOMS\Security\EncryptionHelper;
 use phpOMS\Views\View;
 
 /**
@@ -76,9 +78,9 @@ final class CliController extends Controller
     public function cliRunEvent(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $event = $this->app->eventManager->triggerSimilar(
-            $request->getDataString('g') ?? '',
-            $request->getDataString('i') ?? '',
-            $request->getDataJson('d')
+            $request->getDataString('-g') ?? '',
+            $request->getDataString('-i') ?? '',
+            $request->getDataJson('-d')
         );
 
         $view = new View($this->app->l11nManager, $request, $response);
@@ -87,5 +89,69 @@ final class CliController extends Controller
         $view->data['event'] = $event;
 
         return $view;
+    }
+
+    /**
+     * Find and run events
+     *
+     * This is mostly used by the web applications to offload searching for event hooks and of course running the events which might take a long time for complex events.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface Response can be rendered
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function cliEncryptionChange(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $event = $this->app->eventManager->trigger(
+            'Module:' . self::NAME . '-encryption-change', '', [
+                'old' => $request->getDataString('-old') ?? '',
+                'new' => $request->getDataString('-new') ?? '',
+            ]
+        );
+
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/Admin/Theme/Cli/encryption-change');
+
+        $view->data['event'] = $event;
+
+        return $view;
+    }
+
+    /**
+     * Api method to make a call to the cli app
+     *
+     * @param mixed ...$data Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function runEncryptionChangeFromHook(mixed ...$data) : void
+    {
+        // @todo: start read only mode
+        $mapper = SettingMapper::yield()
+            ->where('isEncrypted', true);
+
+        foreach ($mapper->execute() as $setting) {
+            $decrypted = empty($data['old']) || empty($setting->content)
+                ? $setting->content
+                : EncryptionHelper::decryptShared($setting->content ?? '', $data['old']);
+
+            $encrypted = empty($data['new']) || empty($decrypted)
+                ? $decrypted
+                : EncryptionHelper::encryptShared($decrypted ?? '', $data['new']);
+
+            $setting->content = $encrypted;
+
+            SettingMapper::update()->execute($setting);
+        }
+        // @todo: end read only mode
     }
 }

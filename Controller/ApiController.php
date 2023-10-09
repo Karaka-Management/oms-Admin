@@ -59,7 +59,6 @@ use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestMethod;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\Http\Rest;
-use phpOMS\Message\Mail\Email;
 use phpOMS\Message\Mail\MailHandler;
 use phpOMS\Message\Mail\Smtp;
 use phpOMS\Message\Mail\SubmitType;

@@ -38,8 +38,8 @@ trait ApiControllerAccountTrait
 
         $this->module->apiAccountGet($request, $response);
 
-        self::assertEquals('admin', $response->get('')['response']->login);
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertEquals('admin', $response->getDataArray('')['response']->login);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -60,8 +60,8 @@ trait ApiControllerAccountTrait
         $this->module->apiAccountUpdate($request, $response);
         $this->module->apiAccountGet($request, $response);
 
-        self::assertEquals('oms@karaka.de', $response->get('')['response']->getEmail());
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertEquals('oms@karaka.de', $response->getDataArray('')['response']->getEmail());
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -78,8 +78,8 @@ trait ApiControllerAccountTrait
         $request->setData('search', 'admin');
 
         $this->module->apiAccountFind($request, $response);
-        self::assertCount(1, $response->get(''));
-        self::assertEquals('admin', $response->get('')[0]->name1);
+        self::assertCount(1, $response->getData(''));
+        self::assertEquals('admin', $response->getData('')[0]->name1);
     }
 
     /**
@@ -102,8 +102,8 @@ trait ApiControllerAccountTrait
 
         $this->module->apiAccountCreate($request, $response);
 
-        self::assertEquals('guest', $response->get('')['response']->login);
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertEquals('guest', $response->getDataArray('')['response']->login);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -126,8 +126,8 @@ trait ApiControllerAccountTrait
 
         $this->module->apiAccountCreate($request, $response);
 
-        self::assertEquals('guest2', $response->get('')['response']->login);
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertEquals('guest2', $response->getDataArray('')['response']->login);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -148,10 +148,10 @@ trait ApiControllerAccountTrait
         $request->setData('status', AccountStatus::INACTIVE);
 
         $this->module->apiAccountCreate($request, $response);
-        $request->setData('id', $response->get('')['response']->id);
+        $request->setData('id', $response->getDataArray('')['response']->id);
         $this->module->apiAccountDelete($request, $response);
 
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -187,13 +187,13 @@ trait ApiControllerAccountTrait
         $request->setData('account-list', '1');
 
         $this->module->apiAddGroupToAccount($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
 
         // remove
         $response = new HttpResponse();
 
         $this->module->apiDeleteGroupFromAccount($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
     }
 
     /**
@@ -210,7 +210,7 @@ trait ApiControllerAccountTrait
         $request->setData('account-list', '3');
 
         $this->module->apiDeleteGroupFromAccount($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
     }
 
     /**
@@ -227,7 +227,7 @@ trait ApiControllerAccountTrait
         $request->setData('pass', 'orange');
 
         $this->module->apiLogin($request, $response);
-        self::assertInstanceOf('\phpOMS\Model\Message\Reload', $response->get(''));
+        self::assertInstanceOf('\phpOMS\Model\Message\Reload', $response->getData(''));
     }
 
     /**
@@ -244,7 +244,7 @@ trait ApiControllerAccountTrait
         $request->setData('pass', 'invalid');
 
         $this->module->apiLogin($request, $response);
-        self::assertEquals('warning', $response->get('')['status']);
+        self::assertEquals('warning', $response->getData('')['status']);
     }
 
     /**
@@ -261,6 +261,6 @@ trait ApiControllerAccountTrait
         $request->setData('pass', 'invalid');
 
         $this->module->apiLogout($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
     }
 }

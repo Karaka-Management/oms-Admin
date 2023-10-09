@@ -16,4 +16,10 @@ return [
             'verb' => RouteVerb::ANY,
         ],
     ],
+    '^/admin/encryption/change.*$' => [
+        [
+            'dest' => '\Modules\Admin\Controller\CliController:cliEncryptionChange',
+            'verb' => RouteVerb::ANY,
+        ],
+    ],
 ];

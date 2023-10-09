@@ -37,8 +37,8 @@ trait ApiControllerGroupTrait
 
         $this->module->apiGroupGet($request, $response);
 
-        self::assertEquals('admin', $response->get('')['response']->name);
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertEquals('admin', $response->getDataArray('')['response']->name);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -58,7 +58,7 @@ trait ApiControllerGroupTrait
         $this->module->apiGroupUpdate($request, $response);
         $this->module->apiGroupGet($request, $response);
 
-        self::assertEquals('root', $response->get('')['response']->name);
+        self::assertEquals('root', $response->getDataArray('')['response']->name);
 
         $request->setData('name', 'admin', true);
         $this->module->apiGroupUpdate($request, $response);
@@ -78,8 +78,8 @@ trait ApiControllerGroupTrait
         $request->setData('search', 'admin');
 
         $this->module->apiGroupFind($request, $response);
-        self::assertCount(1, $response->get(''));
-        self::assertEquals('admin', $response->get('')[0]->name);
+        self::assertCount(1, $response->getData(''));
+        self::assertEquals('admin', $response->getData('')[0]->name);
     }
 
     /**
@@ -99,14 +99,14 @@ trait ApiControllerGroupTrait
 
         $this->module->apiGroupCreate($request, $response);
 
-        self::assertEquals('test', $response->get('')['response']->name);
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertEquals('test', $response->getDataArray('')['response']->name);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
 
         // test delete
-        $request->setData('id', $response->get('')['response']->id);
+        $request->setData('id', $response->getDataArray('')['response']->id);
         $this->module->apiGroupDelete($request, $response);
 
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -123,7 +123,7 @@ trait ApiControllerGroupTrait
 
         $request->setData('id', '3');
         $this->module->apiGroupDelete($request, $response);
-        self::assertEquals('warning', $response->get('')['status']);
+        self::assertEquals('warning', $response->getData('')['status']);
     }
 
     /**
@@ -159,13 +159,13 @@ trait ApiControllerGroupTrait
         $request->setData('group-list', '1');
 
         $this->module->apiAddAccountToGroup($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
 
         // remove
         $response = new HttpResponse();
 
         $this->module->apiDeleteAccountFromGroup($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
     }
 
     /**
@@ -182,7 +182,7 @@ trait ApiControllerGroupTrait
         $request->setData('group-list', '1');
 
         $this->module->apiDeleteAccountFromGroup($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
     }
 
     /**
@@ -199,8 +199,8 @@ trait ApiControllerGroupTrait
         $request->setData('search', 'admin');
 
         $this->module->apiAccountGroupFind($request, $response);
-        self::assertCount(2, $response->get(''));
-        self::assertEquals('admin', $response->get('')[0]['name'][0] ?? '');
-        self::assertEquals('admin', $response->get('')[1]['name'][0] ?? '');
+        self::assertCount(2, $response->getData(''));
+        self::assertEquals('admin', $response->getData('')[0]['name'][0] ?? '');
+        self::assertEquals('admin', $response->getData('')[1]['name'][0] ?? '');
     }
 }

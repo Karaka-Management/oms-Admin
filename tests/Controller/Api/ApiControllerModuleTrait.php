@@ -37,19 +37,19 @@ trait ApiControllerModuleTrait
 
         $request->setData('status', ModuleStatusUpdateType::INSTALL);
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
 
         $request->setData('status', ModuleStatusUpdateType::ACTIVATE, true);
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
 
         $request->setData('status', ModuleStatusUpdateType::DEACTIVATE, true);
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
 
         $request->setData('status', ModuleStatusUpdateType::UNINSTALL, true);
         $this->module->apiModuleStatusUpdate($request, $response);
-        self::assertEquals('ok', $response->get('')['status']);
+        self::assertEquals('ok', $response->getData('')['status']);
     }
 
     /**
@@ -68,7 +68,7 @@ trait ApiControllerModuleTrait
         $this->module->apiModuleStatusUpdate($request, $response);
 
         self::assertEquals(RequestStatusCode::R_403, $response->header->status);
-        self::assertNull($response->get('module_stutus_update'));
+        self::assertNull($response->getData('module_stutus_update'));
     }
 
     /**

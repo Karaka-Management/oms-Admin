@@ -309,7 +309,7 @@ final class Installer extends InstallerAbstract
 
         $module->apiSettingsCreate($request, $response);
 
-        $responseData = $response->get('');
+        $responseData = $response->getData('');
         if (!\is_array($responseData)) {
             return [];
         }

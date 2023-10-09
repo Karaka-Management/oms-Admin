@@ -36,7 +36,7 @@ trait ApiControllerSettingsTrait
         $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
 
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('90', $response->get('')['response']->content);
+        self::assertEquals('90', $response->getDataArray('')['response']->content);
     }
 
     /**
@@ -55,7 +55,7 @@ trait ApiControllerSettingsTrait
 
         $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
         $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('60', $response->get('')['response']->content);
+        self::assertEquals('60', $response->getDataArray('')['response']->content);
 
         $request->setData('settings', \json_encode([['name' => SettingsEnum::PASSWORD_INTERVAL, 'content' => '90']]), true);
         $this->module->apiSettingsSet($request, $response);
@@ -76,13 +76,13 @@ trait ApiControllerSettingsTrait
         $request->setData('localization_load', 'de_DE');
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
-        $l11n = $response->get('')['response'];
+        $l11n = $response->getDataArray('')['response'];
         self::assertEquals($l11n->language, 'de');
 
         $request->setData('localization_load', 'en_US', true);
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
-        $l11n = $response->get('')['response'];
+        $l11n = $response->getDataArray('')['response'];
         self::assertEquals($l11n->language, 'en');
     }
 
@@ -106,7 +106,7 @@ trait ApiControllerSettingsTrait
 
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
-        $l11n = $response->get('')['response'];
+        $l11n = $response->getDataArray('')['response'];
         self::assertEquals($l11n->getCurrency(), 'EUR');
     }
 
