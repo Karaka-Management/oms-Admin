@@ -633,20 +633,7 @@ final class ApiController extends Controller
             $new->group       = $group ?? $new->group;
             $new->account     = $account ?? $new->account;
 
-            // @todo: this function call seems stupid, it should just pass the $new object.
-            $this->app->appSettings->set([
-                [
-                    'id'          => $new->id,
-                    'name'        => $new->name,
-                    'content'     => $new->content,
-                    'unit'        => $new->unit,
-                    'app'         => $new->app,
-                    'module'      => $new->module,
-                    'group'       => $new->group,
-                    'account'     => $new->account,
-                    'isEncrypted' => $new->isEncrypted,
-                ],
-            ], false);
+            $this->app->appSettings->set([$new], false);
 
             $this->updateModel($request->header->account, $old, $new, SettingMapper::class, 'settings', $request->getOrigin());
         }
@@ -1332,8 +1319,6 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
-     *
      * @since 1.0.0
      */
     private function validateGroupDelete(RequestAbstract $request) : array
@@ -1981,6 +1966,7 @@ final class ApiController extends Controller
             || ($val['unit'] = !$request->hasData('unit'))
             || ($val['app'] = !$request->hasData('app'))
             || ($val['password'] = !$request->hasData('password'))
+            || ($val['terms'] = (($request->getDataBool('terms_required') ?? false) && ($request->getDataBool('terms') ?? false)))
         ) {
             return $val;
         }
@@ -2094,13 +2080,6 @@ final class ApiController extends Controller
      */
     private function createProfileForAccount(Account $account, RequestAbstract $request) : void
     {
-        // @todo: why do we need the following lines?
-        if (($request->getDataString('password') ?? '') === ''
-            || ($request->getDataString('user') ?? '') === ''
-        ) {
-            return;
-        }
-
         $request->setData('iaccount-idlist', $account->id);
 
         $internalResponse = new HttpResponse();
@@ -3209,8 +3188,6 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
-     *
      * @since 1.0.0
      */
     private function validateSettingsDelete(RequestAbstract $request) : array
@@ -3277,8 +3254,6 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
-     *
      * @since 1.0.0
      */
     private function validateApplicationUpdate(RequestAbstract $request) : array
@@ -3325,8 +3300,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo: implement
      *
      * @since 1.0.0
      */

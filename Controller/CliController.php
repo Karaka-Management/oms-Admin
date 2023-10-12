@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace Modules\Admin\Controller;
 
 use Model\SettingMapper;
+use Modules\Admin\Models\SettingsEnum;
+use phpOMS\Application\ApplicationStatus;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
@@ -135,7 +137,14 @@ final class CliController extends Controller
      */
     public function runEncryptionChangeFromHook(mixed ...$data) : void
     {
-        // @todo: start read only mode
+        /** @var \Model\Setting $setting */
+        $setting = $this->app->appSettings->get(null, names: SettingsEnum::LOGIN_STATUS);
+        $oldMode = $setting->content;
+
+        // Enter read only mode
+        $setting->content = (string) ApplicationStatus::READ_ONLY;
+        $this->app->appSetting->save([$setting]);
+
         $mapper = SettingMapper::yield()
             ->where('isEncrypted', true);
 
@@ -152,6 +161,9 @@ final class CliController extends Controller
 
             SettingMapper::update()->execute($setting);
         }
-        // @todo: end read only mode
+
+        // Restore old mode
+        $setting->content = $oldMode;
+        $this->app->appSetting->save([$setting]);
     }
 }

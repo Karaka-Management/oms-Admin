@@ -188,7 +188,7 @@ return ['Admin' => [
     'Zip'                      => 'Zip.',
     'active'                   => '',
     'available'                => '',
-    'i:LoginRetries'           => "Mængden af \u{200b}\u{200b}tilladte retries (-1 = ubegrænset)",
+    'i:LoginRetries'           => 'Mængden af ​​tilladte retries (-1 = ubegrænset)',
     'i:PasswordChangeInterval' => 'Interval, hvor passager skal ændres (-1 = aldrig)',
     'i:PasswordHistory'        => 'Ny adgangskode skal være forskellig fra de sidste N-adgangskoder',
     'i:PasswordRegex'          => 'Adgangskode krav til brugere',

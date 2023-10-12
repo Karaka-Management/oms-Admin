@@ -33,7 +33,6 @@ $excel = new DefaultExcel();
 
 foreach ($data as $i => $row) {
     foreach ($row as $j => $cell) {
-        // @todo: fix 26 column overflow.
         $excel->getActiveSheet()->setCellValue(StringUtils::intToAlphabet($j + 1) . ($i + 1), $cell);
     }
 }
