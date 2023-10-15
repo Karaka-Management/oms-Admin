@@ -24,6 +24,13 @@ return [
     ],
     [
         'type'    => 'setting',
+        'name'    => SettingsEnum::LOGIN_TIMEOUT,
+        'content' => '3',
+        'pattern' => '/\\d+/',
+        'module'  => 'Admin',
+    ],
+    [
+        'type'    => 'setting',
         'name'    => SettingsEnum::LOGIN_TRIES,
         'content' => '3',
         'pattern' => '/\\d+/',

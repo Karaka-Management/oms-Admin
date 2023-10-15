@@ -37,7 +37,6 @@ echo $this->data['nav']->render();
                     <col style="width: 150px">
                     <col style="width: 100px">
                     <col>
-                    <col>
                     <col style="width: 125px">
                     <col style="width: 75px">
                     <col style="width: 150px">
@@ -48,25 +47,25 @@ echo $this->data['nav']->render();
                     <td><?= $this->getHtml('Module', 'Auditor'); ?>
                     <td><?= $this->getHtml('Type', 'Auditor'); ?>
                     <td><?= $this->getHtml('Trigger', 'Auditor'); ?>
-                    <td><?= $this->getHtml('Content', 'Auditor'); ?>
                     <td><?= $this->getHtml('By', 'Auditor'); ?>
                     <td><?= $this->getHtml('Ref', 'Auditor'); ?>
                     <td><?= $this->getHtml('Date', 'Auditor'); ?>
                 <tbody>
-                <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                $url         = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id); ?>
+                <?php
+                $count = 0;
+                foreach ($audits as $key => $audit) : ++$count;
+                    $url = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id); ?>
                     <tr tabindex="0" data-href="<?= $url; ?>">
                         <td><?= $audit->id; ?>
                         <td><?= $this->printHtml($audit->module); ?>
                         <td><?= $audit->type; ?>
                         <td><?= $this->printHtml($audit->trigger); ?>
-                        <td><?= $this->printHtml((string) $audit->content); ?>
                         <td><?= $this->printHtml($audit->createdBy->login); ?>
                         <td><?= $this->printHtml((string) $audit->ref); ?>
                         <td><?= $audit->createdAt->format('Y-m-d H:i'); ?>
                 <?php endforeach; ?>
                 <?php if ($count === 0) : ?>
-                    <tr><td colspan="8" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                    <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                 <?php endif; ?>
             </table>
             </div>

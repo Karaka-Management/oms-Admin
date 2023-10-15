@@ -207,7 +207,7 @@ echo $this->data['nav']->render();
                                 <label for="iCountries"><?= $this->getHtml('Country'); ?></label>
                                 <select id="iCountries" name="settings_country">
                                     <?php foreach ($countryCodes as $code3 => $code2) : ?>
-                                    <option value="<?= $this->printHtml($code2); ?>"<?= $this->printHtml($code2 === $l11n->getCountry() ? ' selected' : ''); ?>><?= $this->printHtml($countries[$code3]); ?>
+                                    <option value="<?= $this->printHtml($code2); ?>"<?= $this->printHtml($code2 === $l11n->country ? ' selected' : ''); ?>><?= $this->printHtml($countries[$code3]); ?>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
