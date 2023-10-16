@@ -39,4 +39,14 @@ final class NullAccountPermissionTest extends \PHPUnit\Framework\TestCase
         $null = new NullAccountPermission(2);
         self::assertEquals(2, $null->id);
     }
+
+    /**
+     * @covers Modules\Admin\Models\NullAccountPermission
+     * @group module
+     */
+    public function testJsonSerialize() : void
+    {
+        $null = new NullAccountPermission(2);
+        self::assertEquals(['id' => 2], $null);
+    }
 }

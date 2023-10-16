@@ -39,4 +39,14 @@ final class NullAddressTest extends \PHPUnit\Framework\TestCase
         $null = new NullAddress(2);
         self::assertEquals(2, $null->id);
     }
+
+    /**
+     * @covers Modules\Admin\Models\NullAddress
+     * @group module
+     */
+    public function testJsonSerialize() : void
+    {
+        $null = new NullAddress(2);
+        self::assertEquals(['id' => 2], $null);
+    }
 }

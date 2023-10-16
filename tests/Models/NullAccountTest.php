@@ -39,4 +39,14 @@ final class NullAccountTest extends \PHPUnit\Framework\TestCase
         $null = new NullAccount(2);
         self::assertEquals(2, $null->id);
     }
+
+    /**
+     * @covers Modules\Admin\Models\NullAccount
+     * @group module
+     */
+    public function testJsonSerialize() : void
+    {
+        $null = new NullAccount(2);
+        self::assertEquals(['id' => 2], $null);
+    }
 }
