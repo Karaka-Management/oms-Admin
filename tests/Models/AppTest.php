@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace Modules\Admin\tests\Models;
 
 use Modules\Admin\Models\App;
+use phpOMS\Application\ApplicationStatus;
+use phpOMS\Application\ApplicationType;
 
 /**
  * @testdox Modules\Admin\tests\Models\AppTest: App model
@@ -24,13 +26,40 @@ use Modules\Admin\Models\App;
 final class AppTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @testdox The account has the expected default values after initialization
      * @covers Modules\Admin\Models\App
      * @group module
      */
     public function testDefault() : void
     {
-        $account = new App();
-        self::assertEquals(0, $account->id);
+        $app = new App();
+        self::assertEquals(0, $app->id);
+    }
+
+    public function testToArray() : void
+    {
+        $app = new App();
+        self::assertEquals(
+            [
+                'id' => 0,
+                'name' => '',
+                'type' => ApplicationType::WEB,
+                'status' => ApplicationStatus::NORMAL,
+            ],
+            $app->toArray()
+        );
+    }
+
+    public function testJsonSerialize() : void
+    {
+        $app = new App();
+        self::assertEquals(
+            [
+                'id' => 0,
+                'name' => '',
+                'type' => ApplicationType::WEB,
+                'status' => ApplicationStatus::NORMAL,
+            ],
+            $app->jsonSerialize()
+        );
     }
 }

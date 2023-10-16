@@ -132,4 +132,16 @@ final class AddressTest extends \PHPUnit\Framework\TestCase
         $this->address->unserialize(\json_encode($expected));
         self::assertEquals(\json_encode($expected), $this->address->serialize());
     }
+
+    public function testUnserializeInvalidType() : void
+    {
+        $this->address->unserialize(true);
+        self::assertTrue(true);
+    }
+
+    public function testUnserializeInvalidJson() : void
+    {
+        $this->address->unserialize('{{}');
+        self::assertTrue(true);
+    }
 }

@@ -14,29 +14,29 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Models;
 
-use Modules\Admin\Models\NullGroupPermission;
+use Modules\Admin\Models\NullApp;
 
 /**
  * @internal
  */
-final class NullGroupPermissionTest extends \PHPUnit\Framework\TestCase
+final class NullAppTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Admin\Models\NullGroupPermission
+     * @covers Modules\Admin\Models\NullApp
      * @group module
      */
     public function testNull() : void
     {
-        self::assertInstanceOf('\Modules\Admin\Models\GroupPermission', new NullGroupPermission());
+        self::assertInstanceOf('\Modules\Admin\Models\App', new NullApp());
     }
 
     /**
-     * @covers Modules\Admin\Models\NullGroupPermission
+     * @covers Modules\Admin\Models\NullApp
      * @group module
      */
     public function testId() : void
     {
-        $null = new NullGroupPermission(2);
+        $null = new NullApp(2);
         self::assertEquals(2, $null->id);
     }
 
@@ -46,7 +46,7 @@ final class NullGroupPermissionTest extends \PHPUnit\Framework\TestCase
      */
     public function testJsonSerialize() : void
     {
-        $null = new NullGroupPermission(2);
+        $null = new NullApp(2);
         self::assertEquals(['id' => 2], $null);
     }
 }

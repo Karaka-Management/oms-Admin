@@ -16,6 +16,7 @@ namespace Modules\Admin\tests\Models;
 
 use Modules\Admin\Models\Account;
 use Modules\Admin\Models\AccountMapper;
+use Modules\Admin\Models\NullAccount;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Auth\LoginReturnType;
@@ -161,5 +162,16 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         $accountR = AccountMapper::getWithPermissions(1);
         self::assertEquals('admin', $accountR->login);
         self::assertGreaterThan(0, $accountR->getPermissions());
+    }
+
+    /**
+     * @covers Modules\Admin\Models\AccountMapper
+     * @group module
+     */
+    public function testGetWithPermissionInvalidId() : void
+    {
+        $accountR = AccountMapper::getWithPermissions(0);
+
+        self::assertInstanceOf(NullAccount::class, $accountR);
     }
 }
