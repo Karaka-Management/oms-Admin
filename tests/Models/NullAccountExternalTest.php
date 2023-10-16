@@ -37,7 +37,7 @@ final class NullAccountExternalTest extends \PHPUnit\Framework\TestCase
     public function testId() : void
     {
         $null = new NullAccountExternal(2);
-        self::assertEquals(2, $null->getId());
+        self::assertEquals(2, $null->id);
     }
 
     /**
