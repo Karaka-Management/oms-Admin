@@ -263,4 +263,14 @@ trait ApiControllerAccountTrait
         $this->module->apiLogout($request, $response);
         self::assertEquals('ok', $response->getData('')['status']);
     }
+
+    public function testInvalidapiDataChangeDelete() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $this->module->apiDataChangeDelete($request, $response);
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
+    }
 }
