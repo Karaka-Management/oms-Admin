@@ -21,7 +21,6 @@ use Modules\Admin\tests\Controller\Api\ApiControllerApplicationTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerGroupTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerModuleTrait;
 use Modules\Admin\tests\Controller\Api\ApiControllerPermissionTrait;
-use Modules\Admin\tests\Controller\Api\ApiControllerSettingsTrait;
 use phpOMS\Account\Account;
 use phpOMS\Account\AccountManager;
 use phpOMS\Account\PermissionType;
@@ -94,7 +93,6 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
         TestUtils::setMember($this->module, 'app', $this->app);
     }
 
-    use ApiControllerSettingsTrait;
     use ApiControllerAccountTrait;
     use ApiControllerGroupTrait;
     use ApiControllerPermissionTrait;
