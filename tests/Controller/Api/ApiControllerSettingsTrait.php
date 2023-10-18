@@ -100,4 +100,15 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
     use ApiControllerPermissionTrait;
     use ApiControllerModuleTrait;
     use ApiControllerApplicationTrait;
+    }
+
+    public function testInvalidapiDataChangeDelete() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $this->module->apiDataChangeDelete($request, $response);
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
+    }
 }
