@@ -12,117 +12,103 @@
  */
 declare(strict_types=1);
 
-namespace Modules\Admin\tests\Controller\Api;
+namespace Modules\Admin\tests\Controller;
 
-use Modules\Admin\Models\SettingsEnum;
-use phpOMS\Message\Http\HttpRequest;
-use phpOMS\Message\Http\HttpResponse;
-use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
+use Model\CoreSettings;
+use Modules\Admin\Models\AccountPermission;
+use Modules\Admin\tests\Controller\Api\ApiControllerAccountTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerApplicationTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerGroupTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerModuleTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerPermissionTrait;
+use Modules\Admin\tests\Controller\Api\ApiControllerSettingsTrait;
+use phpOMS\Account\Account;
+use phpOMS\Account\AccountManager;
+use phpOMS\Account\PermissionType;
+use phpOMS\Application\ApplicationAbstract;
+use phpOMS\DataStorage\Session\HttpSession;
+use phpOMS\Dispatcher\Dispatcher;
+use phpOMS\Event\EventManager;
+use phpOMS\Localization\L11nManager;
+use phpOMS\Module\ModuleAbstract;
+use phpOMS\Module\ModuleManager;
+use phpOMS\Router\WebRouter;
+use phpOMS\Utils\TestUtils;
 
-trait ApiControllerSettingsTrait
+/**
+ * @testdox Modules\Admin\tests\Controller\ApiControllerTest: Admin api controller
+ *
+ * @internal
+ */
+final class ApiControllerTest extends \PHPUnit\Framework\TestCase
 {
+    protected ApplicationAbstract $app;
+
     /**
-     * @testdox Application settings can be read from the database
-     * @covers Modules\Admin\Controller\ApiController
-     * @group module
+     * @var \Modules\Admin\Controller\ApiController
      */
-    public function testApiSettingsGet() : void
+    protected ModuleAbstract $module;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp() : void
+    {
+        $this->app = new class() extends ApplicationAbstract
+        {
+            protected string $appName = 'Api';
+        };
+
+        $this->app->dbPool          = $GLOBALS['dbpool'];
+        $this->app->unitId          = 1;
+        $this->app->accountManager  = new AccountManager($GLOBALS['session']);
+        $this->app->appSettings     = new CoreSettings();
+        $this->app->moduleManager   = new ModuleManager($this->app, __DIR__ . '/../../../../Modules/');
+        $this->app->dispatcher      = new Dispatcher($this->app);
+        $this->app->eventManager    = new EventManager($this->app->dispatcher);
+        $this->app->eventManager->importFromFile(__DIR__ . '/../../../../Web/Api/Hooks.php');
+        $this->app->sessionManager = new HttpSession(36000);
+        $this->app->l11nManager    = new L11nManager();
+
+        $account = new Account();
+        TestUtils::setMember($account, 'id', 1);
+
+        $permission       = new AccountPermission();
+        $permission->unit = 1;
+        $permission->app  = 2;
+        $permission->setPermission(
+            PermissionType::READ
+            | PermissionType::CREATE
+            | PermissionType::MODIFY
+            | PermissionType::DELETE
+            | PermissionType::PERMISSION
+        );
+
+        $account->addPermission($permission);
+
+        $this->app->accountManager->add($account);
+        $this->app->router = new WebRouter();
+
+        $this->module = $this->app->moduleManager->get('Admin');
+
+        TestUtils::setMember($this->module, 'app', $this->app);
+    }
+
+    use ApiControllerSettingsTrait;
+    use ApiControllerAccountTrait;
+    use ApiControllerGroupTrait;
+    use ApiControllerPermissionTrait;
+    use ApiControllerModuleTrait;
+    use ApiControllerApplicationTrait;
+    }
+
+    public function testInvalidapiDataChangeDelete() : void
     {
         $response = new HttpResponse();
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->header->account = 1;
-        $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
-
-        $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('90', $response->getDataArray('')['response']->content);
-    }
-
-    /**
-     * @testdox Application settings can be set in the database
-     * @covers Modules\Admin\Controller\ApiController
-     * @group module
-     */
-    public function testApiSettingsSet() : void
-    {
-        $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
-
-        $request->header->account = 1;
-        $request->setData('settings', \json_encode([['name' => SettingsEnum::PASSWORD_INTERVAL, 'content' => '60']]));
-        $this->module->apiSettingsSet($request, $response);
-
-        $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
-        $this->module->apiSettingsGet($request, $response);
-        self::assertEquals('60', $response->getDataArray('')['response']->content);
-
-        $request->setData('settings', \json_encode([['name' => SettingsEnum::PASSWORD_INTERVAL, 'content' => '90']]), true);
-        $this->module->apiSettingsSet($request, $response);
-    }
-
-    /**
-     * @covers Modules\Admin\Controller\ApiController
-     * @group module
-     */
-    public function testApiAccountLocalizationLoadSet() : void
-    {
-        $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
-
-        $request->header->account = 1;
-        $request->setData('account_id', 1);
-        $request->setData('load', true);
-        $request->setData('localization_load', 'de_DE');
-        $this->module->apiSettingsAccountLocalizationSet($request, $response);
-
-        $l11n = $response->getDataArray('')['response'];
-        self::assertEquals($l11n->language, 'de');
-
-        $request->setData('localization_load', 'en_US', true);
-        $this->module->apiSettingsAccountLocalizationSet($request, $response);
-
-        $l11n = $response->getDataArray('')['response'];
-        self::assertEquals($l11n->language, 'en');
-    }
-
-    /**
-     * @covers Modules\Admin\Controller\ApiController
-     * @group module
-     */
-    public function testApiAccountLocalizationSet() : void
-    {
-        $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
-
-        $request->header->account = 1;
-        $request->setData('account_id', 1);
-
-        $data = \json_decode('{"settings_country":"US","settings_language":"en","settings_temperature":"celsius","settings_timezone":"America\/New_York","settings_timeformat_vs":"d.m","settings_timeformat_s":"m.y","settings_timeformat_m":"Y.m.d","settings_timeformat_l":"Y.m.d h:i","settings_timeformat_vl":"Y.m.d h:i:s","settings_currency":"EUR","settings_currencyformat":"0","settings_decimal":".","settings_thousands":",","settings_precision_vs":"0","settings_precision_s":"1","settings_precision_m":"2","settings_precision_l":"3","settings_precision_vl":"5","settings_weight_vl":"mg","settings_weight_l":"g","settings_weight_m":"kg","settings_weight_h":"t","settings_weight_vh":"t","settings_speed_vs":"mps","settings_speed_s":"ms","settings_speed_m":"kph","settings_speed_f":"kph","settings_speed_vf":"mach","settings_speed_sea":"mpd","settings_length_vs":"micron","settings_length_s":"mm","settings_length_m":"cm","settings_length_l":"m","settings_length_vl":"km","settings_length_sea":"mi","settings_area_vs":"micron","settings_area_s":"mm","settings_area_m":"cm","settings_area_l":"m","settings_area_vl":"km","settings_volume_vs":"mul","settings_volume_s":"ml","settings_volume_m":"l","settings_volume_l":"cm","settings_volume_vl":"m","settings_volume_teaspoon":"Metric tsp","settings_volume_tablespoon":"Metric tblsp","settings_volume_glass":"Metric cup"}', true);
-
-        foreach ($data as $key => $value) {
-            $request->setData($key, $value);
-        }
-
-        $this->module->apiSettingsAccountLocalizationSet($request, $response);
-
-        $l11n = $response->getDataArray('')['response'];
-        self::assertEquals($l11n->getCurrency(), 'EUR');
-    }
-
-    /**
-     * @covers Modules\Admin\Controller\ApiController
-     * @group module
-     */
-    public function testInvalidPermissionAccountLocalizationSet() : void
-    {
-        $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
-
-        $request->header->account = 2;
-        $request->setData('account_id', 1);
-        $this->module->apiSettingsAccountLocalizationSet($request, $response);
-
-        self::assertEquals(RequestStatusCode::R_403, $response->header->status);
+        $this->module->apiDataChangeDelete($request, $response);
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 }

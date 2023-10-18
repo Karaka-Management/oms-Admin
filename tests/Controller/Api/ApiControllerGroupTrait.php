@@ -203,4 +203,14 @@ trait ApiControllerGroupTrait
         self::assertEquals('admin', $response->getData('')[0]['name'][0] ?? '');
         self::assertEquals('admin', $response->getData('')[1]['name'][0] ?? '');
     }
+
+    public function testInvalidapiGroupDelete() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $this->module->apiGroupDelete($request, $response);
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
+    }
 }

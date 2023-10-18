@@ -282,4 +282,14 @@ trait ApiControllerPermissionTrait
         self::assertEquals(PermissionType::READ, $response->getDataArray('')['response']->getPermission());
         self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
+
+    public function testInvalidapiGroupPermissionDelete() : void
+    {
+        $response = new HttpResponse();
+        $request  = new HttpRequest(new HttpUri(''));
+
+        $request->header->account = 1;
+        $this->module->apiGroupPermissionDelete($request, $response);
+        self::assertEquals(RequestStatusCode::R_400, $response->header->status);
+    }
 }
