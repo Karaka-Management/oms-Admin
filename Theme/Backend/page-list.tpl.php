@@ -39,54 +39,54 @@ echo $this->data['nav']->render(); ?>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
                         <label for="accountList-r1-asc">
                             <input id="accountList-r1-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
+                            <i class="sort-asc g-icon">expand_less</i>
                         </label>
                         <label for="accountList-r1-desc">
                             <input id="accountList-r1-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc g-icon">expand_more</i>
                         </label>
                     <td><?= $this->getHtml('Status'); ?>
                         <label for="accountList-r2-asc">
                             <input id="accountList-r2-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
+                            <i class="sort-asc g-icon">expand_less</i>
                         </label>
                         <label for="accountList-r2-desc">
                             <input id="accountList-r2-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc g-icon">expand_more</i>
                         </label>
                     <td class="wf-100"><?= $this->getHtml('Name'); ?>
                         <label for="accountList-r3-asc">
                             <input id="accountList-r3-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
+                            <i class="sort-asc g-icon">expand_less</i>
                         </label>
                         <label for="accountList-r3-desc">
                             <input id="accountList-r3-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc g-icon">expand_more</i>
                         </label>
                         <?php include __DIR__ . '/../../../../Web/Backend/Themes/popup-filter-table.tpl.php'; ?>
                     <td><?= $this->getHtml('Activity'); ?>
                         <label for="accountList-r4-asc">
                             <input id="accountList-r4-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
+                            <i class="sort-asc g-icon">expand_less</i>
                         </label>
                         <label for="accountList-r4-desc">
                             <input id="accountList-r4-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc g-icon">expand_more</i>
                         </label>
                         <label>
-                            <i class="filter fa fa-filter"></i>
+                            <i class="filter g-icon">filter_alt</i>
                         </label>
                     <td><?= $this->getHtml('Created'); ?>
                         <label for="accountList-r5-asc">
                             <input id="accountList-r5-asc" name="accountList-sort" type="radio">
-                            <i class="sort-asc fa fa-chevron-up"></i>
+                            <i class="sort-asc g-icon">expand_less</i>
                         </label>
                         <label for="accountList-r5-desc">
                             <input id="accountList-r5-desc" name="accountList-sort" type="radio">
-                            <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc g-icon">expand_more</i>
                         </label>
                         <label>
-                            <i class="filter fa fa-filter"></i>
+                            <i class="filter g-icon">filter_alt</i>
                         </label>
                     <tbody>
                         <?php $c                                                          = 0; foreach ($accounts as $key => $value) : ++$c;

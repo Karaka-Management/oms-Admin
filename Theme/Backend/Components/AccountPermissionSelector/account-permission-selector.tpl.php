@@ -40,7 +40,7 @@ $categories  = ISO639Enum::getConstants();
                                             {"key": 5, "type": "dom.table.append", "id": "grp-table", "aniIn": "fadeIn", "data": [], "bindings": {"id": "id", "name": "name/0"}, "position": -1}
                                         ]
                                     }
-                                ]'><i class="fa fa-book"></i></button>
+                                ]'><i class="g-icon">book</i></button>
                                 <input type="text" list="<?= $this->id; ?>-datalist" id="<?= $this->id; ?>" name="receiver" placeholder="&#xf007; Guest" data-action='[
                                     {
                                         "key": 1, "listener": "keyup", "action": [
@@ -56,7 +56,7 @@ $categories  = ISO639Enum::getConstants();
                                             {"key": 1, "type": "validate.keypress", "pressed": "13|9"},
                                             {"key": 2, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={!#<?= $this->id; ?>}", "method": "GET", "request_type": "json"},
                                             {"key": 3, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>-idlist", "value": "{0/id}", "data": ""},
-                                            {"key": 4, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>-taglist", "value": "<span id=\"<?= $this->id; ?>-taglist-{0/id}\" class=\"tag red\" data-id=\"{0/id}\"><i class=\"fa fa-times\"></i> {0/name}</span>", "data": ""},
+                                            {"key": 4, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>-taglist", "value": "<span id=\"<?= $this->id; ?>-taglist-{0/id}\" class=\"tag red\" data-id=\"{0/id}\"><i class=\"g-icon\">close</i> {0/name}</span>", "data": ""},
                                             {"key": 5, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>", "value": "", "data": ""}
                                         ]
                                     }
@@ -194,7 +194,7 @@ $categories  = ISO639Enum::getConstants();
 
     <div class="col-xs-12 col-md-6">
         <section class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Permissions', 'Admin', 'Backend'); ?><i class="lni lni-download download btn end-xs"></i></div>
+            <div class="portlet-head"><?= $this->getHtml('Permissions', 'Admin', 'Backend'); ?><i class="g-icon download btn end-xs">download</i></div>
             <div class="slider">
             <table id="attributeTable" class="default"
                 data-tag="form"
@@ -205,16 +205,16 @@ $categories  = ISO639Enum::getConstants();
                     <tr>
                         <td>
                         <td><?= $this->getHtml('ID', '0', '0'); ?>
-                        <td><?= $this->getHtml('Account', 'Admin', 'Backend'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <td><?= $this->getHtml('Category', 'Admin', 'Backend'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <td><?= $this->getHtml('Element', 'Admin', 'Backend'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                        <td><?= $this->getHtml('Account', 'Admin', 'Backend'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                        <td><?= $this->getHtml('Category', 'Admin', 'Backend'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                        <td><?= $this->getHtml('Element', 'Admin', 'Backend'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                 <tbody>
                     <template class="oms-add-tpl-attribute">
                         <tr data-id="" draggable="false">
                             <td>
-                                <i class="fa fa-cogs btn update-form"></i>
+                                <i class="g-icon btn update-form">settings</i>
                                 <input id="attributeTable-remove-0" type="checkbox" class="hidden">
-                                <label for="attributeTable-remove-0" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                <label for="attributeTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                 <span class="checked-visibility">
                                     <label for="attributeTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
                                     <label for="attributeTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
@@ -229,10 +229,10 @@ $categories  = ISO639Enum::getConstants();
                     foreach ($permissions as $key => $value) : ++$c; ?>
                         <tr data-id="<?= $value->id; ?>">
                             <td>
-                                <i class="fa fa-cogs btn update-form"></i>
+                                <i class="g-icon btn update-form">settings</i>
                                 <?php if (!$value->type->isRequired) : ?>
                                 <input id="attributeTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
-                                <label for="attributeTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                <label for="attributeTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                 <span class="checked-visibility">
                                     <label for="attributeTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
                                     <label for="attributeTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>

@@ -44,42 +44,42 @@ echo $this->data['nav']->render(); ?>
                     <div class="form-group">
                         <label for="iUsername"><?= $this->getHtml('Username'); ?></label>
                         <span class="input">
-                                    <button class="inactive" type="button"><i class="fa fa-user"></i></button>
+                                    <button class="inactive" type="button"><i class="g-icon">person</i></button>
                                     <input id="iUsername" name="name" type="text" autocomplete="off" spellcheck="false">
                                 </span>
                     </div>
                     <div class="form-group">
                         <label for="iName1"><?= $this->getHtml('Name1'); ?></label>
                         <span class="input">
-                                    <button class="inactive" type="button"><i class="fa fa-user"></i></button>
+                                    <button class="inactive" type="button"><i class="g-icon">person</i></button>
                                     <input id="iName1" name="name1" type="text" autocomplete="off" spellcheck="false" required>
                                 </span>
                     </div>
                     <div class="form-group">
                         <label for="iName2"><?= $this->getHtml('Name2'); ?></label>
                         <span class="input">
-                                    <button class="inactive" type="button"><i class="fa fa-user"></i></button>
+                                    <button class="inactive" type="button"><i class="g-icon">person</i></button>
                                     <input id="iName2" name="name2" type="text" autocomplete="off" spellcheck="false">
                                 </span>
                     </div>
                     <div class="form-group">
                         <label for="iName3"><?= $this->getHtml('Name3'); ?></label>
                         <span class="input">
-                                    <button class="inactive" type="button"><i class="fa fa-user"></i></button>
+                                    <button class="inactive" type="button"><i class="g-icon">person</i></button>
                                     <input id="iName3" name="name3" type="text" autocomplete="off" spellcheck="false">
                                 </span>
                     </div>
                     <div class="form-group">
                         <label for="iEmail"><?= $this->getHtml('Email'); ?></label>
                         <span class="input">
-                                    <button class="inactive" type="button"><i class="fa fa-envelope-o"></i></button>
+                                    <button class="inactive" type="button"><i class="g-icon">mail</i></button>
                                     <input id="iEmail" name="email" type="email" autocomplete="off" spellcheck="false">
                                 </span>
                     </div>
                     <div class="form-group">
                         <label for="iPassword"><?= $this->getHtml('Password'); ?></label>
                         <span class="input">
-                                    <button class="inactive" type="button"><i class="fa fa-lock"></i></button>
+                                    <button class="inactive" type="button"><i class="g-icon">lock</i></button>
                                     <input id="iPassword" name="password" type="password">
                                 </span>
                     </div>

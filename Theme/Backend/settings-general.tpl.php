@@ -79,7 +79,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <div class="form-group">
                                     <label for="iPassword">
                                         <?= $this->getHtml('PasswordRegex'); ?>
-                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="fa fa-info-circle"></i></i>
+                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="g-icon">info</i></i>
                                     </label>
 
                                     <input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001']->content); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
@@ -88,7 +88,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <div class="form-group">
                                     <label for="iLoginRetries">
                                         <?= $this->getHtml('LoginRetries'); ?>
-                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries'); ?>"><i class="fa fa-info-circle"></i></i>
+                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:LoginRetries'); ?>"><i class="g-icon">info</i></i>
                                     </label>
 
                                     <input id="iLoginRetries" name="settings_1000000005" type="number" value="<?= $this->printHtml($generalSettings['1000000005']->content); ?>" min="-1">
@@ -97,7 +97,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <div class="form-group">
                                     <label for="iTimeoutPeriod">
                                         <?= $this->getHtml('TimeoutPeriod'); ?>
-                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod'); ?>"><i class="fa fa-info-circle"></i></i>
+                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:TimeoutPeriod'); ?>"><i class="g-icon">info</i></i>
                                     </label>
 
                                     <input id="iTimeoutPeriod" name="settings_1000000002" type="number" value="<?= $this->printHtml($generalSettings['1000000002']->content); ?>">
@@ -106,7 +106,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <div class="form-group">
                                     <label for="iPasswordChangeInterval">
                                         <?= $this->getHtml('PasswordChangeInterval'); ?>
-                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval'); ?>"><i class="fa fa-info-circle"></i></i>
+                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordChangeInterval'); ?>"><i class="g-icon">info</i></i>
                                     </label>
 
                                     <input id="iPasswordChangeInterval" name="settings_1000000003" type="number" value="<?= $this->printHtml($generalSettings['1000000003']->content); ?>">
@@ -115,7 +115,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <div class="form-group">
                                     <label for="iPasswordHistory">
                                         <?= $this->getHtml('PasswordHistory'); ?>
-                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory'); ?>"><i class="fa fa-info-circle"></i></i>
+                                        <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordHistory'); ?>"><i class="g-icon">info</i></i>
                                     </label>
 
                                     <input id="iPasswordHistory" name="settings_1000000004" type="number" value="<?= $this->printHtml($generalSettings['1000000004']->content); ?>">
@@ -641,7 +641,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                         <table id="settingsList" class="default sticky">
                             <thead>
@@ -650,63 +650,63 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 <td><?= $this->getHtml('ID', '0', '0'); ?>
                                     <label for="settingsList-sort-1">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-1">
-                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                        <i class="sort-asc g-icon">expand_less</i>
                                     </label>
                                     <label for="settingsList-sort-2">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-2">
-                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                        <i class="sort-desc g-icon">expand_more</i>
                                     </label>
                                     <label>
-                                        <i class="filter fa fa-filter"></i>
+                                        <i class="filter g-icon">filter_alt</i>
                                     </label>
                                 <td><?= $this->getHtml('Name'); ?>
                                     <label for="settingsList-sort-3">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-3">
-                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                        <i class="sort-asc g-icon">expand_less</i>
                                     </label>
                                     <label for="settingsList-sort-4">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-4">
-                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                        <i class="sort-desc g-icon">expand_more</i>
                                     </label>
                                     <label>
-                                        <i class="filter fa fa-filter"></i>
+                                        <i class="filter g-icon">filter_alt</i>
                                     </label>
                                 <td class="wf-100"><?= $this->getHtml('Value'); ?>
                                 <td><?= $this->getHtml('Module'); ?>
                                     <label for="settingsList-sort-5">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-5">
-                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                        <i class="sort-asc g-icon">expand_less</i>
                                     </label>
                                     <label for="settingsList-sort-6">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-6">
-                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                        <i class="sort-desc g-icon">expand_more</i>
                                     </label>
                                     <label>
-                                        <i class="filter fa fa-filter"></i>
+                                        <i class="filter g-icon">filter_alt</i>
                                     </label>
                                 <td><?= $this->getHtml('Group'); ?>
                                     <label for="settingsList-sort-7">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-7">
-                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                        <i class="sort-asc g-icon">expand_less</i>
                                     </label>
                                     <label for="settingsList-sort-8">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-8">
-                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                        <i class="sort-desc g-icon">expand_more</i>
                                     </label>
                                     <label>
-                                        <i class="filter fa fa-filter"></i>
+                                        <i class="filter g-icon">filter_alt</i>
                                     </label>
                                 <td><?= $this->getHtml('Account'); ?>
                                     <label for="settingsList-sort-9">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-9">
-                                        <i class="sort-asc fa fa-chevron-up"></i>
+                                        <i class="sort-asc g-icon">expand_less</i>
                                     </label>
                                     <label for="settingsList-sort-10">
                                         <input type="radio" name="settingsList-sort" id="settingsList-sort-10">
-                                        <i class="sort-desc fa fa-chevron-down"></i>
+                                        <i class="sort-desc g-icon">expand_more</i>
                                     </label>
                                     <label>
-                                        <i class="filter fa fa-filter"></i>
+                                        <i class="filter g-icon">filter_alt</i>
                                     </label>
                             <tbody>
                             <?php $count          = 0;
@@ -716,7 +716,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                 foreach ($settings as $key => $setting) : ++$count;
                             ?>
                             <tr tabindex="0">
-                                <td><i class="fa fa-cogs"></i>
+                                <td><i class="g-icon">settings</i>
                                 <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><?= $setting->id; ?>
                                 <td data-label="<?= $this->getHtml('Name'); ?>"><?= $this->printHtml($setting->name); ?>
                                 <td data-label="<?= $this->getHtml('Value'); ?>"><?= $this->printHtml($setting->content); ?>

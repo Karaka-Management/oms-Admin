@@ -116,7 +116,7 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Accounts'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Accounts'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <table id="accountTable" class="default"
                             data-tag="form"
                             data-ui-element="tr"
@@ -125,15 +125,15 @@ echo $this->data['nav']->render(); ?>
                             <thead>
                                 <tr>
                                     <td>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                             <tbody>
                             <template class="oms-add-tpl-account">
                                 <tr data-id="" draggable="false">
                                     <td>
-                                        <i class="fa fa-times btn remove-form"></i>
+                                        <i class="g-icon btn remove-form">close</i>
                                         <input id="accountTable-remove-0" type="checkbox" class="hidden">
-                                        <label for="accountTable-remove-0" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                        <label for="accountTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                         <span class="checked-visibility">
                                             <label for="accountTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
                                             <label for="accountTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
@@ -148,7 +148,7 @@ echo $this->data['nav']->render(); ?>
                                     $url = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->id); ?>
                                 <tr data-id="<?= $value->id; ?>">
                                     <td><input id="accountTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
-                                        <label for="accountTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                        <label for="accountTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                         <span class="checked-visibility">
                                             <label for="accountTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
                                             <label for="accountTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
@@ -280,7 +280,7 @@ echo $this->data['nav']->render(); ?>
 
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                             <table id="permissionTable" class="default"
                                 data-tag="form"
@@ -290,20 +290,20 @@ echo $this->data['nav']->render(); ?>
                                 <thead>
                                     <tr>
                                         <td>
-                                        <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('App'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Module'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Type'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Ele'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                        <td><?= $this->getHtml('Comp'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                        <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                        <td><?= $this->getHtml('Unit'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                        <td><?= $this->getHtml('App'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                        <td><?= $this->getHtml('Module'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                        <td><?= $this->getHtml('Type'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                        <td><?= $this->getHtml('Ele'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                        <td><?= $this->getHtml('Comp'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                                         <td class="wf-100"><?= $this->getHtml('Perm'); ?>
                                 <tbody>
                                     <template class="oms-add-tpl-permission">
                                         <tr data-id="" draggable="false">
-                                            <td><i class="fa fa-cogs btn update-form"></i>
+                                            <td><i class="g-icon btn update-form">settings</i>
                                                 <input id="permissionTable-remove-0" type="checkbox" class="hidden">
-                                                <label for="permissionTable-remove-0" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                                <label for="permissionTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                                 <span class="checked-visibility">
                                                     <label for="permissionTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
                                                     <label for="permissionTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
@@ -328,9 +328,9 @@ echo $this->data['nav']->render(); ?>
                                     foreach ($permissions as $key => $value) : ++$c;
                                         $permission = $value->getPermission(); ?>
                                     <tr data-id="<?= $value->id; ?>">
-                                        <td><i class="fa fa-cogs btn update-form"></i>
+                                        <td><i class="g-icon btn update-form">settings</i>
                                             <input id="permissionTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
-                                            <label for="permissionTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                            <label for="permissionTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                             <span class="checked-visibility">
                                                 <label for="permissionTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
                                                 <label for="permissionTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
@@ -374,7 +374,7 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <table class="default fixed">
                             <thead>
                             <tr>

@@ -12,7 +12,7 @@
                             {"key": 5, "type": "dom.table.append", "id": "grp-table", "aniIn": "fadeIn", "data": [], "bindings": {"id": "id", "name": "name/0"}, "position": -1}
                         ]
                     }
-                ]'><i class="fa fa-book"></i></button>
+                ]'><i class="g-icon">book</i></button>
                 <input type="text" list="<?= $this->id; ?>-datalist" id="<?= $this->id; ?>" name="receiver" placeholder="&#xf007; Guest" data-action='[
                     {
                         "key": 1, "listener": "keyup", "action": [
@@ -28,7 +28,7 @@
                             {"key": 1, "type": "validate.keypress", "pressed": "13|9"},
                             {"key": 2, "type": "message.request", "uri": "{/base}/{/lang}/api/admin/find/group?search={!#<?= $this->id; ?>}", "method": "GET", "request_type": "json"},
                             {"key": 3, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>-idlist", "value": "{0/id}", "data": ""},
-                            {"key": 4, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>-taglist", "value": "<span id=\"<?= $this->id; ?>-taglist-{0/id}\" class=\"tag red\" data-id=\"{0/id}\"><i class=\"fa fa-times\"></i> {0/name}</span>", "data": ""},
+                            {"key": 4, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>-taglist", "value": "<span id=\"<?= $this->id; ?>-taglist-{0/id}\" class=\"tag red\" data-id=\"{0/id}\"><i class=\"g-icon\">close</i> {0/name}</span>", "data": ""},
                             {"key": 5, "type": "dom.setvalue", "overwrite": true, "selector": "#<?= $this->id; ?>", "value": "", "data": ""}
                         ]
                     }

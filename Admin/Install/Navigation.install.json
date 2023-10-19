@@ -7,7 +7,7 @@
         "name": "Admin",
         "uri": null,
         "target": "self",
-        "icon": "fa fa-lock",
+        "icon": "lock",
         "order": 1,
         "from": "Admin",
         "permission": { "permission": 2, "category": null, "element": null },
