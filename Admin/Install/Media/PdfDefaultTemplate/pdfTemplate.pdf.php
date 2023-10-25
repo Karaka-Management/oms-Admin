@@ -227,9 +227,9 @@ class DefaultPdf extends TCPDF
             0, 'L', false, 1, null, null, true, 0, false, true, 0, 'B'
         );
 
-        $this->setXY(25 + 45 + 15 + 30, -15, true);
+        $this->setXY(25 + 45 + 15 + 20, -15, true);
         $this->MultiCell(
-            35, 0,
+            45, 0,
             $this->attributes['bank_name'] . "\n"
             . $this->lang[$this->language]['Swift']. ': ' . $this->attributes['swift'] . "\n"
             . $this->lang[$this->language]['BankAccount']. ': ' . $this->attributes['bank_account'],
