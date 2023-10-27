@@ -235,8 +235,8 @@ final class ApiController extends Controller
         $handler->hostname = $emailSettings[SettingsEnum::MAIL_SERVER_OUT]->content ?? '';
         $handler->username = $emailSettings[SettingsEnum::MAIL_SERVER_USER]->content ?? '';
         $handler->password = $emailSettings[SettingsEnum::MAIL_SERVER_PASS]->isEncrypted && !empty($_SERVER['OMS_PRIVATE_KEY_I'] ?? '')
-            ? EncryptionHelper::decryptShared($emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '', $_SERVER['OMS_PRIVATE_KEY_I'])
-            : $emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '';
+            ? (EncryptionHelper::decryptShared($emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '', $_SERVER['OMS_PRIVATE_KEY_I']))
+            : ($emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '');
 
         return $handler;
     }
@@ -1966,7 +1966,7 @@ final class ApiController extends Controller
             || ($val['unit'] = !$request->hasData('unit'))
             || ($val['app'] = !$request->hasData('app'))
             || ($val['password'] = !$request->hasData('password'))
-            || ($val['terms'] = (($request->getDataBool('terms_required') ?? false) && ($request->getDataBool('terms') ?? false)))
+            || ($val['terms'] = (($request->getDataBool('terms_required') ?? false) && !($request->getDataBool('terms') ?? false)))
         ) {
             return $val;
         }
