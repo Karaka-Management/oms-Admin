@@ -57,19 +57,7 @@ class AccountExternal
     public int $status = AccountExternalStatus::ACTIVATE;
 
     /**
-     * External key
-     *
-     * (e.g. user id on the external platform).
-     *
-     * @var string
-     * @since 1.0.0
-     */
-    public string $key = '';
-
-    /**
-     * External name
-     *
-     * (e.g. user name on the external platform).
+     * Name of the external service
      *
      * @var string
      * @since 1.0.0
@@ -77,14 +65,36 @@ class AccountExternal
     public string $name = '';
 
     /**
-     * External auth
-     *
-     * (e.g. user authentication on the external platform such as password or api key).
+     * External uid
      *
      * @var string
      * @since 1.0.0
      */
-    public string $auth = '';
+    public string $uid = '';
+
+    /**
+     * External login
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public string $login = '';
+
+    /**
+     * External password
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public string $password = '';
+
+    /**
+     * External key
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public string $key = '';
 
     /**
      * Belongs to.

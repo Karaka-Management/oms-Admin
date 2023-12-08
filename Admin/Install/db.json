@@ -96,13 +96,18 @@
                 "type": "VARCHAR(255)",
                 "null": false
             },
-            "address_addition": {
-                "name": "address_addition",
+            "address_fao": {
+                "name": "address_fao",
                 "type": "VARCHAR(255)",
                 "null": false
             },
             "address_address": {
                 "name": "address_address",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "address_addition": {
+                "name": "address_addition",
                 "type": "VARCHAR(255)",
                 "null": false
             },
@@ -1602,18 +1607,28 @@
                 "type": "INT",
                 "null": false
             },
-            "account_external_key": {
-                "name": "account_external_key",
-                "type": "VARCHAR(255)",
-                "null": false
-            },
             "account_external_name": {
                 "name": "account_external_name",
                 "type": "VARCHAR(255)",
                 "null": false
             },
-            "account_external_auth": {
-                "name": "account_external_auth",
+            "account_external_uid": {
+                "name": "account_external_uid",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "account_external_login": {
+                "name": "account_external_login",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "account_external_password": {
+                "name": "account_external_password",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "account_external_key": {
+                "name": "account_external_key",
                 "type": "VARCHAR(255)",
                 "null": false
             },
@@ -1874,11 +1889,6 @@
                 "null": false,
                 "primary": true,
                 "autoincrement": true
-            },
-            "account_api_status": {
-                "name": "account_api_status",
-                "type": "TINYINT",
-                "null": false
             },
             "account_api_key": {
                 "name": "account_api_key",

@@ -298,12 +298,12 @@ final class ApiController extends Controller
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
         $mail->addTo($account->email);
 
-        // @todo: load default l11n if no translation is available
+        // @todo load default l11n if no translation is available
         $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
 
         $mail->subject = $mailL11n->subject;
 
-        // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
+        // @todo improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
         // Maybe store the uri in the $app model? or store all urls in the config file
         $mail->body = \str_replace(
             [
@@ -440,12 +440,12 @@ final class ApiController extends Controller
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
         $mail->addTo($account->email);
 
-        // @todo: load default l11n if no translation is available
+        // @todo load default l11n if no translation is available
         $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
 
         $mail->subject = $mailL11n->subject;
 
-        // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
+        // @todo improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
         // Maybe store the uri in the $app model? or store all urls in the config file
         $mail->body = \str_replace(
             [
@@ -1877,12 +1877,12 @@ final class ApiController extends Controller
             $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
             $mail->addTo((string) $request->getData('email'));
 
-            // @todo: load default l11n if no translation is available
+            // @todo load default l11n if no translation is available
             $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
 
             $mail->subject = $mailL11n->subject;
 
-            // @todo: improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
+            // @todo improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
             // Maybe store the uri in the $app model? or store all urls in the config file
             $mail->body = \str_replace(
                 [
@@ -1984,7 +1984,7 @@ final class ApiController extends Controller
      * @return void
      *
      * @api
-     * @todo: maybe move to job/workflow??? This feels very much like a job/event especially if we make the 'type' an event-trigger
+     * @todo maybe move to job/workflow??? This feels very much like a job/event especially if we make the 'type' an event-trigger
      *
      * @since 1.0.0
      */
@@ -3238,7 +3238,7 @@ final class ApiController extends Controller
      *
      * @return App
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -3320,7 +3320,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3341,7 +3341,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3363,7 +3363,7 @@ final class ApiController extends Controller
      *
      * @return AccountPermission
      *
-     * @todo: implement
+     * @todo Implement API update function
      *
      * @since 1.0.0
      */
@@ -3379,7 +3379,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3400,7 +3400,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3452,12 +3452,15 @@ final class ApiController extends Controller
      *
      * @return Contact
      *
-     * @todo: implement
-     *
      * @since 1.0.0
      */
     public function updateContactFromRequest(RequestAbstract $request, Contact $new) : Contact
     {
+        $new->type = $request->getDataInt('type') ?? $new->type;
+        $new->subtype = $request->getDataInt('subtype') ?? $new->subtype;
+        $new->content = $request->getDataString('content') ?? $new->content;
+        $new->account = $request->getDataInt('account') ?? $new->account;
+
         return $new;
     }
 
@@ -3468,7 +3471,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3517,7 +3520,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3563,7 +3566,7 @@ final class ApiController extends Controller
      *
      * @return DataChange
      *
-     * @todo: implement
+     * @todo implement
      *
      * @since 1.0.0
      */
@@ -3579,7 +3582,7 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo: implement
+     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3627,8 +3630,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo: implement
      *
      * @since 1.0.0
      */

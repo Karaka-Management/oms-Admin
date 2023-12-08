@@ -16,6 +16,7 @@ namespace Modules\Admin\Models;
 
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 use phpOMS\Localization\Defaults\CountryMapper;
+use phpOMS\Stdlib\Base\Address;
 
 /**
  * Address mapper class.
@@ -39,8 +40,9 @@ final class AddressMapper extends DataMapperFactory
     public const COLUMNS = [
         'address_id'       => ['name' => 'address_id',      'type' => 'int',    'internal' => 'id'],
         'address_name'     => ['name' => 'address_name',  'type' => 'string', 'internal' => 'name'],
-        'address_addition' => ['name' => 'address_addition',  'type' => 'string', 'internal' => 'addition'],
+        'address_fao'      => ['name' => 'address_fao',  'type' => 'string', 'internal' => 'fao'],
         'address_address'  => ['name' => 'address_address',  'type' => 'string', 'internal' => 'address'],
+        'address_addition' => ['name' => 'address_addition',  'type' => 'string', 'internal' => 'addressAddition'],
         'address_postal'   => ['name' => 'address_postal',  'type' => 'string', 'internal' => 'postal'],
         'address_state'    => ['name' => 'address_state',   'type' => 'string', 'internal' => 'state'],
         'address_city'     => ['name' => 'address_city',    'type' => 'string', 'internal' => 'city'],
@@ -81,4 +83,12 @@ final class AddressMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const PRIMARYFIELD = 'address_id';
+
+    /**
+     * Model to use by the mapper.
+     *
+     * @var class-string<T>
+     * @since 1.0.0
+     */
+    public const MODEL = Address::class;
 }

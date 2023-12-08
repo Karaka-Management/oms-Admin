@@ -35,7 +35,7 @@ class ApiKey
     public int $id = 0;
 
     /**
-     * Names.
+     * Key.
      *
      * @var string
      * @since 1.0.0

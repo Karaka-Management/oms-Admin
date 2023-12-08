@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\Admin\tests\Models;
 
-use Modules\Admin\Models\Address;
 use Modules\Admin\Models\AddressMapper;
+use phpOMS\Stdlib\Base\Address;
 use phpOMS\Stdlib\Base\AddressType;
 
 /**
@@ -34,7 +34,8 @@ final class AddressMapperTest extends \PHPUnit\Framework\TestCase
         $address = new Address();
 
         $address->name     = 'name';
-        $address->addition = 'addition';
+        $address->fao = 'fao';
+        $address->addressAddition = 'addition';
         $address->postal   = '0123456789';
         $address->setType(AddressType::BUSINESS);
         $address->city    = 'city';
@@ -50,7 +51,8 @@ final class AddressMapperTest extends \PHPUnit\Framework\TestCase
 
         $addressR = AddressMapper::get()->where('id', $address->id)->execute();
         self::assertEquals($address->name, $addressR->name);
-        self::assertEquals($address->addition, $addressR->addition);
+        self::assertEquals($address->fao, $addressR->fao);
+        self::assertEquals($address->addressAddition, $addressR->addressAddition);
         self::assertEquals($address->getType(), $addressR->getType());
         self::assertEquals($address->postal, $addressR->postal);
         self::assertEquals($address->address, $addressR->address);
