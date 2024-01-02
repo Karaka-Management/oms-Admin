@@ -40,9 +40,9 @@ final class AppTest extends \PHPUnit\Framework\TestCase
         $app = new App();
         self::assertEquals(
             [
-                'id' => 0,
-                'name' => '',
-                'type' => ApplicationType::WEB,
+                'id'     => 0,
+                'name'   => '',
+                'type'   => ApplicationType::WEB,
                 'status' => ApplicationStatus::NORMAL,
             ],
             $app->toArray()
@@ -54,9 +54,9 @@ final class AppTest extends \PHPUnit\Framework\TestCase
         $app = new App();
         self::assertEquals(
             [
-                'id' => 0,
-                'name' => '',
-                'type' => ApplicationType::WEB,
+                'id'     => 0,
+                'name'   => '',
+                'type'   => ApplicationType::WEB,
                 'status' => ApplicationStatus::NORMAL,
             ],
             $app->jsonSerialize()

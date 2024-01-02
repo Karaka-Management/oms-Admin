@@ -62,11 +62,11 @@ echo $this->data['nav']->render(); ?>
 <div id="iaccount-tabs" class="tabview tab-2 url-rewrite">
     <div class="box">
         <ul class="tab-links">
-            <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Groups'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('Permissions'); ?></label></li>
-            <li><label for="c-tab-4"><?= $this->getHtml('Localization'); ?></label></li>
-            <li><label for="c-tab-5"><?= $this->getHtml('AuditLog'); ?></label></li>
+            <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label>
+            <li><label for="c-tab-2"><?= $this->getHtml('Groups'); ?></label>
+            <li><label for="c-tab-3"><?= $this->getHtml('Permissions'); ?></label>
+            <li><label for="c-tab-4"><?= $this->getHtml('Localization'); ?></label>
+            <li><label for="c-tab-5"><?= $this->getHtml('AuditLog'); ?></label>
         </ul>
     </div>
     <div class="tab-content">
@@ -189,7 +189,7 @@ echo $this->data['nav']->render(); ?>
                 <div class="col-xs-12">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="groupTable" class="default">
+                        <table id="groupTable" class="default sticky">
                             <thead>
                                 <tr>
                                     <td>
@@ -333,7 +333,7 @@ echo $this->data['nav']->render(); ?>
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
-                            <table id="permissionTable" class="default"
+                            <table id="permissionTable" class="default sticky"
                                 data-tag="form"
                                 data-ui-element="tr"
                                 data-add-tpl=".oms-add-tpl-permission"

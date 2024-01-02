@@ -15,8 +15,6 @@ declare(strict_types=1);
 namespace Modules\Admin\tests\Models;
 
 use Modules\Admin\Models\DataChange;
-use phpOMS\Application\ApplicationStatus;
-use phpOMS\Application\ApplicationType;
 
 /**
  * @testdox Modules\Admin\tests\Models\DataChangeTest: DataChange model
@@ -40,7 +38,7 @@ final class DataChangeTest extends \PHPUnit\Framework\TestCase
     public function testReHash() : void
     {
         $change = new DataChange();
-        $hash = $change->getHash();
+        $hash   = $change->getHash();
 
         $change->reHash();
         self::assertNotEquals($hash, $change->getHash());
@@ -51,7 +49,7 @@ final class DataChangeTest extends \PHPUnit\Framework\TestCase
         $change = new DataChange();
         self::assertEquals(
             [
-                'id' => 0,
+                'id'   => 0,
                 'data' => '',
             ],
             $change->toArray()
@@ -63,7 +61,7 @@ final class DataChangeTest extends \PHPUnit\Framework\TestCase
         $change = new DataChange();
         self::assertEquals(
             [
-                'id' => 0,
+                'id'   => 0,
                 'data' => '',
             ],
             $change->jsonSerialize()

@@ -170,8 +170,8 @@ class AccountMapper extends DataMapperFactory
             from `group`
             join group_permission on `group`.group_id = group_permission.group_permission_group
             join account_group on group_permission.group_permission_group = account_group.account_group_group
-				AND account_group.account_group_account = ((int) $id)
-			where `group`.group_status = 1;
+                AND account_group.account_group_account = ((int) $id)
+            where `group`.group_status = 1;
         */
 
         /** @var \Modules\Admin\Models\Account $account */

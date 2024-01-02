@@ -38,10 +38,10 @@ echo $this->data['nav']->render(); ?>
 <div id="igroup-tabs" class="tabview tab-2 url-rewrite">
     <div class="box">
         <ul class="tab-links">
-            <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Accounts'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('Permissions'); ?></label></li>
-            <li><label for="c-tab-4"><?= $this->getHtml('AuditLog'); ?></label></li>
+            <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label>
+            <li><label for="c-tab-2"><?= $this->getHtml('Accounts'); ?></label>
+            <li><label for="c-tab-3"><?= $this->getHtml('Permissions'); ?></label>
+            <li><label for="c-tab-4"><?= $this->getHtml('AuditLog'); ?></label>
         </ul>
     </div>
     <div class="tab-content">
@@ -59,7 +59,7 @@ echo $this->data['nav']->render(); ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="iGname"><?= $this->getHtml('Name'); ?></label>
-                                    <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="&#xf0c0; Guest" value="<?= $this->printHtml($group->name); ?>">
+                                    <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="Guest" value="<?= $this->printHtml($group->name); ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
@@ -117,7 +117,7 @@ echo $this->data['nav']->render(); ?>
                 <div class="col-xs-12">
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Accounts'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="accountTable" class="default"
+                        <table id="accountTable" class="default sticky"
                             data-tag="form"
                             data-ui-element="tr"
                             data-add-tpl=".oms-add-tpl-account"
@@ -282,7 +282,7 @@ echo $this->data['nav']->render(); ?>
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
-                            <table id="permissionTable" class="default"
+                            <table id="permissionTable" class="default sticky"
                                 data-tag="form"
                                 data-ui-element="tr"
                                 data-add-tpl=".oms-add-tpl-permission"

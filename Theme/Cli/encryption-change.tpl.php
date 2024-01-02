@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 echo 'Use "/admin/encryption/change -old {old_hash} -new {new_hash}" to change the encryption'
     , "\n\n"

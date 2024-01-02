@@ -1,6 +1,6 @@
 <?php
 /**
- * Karaka
+ * Jingga
  *
  * PHP Version 8.1
  *
@@ -41,7 +41,7 @@ $categories  = ISO639Enum::getConstants();
                                         ]
                                     }
                                 ]'><i class="g-icon">book</i></button>
-                                <input type="text" list="<?= $this->id; ?>-datalist" id="<?= $this->id; ?>" name="receiver" placeholder="&#xf007; Guest" data-action='[
+                                <input type="text" list="<?= $this->id; ?>-datalist" id="<?= $this->id; ?>" name="receiver" placeholder="Guest" data-action='[
                                     {
                                         "key": 1, "listener": "keyup", "action": [
                                             {"key": 1, "type": "validate.keypress", "pressed": "!13!37!38!39!40"},
@@ -196,7 +196,7 @@ $categories  = ISO639Enum::getConstants();
         <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Permissions', 'Admin', 'Backend'); ?><i class="g-icon download btn end-xs">download</i></div>
             <div class="slider">
-            <table id="attributeTable" class="default"
+            <table id="attributeTable" class="default sticky"
                 data-tag="form"
                 data-ui-element="tr"
                 data-add-tpl=".oms-add-tpl-attribute"

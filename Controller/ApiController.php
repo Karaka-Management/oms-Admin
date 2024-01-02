@@ -954,7 +954,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -3076,7 +3076,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -3456,7 +3456,7 @@ final class ApiController extends Controller
      */
     public function updateContactFromRequest(RequestAbstract $request, Contact $new) : Contact
     {
-        $new->type = $request->getDataInt('type') ?? $new->type;
+        $new->type    = $request->getDataInt('type') ?? $new->type;
         $new->subtype = $request->getDataInt('subtype') ?? $new->subtype;
         $new->content = $request->getDataString('content') ?? $new->content;
         $new->account = $request->getDataInt('account') ?? $new->account;

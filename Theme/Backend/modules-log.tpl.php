@@ -31,7 +31,7 @@ echo $this->data['nav']->render();
         <div class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
             <div class="slider">
-            <table class="default">
+            <table class="default sticky">
                 <colgroup>
                     <col style="width: 75px">
                     <col style="width: 150px">

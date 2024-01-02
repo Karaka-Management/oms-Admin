@@ -33,10 +33,10 @@ final class AddressMapperTest extends \PHPUnit\Framework\TestCase
     {
         $address = new Address();
 
-        $address->name     = 'name';
-        $address->fao = 'fao';
+        $address->name            = 'name';
+        $address->fao             = 'fao';
         $address->addressAddition = 'addition';
-        $address->postal   = '0123456789';
+        $address->postal          = '0123456789';
         $address->setType(AddressType::BUSINESS);
         $address->city    = 'city';
         $address->address = 'Some address here';

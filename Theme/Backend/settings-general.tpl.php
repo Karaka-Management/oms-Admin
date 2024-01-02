@@ -43,10 +43,10 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 <div class="tabview tab-2 url-rewrite">
     <div class="box">
         <ul class="tab-links">
-            <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('Settings'); ?></label></li>
-            <li><label for="c-tab-4"><?= $this->getHtml('Design'); ?></label></li>
+            <li><label for="c-tab-1"><?= $this->getHtml('General'); ?></label>
+            <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label>
+            <li><label for="c-tab-3"><?= $this->getHtml('Settings'); ?></label>
+            <li><label for="c-tab-4"><?= $this->getHtml('Design'); ?></label>
         </ul>
     </div>
     <div class="tab-content">
@@ -82,7 +82,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
                                         <i class="tooltip" data-tooltip="<?= $this->getHtml('i:PasswordRegex'); ?>"><i class="g-icon">info</i></i>
                                     </label>
 
-                                    <input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001']->content); ?>" placeholder="&#xf023; ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
+                                    <input id="iPassword" name="settings_1000000001" type="text" value="<?= $this->printHtml($generalSettings['1000000001']->content); ?>" placeholder="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[A-Za-z\d$@$!%*?&;:\(\)\[\]=\{\}\+\-]{8,}">
                                 </div>
 
                                 <div class="form-group">
@@ -146,7 +146,7 @@ $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 
                                 <div class="form-group">
                                     <label for="iLogPath"><?= $this->getHtml('LogPath'); ?></label>
-                                    <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']->content); ?>" placeholder="&#xf040; /Logs">
+                                    <input id="iLogPath" name="settings_1000000007" type="text" value="<?= $this->printHtml($generalSettings['1000000007']->content); ?>" placeholder="/Logs">
                                 </div>
                             </div>
                             <div class="portlet-foot">

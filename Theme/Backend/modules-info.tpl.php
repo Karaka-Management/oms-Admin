@@ -48,9 +48,6 @@ if (isset($installed[$id])) {
                     <tr>
                         <td><?= $this->getHtml('Website'); ?>
                         <td><?= $this->printHtml($modules[$id]->get()['creator']['website']); ?>
-                    <tr>
-                        <td><?= $this->getHtml('Description'); ?>
-                        <td><?= $this->printHtml($modules[$id]->get()['description']); ?>
                 </table>
             </div>
             <div class="portlet-foot">
