@@ -183,6 +183,11 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
+            "address_attr_type_repeatable": {
+                "name": "address_attr_type_repeatable",
+                "type": "TINYINT(1)",
+                "null": false
+            },
             "address_attr_type_required": {
                 "description": "Every address must have this attribute type if set to true.",
                 "name": "address_attr_type_required",
@@ -861,6 +866,11 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
+            "unit_attr_type_repeatable": {
+                "name": "unit_attr_type_repeatable",
+                "type": "TINYINT(1)",
+                "null": false
+            },
             "unit_attr_type_required": {
                 "description": "Every unit must have this attribute type if set to true.",
                 "name": "unit_attr_type_required",
@@ -1381,6 +1391,11 @@
             },
             "account_attr_type_custom": {
                 "name": "account_attr_type_custom",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "account_attr_type_repeatable": {
+                "name": "account_attr_type_repeatable",
                 "type": "TINYINT(1)",
                 "null": false
             },

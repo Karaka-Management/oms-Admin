@@ -37,7 +37,7 @@ $lengths      = \phpOMS\Utils\Converter\LengthType::getConstants();
 $volumes      = \phpOMS\Utils\Converter\VolumeType::getConstants();
 $temperatures = \phpOMS\Utils\Converter\TemperatureType::getConstants();
 
-$l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
+$l11n = $this->getData('default_localization') ?? new NullLocalization();
 ?>
 
 <div class="tabview tab-2 url-rewrite">

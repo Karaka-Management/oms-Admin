@@ -37,7 +37,7 @@ $temperatures = \phpOMS\Utils\Converter\TemperatureType::getConstants();
 
 $serverModes = ApplicationStatus::getConstants();
 
-$l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
+$l11n = $this->getData('default_localization') ?? new NullLocalization();
 
 echo $this->data['nav']->render();
 ?>
