@@ -44,7 +44,7 @@ final class ModuleTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('', $this->module->id);
         self::assertInstanceOf('\DateTimeImmutable', $this->module->createdAt);
         self::assertEquals('', $this->module->name);
-        self::assertEquals(ModuleStatus::INACTIVE, $this->module->getStatus());
+        self::assertEquals(ModuleStatus::INACTIVE, $this->module->status);
         self::assertEquals(\json_encode($this->module->jsonSerialize()), $this->module->__toString());
         self::assertEquals($this->module->jsonSerialize(), $this->module->toArray());
     }
@@ -67,8 +67,8 @@ final class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     public function testStatusInputOutput() : void
     {
-        $this->module->setStatus(ModuleStatus::ACTIVE);
-        self::assertEquals(ModuleStatus::ACTIVE, $this->module->getStatus());
+        $this->module->status = ModuleStatus::ACTIVE;
+        self::assertEquals(ModuleStatus::ACTIVE, $this->module->status);
     }
 
     /**
@@ -80,17 +80,5 @@ final class ModuleTest extends \PHPUnit\Framework\TestCase
     {
         self::assertEquals(\json_encode($this->module->jsonSerialize()), $this->module->__toString());
         self::assertEquals($this->module->jsonSerialize(), $this->module->toArray());
-    }
-
-    /**
-     * @testdox A invalid status throws a InvalidEnumValue exception
-     * @covers Modules\Admin\Models\Module
-     * @group module
-     */
-    public function testInvalidStatus() : void
-    {
-        $this->expectException(\phpOMS\Stdlib\Base\Exception\InvalidEnumValue::class);
-
-        $this->module->setStatus(9999);
     }
 }

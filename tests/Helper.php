@@ -38,8 +38,8 @@ class Helper {
             $account->name3 = \ucfirst(Text::LOREM_IPSUM[\mt_rand(0, $LOREM_COUNT - 1)]);
             $account->tries = 0;
             $account->setEmail(Email::generateEmail());
-            $account->setStatus(AccountStatus::ACTIVE);
-            $account->setType(AccountType::USER);
+            $account->status = AccountStatus::ACTIVE;
+            $account->type   = AccountType::USER;
 
             AccountMapper::create()->execute($account);
 

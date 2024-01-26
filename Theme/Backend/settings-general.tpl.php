@@ -37,7 +37,7 @@ $lengths      = \phpOMS\Utils\Converter\LengthType::getConstants();
 $volumes      = \phpOMS\Utils\Converter\VolumeType::getConstants();
 $temperatures = \phpOMS\Utils\Converter\TemperatureType::getConstants();
 
-$l11n = $this->getData('default_localization') ?? new NullLocalization();
+$l11n = $this->data['default_localization'] ?? new NullLocalization();
 ?>
 
 <div class="tabview tab-2 url-rewrite">
@@ -186,7 +186,7 @@ $l11n = $this->getData('default_localization') ?? new NullLocalization();
                                     <label for="iCountries"><?= $this->getHtml('Country'); ?></label>
                                     <select id="iCountries" name="settings_country">
                                         <?php foreach ($countryCodes as $code3 => $code2) : ?>
-                                        <option value="<?= $this->printHtml($code2); ?>"<?= $this->printHtml($code2 === $l11n->getCountry() ? ' selected' : ''); ?>><?= $this->printHtml($countries[$code3]); ?>
+                                        <option value="<?= $this->printHtml($code2); ?>"<?= $this->printHtml($code2 === $l11n->country ? ' selected' : ''); ?>><?= $this->printHtml($countries[$code3]); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -267,7 +267,7 @@ $l11n = $this->getData('default_localization') ?? new NullLocalization();
                                 <label for="iCurrencies"><?= $this->getHtml('Currency'); ?></label>
                                 <select form="fLocalization" id="iCurrencies" name="settings_currency">
                                     <?php foreach ($currencies as $code => $currency) : $code = \substr($code, 1); ?>
-                                    <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->getCurrency() ? ' selected' : ''); ?>><?= $this->printHtml($currency); ?>
+                                    <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->currency ? ' selected' : ''); ?>><?= $this->printHtml($currency); ?>
                                         <?php endforeach; ?>
                                 </select>
                             </div>
@@ -275,8 +275,8 @@ $l11n = $this->getData('default_localization') ?? new NullLocalization();
                             <div class="form-group">
                                 <label><?= $this->getHtml('Currencyformat'); ?></label>
                                 <select form="fLocalization" name="settings_currencyformat">
-                                    <option value="0"<?= $this->printHtml($l11n->getCurrencyFormat() === '0' ? ' selected' : ''); ?>><?= $this->getHtml('Amount') , ' ' , $this->printHtml($l11n->getCurrency()); ?>
-                                    <option value="1"<?= $this->printHtml($l11n->getCurrencyFormat() === '1' ? ' selected' : ''); ?>><?= $this->printHtml($l11n->getCurrency()) , ' ' , $this->getHtml('Amount'); ?>
+                                    <option value="0"<?= $this->printHtml($l11n->getCurrencyFormat() === '0' ? ' selected' : ''); ?>><?= $this->getHtml('Amount') , ' ' , $this->printHtml($l11n->currency); ?>
+                                    <option value="1"<?= $this->printHtml($l11n->getCurrencyFormat() === '1' ? ' selected' : ''); ?>><?= $this->printHtml($l11n->currency) , ' ' , $this->getHtml('Amount'); ?>
                                 </select>
                             </div>
 

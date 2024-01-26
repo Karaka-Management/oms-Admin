@@ -62,7 +62,7 @@ class Account extends \phpOMS\Account\Account
      * @var Address[]
      * @since 1.0.0
      */
-    public array $locations = [];
+    public array $addresses = [];
 
     /**
      * Contact data.
@@ -71,4 +71,24 @@ class Account extends \phpOMS\Account\Account
      * @since 1.0.0
      */
     public array $contacts = [];
+
+    /**
+     * Get the main contact element by type
+     *
+     * @param int $type Contact element type
+     *
+     * @return Contact
+     *
+     * @since 1.0.0
+     */
+    public function getContactByType(int $type) : Contact
+    {
+        foreach ($this->contacts as $element) {
+            if ($element->type === $type) {
+                return $element;
+            }
+        }
+
+        return new NullContact();
+    }
 }

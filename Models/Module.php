@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\Admin\Models;
 
 use phpOMS\Module\ModuleStatus;
-use phpOMS\Stdlib\Base\Exception\InvalidEnumValue;
 
 /**
  * Module class.
@@ -94,50 +93,6 @@ class Module
     }
 
     /**
-     * Get module id.
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getId() : string
-    {
-        return $this->id;
-    }
-
-    /**
-     * Get module status.
-     *
-     * @return int Module status
-     *
-     * @since 1.0.0
-     */
-    public function getStatus() : int
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set module status.
-     *
-     * @param int $status Module status
-     *
-     * @return void
-     *
-     * @throws InvalidEnumValue
-     *
-     * @since 1.0.0
-     */
-    public function setStatus(int $status) : void
-    {
-        if (!ModuleStatusUpdateType::isValidValue($status)) {
-            throw new InvalidEnumValue($status);
-        }
-
-        $this->status = $status;
-    }
-
-    /**
      * Get string representation.
      *
      * @return string
@@ -163,12 +118,12 @@ class Module
     public function toArray() : array
     {
         return [
-            'id'             => $this->id,
-            'name'           => $this->name,
-            'path'           => $this->path,
-            'version'        => $this->version,
-            'status'         => $this->status,
-            'createdAt'      => $this->createdAt,
+            'id'        => $this->id,
+            'name'      => $this->name,
+            'path'      => $this->path,
+            'version'   => $this->version,
+            'status'    => $this->status,
+            'createdAt' => $this->createdAt,
         ];
     }
 }

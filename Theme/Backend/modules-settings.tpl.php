@@ -121,7 +121,7 @@ else : ?>
                             $name = $this->getData('settings_class')::getName($setting->name);
 
                             if (!\is_string($name)) {
-                                $name= $setting->name;
+                                $name = $setting->name;
                             }
                         }
                         ?>

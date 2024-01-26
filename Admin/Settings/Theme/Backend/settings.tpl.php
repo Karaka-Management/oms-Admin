@@ -37,7 +37,7 @@ $temperatures = \phpOMS\Utils\Converter\TemperatureType::getConstants();
 
 $serverModes = ApplicationStatus::getConstants();
 
-$l11n = $this->getData('default_localization') ?? new NullLocalization();
+$l11n = $this->data['default_localization'] ?? new NullLocalization();
 
 echo $this->data['nav']->render();
 ?>
@@ -288,7 +288,7 @@ echo $this->data['nav']->render();
                             <label for="iCurrencies"><?= $this->getHtml('Currency'); ?></label>
                             <select form="fLocalization" id="iCurrencies" name="settings_currency">
                                 <?php foreach ($currencies as $code => $currency) : $code = \substr($code, 1); ?>
-                                <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->getCurrency() ? ' selected' : ''); ?>><?= $this->printHtml($currency); ?>
+                                <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->currency ? ' selected' : ''); ?>><?= $this->printHtml($currency); ?>
                                     <?php endforeach; ?>
                             </select>
                         </div>
@@ -296,8 +296,8 @@ echo $this->data['nav']->render();
                         <div class="form-group">
                             <label><?= $this->getHtml('Currencyformat'); ?></label>
                             <select form="fLocalization" name="settings_currencyformat">
-                                <option value="0"<?= $this->printHtml($l11n->getCurrencyFormat() === '0' ? ' selected' : ''); ?>><?= $this->getHtml('Amount') , ' ' , $this->printHtml($l11n->getCurrency()); ?>
-                                <option value="1"<?= $this->printHtml($l11n->getCurrencyFormat() === '1' ? ' selected' : ''); ?>><?= $this->printHtml($l11n->getCurrency()) , ' ' , $this->getHtml('Amount'); ?>
+                                <option value="0"<?= $this->printHtml($l11n->getCurrencyFormat() === '0' ? ' selected' : ''); ?>><?= $this->getHtml('Amount') , ' ' , $this->printHtml($l11n->currency); ?>
+                                <option value="1"<?= $this->printHtml($l11n->getCurrencyFormat() === '1' ? ' selected' : ''); ?>><?= $this->printHtml($l11n->currency) , ' ' , $this->getHtml('Amount'); ?>
                             </select>
                         </div>
 
@@ -806,7 +806,7 @@ echo $this->data['nav']->render();
                                     $name = $this->getData('settings_class')::getName($setting->name);
 
                                     if (!\is_string($name)) {
-                                        $name= $setting->name;
+                                        $name = $setting->name;
                                     }
                                 }
                                 ?>

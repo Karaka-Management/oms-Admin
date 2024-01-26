@@ -10,13 +10,13 @@ return [
             'verb' => RouteVerb::ANY,
         ],
     ],
-    '^/admin/event.*$' => [
+    '^/admin/event(\?.*$|$)' => [
         [
             'dest' => '\Modules\Admin\Controller\CliController:cliRunEvent',
             'verb' => RouteVerb::ANY,
         ],
     ],
-    '^/admin/encryption/change.*$' => [
+    '^/admin/encryption/change(\?.*$|$)' => [
         [
             'dest' => '\Modules\Admin\Controller\CliController:cliEncryptionChange',
             'verb' => RouteVerb::ANY,

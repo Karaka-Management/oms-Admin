@@ -87,14 +87,14 @@ echo $this->data['nav']->render(); ?>
                         foreach ($groups as $key => $value) : ++$c;
                             $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id);
 
-                            $color                                                          = 'darkred';
-                            if ($value->getStatus() === GroupStatus::ACTIVE) { $color       = 'green'; }
-                            elseif ($value->getStatus() === GroupStatus::INACTIVE) { $color = 'darkblue'; }
-                            elseif ($value->getStatus() === GroupStatus::HIDDEN) { $color   = 'purple'; }
+                            $color = 'darkred';
+                            if ($value->status === GroupStatus::ACTIVE) { $color = 'green'; }
+                            elseif ($value->status === GroupStatus::INACTIVE) { $color = 'darkblue'; }
+                            elseif ($value->status === GroupStatus::HIDDEN) { $color = 'purple'; }
                     ?>
                     <tr tabindex="0" data-href="<?= $url; ?>">
                         <td data-label="<?= $this->getHtml('ID', '0', '0'); ?>"><a href="<?= $url; ?>"><?= $value->id; ?></a>
-                        <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status'. $value->getStatus()); ?></span></a>
+                        <td data-label="<?= $this->getHtml('Status'); ?>"><a href="<?= $url; ?>"><span class="tag <?= $color; ?>"><?= $this->getHtml('Status' . $value->status); ?></span></a>
                         <td data-label="<?= $this->getHtml('Name'); ?>"><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                         <td data-label="<?= $this->getHtml('Members'); ?>"><?= $memberCount[$value->id] ?? 0; ?>
                     <?php endforeach; ?>

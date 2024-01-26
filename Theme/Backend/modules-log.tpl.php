@@ -54,7 +54,7 @@ echo $this->data['nav']->render();
                 <?php
                 $count = 0;
                 foreach ($audits as $key => $audit) : ++$count;
-                    $url = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id); ?>
+                    $url = UriFactory::build('{/base}/admin/audit/view?{?}&id=' . $audit->id); ?>
                     <tr tabindex="0" data-href="<?= $url; ?>">
                         <td><?= $audit->id; ?>
                         <td><?= $this->printHtml($audit->module); ?>

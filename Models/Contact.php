@@ -50,6 +50,8 @@ class Contact
      */
     public int $subtype = 0;
 
+    public string $title = '';
+
     /**
      * Content.
      *
@@ -57,80 +59,4 @@ class Contact
      * @since 1.0.0
      */
     public string $content = '';
-
-    /**
-     * Order.
-     *
-     * @var int
-     * @since 1.0.0
-     */
-    public int $order = 0;
-
-    public int $account = 0;
-
-    public string $module = '';
-
-    /**
-     * Get id.
-     *
-     * @return int Model id
-     *
-     * @since 1.0.0
-     */
-    public function getId() : int
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param int $type Type
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setType(int $type) : void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Get type
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getType() : int
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set subtype
-     *
-     * @param int $subtype Subtype
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setSubtype(int $subtype) : void
-    {
-        $this->subtype = $subtype;
-    }
-
-    /**
-     * Get subtype
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getSubtype() : int
-    {
-        return $this->subtype;
-    }
 }

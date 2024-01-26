@@ -59,18 +59,6 @@ class GroupTagSelectorView extends View
     }
 
     /**
-     * Get selector id
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getId() : string
-    {
-        return $this->id;
-    }
-
-    /**
      * Is required?
      *
      * @return bool
@@ -91,7 +79,7 @@ class GroupTagSelectorView extends View
         $this->id         = $data[0];
         $this->isRequired = $data[1] ?? false;
 
-        $this->getData('group-selector-popup')->setId($this->id);
+        $this->getData('group-selector-popup')->id = $this->id;
 
         return parent::render();
     }

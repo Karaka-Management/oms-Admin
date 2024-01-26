@@ -44,5 +44,9 @@ abstract class PermissionCategory extends Enum
 
     public const SEARCH = 9;
 
-    public const API = 9;
+    public const API = 10;
+
+    public const ADDRESS = 11;
+
+    public const CONTACT = 12;
 }

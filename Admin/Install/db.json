@@ -188,6 +188,11 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
+            "address_attr_type_internal": {
+                "name": "address_attr_type_internal",
+                "type": "TINYINT(1)",
+                "null": false
+            },
             "address_attr_type_required": {
                 "description": "Every address must have this attribute type if set to true.",
                 "name": "address_attr_type_required",
@@ -871,6 +876,11 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
+            "unit_attr_type_internal": {
+                "name": "unit_attr_type_internal",
+                "type": "TINYINT(1)",
+                "null": false
+            },
             "unit_attr_type_required": {
                 "description": "Every unit must have this attribute type if set to true.",
                 "name": "unit_attr_type_required",
@@ -1399,6 +1409,11 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
+            "account_attr_type_internal": {
+                "name": "account_attr_type_internal",
+                "type": "TINYINT(1)",
+                "null": false
+            },
             "account_attr_type_required": {
                 "description": "Every account must have this attribute type if set to true.",
                 "name": "account_attr_type_required",
@@ -1656,50 +1671,35 @@
             }
         }
     },
-    "account_contact": {
-        "name": "account_contact",
+    "contact": {
+        "name": "contact",
         "fields": {
-            "account_contact_id": {
-                "name": "account_contact_id",
+            "contact_id": {
+                "name": "contact_id",
                 "type": "INT",
                 "null": false,
                 "primary": true,
                 "autoincrement": true
             },
-            "account_contact_type": {
-                "name": "account_contact_type",
-                "type": "TINYINT",
-                "null": false
-            },
-            "account_contact_subtype": {
-                "name": "account_contact_subtype",
-                "type": "TINYINT",
-                "null": false
-            },
-            "account_contact_order": {
-                "name": "account_contact_order",
-                "type": "INT",
-                "null": false
-            },
-            "account_contact_content": {
-                "name": "account_contact_content",
+            "contact_title": {
+                "name": "contact_title",
                 "type": "VARCHAR(255)",
                 "null": false
             },
-            "account_contact_module": {
-                "name": "account_contact_module",
-                "type": "VARCHAR(190)",
-                "null": true,
-                "default": null,
-                "foreignTable": "module",
-                "foreignKey": "module_id"
+            "contact_type": {
+                "name": "contact_type",
+                "type": "TINYINT",
+                "null": false
             },
-            "account_contact_account": {
-                "name": "account_contact_account",
-                "type": "INT",
-                "null": false,
-                "foreignTable": "account",
-                "foreignKey": "account_id"
+            "contact_subtype": {
+                "name": "contact_subtype",
+                "type": "TINYINT",
+                "null": false
+            },
+            "contact_content": {
+                "name": "contact_content",
+                "type": "VARCHAR(255)",
+                "null": false
             }
         }
     },
@@ -1734,6 +1734,40 @@
                 "null": false,
                 "foreignTable": "address",
                 "foreignKey": "address_id"
+            }
+        }
+    },
+    "account_contact_rel": {
+        "name": "account_contact_rel",
+        "fields": {
+            "account_contact_rel_id": {
+                "name": "account_contact_rel_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "account_contact_rel_account": {
+                "name": "account_contact_rel_account",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "account",
+                "foreignKey": "account_id"
+            },
+            "account_contact_rel_module": {
+                "name": "account_contact_rel_module",
+                "type": "VARCHAR(190)",
+                "null": true,
+                "default": null,
+                "foreignTable": "module",
+                "foreignKey": "module_id"
+            },
+            "account_contact_rel_contact": {
+                "name": "account_contact_rel_contact",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "contact",
+                "foreignKey": "contact_id"
             }
         }
     },

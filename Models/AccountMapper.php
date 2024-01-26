@@ -39,18 +39,18 @@ class AccountMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'account_id'                  => ['name' => 'account_id',           'type' => 'int',      'internal' => 'id'],
-        'account_status'              => ['name' => 'account_status',       'type' => 'int',      'internal' => 'status'],
-        'account_type'                => ['name' => 'account_type',         'type' => 'int',      'internal' => 'type'],
-        'account_login'               => ['name' => 'account_login',        'type' => 'string',   'internal' => 'login', 'autocomplete' => true],
-        'account_name1'               => ['name' => 'account_name1',        'type' => 'string',   'internal' => 'name1', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
-        'account_name2'               => ['name' => 'account_name2',        'type' => 'string',   'internal' => 'name2', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
-        'account_name3'               => ['name' => 'account_name3',        'type' => 'string',   'internal' => 'name3', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
-        'account_email'               => ['name' => 'account_email',        'type' => 'string',   'internal' => 'email', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
-        'account_tries'               => ['name' => 'account_tries',        'type' => 'int',      'internal' => 'tries'],
-        'account_lactive'             => ['name' => 'account_lactive',      'type' => 'DateTime', 'internal' => 'lastActive'],
-        'account_localization'        => ['name' => 'account_localization', 'type' => 'int',      'internal' => 'l11n'],
-        'account_created_at'          => ['name' => 'account_created_at',   'type' => 'DateTimeImmutable', 'internal' => 'createdAt', 'readonly' => true],
+        'account_id'           => ['name' => 'account_id',           'type' => 'int',      'internal' => 'id'],
+        'account_status'       => ['name' => 'account_status',       'type' => 'int',      'internal' => 'status'],
+        'account_type'         => ['name' => 'account_type',         'type' => 'int',      'internal' => 'type'],
+        'account_login'        => ['name' => 'account_login',        'type' => 'string',   'internal' => 'login', 'autocomplete' => true],
+        'account_name1'        => ['name' => 'account_name1',        'type' => 'string',   'internal' => 'name1', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
+        'account_name2'        => ['name' => 'account_name2',        'type' => 'string',   'internal' => 'name2', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
+        'account_name3'        => ['name' => 'account_name3',        'type' => 'string',   'internal' => 'name3', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
+        'account_email'        => ['name' => 'account_email',        'type' => 'string',   'internal' => 'email', 'autocomplete' => true, 'annotations' => ['gdpr' => true]],
+        'account_tries'        => ['name' => 'account_tries',        'type' => 'int',      'internal' => 'tries'],
+        'account_lactive'      => ['name' => 'account_lactive',      'type' => 'DateTime', 'internal' => 'lastActive'],
+        'account_localization' => ['name' => 'account_localization', 'type' => 'int',      'internal' => 'l11n'],
+        'account_created_at'   => ['name' => 'account_created_at',   'type' => 'DateTimeImmutable', 'internal' => 'createdAt', 'readonly' => true],
     ];
 
     /**
@@ -60,9 +60,9 @@ class AccountMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const OWNS_ONE = [
-        'l11n'  => [
-            'mapper'     => LocalizationMapper::class,
-            'external'   => 'account_localization',
+        'l11n' => [
+            'mapper'   => LocalizationMapper::class,
+            'external' => 'account_localization',
         ],
     ];
 
@@ -91,7 +91,7 @@ class AccountMapper extends DataMapperFactory
             'external' => 'account_account_rel_root',
             'self'     => 'account_account_rel_child',
         ],
-        'locations' => [
+        'addresses' => [
             'mapper'   => AddressMapper::class,
             'table'    => 'account_address_rel',
             'external' => 'account_address_rel_address',
@@ -99,9 +99,9 @@ class AccountMapper extends DataMapperFactory
         ],
         'contacts' => [
             'mapper'   => ContactMapper::class,
-            'table'    => 'account_contact',
-            'self'     => 'account_contact_account',
-            'external' => null,
+            'table'    => 'account_contact_rel',
+            'external' => 'account_contact_rel_contact',
+            'self'     => 'account_contact_rel_account',
         ],
     ];
 

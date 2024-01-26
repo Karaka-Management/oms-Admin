@@ -19,7 +19,6 @@ use phpOMS\Account\AccountType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerAccountTrait
 {
@@ -31,7 +30,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountGet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', '1');
@@ -50,7 +49,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountUpdate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', 1);
@@ -72,7 +71,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountFind() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('search', 'admin');
@@ -90,7 +89,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountAndProfileCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('user', 'guest');
@@ -113,7 +112,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountCreateWithCustomLocale() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('user', 'guest2');
@@ -138,7 +137,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountDelete() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         // mustn't create a profile otherwise it will not be possible to delete the account because of FK constraints
@@ -162,7 +161,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountCreateInvalid() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('status', 999);
@@ -180,7 +179,7 @@ trait ApiControllerAccountTrait
     public function testApiAddRemoveGroupToAccount() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('account', 1);
@@ -203,7 +202,7 @@ trait ApiControllerAccountTrait
     public function testApiRemoveAdminGroupFromOneselfAccount() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('account', 1);
@@ -220,7 +219,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountLogin() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('user', 'admin');
@@ -237,7 +236,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountLoginInvalid() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('user', 'admin');
@@ -254,7 +253,7 @@ trait ApiControllerAccountTrait
     public function testApiAccountLogout() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('user', 'admin');

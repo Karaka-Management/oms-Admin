@@ -153,7 +153,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/find/group.*$' => [
+    '^.*/admin/find/group(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupFind',
             'verb'       => RouteVerb::GET,
@@ -164,7 +164,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/find/accgrp.*$' => [
+    '^.*/admin/find/accgrp(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountGroupFind',
             'verb'       => RouteVerb::GET,
@@ -226,7 +226,7 @@ return [
         ],
     ],
 
-    '^.*/admin/module/status.*$' => [
+    '^.*/admin/module/status(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiModuleStatusUpdate',
             'verb'       => RouteVerb::SET,
@@ -238,7 +238,7 @@ return [
         ],
     ],
 
-    '^.*/admin/group/account.*$' => [
+    '^.*/admin/group/account(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddAccountToGroup',
             'verb'       => RouteVerb::PUT,
@@ -249,7 +249,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/account/group.*$' => [
+    '^.*/admin/account/group(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddGroupToAccount',
             'verb'       => RouteVerb::PUT,
@@ -261,7 +261,7 @@ return [
         ],
     ],
 
-    '^.*/admin/group/permission.*$' => [
+    '^.*/admin/group/permission(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupPermissionGet',
             'verb'       => RouteVerb::PUT,
@@ -299,7 +299,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/account/permission.*$' => [
+    '^.*/admin/account/permission(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountPermissionGet',
             'verb'       => RouteVerb::GET,
@@ -337,7 +337,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/module/reinit.*$' => [
+    '^.*/admin/module/reinit(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiReInit',
             'verb'       => RouteVerb::GET,
@@ -349,7 +349,7 @@ return [
         ],
     ],
 
-    '^.*/admin/update/url.*$' => [
+    '^.*/admin/update/url(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiUpdateFile',
             'verb'       => RouteVerb::GET,
@@ -360,7 +360,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/update/check.*$' => [
+    '^.*/admin/update/check(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiCheckForUpdates',
             'verb'       => RouteVerb::PUT,
@@ -371,7 +371,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/update/component.*$' => [
+    '^.*/admin/update/component(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiCheckForUpdates',
             'verb'       => RouteVerb::PUT,
@@ -379,6 +379,64 @@ return [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::APP,
+            ],
+        ],
+    ],
+    '^.*/account/address$' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressCreate',
+            'verb'       => RouteVerb::PUT,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::ADDRESS,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressUpdate',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionCategory::ADDRESS,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressDelete',
+            'verb'       => RouteVerb::DELETE,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::DELETE,
+                'state'  => PermissionCategory::ADDRESS,
+            ],
+        ],
+    ],
+    '^.*/account/contact$' => [
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactCreate',
+            'verb'       => RouteVerb::PUT,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::ADDRESS,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactUpdate',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionCategory::ADDRESS,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactDelete',
+            'verb'       => RouteVerb::DELETE,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::DELETE,
+                'state'  => PermissionCategory::ADDRESS,
             ],
         ],
     ],

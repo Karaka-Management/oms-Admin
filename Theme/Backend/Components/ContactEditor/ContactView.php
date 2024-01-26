@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace Modules\Admin\Theme\Backend\Components\AddressEditor;
+namespace Modules\Admin\Theme\Backend\Components\ContactEditor;
 
 use phpOMS\Localization\L11nManager;
 use phpOMS\Message\RequestAbstract;
@@ -28,15 +28,15 @@ use phpOMS\Views\View;
  * @since   1.0.0
  * @codeCoverageIgnore
  */
-class AddressView extends View
+class ContactView extends View
 {
     /**
-     * Address
+     * Contact
      *
-     * @var \phpOMS\Stdlib\Base\Address[]
+     * @var Modules\Admin\Models\Contact[]
      * @since 1.0.0
      */
-    public array $addresses = [];
+    public array $contacts = [];
 
     /**
      * Form id
@@ -84,7 +84,7 @@ class AddressView extends View
     public function __construct(?L11nManager $l11n = null, RequestAbstract $request, ResponseAbstract $response)
     {
         parent::__construct($l11n, $request, $response);
-        $this->setTemplate('/Modules/Admin/Theme/Backend/Components/AddressEditor/addresses');
+        $this->setTemplate('/Modules/Admin/Theme/Backend/Components/ContactEditor/contacts');
     }
 
     /**
@@ -95,7 +95,7 @@ class AddressView extends View
         /** @var array{0:string, 1?:string, 2?:array} $data */
         $this->form        = $data[0];
         $this->virtualPath = $data[1] ?? $this->virtualPath;
-        $this->addresses   = $data[2] ?? $this->addresses;
+        $this->contacts    = $data[2] ?? $this->contacts;
 
         return parent::render();
     }

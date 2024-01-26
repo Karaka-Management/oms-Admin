@@ -85,17 +85,17 @@ echo $this->data['nav']->render(); ?>
                                 <div class="form-group">
                                     <label for="iType"><?= $this->getHtml('Type'); ?></label>
                                     <select id="iType" name="type">
-                                        <option value="<?= AccountType::USER; ?>"<?= $this->printHtml($account->getType() === AccountType::USER ? ' selected' : ''); ?>><?= $this->getHtml('Person'); ?>
-                                        <option value="<?= AccountType::GROUP; ?>"<?= $this->printHtml($account->getType() === AccountType::GROUP ? ' selected' : ''); ?>><?= $this->getHtml('Organization'); ?>
+                                        <option value="<?= AccountType::USER; ?>"<?= $account->type === AccountType::USER ? ' selected' : ''; ?>><?= $this->getHtml('Person'); ?>
+                                        <option value="<?= AccountType::GROUP; ?>"<?= $account->type === AccountType::GROUP ? ' selected' : ''; ?>><?= $this->getHtml('Organization'); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="iStatus"><?= $this->getHtml('Status'); ?></label>
                                     <select id="iStatus" name="status">
-                                        <option value="<?= AccountStatus::ACTIVE; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::ACTIVE ? ' selected' : ''); ?>><?= $this->getHtml('Active'); ?>
-                                        <option value="<?= AccountStatus::INACTIVE; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::INACTIVE ? ' selected' : ''); ?>><?= $this->getHtml('Inactive'); ?>
-                                        <option value="<?= AccountStatus::TIMEOUT; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::TIMEOUT ? ' selected' : ''); ?>><?= $this->getHtml('Timeout'); ?>
-                                        <option value="<?= AccountStatus::BANNED; ?>"<?= $this->printHtml($account->getStatus() === AccountStatus::BANNED ? ' selected' : ''); ?>><?= $this->getHtml('Banned'); ?>
+                                        <option value="<?= AccountStatus::ACTIVE; ?>"<?= $account->status === AccountStatus::ACTIVE ? ' selected' : ''; ?>><?= $this->getHtml('Active'); ?>
+                                        <option value="<?= AccountStatus::INACTIVE; ?>"<?= $account->status === AccountStatus::INACTIVE ? ' selected' : ''; ?>><?= $this->getHtml('Inactive'); ?>
+                                        <option value="<?= AccountStatus::TIMEOUT; ?>"<?= $account->status === AccountStatus::TIMEOUT ? ' selected' : ''; ?>><?= $this->getHtml('Timeout'); ?>
+                                        <option value="<?= AccountStatus::BANNED; ?>"<?= $account->status === AccountStatus::BANNED ? ' selected' : ''; ?>><?= $this->getHtml('Banned'); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -153,7 +153,7 @@ echo $this->data['nav']->render(); ?>
                                         "key": 1, "listener": "click", "action": [
                                             {"key": 1, "type": "event.prevent"},
                                             {"key": 2, "type": "dom.getvalue", "base": "", "selector": "#iId"},
-                                            {"key": 3, "type": "message.request", "uri": "{/base}/{/lang}/api/profile", "method": "PUT", "request_type": "json"},
+                                            {"key": 3, "type": "message.request", "uri": "{/base}/{/lang}/api/view", "method": "PUT", "request_type": "json"},
                                             {"key": 4, "type": "message.log"}
                                         ]
                                     }
@@ -538,15 +538,15 @@ echo $this->data['nav']->render(); ?>
                                     <label for="iCurrencies"><?= $this->getHtml('Currency'); ?></label>
                                     <select form="fLocalization" id="iCurrencies" name="settings_currency">
                                         <?php foreach ($currencies as $code => $currency) : $code = \substr($code, 1); ?>
-                                        <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->getCurrency() ? ' selected' : ''); ?>><?= $this->printHtml($currency); ?>
+                                        <option value="<?= $this->printHtml($code); ?>"<?= $this->printHtml($code === $l11n->currency ? ' selected' : ''); ?>><?= $this->printHtml($currency); ?>
                                             <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label><?= $this->getHtml('Currencyformat'); ?></label>
                                     <select form="fLocalization" name="settings_currencyformat">
-                                        <option value="0"<?= $this->printHtml($l11n->getCurrencyFormat() === '0' ? ' selected' : ''); ?>><?= $this->getHtml('Amount') , ' ' , $this->printHtml($l11n->getCurrency()); ?>
-                                        <option value="1"<?= $this->printHtml($l11n->getCurrencyFormat() === '1' ? ' selected' : ''); ?>><?= $this->printHtml($l11n->getCurrency()) , ' ' , $this->getHtml('Amount'); ?>
+                                        <option value="0"<?= $this->printHtml($l11n->getCurrencyFormat() === '0' ? ' selected' : ''); ?>><?= $this->getHtml('Amount') , ' ' , $this->printHtml($l11n->currency); ?>
+                                        <option value="1"<?= $this->printHtml($l11n->getCurrencyFormat() === '1' ? ' selected' : ''); ?>><?= $this->printHtml($l11n->currency) , ' ' , $this->getHtml('Amount'); ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -916,7 +916,7 @@ echo $this->data['nav']->render(); ?>
                         <?php
                         $count = 0;
                         foreach ($audits as $key => $audit) : ++$count;
-                            $url = UriFactory::build('{/base}/admin/audit/single?id=' . $audit->id); ?>
+                            $url = UriFactory::build('{/base}/admin/audit/view?id=' . $audit->id); ?>
                             <tr tabindex="0" data-href="<?= $url; ?>">
                                 <td><?= $audit->id; ?>
                                 <td><?= $this->printHtml($audit->module); ?>

@@ -18,7 +18,6 @@ use Modules\Admin\Models\ModuleStatusUpdateType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerModuleTrait
 {
@@ -30,7 +29,7 @@ trait ApiControllerModuleTrait
     public function testApiModuleStatusUpdate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('module', 'TestModule');
@@ -60,7 +59,7 @@ trait ApiControllerModuleTrait
     public function testApiModuleStatusUpdateEmptyModule() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
 
@@ -79,7 +78,7 @@ trait ApiControllerModuleTrait
     public function testApiModuleStatusUpdateInvalidStatus() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('module', 'TestModule');
@@ -97,7 +96,7 @@ trait ApiControllerModuleTrait
     public function testApiModuleStatusUpdateInvalidModule() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('module', 'invalid');
@@ -115,7 +114,7 @@ trait ApiControllerModuleTrait
     public function testApiReInit() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
 

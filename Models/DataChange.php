@@ -113,8 +113,8 @@ class DataChange
     public function toArray() : array
     {
         return [
-            'id'          => $this->id,
-            'data'        => $this->data,
+            'id'   => $this->id,
+            'data' => $this->data,
         ];
     }
 

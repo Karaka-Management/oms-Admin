@@ -36,13 +36,11 @@ final class ContactMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'account_contact_id'      => ['name' => 'account_contact_id', 'type' => 'int', 'internal' => 'id'],
-        'account_contact_type'    => ['name' => 'account_contact_type', 'type' => 'int', 'internal' => 'type'],
-        'account_contact_subtype' => ['name' => 'account_contact_subtype', 'type' => 'int', 'internal' => 'subtype'],
-        'account_contact_order'   => ['name' => 'account_contact_order', 'type' => 'int', 'internal' => 'order'],
-        'account_contact_content' => ['name' => 'account_contact_content', 'type' => 'string', 'internal' => 'content'],
-        'account_contact_module'  => ['name' => 'account_contact_module', 'type' => 'string', 'internal' => 'module'],
-        'account_contact_account' => ['name' => 'account_contact_account', 'type' => 'int', 'internal' => 'account'],
+        'contact_id'      => ['name' => 'contact_id', 'type' => 'int', 'internal' => 'id'],
+        'contact_title'   => ['name' => 'contact_title', 'type' => 'string', 'internal' => 'title'],
+        'contact_type'    => ['name' => 'contact_type', 'type' => 'int', 'internal' => 'type'],
+        'contact_subtype' => ['name' => 'contact_subtype', 'type' => 'int', 'internal' => 'subtype'],
+        'contact_content' => ['name' => 'contact_content', 'type' => 'string', 'internal' => 'content'],
     ];
 
     /**
@@ -51,7 +49,7 @@ final class ContactMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const TABLE = 'account_contact';
+    public const TABLE = 'contact';
 
     /**
      * Primary field name.
@@ -59,5 +57,5 @@ final class ContactMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD = 'account_contact_id';
+    public const PRIMARYFIELD = 'contact_id';
 }

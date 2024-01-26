@@ -21,10 +21,12 @@ use Modules\Admin\Models\AccountCredentialMapper;
 use Modules\Admin\Models\AccountMapper;
 use Modules\Admin\Models\AccountPermission;
 use Modules\Admin\Models\AccountPermissionMapper;
+use Modules\Admin\Models\AddressMapper;
 use Modules\Admin\Models\App;
 use Modules\Admin\Models\AppMapper;
 use Modules\Admin\Models\Contact;
 use Modules\Admin\Models\ContactMapper;
+use Modules\Admin\Models\ContactType;
 use Modules\Admin\Models\DataChange;
 use Modules\Admin\Models\DataChangeMapper;
 use Modules\Admin\Models\Group;
@@ -48,11 +50,13 @@ use phpOMS\Account\GroupStatus;
 use phpOMS\Account\PermissionAbstract;
 use phpOMS\Account\PermissionOwner;
 use phpOMS\Account\PermissionType;
+use phpOMS\Api\Geocoding\Nominatim;
 use phpOMS\Application\ApplicationInfo;
 use phpOMS\Application\ApplicationManager;
 use phpOMS\Application\ApplicationType;
 use phpOMS\Auth\LoginReturnType;
 use phpOMS\DataStorage\Database\Query\Builder;
+use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Localization\Localization;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
@@ -70,6 +74,8 @@ use phpOMS\Model\Message\Reload;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
 use phpOMS\Security\EncryptionHelper;
+use phpOMS\Stdlib\Base\Address;
+use phpOMS\Stdlib\Base\AddressType;
 use phpOMS\System\File\Local\File;
 use phpOMS\System\MimeType;
 use phpOMS\Uri\HttpUri;
@@ -627,11 +633,11 @@ final class ApiController extends Controller
             $new->content     = $new->isEncrypted && !empty($content) && !empty($_SERVER['OMS_PRIVATE_KEY_I'] ?? '')
                 ? EncryptionHelper::encryptShared($content, $_SERVER['OMS_PRIVATE_KEY_I'])
                 : $content ?? $new->content;
-            $new->unit        = $unit ?? $new->unit;
-            $new->app         = $app ?? $new->app;
-            $new->module      = $module ?? $new->module;
-            $new->group       = $group ?? $new->group;
-            $new->account     = $account ?? $new->account;
+            $new->unit    = $unit ?? $new->unit;
+            $new->app     = $app ?? $new->app;
+            $new->module  = $module ?? $new->module;
+            $new->group   = $group ?? $new->group;
+            $new->account = $account ?? $new->account;
 
             $this->app->appSettings->set([$new], false);
 
@@ -864,7 +870,7 @@ final class ApiController extends Controller
         $dataSettings = $request->getLike('settings_(.*)');
 
         $account->l11n->setCountry($dataSettings['settings_country']);
-        $account->l11n->setLanguage($dataSettings['settings_language']);
+        $account->l11n->language = $dataSettings['settings_language'];
         $account->l11n->setTemperature($dataSettings['settings_temperature']);
 
         $account->l11n->setTimezone($dataSettings['settings_timezone']);
@@ -878,7 +884,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $account->l11n->setCurrency($dataSettings['settings_currency']);
+        $account->l11n->currency = $dataSettings['settings_currency'];
         $account->l11n->setCurrencyFormat($dataSettings['settings_currencyformat']);
 
         $account->l11n->setDecimal($dataSettings['settings_decimal']);
@@ -1074,7 +1080,7 @@ final class ApiController extends Controller
     {
         $app              = new App();
         $app->name        = $request->getDataString('name') ?? '';
-        $app->type        = $request->getDataInt('type') ?? ApplicationType::WEB;
+        $app->type        = ApplicationType::tryFromValue($request->getDataInt('type')) ?? ApplicationType::WEB;
         $app->defaultUnit = $request->getDataInt('default_unit');
 
         return $app;
@@ -1200,8 +1206,8 @@ final class ApiController extends Controller
      */
     private function updateGroupFromRequest(RequestAbstract $request, Group $group) : Group
     {
-        $group->name = $request->getDataString('name') ?? $group->name;
-        $group->setStatus($request->getDataInt('status') ?? $group->getStatus());
+        $group->name           = $request->getDataString('name') ?? $group->name;
+        $group->status         = GroupStatus::tryFromValue($request->getDataInt('status')) ?? $group->status;
         $group->description    = Markdown::parse($request->getDataString('description') ?? $group->descriptionRaw);
         $group->descriptionRaw = $request->getDataString('description') ?? $group->descriptionRaw;
 
@@ -1267,10 +1273,10 @@ final class ApiController extends Controller
      */
     private function createGroupFromRequest(RequestAbstract $request) : Group
     {
-        $group            = new Group();
-        $group->createdBy = new NullAccount($request->header->account);
-        $group->name      = $request->getDataString('name') ?? '';
-        $group->setStatus($request->getDataInt('status') ?? GroupStatus::INACTIVE);
+        $group                 = new Group();
+        $group->createdBy      = new NullAccount($request->header->account);
+        $group->name           = $request->getDataString('name') ?? '';
+        $group->status         = GroupStatus::tryFromValue($request->getDataInt('status')) ?? GroupStatus::INACTIVE;
         $group->description    = Markdown::parse($request->getDataString('description') ?? '');
         $group->descriptionRaw = $request->getDataString('description') ?? '';
 
@@ -1394,7 +1400,7 @@ final class ApiController extends Controller
     public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Account[] $accounts */
-        $accounts =  AccountMapper::getAll()
+        $accounts = AccountMapper::getAll()
             ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
             ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
             ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
@@ -1791,7 +1797,7 @@ final class ApiController extends Controller
             }
 
             if (empty($defaultGroupIds)
-                && $account->getStatus() === AccountStatus::INACTIVE
+                && $account->status === AccountStatus::INACTIVE
             ) {
                 $response->header->status = RequestStatusCode::R_400;
 
@@ -2016,7 +2022,7 @@ final class ApiController extends Controller
                     break;
                 }
 
-                $new->setStatus((int) ($data['status'] ?? -1));
+                $new->status = AccountStatus::tryFromValue((int) ($data['status'] ?? AccountStatus::INACTIVE)) ?? AccountStatus::INACTIVE;
 
                 $this->updateModel($dataChange->createdBy, $old, $new, AccountMapper::class, 'datachange', $request->getOrigin());
                 $this->deleteModel($dataChange->createdBy, $dataChange, DataChangeMapper::class, 'datachange', $request->getOrigin());
@@ -2098,13 +2104,13 @@ final class ApiController extends Controller
      */
     private function createAccountFromRequest(RequestAbstract $request) : Account
     {
-        $account        = new Account();
-        $account->login = $request->getDataString('user') ?? '';
-        $account->name1 = $request->getDataString('name1') ?? '';
-        $account->name2 = $request->getDataString('name2') ?? '';
-        $account->name3 = $request->getDataString('name3') ?? '';
-        $account->setStatus($request->getDataInt('status') ?? AccountStatus::INACTIVE);
-        $account->setType($request->getDataInt('type') ?? AccountType::USER);
+        $account         = new Account();
+        $account->login  = $request->getDataString('user') ?? '';
+        $account->name1  = $request->getDataString('name1') ?? '';
+        $account->name2  = $request->getDataString('name2') ?? '';
+        $account->name3  = $request->getDataString('name3') ?? '';
+        $account->status = AccountStatus::tryFromValue($request->getDataInt('status')) ?? AccountStatus::INACTIVE;
+        $account->type   = AccountType::tryFromValue($request->getDataInt('type')) ?? AccountType::USER;
         $account->setEmail($request->getDataString('email') ?? '');
         $account->generatePassword($request->getDataString('password') ?? '');
 
@@ -2191,8 +2197,8 @@ final class ApiController extends Controller
         $account->name2 = $request->getDataString('name2') ?? $account->name2;
         $account->name3 = $request->getDataString('name3') ?? $account->name3;
         $account->setEmail($request->getDataString('email') ?? $account->getEmail());
-        $account->setStatus($request->getDataInt('status') ?? $account->getStatus());
-        $account->setType($request->getDataInt('type') ?? $account->getType());
+        $account->status = AccountStatus::tryFromValue($request->getDataInt('status')) ?? $account->status;
+        $account->type   = AccountType::tryFromValue($request->getDataInt('type')) ?? $account->type;
 
         if ($allowPassword && $request->hasData('password')) {
             $account->generatePassword((string) $request->getData('password'));
@@ -2250,8 +2256,8 @@ final class ApiController extends Controller
                     ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleActivatedSuccessful')
                     : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleActivatedFailure');
 
-                $new = clone $old;
-                $new->setStatus(ModuleStatusUpdateType::ACTIVATE);
+                $new         = clone $old;
+                $new->status = ModuleStatusUpdateType::ACTIVATE;
                 ModuleMapper::update()->execute($new);
 
                 break;
@@ -2261,8 +2267,8 @@ final class ApiController extends Controller
                     ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleDeactivatedSuccessful')
                     : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleDeactivatedFailure');
 
-                $new = clone $old;
-                $new->setStatus(ModuleStatusUpdateType::DEACTIVATE);
+                $new         = clone $old;
+                $new->status = ModuleStatusUpdateType::DEACTIVATE;
                 ModuleMapper::update()->execute($new);
 
                 break;
@@ -2289,7 +2295,7 @@ final class ApiController extends Controller
                 $dependencies = $moduleInfo->getDependencies();
                 foreach ($dependencies as $key => $_) {
                     $iResponse                 = new HttpResponse();
-                    $iRequest                  = new HttpRequest(new HttpUri(''));
+                    $iRequest                  = new HttpRequest();
                     $iRequest->header->account = 1;
                     $iRequest->setData('status', ModuleStatusUpdateType::INSTALL);
                     $iRequest->setData('module', $key);
@@ -2305,7 +2311,7 @@ final class ApiController extends Controller
                 $moduleObj->version = $moduleInfo->getVersion();
                 $moduleObj->name    = $moduleInfo->getExternalName();
 
-                $moduleObj->setStatus(ModuleStatus::AVAILABLE);
+                $moduleObj->status = ModuleStatus::AVAILABLE;
 
                 $this->createModel($request->header->account, $moduleObj, ModuleMapper::class, 'module', $request->getOrigin());
 
@@ -2314,8 +2320,8 @@ final class ApiController extends Controller
                     ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleInstalledSuccessful')
                     : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleInstalledFailure');
 
-                $old = clone $moduleObj;
-                $moduleObj->setStatus(ModuleStatus::ACTIVE);
+                $old               = clone $moduleObj;
+                $moduleObj->status = ModuleStatus::ACTIVE;
 
                 $this->updateModel($request->header->account, $old, $moduleObj, ModuleMapper::class, 'module', $request->getOrigin());
 
@@ -2356,8 +2362,8 @@ final class ApiController extends Controller
                     ? $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleUninstalledSuccessful')
                     : $this->app->l11nManager->getText($response->header->l11n->language, 'Admin', 'Api', 'ModuleUninstalledFailure');
 
-                $new = clone $old;
-                $new->setStatus(ModuleStatusUpdateType::DELETE);
+                $new         = clone $old;
+                $new->status = ModuleStatusUpdateType::DELETE;
                 ModuleMapper::delete()->execute($new);
 
                 break;
@@ -3098,7 +3104,6 @@ final class ApiController extends Controller
         }
 
         $contact = $this->createContactFromRequest($request);
-
         $this->createModel($request->header->account, $contact, ContactMapper::class, 'account_contact', $request->getOrigin());
 
         $this->createModelRelation(
@@ -3145,11 +3150,10 @@ final class ApiController extends Controller
     public function createContactFromRequest(RequestAbstract $request) : Contact
     {
         /** @var Contact $element */
-        $element = new Contact();
-        $element->setType($request->getDataInt('type') ?? 0);
-        $element->setSubtype($request->getDataInt('subtype') ?? 0);
+        $element          = new Contact();
+        $element->type    = ContactType::tryFromValue($request->getDataInt('type')) ?? ContactType::EMAIL;
+        $element->subtype = $request->getDataInt('subtype') ?? 0;
         $element->content = $request->getDataString('content') ?? '';
-        $element->account = $request->getDataInt('account') ?? 0;
 
         return $element;
     }
@@ -3456,10 +3460,9 @@ final class ApiController extends Controller
      */
     public function updateContactFromRequest(RequestAbstract $request, Contact $new) : Contact
     {
-        $new->type    = $request->getDataInt('type') ?? $new->type;
+        $new->type    = ContactType::tryFromValue($request->getDataInt('type')) ?? $new->type;
         $new->subtype = $request->getDataInt('subtype') ?? $new->subtype;
         $new->content = $request->getDataString('content') ?? $new->content;
-        $new->account = $request->getDataInt('account') ?? $new->account;
 
         return $new;
     }
@@ -3509,7 +3512,9 @@ final class ApiController extends Controller
 
         /** @var \Modules\Admin\Models\Contact $contact */
         $contact = ContactMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModelRelation($request->header->account, (int) $request->getData('account'), [$contact->id], AccountMapper::class, 'contacts', 'account-contact', $request->getOrigin());
         $this->deleteModel($request->header->account, $contact, ContactMapper::class, 'contact', $request->getOrigin());
+
         $this->createStandardDeleteResponse($request, $response, $contact);
     }
 
@@ -3527,7 +3532,9 @@ final class ApiController extends Controller
     private function validateContactDelete(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['id'] = !$request->hasData('id'))) {
+        if (($val['id'] = !$request->hasData('id'))
+            || ($val['account'] = !$request->hasData('account'))
+        ) {
             return $val;
         }
 
@@ -3641,5 +3648,236 @@ final class ApiController extends Controller
         }
 
         return [];
+    }
+
+    /**
+     * Api method to delete Contact
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiAddressDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateAddressDelete($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidDeleteResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var \Modules\Admin\Models\Address $address */
+        $address = AddressMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $this->deleteModelRelation($request->header->account, (int) $request->getData('account'), [$address->id], AccountMapper::class, 'addresses', 'account-address', $request->getOrigin());
+        $this->deleteModel($request->header->account, $address, AddressMapper::class, 'address', $request->getOrigin());
+
+        $this->createStandardDeleteResponse($request, $response, $address);
+    }
+
+    /**
+     * Validate Address delete request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo Implement API validation function
+     *
+     * @since 1.0.0
+     */
+    private function validateAddressDelete(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))
+            || ($val['account'] = !$request->hasData('account'))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to update Contact
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiAddressUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateAddressUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
+        /** @var Address $old */
+        $old = AddressMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $new = $this->updateAddressFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, AddressMapper::class, 'address', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Validate Contact update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @todo Implement API validation function
+     *
+     * @since 1.0.0
+     */
+    private function validateAddressUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to update an account from a request
+     *
+     * @param RequestAbstract $request Request
+     * @param Address         $address Address
+     *
+     * @return Address
+     *
+     * @since 1.0.0
+     */
+    public function updateAddressFromRequest(RequestAbstract $request, Address $address) : Address
+    {
+        $hasLocationChange = ($request->getDataString('address') ?? $address->address) !== $address->address
+            || ($request->getDataString('postal') ?? $address->postal) !== $address->postal
+            || ($request->getDataString('city') ?? $address->city) !== $address->city
+            || ($request->getDataString('state') ?? $address->state) !== $address->state
+            || ($request->getDataString('country') ?? $address->country) !== $address->country;
+
+        $address->name            = $request->getDataString('name') ?? $address->name;
+        $address->fao             = $request->getDataString('fao') ?? $address->fao;
+        $address->address         = $request->getDataString('address') ?? $address->address;
+        $address->addressAddition = $request->getDataString('addition') ?? $address->addressAddition;
+        $address->postal          = $request->getDataString('postal') ?? $address->postal;
+        $address->city            = $request->getDataString('city') ?? $address->city;
+        $address->state           = $request->getDataString('state') ?? $address->state;
+        $address->setCountry($request->getDataString('country') ?? $address->country);
+
+        if ($hasLocationChange) {
+            $geocoding = Nominatim::geocoding($address->country, $address->city, $address->address);
+            if ($geocoding === ['lat' => 0.0, 'lon' => 0.0]) {
+                $geocoding = Nominatim::geocoding($address->country, $address->city);
+            }
+
+            $address->lat = $geocoding['lat'];
+            $address->lon = $geocoding['lon'];
+        }
+
+        return $address;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiAddressCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateAddressCreate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
+
+            return;
+        }
+
+        $address = $this->createAddressFromRequest($request);
+        $this->createModel($request->header->account, $address, AddressMapper::class, 'account_address', $request->getOrigin());
+
+        $this->createModelRelation(
+            $request->header->account,
+            (int) $request->getData('account'),
+            $address->id,
+            AccountMapper::class, 'addresses', '', $request->getOrigin()
+        );
+
+        $this->createStandardCreateResponse($request, $response, $address);
+    }
+
+    /**
+     * Validate contact element create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    public function validateAddressCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['account'] = !$request->hasData('account'))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to create unit from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return Address
+     *
+     * @since 1.0.0
+     */
+    public function createAddressFromRequest(RequestAbstract $request) : Address
+    {
+        $address          = new Address();
+        $address->name    = $request->getDataString('name') ?? '';
+        $address->type    = AddressType::tryFromValue($request->getDataInt('type')) ?? AddressType::BUSINESS;
+        $address->fao     = $request->getDataString('fao') ?? '';
+        $address->address = $request->getDataString('address') ?? '';
+        $address->postal  = $request->getDataString('postal') ?? '';
+        $address->city    = $request->getDataString('city') ?? '';
+        $address->state   = $request->getDataString('state') ?? '';
+        $address->setCountry($request->getDataString('country') ?? ISO3166TwoEnum::_XXX);
+
+        $geocoding = Nominatim::geocoding($address->country, $address->city, $address->address);
+        if ($geocoding === ['lat' => 0.0, 'lon' => 0.0]) {
+            $geocoding = Nominatim::geocoding($address->country, $address->city);
+        }
+
+        $address->lat = $geocoding['lat'];
+        $address->lon = $geocoding['lon'];
+
+        return $address;
     }
 }

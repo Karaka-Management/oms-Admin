@@ -19,7 +19,6 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerPermissionTrait
 {
@@ -31,7 +30,7 @@ trait ApiControllerPermissionTrait
     public function testApiAddGroupPermission() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
@@ -49,7 +48,7 @@ trait ApiControllerPermissionTrait
     public function testApiAddGroupPermissionToAdmin() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
@@ -67,7 +66,7 @@ trait ApiControllerPermissionTrait
     public function testApiGroupPermissionGet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', '2');
@@ -86,7 +85,7 @@ trait ApiControllerPermissionTrait
     public function testApiGroupPermissionCreateDelete() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
@@ -111,7 +110,7 @@ trait ApiControllerPermissionTrait
     public function testApiAddGroupPermissionInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
@@ -128,7 +127,7 @@ trait ApiControllerPermissionTrait
     public function testApiAddGroupPermissionInvalidType() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
@@ -146,7 +145,7 @@ trait ApiControllerPermissionTrait
     public function testApiGroupPermissionUpdate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', 1);
@@ -173,7 +172,7 @@ trait ApiControllerPermissionTrait
     public function testApiAddAccountPermission() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
@@ -192,7 +191,7 @@ trait ApiControllerPermissionTrait
     public function testApiAccountPermissionGet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', '1');
@@ -211,7 +210,7 @@ trait ApiControllerPermissionTrait
     public function testApiAccountPermissionCreateDelete() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
@@ -236,7 +235,7 @@ trait ApiControllerPermissionTrait
     public function testApiAddAccountPermissionInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::ACCOUNT);
@@ -253,7 +252,7 @@ trait ApiControllerPermissionTrait
     public function testApiAddAccountPermissionInvalidType() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('permissionowner', PermissionOwner::GROUP);
@@ -271,7 +270,7 @@ trait ApiControllerPermissionTrait
     public function testApiAccountPermissionUpdate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', 1);

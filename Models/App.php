@@ -81,10 +81,10 @@ class App implements \JsonSerializable
     public function toArray() : array
     {
         return [
-            'id'          => $this->id,
-            'name'        => $this->name,
-            'type'        => $this->type,
-            'status'      => $this->status,
+            'id'     => $this->id,
+            'name'   => $this->name,
+            'type'   => $this->type,
+            'status' => $this->status,
         ];
     }
 

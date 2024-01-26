@@ -31,7 +31,6 @@ use phpOMS\Module\ModuleInfo;
 use phpOMS\System\File\PathException;
 use phpOMS\System\OperatingSystem;
 use phpOMS\System\SystemType;
-use phpOMS\Uri\HttpUri;
 
 /**
  * Installer class.
@@ -287,13 +286,13 @@ final class Installer extends InstallerAbstract
      *
      * @since 1.0.0
      */
-    private static function createSettings(ApplicationAbstract $app, array $data) : array
+    public static function createSettings(ApplicationAbstract $app, array $data) : array
     {
         /** @var \Modules\Admin\Controller\ApiController $module */
         $module = $app->moduleManager->get('Admin');
 
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('id', $data['id'] ?? 0);

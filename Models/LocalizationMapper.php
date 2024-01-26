@@ -99,23 +99,23 @@ final class LocalizationMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const OWNS_ONE = [
-        'country'  => [
-            'mapper'            => CountryMapper::class,
-            'external'          => 'l11n_country',
-            'by'                => 'code2',
-            'column'            => 'code2',
+        'country' => [
+            'mapper'   => CountryMapper::class,
+            'external' => 'l11n_country',
+            'by'       => 'code2',
+            'column'   => 'code2',
         ],
-        'language'    => [
-            'mapper'            => LanguageMapper::class,
-            'external'          => 'l11n_language',
-            'by'                => 'code2',
-            'column'            => 'code2',
+        'language' => [
+            'mapper'   => LanguageMapper::class,
+            'external' => 'l11n_language',
+            'by'       => 'code2',
+            'column'   => 'code2',
         ],
-        'currency'    => [
-            'mapper'            => CurrencyMapper::class,
-            'external'          => 'l11n_currency',
-            'by'                => 'code',
-            'column'            => 'code',
+        'currency' => [
+            'mapper'   => CurrencyMapper::class,
+            'external' => 'l11n_currency',
+            'by'       => 'code',
+            'column'   => 'code',
         ],
     ];
 

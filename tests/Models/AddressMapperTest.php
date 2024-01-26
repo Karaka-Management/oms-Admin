@@ -37,13 +37,13 @@ final class AddressMapperTest extends \PHPUnit\Framework\TestCase
         $address->fao             = 'fao';
         $address->addressAddition = 'addition';
         $address->postal          = '0123456789';
-        $address->setType(AddressType::BUSINESS);
-        $address->city    = 'city';
-        $address->address = 'Some address here';
-        $address->state   = 'This is a state 123';
-        $address->setCountry('DE');
-        $address->lat = 12.1;
-        $address->lon = 11.2;
+        $address->type            = AddressType::BUSINESS;
+        $address->city            = 'city';
+        $address->address         = 'Some address here';
+        $address->state           = 'This is a state 123';
+        $address->country         = 'DE';
+        $address->lat             = 12.1;
+        $address->lon             = 11.2;
 
         $id = AddressMapper::create()->execute($address);
         self::assertGreaterThan(0, $address->id);
@@ -53,7 +53,7 @@ final class AddressMapperTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($address->name, $addressR->name);
         self::assertEquals($address->fao, $addressR->fao);
         self::assertEquals($address->addressAddition, $addressR->addressAddition);
-        self::assertEquals($address->getType(), $addressR->getType());
+        self::assertEquals($address->type, $addressR->type);
         self::assertEquals($address->postal, $addressR->postal);
         self::assertEquals($address->address, $addressR->address);
         self::assertEquals($address->state, $addressR->state);

@@ -54,13 +54,13 @@ class AccountPermission extends PermissionAbstract
      */
     public function __construct(
         int $account = 0,
-        int $unit = null,
-        int $app = null,
-        string $module = null,
-        string $from = null,
-        int $category = null,
-        int $element = null,
-        int $component = null,
+        ?int $unit = null,
+        ?int $app = null,
+        ?string $module = null,
+        ?string $from = null,
+        ?int $category = null,
+        ?int $element = null,
+        ?int $component = null,
         int $permission = PermissionType::NONE
     ) {
         $this->account = $account;

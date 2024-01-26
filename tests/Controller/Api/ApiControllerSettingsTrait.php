@@ -18,7 +18,6 @@ use Modules\Admin\Models\SettingsEnum;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerSettingsTrait
 {
@@ -30,7 +29,7 @@ trait ApiControllerSettingsTrait
     public function testApiSettingsGet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('name', SettingsEnum::PASSWORD_INTERVAL);
@@ -47,7 +46,7 @@ trait ApiControllerSettingsTrait
     public function testApiSettingsSet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('settings', \json_encode([['name' => SettingsEnum::PASSWORD_INTERVAL, 'content' => '60']]));
@@ -68,7 +67,7 @@ trait ApiControllerSettingsTrait
     public function testApiAccountLocalizationLoadSet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('account_id', 1);
@@ -93,7 +92,7 @@ trait ApiControllerSettingsTrait
     public function testApiAccountLocalizationSet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('account_id', 1);
@@ -107,7 +106,7 @@ trait ApiControllerSettingsTrait
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
         $l11n = $response->getDataArray('')['response'];
-        self::assertEquals($l11n->getCurrency(), 'EUR');
+        self::assertEquals($l11n->currency, 'EUR');
     }
 
     /**
@@ -117,7 +116,7 @@ trait ApiControllerSettingsTrait
     public function testInvalidPermissionAccountLocalizationSet() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 2;
         $request->setData('account_id', 1);

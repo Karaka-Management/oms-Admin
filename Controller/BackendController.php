@@ -20,13 +20,11 @@ use Modules\Admin\Models\AccountPermissionMapper;
 use Modules\Admin\Models\AppMapper;
 use Modules\Admin\Models\GroupMapper;
 use Modules\Admin\Models\GroupPermissionMapper;
-use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Organization\Models\UnitMapper;
-use phpOMS\Asset\AssetType;
 use phpOMS\Autoloader;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\OrderType;
@@ -110,7 +108,7 @@ final class BackendController extends Controller
         foreach ($searchFieldData as $key => $data) {
             if ($data === '1') {
                 $split  = \explode('-', $key);
-                $member =  \end($split);
+                $member = \end($split);
 
                 $searchField[] = $member;
             }
@@ -203,7 +201,7 @@ final class BackendController extends Controller
     public function viewAccountSettings(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-single');
+        $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response);
 
         /** @var \Modules\Admin\Models\Account $account */
@@ -234,7 +232,7 @@ final class BackendController extends Controller
         foreach ($searchFieldData as $key => $data) {
             if ($data === '1') {
                 $split  = \explode('-', $key);
-                $member =  \end($split);
+                $member = \end($split);
 
                 $searchField[] = $member;
             }
@@ -355,7 +353,7 @@ final class BackendController extends Controller
         foreach ($searchFieldData as $key => $data) {
             if ($data === '1') {
                 $split  = \explode('-', $key);
-                $member =  \end($split);
+                $member = \end($split);
 
                 $searchField[] = $member;
             }
@@ -451,7 +449,7 @@ final class BackendController extends Controller
     public function viewGroupSettings(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/Admin/Theme/Backend/groups-single');
+        $view->setTemplate('/Modules/Admin/Theme/Backend/groups-view');
 
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')
             ->createNavigationMid(1000103001, $request, $response);
@@ -642,7 +640,7 @@ final class BackendController extends Controller
 
         $id = $request->getDataString('id') ?? '';
 
-        $queryMapper =  AuditMapper::getAll()
+        $queryMapper = AuditMapper::getAll()
             ->with('createdBy')
             ->where('module', $id);
 
@@ -800,13 +798,13 @@ final class BackendController extends Controller
         $generalSettings = $this->app->appSettings->get(
             names: [
                 SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_UNIT,
-                SettingsEnum::LOGIN_STATUS, SettingsEnum::DEFAULT_LOCALIZATION, SettingsEnum::MAIL_SERVER_ADDR,
+                SettingsEnum::LOGIN_STATUS, SettingsEnum::MAIL_SERVER_ADDR,
             ],
             module: 'Admin'
         );
 
-        $view->data['generalSettings']     = $generalSettings;
-        $view->data['default_localization'] = LocalizationMapper::get()->where('id', (int) $generalSettings[SettingsEnum::DEFAULT_LOCALIZATION]->content)->execute();
+        $view->data['generalSettings']      = $generalSettings;
+        $view->data['default_localization'] = $this->app->l11nServer;
 
         return $view;
     }

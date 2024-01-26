@@ -42,7 +42,7 @@ The type is a `module` specific subpart which only should be set if the module i
 
 ### Element
 
-The element is a `module` and `type` specific subpart which only should be set if the `type` is defined in the permission. For further information what kind of elements are available for a module and type please refer to the module specific documentation. Usually it referes to a section on a module page.
+The element is a `module` and `type` specific subpart which only should be set if the `type` is defined in the permission. For further information what kind of elements are available for a module and type please refer to the module specific documentation. Usually it refers to a section on a module page.
 
 ### Component
 

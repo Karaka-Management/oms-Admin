@@ -17,7 +17,6 @@ namespace Modules\Admin\tests\Controller\Api;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerApplicationTrait
 {
@@ -28,7 +27,7 @@ trait ApiControllerApplicationTrait
     public function testApiInvalidAppplicationPathInstall() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('appSrc', 'invalid');

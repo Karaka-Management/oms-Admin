@@ -44,8 +44,8 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         $account->name3 = 'Duck';
         $account->tries = 0;
         $account->setEmail('d.duck@duckburg.com');
-        $account->setStatus(AccountStatus::ACTIVE);
-        $account->setType(AccountType::USER);
+        $account->status = AccountStatus::ACTIVE;
+        $account->type   = AccountType::USER;
 
         $id = AccountMapper::create()->execute($account);
         self::assertGreaterThan(0, $account->id);
@@ -57,8 +57,8 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($account->name1, $accountR->name1);
         self::assertEquals($account->name2, $accountR->name2);
         self::assertEquals($account->name3, $accountR->name3);
-        self::assertEquals($account->getStatus(), $accountR->getStatus());
-        self::assertEquals($account->getType(), $accountR->getType());
+        self::assertEquals($account->status, $accountR->status);
+        self::assertEquals($account->type, $accountR->type);
         self::assertEquals($account->getEmail(), $accountR->getEmail());
         self::assertEquals($account->tries, $accountR->tries);
     }
@@ -126,13 +126,13 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
     public function testInvalidLoginAccountStatus() : void
     {
         /** @var Account $accountR */
-        $accountR = AccountMapper::get()->where('id', 1)->execute();
-        $accountR->setStatus(AccountStatus::BANNED);
+        $accountR         = AccountMapper::get()->where('id', 1)->execute();
+        $accountR->status = AccountStatus::BANNED;
         AccountMapper::update()->execute($accountR);
 
         self::assertEquals(LoginReturnType::INACTIVE, AccountMapper::login($accountR->login, 'orange'));
 
-        $accountR->setStatus(AccountStatus::ACTIVE);
+        $accountR->status = AccountStatus::ACTIVE;
         AccountMapper::update()->execute($accountR);
     }
 

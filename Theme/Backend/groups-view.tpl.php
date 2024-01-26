@@ -29,7 +29,7 @@ $audits      = $this->data['auditlogs'] ?? [];
 $previous = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
     : 'admin/group/settings?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
-$next     = empty($audits)
+$next = empty($audits)
     ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
     : 'admin/group/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
@@ -65,7 +65,7 @@ echo $this->data['nav']->render(); ?>
                                     <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
                                     <select id="iGstatus" name="status">
                                         <?php $status = GroupStatus::getConstants(); foreach ($status as $stat) : ?>
-                                        <option value="<?= $stat; ?>"<?= $stat === $group->getStatus() ? ' selected' : ''; ?>><?= $this->getHtml('GroupStatus' . $stat); ?>
+                                        <option value="<?= $stat; ?>"<?= $stat === $group->status ? ' selected' : ''; ?>><?= $this->getHtml('GroupStatus' . $stat); ?>
                                     <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -387,7 +387,7 @@ echo $this->data['nav']->render(); ?>
                                 <td><?= $this->getHtml('Date', 'Auditor'); ?>
                             <tbody>
                             <?php $count = 0; foreach ($audits as $key => $audit) : ++$count;
-                            $url         = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id); ?>
+                            $url         = UriFactory::build('{/base}/admin/audit/view?{?}&id=' . $audit->id); ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->id; ?>
                                     <td><?= $this->printHtml($audit->module); ?>
