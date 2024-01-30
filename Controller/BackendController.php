@@ -205,7 +205,12 @@ final class BackendController extends Controller
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000104001, $request, $response);
 
         /** @var \Modules\Admin\Models\Account $account */
-        $account = AccountMapper::get()->with('groups')->with('l11n')->where('id', (int) $request->getData('id'))->execute();
+        $account = AccountMapper::get()
+            ->with('groups')
+            ->with('l11n')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
         if ($account->l11n->id === 0) {
             $account->l11n->loadFromLanguage($request->header->l11n->language);
         }

@@ -1141,7 +1141,7 @@ final class ApiController extends Controller
         }
 
         // handle Routes of already installed modules
-        foreach ($installed as $module => $data) {
+        foreach ($installed as $module => $_) {
             $class = '\Modules\\' . $module . '\Admin\Status';
 
             $moduleInfo = new ModuleInfo(__DIR__ . '/../../../Modules/' . $module . '/info.json');
