@@ -294,6 +294,10 @@ final class ApiController extends Controller
             module: 'Admin'
         );
 
+        if (empty($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content)) {
+            return;
+        }
+
         /** @var \Modules\Messages\Models\Email $mail */
         $mail = EmailMapper::get()
             ->with('l11n')
@@ -304,36 +308,18 @@ final class ApiController extends Controller
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
         $mail->addTo($account->email);
 
-        // @todo load default l11n if no translation is available
+        // @todo Implement a model reading system which allows to define alternative conditions/wheres
+        //      https://github.com/Karaka-Management/phpOMS/issues/365
         $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
 
         $mail->subject = $mailL11n->subject;
+        $mail->body = $mailL11n->body;
+        $mail->bodyAlt = $mailL11n->bodyAlt;
 
-        // @todo improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
-        // Maybe store the uri in the $app model? or store all urls in the config file
-        $mail->body = \str_replace(
-            [
-                '{reset_link}',
-                '{user_name}',
-            ],
-            [
-                $resetLink,
-                $account->login,
-            ],
-            $mailL11n->body
-        );
-
-        $mail->bodyAlt = \str_replace(
-            [
-                '{reset_link}',
-                '{user_name}',
-            ],
-            [
-                $resetLink,
-                $account->login,
-            ],
-            $mailL11n->bodyAlt
-        );
+        $mail->template = [
+            '{reset_link}' => $resetLink,
+            '{user_name}' => $account->login,
+        ];
 
         $handler->send($mail);
 
@@ -436,6 +422,10 @@ final class ApiController extends Controller
             module: 'Admin'
         );
 
+        if (empty($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content)) {
+            return;
+        }
+
         /** @var \Modules\Messages\Models\Email $mail */
         $mail = EmailMapper::get()
             ->with('l11n')
@@ -446,36 +436,18 @@ final class ApiController extends Controller
         $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
         $mail->addTo($account->email);
 
-        // @todo load default l11n if no translation is available
+        // @todo Implement a model reading system which allows to define alternative conditions/wheres
+        //      https://github.com/Karaka-Management/phpOMS/issues/365
         $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
 
         $mail->subject = $mailL11n->subject;
+        $mail->body = $mailL11n->body;
+        $mail->bodyAlt = $mailL11n->bodyAlt;
 
-        // @todo improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
-        // Maybe store the uri in the $app model? or store all urls in the config file
-        $mail->body = \str_replace(
-            [
-                '{new_password}',
-                '{user_name}',
-            ],
-            [
-                $pass,
-                $account->login,
-            ],
-            $mailL11n->body
-        );
-
-        $mail->bodyAlt = \str_replace(
-            [
-                '{new_password}',
-                '{user_name}',
-            ],
-            [
-                $pass,
-                $account->login,
-            ],
-            $mailL11n->bodyAlt
-        );
+        $mail->template = [
+            '{new_password}' => $pass,
+            '{user_name}' => $account->login,
+        ];
 
         $handler->send($mail);
 
@@ -1873,6 +1845,10 @@ final class ApiController extends Controller
                 module: 'Admin'
             );
 
+            if (empty($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content)) {
+                return;
+            }
+
             /** @var \Modules\Messages\Models\Email $mail */
             $mail = EmailMapper::get()
                 ->with('l11n')
@@ -1883,40 +1859,20 @@ final class ApiController extends Controller
             $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
             $mail->addTo((string) $request->getData('email'));
 
-            // @todo load default l11n if no translation is available
+            // @todo Implement a model reading system which allows to define alternative conditions/wheres
+            //      https://github.com/Karaka-Management/phpOMS/issues/365
             $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
 
             $mail->subject = $mailL11n->subject;
+            $mail->body = $mailL11n->body;
+            $mail->bodyAlt = $mailL11n->bodyAlt;
 
-            // @todo improve, the /tld link could be api.myurl.com which of course is not the url of the respective app.
-            // Maybe store the uri in the $app model? or store all urls in the config file
-            $mail->body = \str_replace(
-                [
-                    '{confirmation_link}',
-                    '{user_name}',
-                ],
-                [
-                    UriFactory::hasQuery('/' . \strtolower($app->name))
-                        ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
-                        : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                    $account->login,
-                ],
-                $mailL11n->body
-            );
-
-            $mail->bodyAlt = \str_replace(
-                [
-                    '{confirmation_link}',
-                    '{user_name}',
-                ],
-                [
-                    UriFactory::hasQuery('/' . \strtolower($app->name))
-                        ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
-                        : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                    $account->login,
-                ],
-                $mailL11n->bodyAlt
-            );
+            $mail->template = [
+                '{confirmation_link}' => UriFactory::hasQuery('/' . \strtolower($app->name))
+                    ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
+                    : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
+                '{user_name}' => $account->login,
+            ];
 
             $handler->send($mail);
         }
@@ -1990,7 +1946,9 @@ final class ApiController extends Controller
      * @return void
      *
      * @api
-     * @todo maybe move to job/workflow??? This feels very much like a job/event especially if we make the 'type' an event-trigger
+     *
+     * @question Consider to re-implement the apiDataChange function as workflow
+     *      https://github.com/Karaka-Management/oms-Admin/issues/31
      *
      * @since 1.0.0
      */
@@ -3345,8 +3303,6 @@ final class ApiController extends Controller
      *
      * @return array<string, bool>
      *
-     * @todo Implement API validation function
-     *
      * @since 1.0.0
      */
     private function validateGroupPermissionDelete(RequestAbstract $request) : array
@@ -3403,8 +3359,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3524,8 +3478,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
@@ -3686,8 +3638,6 @@ final class ApiController extends Controller
      * @param RequestAbstract $request Request
      *
      * @return array<string, bool>
-     *
-     * @todo Implement API validation function
      *
      * @since 1.0.0
      */
