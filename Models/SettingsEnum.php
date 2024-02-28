@@ -97,7 +97,7 @@ abstract class SettingsEnum extends Enum
     public const MAIL_SERVER_TLS = '1000000211';
 
     /* Global default templates */
-    public const DEFAULT_LIST_EXPORTS = '1000000301';
+    //public const DEFAULT_LIST_EXPORTS = '1000000301';
 
     public const DEFAULT_LETTERS = '1000000302';
 

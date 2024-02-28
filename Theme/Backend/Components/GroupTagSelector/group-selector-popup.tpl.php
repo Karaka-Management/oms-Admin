@@ -14,7 +14,7 @@
                     ]
                 }
             ]' autocomplete="off">
-            <table id="acc-table" class="table">
+            <table id="acc-table" class="popupTable">
                 <thead>
                     <tr>
                         <th data-name="id"><?= $this->getHtml('ID', '0', '0'); ?>

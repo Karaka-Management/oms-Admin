@@ -29,7 +29,7 @@ if (isset($installed[$id])) {
 ?>
 
 <div class="row">
-    <div class="col-xs-12 col-md-4">
+    <div class="col-xs-12 col-md-6 col-lg-4">
         <div class="portlet">
             <div class="portlet-head"><?= $this->printHtml($modules[$id]->getExternalName()); ?></div>
 

@@ -213,7 +213,7 @@ $categories  = ISO639Enum::getConstants();
                         <tr data-id="" draggable="false">
                             <td>
                                 <i class="g-icon btn update-form">settings</i>
-                                <input id="attributeTable-remove-0" type="checkbox" class="hidden">
+                                <input id="attributeTable-remove-0" type="checkbox" class="vh">
                                 <label for="attributeTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                 <span class="checked-visibility">
                                     <label for="attributeTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
@@ -231,7 +231,7 @@ $categories  = ISO639Enum::getConstants();
                             <td>
                                 <i class="g-icon btn update-form">settings</i>
                                 <?php if (!$value->type->isRequired) : ?>
-                                <input id="attributeTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                <input id="attributeTable-remove-<?= $value->id; ?>" type="checkbox" class="vh">
                                 <label for="attributeTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                 <span class="checked-visibility">
                                     <label for="attributeTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>

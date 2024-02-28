@@ -89,8 +89,8 @@ $types     = AddressType::getConstants();
                 </div>
                 <div class="portlet-foot">
                     <input id="bAddressAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
-                    <input id="bAddressSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
-                    <input id="bAddressCancel" type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
+                    <input id="bAddressSave" formmethod="post" type="submit" class="save-form vh button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                    <input id="bAddressCancel" type="submit" class="cancel-form vh button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                 </div>
             </form>
         </section>
@@ -123,7 +123,7 @@ $types     = AddressType::getConstants();
                         <tr class="animated medium-duration greenCircleFade" data-id="" draggable="false">
                             <td>
                                 <i class="g-icon btn update-form">settings</i>
-                                <input id="addressTable-remove-0" type="checkbox" class="hidden">
+                                <input id="addressTable-remove-0" type="checkbox" class="vh">
                                 <label for="addressTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                 <span class="checked-visibility">
                                     <label for="addressTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
@@ -149,7 +149,7 @@ $types     = AddressType::getConstants();
                     <tr data-id="<?= $value->id; ?>">
                         <td>
                             <i class="g-icon btn update-form">settings</i>
-                            <input id="addressTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                            <input id="addressTable-remove-<?= $value->id; ?>" type="checkbox" class="vh">
                             <label for="addressTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                             <span class="checked-visibility">
                                 <label for="addressTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>

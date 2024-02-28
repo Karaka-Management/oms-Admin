@@ -1703,6 +1703,40 @@
             }
         }
     },
+    "unit_contact_rel": {
+        "name": "unit_contact_rel",
+        "fields": {
+            "unit_contact_rel_id": {
+                "name": "unit_contact_rel_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "unit_contact_rel_unit": {
+                "name": "unit_contact_rel_unit",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "unit",
+                "foreignKey": "unit_id"
+            },
+            "unit_contact_rel_module": {
+                "name": "unit_contact_rel_module",
+                "type": "VARCHAR(190)",
+                "null": true,
+                "default": null,
+                "foreignTable": "module",
+                "foreignKey": "module_id"
+            },
+            "unit_contact_rel_contact": {
+                "name": "unit_contact_rel_contact",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "contact",
+                "foreignKey": "contact_id"
+            }
+        }
+    },
     "account_address_rel": {
         "name": "account_address_rel",
         "fields": {

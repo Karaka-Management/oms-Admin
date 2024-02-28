@@ -27,41 +27,6 @@
         "virtualPath": "/Modules/Admin/Templates/Global",
         "user": 1
     },
-    {
-        "type": "collection",
-        "create_directory": true,
-        "name": "Lists",
-        "virtualPath": "/Modules/Admin/Templates/Global",
-        "user": 1
-    },
-    {
-        "type": "collection",
-        "create_directory": true,
-        "name": "Letters",
-        "virtualPath": "/Modules/Admin/Templates/Global",
-        "user": 1
-    },
-    {
-        "type": "collection",
-        "create_directory": true,
-        "name": "Emails",
-        "virtualPath": "/Modules/Admin/Templates/Global",
-        "user": 1
-    },
-    {
-        "type": "collection",
-        "create_directory": true,
-        "name": "Data",
-        "virtualPath": "/Modules/Admin/Templates/Global",
-        "user": 1
-    },
-    {
-        "type": "collection",
-        "create_directory": true,
-        "name": "Reports",
-        "virtualPath": "/Modules/Admin/Templates/Global",
-        "user": 1
-    },
 
     {
         "type": "upload",
@@ -84,74 +49,6 @@
             "/Modules/Admin/Admin/Install/Media/PdfDefaultTemplate/pdfTemplate.pdf.php",
             "/Modules/Admin/Admin/Install/Media/WordDefaultTemplate/docTemplate.doc.php",
             "/Modules/Admin/Admin/Install/Media/ExcelDefaultTemplate/spreadsheetTemplate.xls.php"
-        ],
-        "user": 1
-    },
-
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Pdf List Exporter",
-        "virtualPath": "/Modules/Admin/Templates/Global/Lists",
-        "path": "/Modules/Admin/Templates/Global/Lists/Pdf List Exporter",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/PdfListExporter"
-        ],
-        "user": 1
-    },
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Word List Exporter",
-        "virtualPath": "/Modules/Admin/Templates/Global/Lists",
-        "path": "/Modules/Admin/Templates/Global/Lists/Word List Exporter",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/WordListExporter"
-        ],
-        "user": 1
-    },
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Excel List Exporter",
-        "virtualPath": "/Modules/Admin/Templates/Global/Lists",
-        "path": "/Modules/Admin/Templates/Global/Lists/Excel List Exporter",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/ExcelListExporter"
-        ],
-        "user": 1
-    },
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Csv List Exporter",
-        "virtualPath": "/Modules/Admin/Templates/Global/Lists",
-        "path": "/Modules/Admin/Templates/Global/Lists/Csv List Exporter",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/CsvListExporter"
-        ],
-        "user": 1
-    },
-
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Word List Exporter",
-        "virtualPath": "/Modules/Admin/Templates/Global/Letters",
-        "path": "/Modules/Admin/Templates/Global/Letters/Word Letter Exporter",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/WordLetterExporter"
-        ],
-        "user": 1
-    },
-    {
-        "type": "upload",
-        "create_collection": true,
-        "name": "Email Exporter",
-        "virtualPath": "/Modules/Admin/Templates/Global/Emails",
-        "path": "/Modules/Admin/Templates/Global/Emails/Email Exporter",
-        "files": [
-            "/Modules/Admin/Admin/Install/Media/EmailExporter"
         ],
         "user": 1
     }

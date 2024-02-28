@@ -246,12 +246,7 @@ final class Installer extends InstallerAbstract
         $adminData = [];
 
         if (isset($data['path'])) {
-            $adminFile = \file_get_contents($data['path'] ?? '');
-            if ($adminFile === false) {
-                throw new PathException($data['path'] ?? ''); // @codeCoverageIgnore
-            }
-
-            $adminData = \json_decode($adminFile, true) ?? [];
+            $adminData = include $data['path'];
         } elseif (isset($data['data'])) {
             $adminData = $data['data'];
         }

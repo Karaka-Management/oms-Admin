@@ -152,30 +152,12 @@ final class BackendController extends Controller
 
         $view->data['accounts'] = $list['data'];
 
-        /** @var \Model\Setting[] $exportTemplates */
-        $exportTemplates = $this->app->appSettings->get(
-            names: [
-                SettingsEnum::DEFAULT_LIST_EXPORTS,
-            ],
-            module: 'Admin'
-        );
-
-        $templateIds = [];
-        foreach ($exportTemplates as $template) {
-            $templateIds[] = (int) $template->content;
-        }
-
-        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
-        $mediaTemplates = MediaMapper::getAll()
-            ->where('id', $templateIds, 'in')
-            ->execute();
-
         $tableView         = new TableView($this->app->l11nManager, $request, $response);
         $tableView->module = 'Admin';
         $tableView->theme  = 'Backend';
         $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
         $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
-        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setExportTemplates([]);
         $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
         $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
         $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
@@ -283,28 +265,12 @@ final class BackendController extends Controller
 
         $view->data['audits'] = $list['data'];
 
-        /** @var \Model\Setting[] $exportTemplates */
-        $exportTemplates = $this->app->appSettings->get(
-            names: [SettingsEnum::DEFAULT_LIST_EXPORTS],
-            module: 'Admin'
-        );
-
-        $templateIds = [];
-        foreach ($exportTemplates as $template) {
-            $templateIds[] = (int) $template->content;
-        }
-
-        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
-        $mediaTemplates = MediaMapper::getAll()
-            ->where('id', $templateIds, 'in')
-            ->execute();
-
         $tableView         = new TableView($this->app->l11nManager, $request, $response);
         $tableView->module = 'Auditor';
         $tableView->theme  = 'Backend';
         $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
         $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
-        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setExportTemplates([]);
         $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
         $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
         $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
@@ -405,30 +371,12 @@ final class BackendController extends Controller
         $memberCount               = GroupMapper::countMembers();
         $view->data['memberCount'] = $memberCount;
 
-        /** @var \Model\Setting[] $exportTemplates */
-        $exportTemplates = $this->app->appSettings->get(
-            names: [
-                SettingsEnum::DEFAULT_LIST_EXPORTS,
-            ],
-            module: 'Admin'
-        );
-
-        $templateIds = [];
-        foreach ($exportTemplates as $template) {
-            $templateIds[] = (int) $template->content;
-        }
-
-        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
-        $mediaTemplates = MediaMapper::getAll()
-            ->where('id', $templateIds, 'in')
-            ->execute();
-
         $tableView         = new TableView($this->app->l11nManager, $request, $response);
         $tableView->module = 'Admin';
         $tableView->theme  = 'Backend';
         $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
         $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
-        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setExportTemplates([]);
         $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
         $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
         $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');
@@ -543,30 +491,12 @@ final class BackendController extends Controller
         $view->data['active']    = $this->app->moduleManager->getActiveModules();
         $view->data['installed'] = $this->app->moduleManager->getInstalledModules();
 
-        /** @var \Model\Setting[] $exportTemplates */
-        $exportTemplates = $this->app->appSettings->get(
-            names: [
-                SettingsEnum::DEFAULT_LIST_EXPORTS,
-            ],
-            module: 'Admin'
-        );
-
-        $templateIds = [];
-        foreach ($exportTemplates as $template) {
-            $templateIds[] = (int) $template->content;
-        }
-
-        /** @var \Modules\Media\Models\Media[] $mediaTemplates */
-        $mediaTemplates = MediaMapper::getAll()
-            ->where('id', $templateIds, 'in')
-            ->execute();
-
         $tableView         = new TableView($this->app->l11nManager, $request, $response);
         $tableView->module = 'Admin';
         $tableView->theme  = 'Backend';
         $tableView->setTitleTemplate('/Web/Backend/Themes/table-title');
         $tableView->setExportTemplate('/Web/Backend/Themes/popup-export-data');
-        $tableView->setExportTemplates($mediaTemplates);
+        $tableView->setExportTemplates([]);
         $tableView->setColumnHeaderElementTemplate('/Web/Backend/Themes/header-element-table');
         $tableView->setFilterTemplate('/Web/Backend/Themes/popup-filter-table');
         $tableView->setSortTemplate('/Web/Backend/Themes/sort-table');

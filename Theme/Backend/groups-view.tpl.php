@@ -132,7 +132,7 @@ echo $this->data['nav']->render(); ?>
                                 <tr data-id="" draggable="false">
                                     <td>
                                         <i class="g-icon btn remove-form">close</i>
-                                        <input id="accountTable-remove-0" type="checkbox" class="hidden">
+                                        <input id="accountTable-remove-0" type="checkbox" class="vh">
                                         <label for="accountTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                         <span class="checked-visibility">
                                             <label for="accountTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
@@ -147,7 +147,7 @@ echo $this->data['nav']->render(); ?>
                                 foreach ($accounts as $key => $value) : ++$c;
                                     $url = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->id); ?>
                                 <tr data-id="<?= $value->id; ?>">
-                                    <td><input id="accountTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                    <td><input id="accountTable-remove-<?= $value->id; ?>" type="checkbox" class="vh">
                                         <label for="accountTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                         <span class="checked-visibility">
                                             <label for="accountTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
@@ -271,8 +271,8 @@ echo $this->data['nav']->render(); ?>
                                 <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP; ?>">
 
                                 <input id="bPermissionAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
-                                <input id="bPermissionSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
-                                <input type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
+                                <input id="bPermissionSave" formmethod="post" type="submit" class="save-form vh button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                                <input type="submit" class="cancel-form vh button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                             </div>
                         </form>
                     </div>
@@ -302,7 +302,7 @@ echo $this->data['nav']->render(); ?>
                                     <template class="oms-add-tpl-permission">
                                         <tr data-id="" draggable="false">
                                             <td><i class="g-icon btn update-form">settings</i>
-                                                <input id="permissionTable-remove-0" type="checkbox" class="hidden">
+                                                <input id="permissionTable-remove-0" type="checkbox" class="vh">
                                                 <label for="permissionTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                                 <span class="checked-visibility">
                                                     <label for="permissionTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
@@ -329,7 +329,7 @@ echo $this->data['nav']->render(); ?>
                                         $permission = $value->getPermission(); ?>
                                     <tr data-id="<?= $value->id; ?>">
                                         <td><i class="g-icon btn update-form">settings</i>
-                                            <input id="permissionTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                            <input id="permissionTable-remove-<?= $value->id; ?>" type="checkbox" class="vh">
                                             <label for="permissionTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                             <span class="checked-visibility">
                                                 <label for="permissionTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>

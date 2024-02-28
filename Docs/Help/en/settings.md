@@ -18,37 +18,49 @@ In this field the password structure can be defined that is required by every ac
 
 At least 8 characters including at least one numeric value, one lower letter, one upper letter, one special char
 
-```^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}```
+```
+^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
+```
 
 ##### Password Example 2
 
 At least 8 characters including at least one numeric value, one upper letter, one special char
 
-```^(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}```
+```
+^(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
+```
 
 ##### Password Example 3
 
 At least 8 characters including at least one numeric value, one special char
 
-```^(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}```
+```
+^(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
+```
 
 ##### Password Example 4
 
 At least 8 characters including at least one special char
 
-```^(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}```
+```
+^(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
+```
 
 ##### Password Example 5
 
 At least 8 characters
 
-```^[.]{8,}```
+```
+^[.]{8,}
+```
 
 ##### Password Example 6
 
 At least 12 characters
 
-```^[.]{12,}```
+```
+^[.]{12,}
+```
 
 #### Login Retries
 

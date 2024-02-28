@@ -274,4 +274,51 @@ class AccountMapper extends DataMapperFactory
             return LoginReturnType::FAILURE; // @codeCoverageIgnore
         }
     }
+
+    public static function findReadPermission(
+        int $unitId,
+        string $module,
+        int $category,
+        int $element,
+    ) : array
+    {
+        $accounts = [];
+
+        $sql =<<<SQL
+        SELECT account_permission_account as account
+        FROM account_permission
+        WHERE (account_permission_unit = {$unitId} OR account_permission_unit IS NULL)
+            AND (account_permission_module = "{$module}" OR account_permission_module IS NULL)
+            AND (account_permission_category = {$category} OR account_permission_category IS NULL)
+            AND (account_permission_element = {$element} OR account_permission_element IS NULL)
+            AND account_permission_hasread = 1;
+        SQL;
+
+        $query  = new Builder(self::$db);
+        $results = $query->raw($sql)->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($results as $result) {
+            $accounts[] = (int) $result['account'];
+        }
+
+        $sql =<<<SQL
+        SELECT account_group_account as account
+        FROM account_group
+        LEFT JOIN group_permission ON account_group.account_group_group = group_permission.group_permission_group
+        WHERE (group_permission_unit = {$unitId} OR group_permission_unit IS NULL)
+            AND (group_permission_module = "{$module}" OR group_permission_module IS NULL)
+            AND (group_permission_category = {$category} OR group_permission_category IS NULL)
+            AND (group_permission_element = {$element} OR group_permission_element IS NULL)
+            AND group_permission_hasread = 1;
+        SQL;
+
+        $query  = new Builder(self::$db);
+        $results = $query->raw($sql)->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($results as $result) {
+            $accounts[] = (int) $result['account'];
+        }
+
+        return \array_unique($accounts);
+    }
 }

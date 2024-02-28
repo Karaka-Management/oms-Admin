@@ -40,6 +40,7 @@ use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
 use Modules\Admin\Models\PermissionCategory;
 use Modules\Admin\Models\SettingsEnum;
+use Modules\Messages\Models\SettingsEnum as SettingsEnumMessages;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\UploadFile;
@@ -64,6 +65,7 @@ use phpOMS\Message\Http\RequestMethod;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\Http\Rest;
 use phpOMS\Message\Mail\MailHandler;
+use phpOMS\Message\Mail\DsnNotificationType;
 use phpOMS\Message\Mail\Smtp;
 use phpOMS\Message\Mail\SubmitType;
 use phpOMS\Message\NotificationLevel;
@@ -97,6 +99,12 @@ use phpOMS\Version\Version;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @todo Create a view where it's possible to create/activate, change and delete/deactivate hooks for events.
+ *      https://github.com/Karaka-Management/oms-Admin/issues/12
+ *
+ * @todo Split up the ApiController, it is doing way to much in one file.
+ *      Consider to create one for: accounts+groups+permissions and one for general stuff like address+settings etc.
  */
 final class ApiController extends Controller
 {
@@ -244,7 +252,75 @@ final class ApiController extends Controller
             ? (EncryptionHelper::decryptShared($emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '', $_SERVER['OMS_PRIVATE_KEY_I']))
             : ($emailSettings[SettingsEnum::MAIL_SERVER_PASS]->content ?? '');
 
+        $handler->dsn = DsnNotificationType::FAILURE;
+
         return $handler;
+    }
+
+    public function setupEmailDefaults(\Modules\Messages\Models\Email $mail, string $language = '') : bool
+    {
+        /** @var \Model\Setting[] $emailSettings */
+        $emailSettings = $this->app->appSettings->get(
+            names: [SettingsEnum::MAIL_SERVER_ADDR],
+            module: 'Admin'
+        );
+
+        if (empty($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content)) {
+            return false;
+        }
+
+        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
+
+        // @todo Implement a model reading system which allows to define alternative conditions/wheres
+        //      https://github.com/Karaka-Management/phpOMS/issues/365
+        if ($language !== '') {
+            $mailL11n = $mail->getL11nByLanguage($language);
+            $mail->subject = $mailL11n->subject;
+            $mail->body    = $mailL11n->body;
+            $mail->bodyAlt = $mailL11n->bodyAlt;
+        }
+
+        /** @var \Model\Setting[] $templateSettings */
+        $templateSettings = $this->app->appSettings->get(
+            names: [SettingsEnumMessages::HEADER_TEMPLATE, SettingsEnumMessages::FOOTER_TEMPLATE],
+            module: 'Messages',
+            unit: $this->app->unitId
+        );
+
+        if (empty($templateSettings)) {
+            $templateSettings = $this->app->appSettings->get(
+                names: [SettingsEnumMessages::HEADER_TEMPLATE, SettingsEnumMessages::FOOTER_TEMPLATE],
+                module: 'Messages',
+            );
+        }
+
+        $headerTemplate = $mail = EmailMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $templateSettings[SettingsEnumMessages::HEADER_TEMPLATE]->content)
+            ->where('l11n/language', $language)
+            ->execute();
+
+        $header = $headerTemplate->getL11nByLanguage($language);
+
+        $footerTemplate = $mail = EmailMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $templateSettings[SettingsEnumMessages::HEADER_TEMPLATE]->content)
+            ->where('l11n/language', $language)
+            ->execute();
+
+        $footer = $footerTemplate->getL11nByLanguage($language);
+
+        $mail->template = \array_merge(
+            $mail->template,
+            [
+                '{header_template}' => $header->body,
+                '{header_template_alt}' => $header->bodyAlt,
+                '{footer_template}' => $footer->body,
+                '{footer_template_alt}' => $footer->bodyAlt,
+            ]
+        );
+
+        return true;
     }
 
     /**
@@ -290,13 +366,9 @@ final class ApiController extends Controller
 
         /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
-            names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE],
+            names: [SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE],
             module: 'Admin'
         );
-
-        if (empty($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content)) {
-            return;
-        }
 
         /** @var \Modules\Messages\Models\Email $mail */
         $mail = EmailMapper::get()
@@ -305,23 +377,34 @@ final class ApiController extends Controller
             ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
+        $status = false;
+        if ($mail->id !== 0) {
+            $status = $this->setupEmailDefaults($mail, $response->header->l11n->language);
+        }
+
         $mail->addTo($account->email);
 
-        // @todo Implement a model reading system which allows to define alternative conditions/wheres
-        //      https://github.com/Karaka-Management/phpOMS/issues/365
-        $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
+        $mail->template = \array_merge(
+            $mail->template,
+            [
+                '{reset_link}' => $resetLink,
+                '{user_name}' => $account->login,
+            ]
+        );
 
-        $mail->subject = $mailL11n->subject;
-        $mail->body = $mailL11n->body;
-        $mail->bodyAlt = $mailL11n->bodyAlt;
+        if ($status) {
+            $status = $handler->send($mail);
+        }
 
-        $mail->template = [
-            '{reset_link}' => $resetLink,
-            '{user_name}' => $account->login,
-        ];
-
-        $handler->send($mail);
+        if (!$status) {
+            \phpOMS\Log\FileLogger::getInstance()->error(
+                \phpOMS\Log\FileLogger::MSG_FULL, [
+                    'message' => 'Couldn\'t send mail: ' . $mail->id,
+                    'line'    => __LINE__,
+                    'file'    => self::class,
+                ]
+            );
+        }
 
         $this->app->appSettings->set([
             [
@@ -418,13 +501,9 @@ final class ApiController extends Controller
 
         /** @var \Model\Setting[] $emailSettings */
         $emailSettings = $this->app->appSettings->get(
-            names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE],
+            names: [SettingsEnum::LOGIN_MAIL_FORGOT_PASSWORD_TEMPLATE],
             module: 'Admin'
         );
-
-        if (empty($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content)) {
-            return;
-        }
 
         /** @var \Modules\Messages\Models\Email $mail */
         $mail = EmailMapper::get()
@@ -433,23 +512,20 @@ final class ApiController extends Controller
             ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
+        $status = false;
+        if ($mail->id !== 0) {
+            $status = $this->setupEmailDefaults($mail, $response->header->l11n->language);
+        }
+
         $mail->addTo($account->email);
 
-        // @todo Implement a model reading system which allows to define alternative conditions/wheres
-        //      https://github.com/Karaka-Management/phpOMS/issues/365
-        $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
-
-        $mail->subject = $mailL11n->subject;
-        $mail->body = $mailL11n->body;
-        $mail->bodyAlt = $mailL11n->bodyAlt;
-
-        $mail->template = [
-            '{new_password}' => $pass,
-            '{user_name}' => $account->login,
-        ];
-
-        $handler->send($mail);
+        $mail->template = \array_merge(
+            $mail->template,
+            [
+                '{new_password}' => $pass,
+                '{user_name}' => $account->login,
+            ]
+        );
 
         $this->app->appSettings->set([
             [
@@ -476,7 +552,19 @@ final class ApiController extends Controller
             );
         }
 
-        $handler->send($mail);
+        if ($status) {
+            $status = $handler->send($mail);
+        }
+
+        if (!$status) {
+            \phpOMS\Log\FileLogger::getInstance()->error(
+                \phpOMS\Log\FileLogger::MSG_FULL, [
+                    'message' => 'Couldn\'t send mail: ' . $mail->id,
+                    'line'    => __LINE__,
+                    'file'    => self::class,
+                ]
+            );
+        }
 
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
         $response->set($request->uri->__toString(), [
@@ -1841,13 +1929,9 @@ final class ApiController extends Controller
 
             /** @var \Model\Setting[] $emailSettings */
             $emailSettings = $this->app->appSettings->get(
-                names: [SettingsEnum::MAIL_SERVER_ADDR, SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE],
+                names: [SettingsEnum::LOGIN_MAIL_REGISTRATION_TEMPLATE],
                 module: 'Admin'
             );
-
-            if (empty($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content)) {
-                return;
-            }
 
             /** @var \Modules\Messages\Models\Email $mail */
             $mail = EmailMapper::get()
@@ -1856,25 +1940,36 @@ final class ApiController extends Controller
                 ->where('l11n/language', $response->header->l11n->language)
                 ->execute();
 
-            $mail->setFrom($emailSettings[SettingsEnum::MAIL_SERVER_ADDR]->content);
+            $status = false;
+            if ($mail->id !== 0) {
+                $status = $this->setupEmailDefaults($mail, $response->header->l11n->language);
+            }
+
             $mail->addTo((string) $request->getData('email'));
 
-            // @todo Implement a model reading system which allows to define alternative conditions/wheres
-            //      https://github.com/Karaka-Management/phpOMS/issues/365
-            $mailL11n = $mail->getL11nByLanguage($response->header->l11n->language);
+            $mail->template = \array_merge(
+                $mail->template,
+                [
+                    '{confirmation_link}' => UriFactory::hasQuery('/' . \strtolower($app->name))
+                        ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
+                        : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
+                    '{user_name}' => $account->login,
+                ]
+            );
 
-            $mail->subject = $mailL11n->subject;
-            $mail->body = $mailL11n->body;
-            $mail->bodyAlt = $mailL11n->bodyAlt;
+            if ($status) {
+                $status = $handler->send($mail);
+            }
 
-            $mail->template = [
-                '{confirmation_link}' => UriFactory::hasQuery('/' . \strtolower($app->name))
-                    ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
-                    : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                '{user_name}' => $account->login,
-            ];
-
-            $handler->send($mail);
+            if (!$status) {
+                \phpOMS\Log\FileLogger::getInstance()->error(
+                    \phpOMS\Log\FileLogger::MSG_FULL, [
+                        'message' => 'Couldn\'t send mail: ' . $mail->id,
+                        'line'    => __LINE__,
+                        'file'    => self::class,
+                    ]
+                );
+            }
         }
 
         // Create client
@@ -2079,7 +2174,7 @@ final class ApiController extends Controller
                         : $this->app->l11nServer->toArray()
                 );
         } else {
-            $locale = \explode('_', $request->getdataString('locale') ?? '');
+            $locale = \explode('_', $request->getDataString('locale') ?? '');
 
             $account->l11n
                 ->loadFromLanguage(
@@ -2988,11 +3083,14 @@ final class ApiController extends Controller
     /**
      * Update the system or a module
      *
-     * @param array $toUpdate Array of updte resources
+     * @param array $toUpdate Array of update resources
      *
      * @return void
      *
      * @since 1.0.0
+     *
+     * @todo Implement in app download and installation
+     *      https://github.com/Karaka-Management/oms-Admin/issues/13
      */
     private function apiUpdate(array $toUpdate) : void
     {

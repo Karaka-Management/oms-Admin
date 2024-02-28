@@ -88,6 +88,9 @@ echo $this->data['nav']->render();
                         <td><?= $uri; ?>
                         <td><?= $callback; ?>
                     <?php endforeach; endforeach; endforeach; endforeach; ?>
+                    <?php if ($c === 0) : ?>
+                        <tr><td colspan="4" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                    <?php endif; ?>
             </table>
         </div>
     </div>

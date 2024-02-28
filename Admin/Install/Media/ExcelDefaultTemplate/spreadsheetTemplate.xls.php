@@ -12,8 +12,6 @@
  */
 declare(strict_types=1);
 
-use PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooter;
-use PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
 class DefaultExcel extends \PhpOffice\PhpSpreadsheet\Spreadsheet
