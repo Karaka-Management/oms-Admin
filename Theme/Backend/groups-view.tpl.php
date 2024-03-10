@@ -69,7 +69,11 @@ echo $this->data['nav']->render(); ?>
                                     <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <?= $this->getData('editor')->render('group-editor'); ?>
+
+                                <div class="form-group">
+                                    <?= $this->getData('editor')->render('group-editor'); ?>
+                                </div>
+
                                 <?= $this->getData('editor')->getData('text')->render(
                                     'group-editor',
                                     'description',

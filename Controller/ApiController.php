@@ -3002,7 +3002,7 @@ final class ApiController extends Controller
         }
 
         $installedModules = $this->app->moduleManager->getActiveModules();
-        foreach ($installedModules as $name => $module) {
+        foreach ($installedModules as $name => $_) {
             $this->app->moduleManager->reInit($name);
         }
     }
