@@ -148,7 +148,7 @@ final class CliController extends Controller
         $mapper = SettingMapper::yield()
             ->where('isEncrypted', true);
 
-        foreach ($mapper->execute() as $setting) {
+        foreach ($mapper->executeYield() as $setting) {
             $decrypted = empty($data['old']) || empty($setting->content)
                 ? $setting->content
                 : EncryptionHelper::decryptShared($setting->content ?? '', $data['old']);

@@ -399,7 +399,7 @@ final class ApiController extends Controller
             $mail->template,
             [
                 '{reset_link}' => $resetLink,
-                '{user_name}'  => $account->login,
+                '{user_name}'  => (string) $account->login,
             ]
         );
 
@@ -534,7 +534,7 @@ final class ApiController extends Controller
             $mail->template,
             [
                 '{new_password}' => $pass,
-                '{user_name}'    => $account->login,
+                '{user_name}'    => (string) $account->login,
             ]
         );
 
@@ -1964,7 +1964,7 @@ final class ApiController extends Controller
                     '{confirmation_link}' => UriFactory::hasQuery('/' . \strtolower($app->name))
                         ? UriFactory::build('{/' . \strtolower($app->name) . '}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash())
                         : UriFactory::build('{/tld}/{/lang}/' . \strtolower($app->name) . '/signup/confirmation?hash=' . $dataChange->getHash()),
-                    '{user_name}' => $account->login,
+                    '{user_name}' => (string) $account->login,
                 ]
             );
 
