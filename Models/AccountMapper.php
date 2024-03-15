@@ -275,6 +275,18 @@ class AccountMapper extends DataMapperFactory
         }
     }
 
+    /**
+     * Find accounts that have read permission
+     *
+     * @param int    $unitId   Unit id
+     * @param string $module   Module name
+     * @param int    $category Category
+     * @param int    $element  Element id
+     *
+     * @return int[] Account ids
+     *
+     * @since 1.0.0
+     */
     public static function findReadPermission(
         int $unitId,
         string $module,
@@ -284,7 +296,7 @@ class AccountMapper extends DataMapperFactory
     {
         $accounts = [];
 
-        $sql =<<<SQL
+        $sql = <<<SQL
         SELECT account_permission_account as account
         FROM account_permission
         WHERE (account_permission_unit = {$unitId} OR account_permission_unit IS NULL)
@@ -294,14 +306,14 @@ class AccountMapper extends DataMapperFactory
             AND account_permission_hasread = 1;
         SQL;
 
-        $query  = new Builder(self::$db);
-        $results = $query->raw($sql)->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $query   = new Builder(self::$db);
+        $results = $query->raw($sql)->execute()?->fetchAll(\PDO::FETCH_ASSOC) ?? [];
 
         foreach ($results as $result) {
             $accounts[] = (int) $result['account'];
         }
 
-        $sql =<<<SQL
+        $sql = <<<SQL
         SELECT account_group_account as account
         FROM account_group
         LEFT JOIN group_permission ON account_group.account_group_group = group_permission.group_permission_group
@@ -312,8 +324,8 @@ class AccountMapper extends DataMapperFactory
             AND group_permission_hasread = 1;
         SQL;
 
-        $query  = new Builder(self::$db);
-        $results = $query->raw($sql)->execute()->fetchAll(\PDO::FETCH_ASSOC);
+        $query   = new Builder(self::$db);
+        $results = $query->raw($sql)->execute()?->fetchAll(\PDO::FETCH_ASSOC) ?? [];
 
         foreach ($results as $result) {
             $accounts[] = (int) $result['account'];

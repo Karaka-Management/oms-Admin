@@ -40,11 +40,11 @@ use Modules\Admin\Models\ModuleStatusUpdateType;
 use Modules\Admin\Models\NullAccount;
 use Modules\Admin\Models\PermissionCategory;
 use Modules\Admin\Models\SettingsEnum;
-use Modules\Messages\Models\SettingsEnum as SettingsEnumMessages;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\UploadFile;
 use Modules\Messages\Models\EmailMapper;
+use Modules\Messages\Models\SettingsEnum as SettingsEnumMessages;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\GroupStatus;
@@ -64,8 +64,8 @@ use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestMethod;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\Http\Rest;
-use phpOMS\Message\Mail\MailHandler;
 use phpOMS\Message\Mail\DsnNotificationType;
+use phpOMS\Message\Mail\MailHandler;
 use phpOMS\Message\Mail\Smtp;
 use phpOMS\Message\Mail\SubmitType;
 use phpOMS\Message\NotificationLevel;
@@ -257,6 +257,16 @@ final class ApiController extends Controller
         return $handler;
     }
 
+    /**
+     * Setup default values for emails (incl. basic templating)
+     *
+     * @param \Modules\Messages\Models\Email $mail     Email
+     * @param string                         $language Email language (e.g. 'en', 'de')
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
     public function setupEmailDefaults(\Modules\Messages\Models\Email $mail, string $language = '') : bool
     {
         /** @var \Model\Setting[] $emailSettings */
@@ -274,7 +284,7 @@ final class ApiController extends Controller
         // @todo Implement a model reading system which allows to define alternative conditions/wheres
         //      https://github.com/Karaka-Management/phpOMS/issues/365
         if ($language !== '') {
-            $mailL11n = $mail->getL11nByLanguage($language);
+            $mailL11n      = $mail->getL11nByLanguage($language);
             $mail->subject = $mailL11n->subject;
             $mail->body    = $mailL11n->body;
             $mail->bodyAlt = $mailL11n->bodyAlt;
@@ -288,6 +298,7 @@ final class ApiController extends Controller
         );
 
         if (empty($templateSettings)) {
+            /** @var \Model\Setting[] $templateSettings */
             $templateSettings = $this->app->appSettings->get(
                 names: [SettingsEnumMessages::HEADER_TEMPLATE, SettingsEnumMessages::FOOTER_TEMPLATE],
                 module: 'Messages',
@@ -313,9 +324,9 @@ final class ApiController extends Controller
         $mail->template = \array_merge(
             $mail->template,
             [
-                '{header_template}' => $header->body,
+                '{header_template}'     => $header->body,
                 '{header_template_alt}' => $header->bodyAlt,
-                '{footer_template}' => $footer->body,
+                '{footer_template}'     => $footer->body,
                 '{footer_template_alt}' => $footer->bodyAlt,
             ]
         );
@@ -388,7 +399,7 @@ final class ApiController extends Controller
             $mail->template,
             [
                 '{reset_link}' => $resetLink,
-                '{user_name}' => $account->login,
+                '{user_name}'  => $account->login,
             ]
         );
 
@@ -523,7 +534,7 @@ final class ApiController extends Controller
             $mail->template,
             [
                 '{new_password}' => $pass,
-                '{user_name}' => $account->login,
+                '{user_name}'    => $account->login,
             ]
         );
 
@@ -3722,7 +3733,7 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var \Modules\Admin\Models\Address $address */
+        /** @var \phpOMS\Stdlib\Base\Address $address */
         $address = AddressMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModelRelation($request->header->account, (int) $request->getData('account'), [$address->id], AccountMapper::class, 'addresses', 'account-address', $request->getOrigin());
         $this->deleteModel($request->header->account, $address, AddressMapper::class, 'address', $request->getOrigin());

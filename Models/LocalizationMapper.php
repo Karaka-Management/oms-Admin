@@ -97,6 +97,15 @@ final class LocalizationMapper extends DataMapperFactory
      *
      * @var array<string, array{mapper:class-string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
+     *
+     * @question Is there a real significant difference between by and column?
+     *      By defines the reference id
+     *      Column defines the data which is stored in the variable IFF a scalar type should be stored instead of an object
+     *      Maybe using a flag instead of column would be better: e.g. useScalar = true -> don't create object
+     *      But sometimes we don't define 'by' if the 'by' is the primary key:
+     *          by => id
+     *          column => whatever
+     *      But we don't type this and only define column.
      */
     public const OWNS_ONE = [
         'country' => [

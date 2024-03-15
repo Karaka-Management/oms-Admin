@@ -33,7 +33,7 @@ class ContactView extends View
     /**
      * Contact
      *
-     * @var Modules\Admin\Models\Contact[]
+     * @var \Modules\Admin\Models\Contact[]
      * @since 1.0.0
      */
     public array $contacts = [];
@@ -73,7 +73,7 @@ class ContactView extends View
     /**
      * Reference id
      *
-     * @var string
+     * @var int
      * @since 1.0.0
      */
     public int $refId = 0;

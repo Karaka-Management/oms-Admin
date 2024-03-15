@@ -127,7 +127,7 @@ final class CliController extends Controller
     /**
      * Api method to make a call to the cli app
      *
-     * @param mixed ...$data Generic data
+     * @param string ...$data Generic data
      *
      * @return void
      *
@@ -143,7 +143,7 @@ final class CliController extends Controller
 
         // Enter read only mode
         $setting->content = (string) ApplicationStatus::READ_ONLY;
-        $this->app->appSetting->save([$setting]);
+        $this->app->appSettings->save([$setting]);
 
         $mapper = SettingMapper::yield()
             ->where('isEncrypted', true);
@@ -164,6 +164,6 @@ final class CliController extends Controller
 
         // Restore old mode
         $setting->content = $oldMode;
-        $this->app->appSetting->save([$setting]);
+        $this->app->appSettings->save([$setting]);
     }
 }

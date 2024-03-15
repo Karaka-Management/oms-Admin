@@ -59,7 +59,7 @@ class Account extends \phpOMS\Account\Account
     /**
      * Location data.
      *
-     * @var Address[]
+     * @var \phpOMS\Stdlib\Base\Address[]
      * @since 1.0.0
      */
     public array $addresses = [];
