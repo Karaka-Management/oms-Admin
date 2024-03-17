@@ -49,6 +49,8 @@ trait ApiControllerModuleTrait
         $request->setData('status', ModuleStatusUpdateType::UNINSTALL, true);
         $this->module->apiModuleStatusUpdate($request, $response);
         self::assertEquals('ok', $response->getData('')['status']);
+
+        $this->module->apiReInit($request, $response);
     }
 
     /**
