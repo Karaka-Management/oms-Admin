@@ -47,6 +47,6 @@ final class NullModuleTest extends \PHPUnit\Framework\TestCase
     public function testJsonSerialize() : void
     {
         $null = new NullModule('Test');
-        self::assertEquals(['id' => 'Test'], $null);
+        self::assertEquals(['id' => 'Test'], $null->jsonSerialize());
     }
 }
