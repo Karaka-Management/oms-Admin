@@ -23,7 +23,7 @@ trait ApiControllerSettingsTrait
 {
     /**
      * @testdox Application settings can be read from the database
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiSettingsGet() : void
@@ -40,7 +40,7 @@ trait ApiControllerSettingsTrait
 
     /**
      * @testdox Application settings can be set in the database
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiSettingsSet() : void
@@ -61,7 +61,7 @@ trait ApiControllerSettingsTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountLocalizationLoadSet() : void
@@ -86,7 +86,7 @@ trait ApiControllerSettingsTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountLocalizationSet() : void
@@ -110,7 +110,7 @@ trait ApiControllerSettingsTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testInvalidPermissionAccountLocalizationSet() : void

@@ -22,7 +22,7 @@ use Modules\Admin\Models\NullAccountPermission;
 final class NullAccountPermissionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Admin\Models\NullAccountPermission
+     * @covers \Modules\Admin\Models\NullAccountPermission
      * @group module
      */
     public function testNull() : void
@@ -31,7 +31,7 @@ final class NullAccountPermissionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\NullAccountPermission
+     * @covers \Modules\Admin\Models\NullAccountPermission
      * @group module
      */
     public function testId() : void
@@ -41,7 +41,7 @@ final class NullAccountPermissionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\NullAccountPermission
+     * @covers \Modules\Admin\Models\NullAccountPermission
      * @group module
      */
     public function testJsonSerialize() : void

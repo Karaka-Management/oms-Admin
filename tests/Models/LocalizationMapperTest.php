@@ -26,7 +26,7 @@ final class LocalizationMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The model can be created and read from the database
-     * @covers Modules\Admin\Models\LocalizationMapper
+     * @covers \Modules\Admin\Models\LocalizationMapper
      * @group module
      */
     public function testCR() : void

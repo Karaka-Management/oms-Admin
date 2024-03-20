@@ -24,7 +24,7 @@ trait ApiControllerAccountTrait
 {
     /**
      * @testdox A user can be returned
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountGet() : void
@@ -43,7 +43,7 @@ trait ApiControllerAccountTrait
 
     /**
      * @testdox A user can be updated
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountUpdate() : void
@@ -65,7 +65,7 @@ trait ApiControllerAccountTrait
 
     /**
      * @testdox A user can be found by name
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountFind() : void
@@ -83,7 +83,7 @@ trait ApiControllerAccountTrait
 
     /**
      * @testdox A user and profile for the user can be created
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountAndProfileCreate() : void
@@ -106,7 +106,7 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountCreateWithCustomLocale() : void
@@ -131,7 +131,7 @@ trait ApiControllerAccountTrait
 
     /**
      * @testdox A user can be deleted
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountDelete() : void
@@ -155,7 +155,7 @@ trait ApiControllerAccountTrait
 
     /**
      * @testdox A invalid user cannot be created
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountCreateInvalid() : void
@@ -173,7 +173,7 @@ trait ApiControllerAccountTrait
 
     /**
      * @testdox A user group can be added to a user
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddRemoveGroupToAccount() : void
@@ -196,7 +196,7 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiRemoveAdminGroupFromOneselfAccount() : void
@@ -213,7 +213,7 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountLogin() : void
@@ -230,7 +230,7 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountLoginInvalid() : void
@@ -247,7 +247,7 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountLogout() : void

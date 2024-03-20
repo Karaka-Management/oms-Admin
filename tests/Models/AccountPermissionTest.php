@@ -25,7 +25,7 @@ final class AccountPermissionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The account permission has the expected default values after initialization
-     * @covers Modules\Admin\Models\AccountPermission
+     * @covers \Modules\Admin\Models\AccountPermission
      * @group module
      */
     public function testDefault() : void

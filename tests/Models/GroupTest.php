@@ -36,7 +36,7 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The group has the expected default values after initialization
-     * @covers Modules\Admin\Models\Group
+     * @covers \Modules\Admin\Models\Group
      * @group module
      */
     public function testDefault() : void
@@ -49,7 +49,7 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The description can be set and returned
-     * @covers Modules\Admin\Models\Group
+     * @covers \Modules\Admin\Models\Group
      * @group module
      */
     public function testDescriptionInputOutput() : void
@@ -60,7 +60,7 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The creator can be set and returned
-     * @covers Modules\Admin\Models\Group
+     * @covers \Modules\Admin\Models\Group
      * @group module
      */
     public function testCreatorInputOutput() : void

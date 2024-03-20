@@ -26,7 +26,7 @@ use phpOMS\Stdlib\Base\AddressType;
 final class AddressMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Admin\Models\AddressMapper
+     * @covers \Modules\Admin\Models\AddressMapper
      * @group module
      */
     public function testCR() : void

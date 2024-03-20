@@ -31,7 +31,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The model can be created and read from the database
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testCR() : void
@@ -65,7 +65,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox A empty user password results in a failed login
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testEmptyPasswordLogin() : void
@@ -75,7 +75,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox A invalid user password results in a failed login
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testInvalidPasswordLogin() : void
@@ -85,7 +85,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox A invalid user name results in a failed login
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testInvalidUsernameLogin() : void
@@ -95,7 +95,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox A valid user name and password results in a successful login
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testValidLogin() : void
@@ -104,7 +104,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testInvalidLoginTries() : void
@@ -120,7 +120,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testInvalidLoginAccountStatus() : void
@@ -137,7 +137,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testEmptyLoginPassword() : void
@@ -154,7 +154,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testGetWithPermission() : void
@@ -165,7 +165,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\AccountMapper
+     * @covers \Modules\Admin\Models\AccountMapper
      * @group module
      */
     public function testGetWithPermissionInvalidId() : void

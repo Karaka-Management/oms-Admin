@@ -25,7 +25,7 @@ final class GroupPermissionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The group permission has the expected default values after initialization
-     * @covers Modules\Admin\Models\GroupPermission
+     * @covers \Modules\Admin\Models\GroupPermission
      * @group module
      */
     public function testDefault() : void

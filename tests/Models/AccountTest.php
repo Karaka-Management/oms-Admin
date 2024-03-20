@@ -25,7 +25,7 @@ final class AccountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The account has the expected default values after initialization
-     * @covers Modules\Admin\Models\Account
+     * @covers \Modules\Admin\Models\Account
      * @group module
      */
     public function testDefault() : void
@@ -36,7 +36,7 @@ final class AccountTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The login tries can be set and returned
-     * @covers Modules\Admin\Models\Account
+     * @covers \Modules\Admin\Models\Account
      * @group module
      */
     public function testLoginTriesInputOutput() : void

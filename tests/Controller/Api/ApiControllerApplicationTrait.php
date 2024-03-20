@@ -21,7 +21,7 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerApplicationTrait
 {
     /**
-     * @covers Modules\Admin\Controller\Apicontroller
+     * @covers \Modules\Admin\Controller\Apicontroller
      * @group module
      */
     public function testApiInvalidAppplicationPathInstall() : void

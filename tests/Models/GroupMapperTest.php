@@ -28,7 +28,7 @@ final class GroupMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox All groups which have permissions for a module can be returned
-     * @covers Modules\Admin\Models\GroupMapper
+     * @covers \Modules\Admin\Models\GroupMapper
      * @group module
      */
     public function testGroupPermissionForModule() : void
@@ -52,7 +52,7 @@ final class GroupMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\GroupMapper
+     * @covers \Modules\Admin\Models\GroupMapper
      * @group module
      */
     public function testCountMembers() : void

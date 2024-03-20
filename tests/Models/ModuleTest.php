@@ -36,7 +36,7 @@ final class ModuleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The module has the expected default values after initialization
-     * @covers Modules\Admin\Models\Module
+     * @covers \Modules\Admin\Models\Module
      * @group module
      */
     public function testDefault() : void
@@ -51,7 +51,7 @@ final class ModuleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The name can be set and returned
-     * @covers Modules\Admin\Models\Module
+     * @covers \Modules\Admin\Models\Module
      * @group module
      */
     public function testNameInputOutput() : void
@@ -62,7 +62,7 @@ final class ModuleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The status can be set and returned
-     * @covers Modules\Admin\Models\Module
+     * @covers \Modules\Admin\Models\Module
      * @group module
      */
     public function testStatusInputOutput() : void
@@ -73,7 +73,7 @@ final class ModuleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @testdox The module can be serialized
-     * @covers Modules\Admin\Models\Module
+     * @covers \Modules\Admin\Models\Module
      * @group module
      */
     public function testSerializations() : void

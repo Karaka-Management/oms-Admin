@@ -22,7 +22,7 @@ use Modules\Admin\Models\NullGroupPermission;
 final class NullGroupPermissionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Admin\Models\NullGroupPermission
+     * @covers \Modules\Admin\Models\NullGroupPermission
      * @group module
      */
     public function testNull() : void
@@ -31,7 +31,7 @@ final class NullGroupPermissionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\NullGroupPermission
+     * @covers \Modules\Admin\Models\NullGroupPermission
      * @group module
      */
     public function testId() : void
@@ -41,7 +41,7 @@ final class NullGroupPermissionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\NullModule
+     * @covers \Modules\Admin\Models\NullModule
      * @group module
      */
     public function testJsonSerialize() : void

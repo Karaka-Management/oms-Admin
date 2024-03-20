@@ -22,7 +22,7 @@ use Modules\Admin\Models\NullDataChange;
 final class NullDataChangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Admin\Models\NullDataChange
+     * @covers \Modules\Admin\Models\NullDataChange
      * @group module
      */
     public function testNull() : void
@@ -31,7 +31,7 @@ final class NullDataChangeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\NullDataChange
+     * @covers \Modules\Admin\Models\NullDataChange
      * @group module
      */
     public function testId() : void
@@ -41,7 +41,7 @@ final class NullDataChangeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\Admin\Models\NullDataChange
+     * @covers \Modules\Admin\Models\NullDataChange
      * @group module
      */
     public function testJsonSerialize() : void

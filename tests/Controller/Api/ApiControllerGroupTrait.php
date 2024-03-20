@@ -23,7 +23,7 @@ trait ApiControllerGroupTrait
 {
     /**
      * @testdox A user group can be returned
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupGet() : void
@@ -42,7 +42,7 @@ trait ApiControllerGroupTrait
 
     /**
      * @testdox A user group can be updated
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupSet() : void
@@ -65,7 +65,7 @@ trait ApiControllerGroupTrait
 
     /**
      * @testdox A user group can be found by name
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupFind() : void
@@ -83,7 +83,7 @@ trait ApiControllerGroupTrait
 
     /**
      * @testdox A user group can be created and deleted
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupCreateDelete() : void
@@ -110,7 +110,7 @@ trait ApiControllerGroupTrait
 
     /**
      * @testdox A user group can be created and deleted
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupDeleteAdminInvalid() : void
@@ -127,7 +127,7 @@ trait ApiControllerGroupTrait
 
     /**
      * @testdox A invalid user group cannot be created
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupCreateInvalid() : void
@@ -145,7 +145,7 @@ trait ApiControllerGroupTrait
 
     /**
      * @testdox A user can be added to a user group
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddRemoveAccountToGroup() : void
@@ -168,7 +168,7 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiRemoveAdminAccountFromAdminGroup() : void
@@ -186,7 +186,7 @@ trait ApiControllerGroupTrait
 
     /**
      * @testdox A user and user group can be found by name
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountGroupFind() : void

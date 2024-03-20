@@ -24,7 +24,7 @@ trait ApiControllerPermissionTrait
 {
     /**
      * @testdox A permission can be added to a user group
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddGroupPermission() : void
@@ -42,7 +42,7 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddGroupPermissionToAdmin() : void
@@ -60,7 +60,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A group permission can be returned
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupPermissionGet() : void
@@ -79,7 +79,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A user group permission can be created and deleted
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupPermissionCreateDelete() : void
@@ -104,7 +104,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A permission with missing data cannot be added to a user group
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddGroupPermissionInvalidData() : void
@@ -121,7 +121,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A invalid permission type cannot be added to a user group
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddGroupPermissionInvalidType() : void
@@ -139,7 +139,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A user group permission can be updated
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiGroupPermissionUpdate() : void
@@ -166,7 +166,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A permission can be added to a user
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddAccountPermission() : void
@@ -185,7 +185,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A user permission can be returned
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountPermissionGet() : void
@@ -204,7 +204,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A user permission can be created and deleted
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountPermissionCreateDelete() : void
@@ -229,7 +229,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A permission with missing data cannot be added to a user
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddAccountPermissionInvalidData() : void
@@ -246,7 +246,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A invalid permission type cannot be added to a user
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAddAccountPermissionInvalidType() : void
@@ -264,7 +264,7 @@ trait ApiControllerPermissionTrait
 
     /**
      * @testdox A user permission can be updated
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiAccountPermissionUpdate() : void

@@ -23,7 +23,7 @@ trait ApiControllerModuleTrait
 {
     /**
      * @testdox The status of a module can be updated
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiModuleStatusUpdate() : void
@@ -55,7 +55,7 @@ trait ApiControllerModuleTrait
 
     /**
      * @testdox A missing module cannot be updated
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiModuleStatusUpdateEmptyModule() : void
@@ -74,7 +74,7 @@ trait ApiControllerModuleTrait
 
     /**
      * @testdox A invalid module status cannot update a module
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiModuleStatusUpdateInvalidStatus() : void
@@ -92,7 +92,7 @@ trait ApiControllerModuleTrait
 
     /**
      * @testdox A invalid module cannot be updated
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiModuleStatusUpdateInvalidModule() : void
@@ -110,7 +110,7 @@ trait ApiControllerModuleTrait
 
     /**
      * @testdox A module can be re-initialized
-     * @covers Modules\Admin\Controller\ApiController
+     * @covers \Modules\Admin\Controller\ApiController
      * @group module
      */
     public function testApiReInit() : void

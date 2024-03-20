@@ -27,7 +27,7 @@ final class AppMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @testdox The model can be created and read from the database
-     * @covers Modules\Admin\Models\AppMapper
+     * @covers \Modules\Admin\Models\AppMapper
      * @group module
      */
     public function testCR() : void

@@ -26,7 +26,7 @@ use phpOMS\Application\ApplicationType;
 final class AppTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Admin\Models\App
+     * @covers \Modules\Admin\Models\App
      * @group module
      */
     public function testDefault() : void

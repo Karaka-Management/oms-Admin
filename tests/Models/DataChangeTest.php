@@ -24,7 +24,7 @@ use Modules\Admin\Models\DataChange;
 final class DataChangeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\Admin\Models\DataChange
+     * @covers \Modules\Admin\Models\DataChange
      * @group module
      */
     public function testDefault() : void
