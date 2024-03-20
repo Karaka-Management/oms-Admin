@@ -23,10 +23,10 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerAccountTrait
 {
     /**
-     * @testdox A user can be returned
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user can be returned')]
     public function testApiAccountGet() : void
     {
         $response = new HttpResponse();
@@ -42,10 +42,10 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @testdox A user can be updated
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user can be updated')]
     public function testApiAccountUpdate() : void
     {
         $response = new HttpResponse();
@@ -64,10 +64,10 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @testdox A user can be found by name
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user can be found by name')]
     public function testApiAccountFind() : void
     {
         $response = new HttpResponse();
@@ -82,10 +82,10 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @testdox A user and profile for the user can be created
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user and profile for the user can be created')]
     public function testApiAccountAndProfileCreate() : void
     {
         $response = new HttpResponse();
@@ -107,8 +107,8 @@ trait ApiControllerAccountTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiAccountCreateWithCustomLocale() : void
     {
         $response = new HttpResponse();
@@ -130,10 +130,10 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @testdox A user can be deleted
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user can be deleted')]
     public function testApiAccountDelete() : void
     {
         $response = new HttpResponse();
@@ -154,10 +154,10 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @testdox A invalid user cannot be created
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid user cannot be created')]
     public function testApiAccountCreateInvalid() : void
     {
         $response = new HttpResponse();
@@ -172,10 +172,10 @@ trait ApiControllerAccountTrait
     }
 
     /**
-     * @testdox A user group can be added to a user
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group can be added to a user')]
     public function testApiAddRemoveGroupToAccount() : void
     {
         $response = new HttpResponse();
@@ -197,8 +197,8 @@ trait ApiControllerAccountTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiRemoveAdminGroupFromOneselfAccount() : void
     {
         $response = new HttpResponse();
@@ -214,8 +214,8 @@ trait ApiControllerAccountTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiAccountLogin() : void
     {
         $response = new HttpResponse();
@@ -231,8 +231,8 @@ trait ApiControllerAccountTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiAccountLoginInvalid() : void
     {
         $response = new HttpResponse();
@@ -248,8 +248,8 @@ trait ApiControllerAccountTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiAccountLogout() : void
     {
         $response = new HttpResponse();

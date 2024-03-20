@@ -19,31 +19,23 @@ use Modules\Admin\Models\NullAccount;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullAccount::class)]
 final class NullAccountTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\NullAccount
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\Account', new NullAccount());
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullAccount
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullAccount(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullAccount
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullAccount(2);

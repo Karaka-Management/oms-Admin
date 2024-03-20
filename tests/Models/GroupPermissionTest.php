@@ -17,17 +17,14 @@ namespace Modules\Admin\tests\Models;
 use Modules\Admin\Models\GroupPermission;
 
 /**
- * @testdox Modules\Admin\tests\Models\GroupPermissionTest: Group permission
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\GroupPermission::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\GroupPermissionTest: Group permission')]
 final class GroupPermissionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @testdox The group permission has the expected default values after initialization
-     * @covers \Modules\Admin\Models\GroupPermission
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('The group permission has the expected default values after initialization')]
     public function testDefault() : void
     {
         $group = new GroupPermission();

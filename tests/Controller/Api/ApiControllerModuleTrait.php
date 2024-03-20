@@ -22,10 +22,10 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerModuleTrait
 {
     /**
-     * @testdox The status of a module can be updated
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('The status of a module can be updated')]
     public function testApiModuleStatusUpdate() : void
     {
         $response = new HttpResponse();
@@ -54,10 +54,10 @@ trait ApiControllerModuleTrait
     }
 
     /**
-     * @testdox A missing module cannot be updated
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A missing module cannot be updated')]
     public function testApiModuleStatusUpdateEmptyModule() : void
     {
         $response = new HttpResponse();
@@ -73,10 +73,10 @@ trait ApiControllerModuleTrait
     }
 
     /**
-     * @testdox A invalid module status cannot update a module
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid module status cannot update a module')]
     public function testApiModuleStatusUpdateInvalidStatus() : void
     {
         $response = new HttpResponse();
@@ -91,10 +91,10 @@ trait ApiControllerModuleTrait
     }
 
     /**
-     * @testdox A invalid module cannot be updated
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid module cannot be updated')]
     public function testApiModuleStatusUpdateInvalidModule() : void
     {
         $response = new HttpResponse();
@@ -109,10 +109,10 @@ trait ApiControllerModuleTrait
     }
 
     /**
-     * @testdox A module can be re-initialized
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A module can be re-initialized')]
     public function testApiReInit() : void
     {
         $response = new HttpResponse();

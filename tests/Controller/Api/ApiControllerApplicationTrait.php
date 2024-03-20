@@ -22,8 +22,8 @@ trait ApiControllerApplicationTrait
 {
     /**
      * @covers \Modules\Admin\Controller\Apicontroller
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiInvalidAppplicationPathInstall() : void
     {
         $response = new HttpResponse();

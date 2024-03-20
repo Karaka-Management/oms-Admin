@@ -20,17 +20,14 @@ use Modules\Admin\Models\GroupPermission;
 use Modules\Admin\Models\GroupPermissionMapper;
 
 /**
- * @testdox Modules\Admin\tests\Models\GroupMapperTest: Group mapper
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\GroupMapper::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\GroupMapperTest: Group mapper')]
 final class GroupMapperTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @testdox All groups which have permissions for a module can be returned
-     * @covers \Modules\Admin\Models\GroupMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('All groups which have permissions for a module can be returned')]
     public function testGroupPermissionForModule() : void
     {
         $group   = new Group('test');
@@ -51,10 +48,7 @@ final class GroupMapperTest extends \PHPUnit\Framework\TestCase
         self::assertTrue(false);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\GroupMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testCountMembers() : void
     {
         self::assertEquals([3 => 1, 1 => 2], GroupMapper::countMembers());

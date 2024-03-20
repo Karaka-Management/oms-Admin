@@ -17,16 +17,13 @@ namespace Modules\Admin\tests\Models;
 use Modules\Admin\Models\DataChange;
 
 /**
- * @testdox Modules\Admin\tests\Models\DataChangeTest: DataChange model
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\DataChange::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\DataChangeTest: DataChange model')]
 final class DataChangeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\DataChange
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testDefault() : void
     {
         $change = new DataChange();

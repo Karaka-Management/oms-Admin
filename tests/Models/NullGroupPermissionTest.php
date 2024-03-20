@@ -19,31 +19,24 @@ use Modules\Admin\Models\NullGroupPermission;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullGroupPermission::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullModule::class)]
 final class NullGroupPermissionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\NullGroupPermission
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\GroupPermission', new NullGroupPermission());
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullGroupPermission
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullGroupPermission(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullModule
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullGroupPermission(2);

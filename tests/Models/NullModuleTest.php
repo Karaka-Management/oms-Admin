@@ -19,31 +19,23 @@ use Modules\Admin\Models\NullModule;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullModule::class)]
 final class NullModuleTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\NullModule
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\Module', new NullModule());
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullModule
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullModule('Test');
         self::assertEquals('Test', $null->id);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullModule
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullModule('Test');

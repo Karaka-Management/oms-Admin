@@ -23,10 +23,10 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerPermissionTrait
 {
     /**
-     * @testdox A permission can be added to a user group
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A permission can be added to a user group')]
     public function testApiAddGroupPermission() : void
     {
         $response = new HttpResponse();
@@ -43,8 +43,8 @@ trait ApiControllerPermissionTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiAddGroupPermissionToAdmin() : void
     {
         $response = new HttpResponse();
@@ -59,10 +59,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A group permission can be returned
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A group permission can be returned')]
     public function testApiGroupPermissionGet() : void
     {
         $response = new HttpResponse();
@@ -78,10 +78,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A user group permission can be created and deleted
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group permission can be created and deleted')]
     public function testApiGroupPermissionCreateDelete() : void
     {
         $response = new HttpResponse();
@@ -103,10 +103,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A permission with missing data cannot be added to a user group
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A permission with missing data cannot be added to a user group')]
     public function testApiAddGroupPermissionInvalidData() : void
     {
         $response = new HttpResponse();
@@ -120,10 +120,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A invalid permission type cannot be added to a user group
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid permission type cannot be added to a user group')]
     public function testApiAddGroupPermissionInvalidType() : void
     {
         $response = new HttpResponse();
@@ -138,10 +138,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A user group permission can be updated
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group permission can be updated')]
     public function testApiGroupPermissionUpdate() : void
     {
         $response = new HttpResponse();
@@ -165,10 +165,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A permission can be added to a user
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A permission can be added to a user')]
     public function testApiAddAccountPermission() : void
     {
         $response = new HttpResponse();
@@ -184,10 +184,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A user permission can be returned
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user permission can be returned')]
     public function testApiAccountPermissionGet() : void
     {
         $response = new HttpResponse();
@@ -203,10 +203,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A user permission can be created and deleted
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user permission can be created and deleted')]
     public function testApiAccountPermissionCreateDelete() : void
     {
         $response = new HttpResponse();
@@ -228,10 +228,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A permission with missing data cannot be added to a user
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A permission with missing data cannot be added to a user')]
     public function testApiAddAccountPermissionInvalidData() : void
     {
         $response = new HttpResponse();
@@ -245,10 +245,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A invalid permission type cannot be added to a user
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid permission type cannot be added to a user')]
     public function testApiAddAccountPermissionInvalidType() : void
     {
         $response = new HttpResponse();
@@ -263,10 +263,10 @@ trait ApiControllerPermissionTrait
     }
 
     /**
-     * @testdox A user permission can be updated
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user permission can be updated')]
     public function testApiAccountPermissionUpdate() : void
     {
         $response = new HttpResponse();

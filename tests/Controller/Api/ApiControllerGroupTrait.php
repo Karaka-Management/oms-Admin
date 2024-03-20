@@ -22,10 +22,10 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerGroupTrait
 {
     /**
-     * @testdox A user group can be returned
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group can be returned')]
     public function testApiGroupGet() : void
     {
         $response = new HttpResponse();
@@ -41,10 +41,10 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @testdox A user group can be updated
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group can be updated')]
     public function testApiGroupSet() : void
     {
         $response = new HttpResponse();
@@ -64,10 +64,10 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @testdox A user group can be found by name
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group can be found by name')]
     public function testApiGroupFind() : void
     {
         $response = new HttpResponse();
@@ -82,10 +82,10 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @testdox A user group can be created and deleted
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group can be created and deleted')]
     public function testApiGroupCreateDelete() : void
     {
         $response = new HttpResponse();
@@ -109,10 +109,10 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @testdox A user group can be created and deleted
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user group can be created and deleted')]
     public function testApiGroupDeleteAdminInvalid() : void
     {
         $response = new HttpResponse();
@@ -126,10 +126,10 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @testdox A invalid user group cannot be created
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid user group cannot be created')]
     public function testApiGroupCreateInvalid() : void
     {
         $response = new HttpResponse();
@@ -144,10 +144,10 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @testdox A user can be added to a user group
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user can be added to a user group')]
     public function testApiAddRemoveAccountToGroup() : void
     {
         $response = new HttpResponse();
@@ -169,8 +169,8 @@ trait ApiControllerGroupTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiRemoveAdminAccountFromAdminGroup() : void
     {
         $response = new HttpResponse();
@@ -185,10 +185,10 @@ trait ApiControllerGroupTrait
     }
 
     /**
-     * @testdox A user and user group can be found by name
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A user and user group can be found by name')]
     public function testApiAccountGroupFind() : void
     {
         $response = new HttpResponse();

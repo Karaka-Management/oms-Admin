@@ -19,31 +19,23 @@ use Modules\Admin\Models\NullAccountExternal;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullAccountExternal::class)]
 final class NullAccountExternalTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\NullAccountExternal
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\AccountExternal', new NullAccountExternal());
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullAccountExternal
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullAccountExternal(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullAccountExternal
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullAccountExternal(2);

@@ -19,31 +19,24 @@ use Modules\Admin\Models\NullApp;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullApp::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullModule::class)]
 final class NullAppTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\NullApp
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\App', new NullApp());
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullApp
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullApp(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullModule
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullApp(2);

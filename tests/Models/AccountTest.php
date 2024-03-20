@@ -17,28 +17,22 @@ namespace Modules\Admin\tests\Models;
 use Modules\Admin\Models\Account;
 
 /**
- * @testdox Modules\Admin\tests\Models\AccountTest: Account model
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\Account::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\AccountTest: Account model')]
 final class AccountTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @testdox The account has the expected default values after initialization
-     * @covers \Modules\Admin\Models\Account
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('The account has the expected default values after initialization')]
     public function testDefault() : void
     {
         $account = new Account();
         self::assertEquals(0, $account->tries);
     }
 
-    /**
-     * @testdox The login tries can be set and returned
-     * @covers \Modules\Admin\Models\Account
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('The login tries can be set and returned')]
     public function testLoginTriesInputOutput() : void
     {
         $account = new Account();

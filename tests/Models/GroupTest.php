@@ -18,10 +18,10 @@ use Modules\Admin\Models\Group;
 use Modules\Admin\Models\NullAccount;
 
 /**
- * @testdox Modules\Admin\tests\Models\GroupTest: Group model
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\Group::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\GroupTest: Group model')]
 final class GroupTest extends \PHPUnit\Framework\TestCase
 {
     protected Group $group;
@@ -35,10 +35,9 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @testdox The group has the expected default values after initialization
-     * @covers \Modules\Admin\Models\Group
      * @group module
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('The group has the expected default values after initialization')]
     public function testDefault() : void
     {
         self::assertEquals((new \DateTime('now'))->format('Y-m-d'), $this->group->createdAt->format('Y-m-d'));
@@ -48,10 +47,9 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @testdox The description can be set and returned
-     * @covers \Modules\Admin\Models\Group
      * @group module
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('The description can be set and returned')]
     public function testDescriptionInputOutput() : void
     {
         $this->group->descriptionRaw = 'Some test';
@@ -59,10 +57,9 @@ final class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @testdox The creator can be set and returned
-     * @covers \Modules\Admin\Models\Group
      * @group module
      */
+    #[\PHPUnit\Framework\Attributes\TestDox('The creator can be set and returned')]
     public function testCreatorInputOutput() : void
     {
         $this->group->createdBy = new NullAccount(3);

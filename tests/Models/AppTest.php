@@ -19,16 +19,13 @@ use phpOMS\Application\ApplicationStatus;
 use phpOMS\Application\ApplicationType;
 
 /**
- * @testdox Modules\Admin\tests\Models\AppTest: App model
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\App::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\AppTest: App model')]
 final class AppTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\App
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testDefault() : void
     {
         $app = new App();

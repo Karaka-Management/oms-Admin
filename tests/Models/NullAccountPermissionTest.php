@@ -19,31 +19,23 @@ use Modules\Admin\Models\NullAccountPermission;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\NullAccountPermission::class)]
 final class NullAccountPermissionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\NullAccountPermission
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\Admin\Models\AccountPermission', new NullAccountPermission());
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullAccountPermission
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullAccountPermission(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\NullAccountPermission
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullAccountPermission(2);

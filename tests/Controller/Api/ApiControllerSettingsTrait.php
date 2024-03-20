@@ -22,10 +22,10 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerSettingsTrait
 {
     /**
-     * @testdox Application settings can be read from the database
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Application settings can be read from the database')]
     public function testApiSettingsGet() : void
     {
         $response = new HttpResponse();
@@ -39,10 +39,10 @@ trait ApiControllerSettingsTrait
     }
 
     /**
-     * @testdox Application settings can be set in the database
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Application settings can be set in the database')]
     public function testApiSettingsSet() : void
     {
         $response = new HttpResponse();
@@ -62,8 +62,8 @@ trait ApiControllerSettingsTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiAccountLocalizationLoadSet() : void
     {
         $response = new HttpResponse();
@@ -87,8 +87,8 @@ trait ApiControllerSettingsTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiAccountLocalizationSet() : void
     {
         $response = new HttpResponse();
@@ -111,8 +111,8 @@ trait ApiControllerSettingsTrait
 
     /**
      * @covers \Modules\Admin\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testInvalidPermissionAccountLocalizationSet() : void
     {
         $response = new HttpResponse();

@@ -19,17 +19,14 @@ use Modules\Admin\Models\AppMapper;
 use phpOMS\Application\ApplicationStatus;
 
 /**
- * @testdox Modules\Admin\tests\Models\AppMapperTest: App database mapper
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\AppMapper::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\AppMapperTest: App database mapper')]
 final class AppMapperTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @testdox The model can be created and read from the database
-     * @covers \Modules\Admin\Models\AppMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('The model can be created and read from the database')]
     public function testCR() : void
     {
         $app = new App();

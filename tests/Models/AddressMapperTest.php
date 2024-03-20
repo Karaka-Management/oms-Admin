@@ -19,16 +19,13 @@ use phpOMS\Stdlib\Base\Address;
 use phpOMS\Stdlib\Base\AddressType;
 
 /**
- * @testdox Modules\Admin\tests\Models\AddressMapperTest: Address database mapper
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\AddressMapper::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\AddressMapperTest: Address database mapper')]
 final class AddressMapperTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\Admin\Models\AddressMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testCR() : void
     {
         $address = new Address();

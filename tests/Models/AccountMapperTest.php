@@ -23,17 +23,14 @@ use phpOMS\Auth\LoginReturnType;
 use phpOMS\Utils\TestUtils;
 
 /**
- * @testdox Modules\Admin\tests\Models\AccountMapperTest: Account database mapper
- *
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\Admin\Models\AccountMapper::class)]
+#[\PHPUnit\Framework\Attributes\TestDox('Modules\Admin\tests\Models\AccountMapperTest: Account database mapper')]
 final class AccountMapperTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @testdox The model can be created and read from the database
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('The model can be created and read from the database')]
     public function testCR() : void
     {
         $account = new Account();
@@ -63,50 +60,35 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($account->tries, $accountR->tries);
     }
 
-    /**
-     * @testdox A empty user password results in a failed login
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A empty user password results in a failed login')]
     public function testEmptyPasswordLogin() : void
     {
         self::assertEquals(LoginReturnType::WRONG_PASSWORD, AccountMapper::login('admin', ''));
     }
 
-    /**
-     * @testdox A invalid user password results in a failed login
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid user password results in a failed login')]
     public function testInvalidPasswordLogin() : void
     {
         self::assertEquals(LoginReturnType::WRONG_PASSWORD, AccountMapper::login('admin', 'invalid'));
     }
 
-    /**
-     * @testdox A invalid user name results in a failed login
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A invalid user name results in a failed login')]
     public function testInvalidUsernameLogin() : void
     {
         self::assertEquals(LoginReturnType::WRONG_USERNAME, AccountMapper::login('zzzzInvalidTestzzz', 'orange'));
     }
 
-    /**
-     * @testdox A valid user name and password results in a successful login
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
+    #[\PHPUnit\Framework\Attributes\TestDox('A valid user name and password results in a successful login')]
     public function testValidLogin() : void
     {
         self::assertGreaterThan(0, AccountMapper::login('admin', 'orange'));
     }
 
-    /**
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testInvalidLoginTries() : void
     {
         $accountR        = AccountMapper::get()->where('id', 1)->execute();
@@ -119,10 +101,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         AccountMapper::update()->execute($accountR);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testInvalidLoginAccountStatus() : void
     {
         /** @var Account $accountR */
@@ -136,10 +115,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         AccountMapper::update()->execute($accountR);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testEmptyLoginPassword() : void
     {
         /** @var Account $accountR */
@@ -153,10 +129,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         AccountMapper::update()->with('password')->execute($accountR);
     }
 
-    /**
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testGetWithPermission() : void
     {
         $accountR = AccountMapper::getWithPermissions(1);
@@ -164,10 +137,7 @@ final class AccountMapperTest extends \PHPUnit\Framework\TestCase
         self::assertGreaterThan(0, $accountR->getPermissions());
     }
 
-    /**
-     * @covers \Modules\Admin\Models\AccountMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testGetWithPermissionInvalidId() : void
     {
         $accountR = AccountMapper::getWithPermissions(0);
