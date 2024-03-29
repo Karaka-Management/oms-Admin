@@ -18,7 +18,7 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/forgot(\?.*$|$)' => [
+    '^/forgot(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewForgot',
             'verb'       => RouteVerb::GET,
@@ -27,7 +27,7 @@ return [
         ],
     ],
 
-    '^.*/admin/module/settings(\?.*$|$)' => [
+    '^/admin/module/settings(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleSettings',
             'verb'       => RouteVerb::GET,
@@ -39,7 +39,7 @@ return [
         ],
     ],
 
-    '^.*/admin/account/list(\?.*$|$)' => [
+    '^/admin/account/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountList',
             'verb'       => RouteVerb::GET,
@@ -50,7 +50,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/account/settings(\?.*$|$)' => [
+    '^/admin/account/settings(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountSettings',
             'verb'       => RouteVerb::GET,
@@ -61,7 +61,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/account/create(\?.*$|$)' => [
+    '^/admin/account/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountCreate',
             'verb'       => RouteVerb::GET,
@@ -72,7 +72,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/group/list(\?.*$|$)' => [
+    '^/admin/group/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupList',
             'verb'       => RouteVerb::GET,
@@ -83,7 +83,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/group/settings(\?.*$|$)' => [
+    '^/admin/group/settings(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupSettings',
             'verb'       => RouteVerb::GET,
@@ -94,7 +94,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/group/create(\?.*$|$)' => [
+    '^/admin/group/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupCreate',
             'verb'       => RouteVerb::GET,
@@ -105,7 +105,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/module/list(\?.*$|$)' => [
+    '^/admin/module/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleList',
             'verb'       => RouteVerb::GET,
@@ -116,7 +116,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/module/info(\?.*$|$)' => [
+    '^/admin/module/info(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleInfo',
             'verb'       => RouteVerb::GET,
@@ -127,7 +127,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/module/log(\?.*$|$)' => [
+    '^/admin/module/log(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleLog',
             'verb'       => RouteVerb::GET,
@@ -138,7 +138,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/module/route/list(\?.*$|$)' => [
+    '^/admin/module/route/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleRouteList',
             'verb'       => RouteVerb::GET,
@@ -149,7 +149,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/module/hook/list(\?.*$|$)' => [
+    '^/admin/module/hook/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleHookList',
             'verb'       => RouteVerb::GET,
