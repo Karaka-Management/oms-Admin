@@ -41,7 +41,7 @@ $categories  = ISO639Enum::getConstants();
                                         ]
                                     }
                                 ]'><i class="g-icon">book</i></button>
-                                <input type="text" list="<?= $this->id; ?>-datalist" id="<?= $this->id; ?>" name="receiver" placeholder="Guest" data-action='[
+                                <input type="text" list="<?= $this->id; ?>-datalist" id="<?= $this->id; ?>" name="receiver" data-action='[
                                     {
                                         "key": 1, "listener": "keyup", "action": [
                                             {"key": 1, "type": "validate.keypress", "pressed": "!13!37!38!39!40"},

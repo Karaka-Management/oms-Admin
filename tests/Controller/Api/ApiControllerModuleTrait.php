@@ -69,7 +69,7 @@ trait ApiControllerModuleTrait
         $this->module->apiModuleStatusUpdate($request, $response);
 
         self::assertEquals(RequestStatusCode::R_403, $response->header->status);
-        self::assertNull($response->getData('module_stutus_update'));
+        self::assertNull($response->getData('module_status_update'));
     }
 
     /**

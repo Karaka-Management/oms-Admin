@@ -22,7 +22,7 @@ echo $this->data['nav']->render(); ?>
     <div class="col-xs-12 col-md-6">
         <div class="portlet">
             <form id="fGroupCreate"
-                action="<?= UriFactory::build('{/api}admin/group'); ?>"
+                action="<?= UriFactory::build('{/api}admin/group?csrf={$CSRF}'); ?>"
                 method="put"
                 autocomplete="off">
                 <div class="portlet-head"><?= $this->getHtml('Group'); ?></div>

@@ -24,7 +24,7 @@ $accounts = $this->data['accounts'] ?? [];
 $tableView            = $this->data['tableView'];
 $tableView->id        = 'accountsList';
 $tableView->baseUri   = 'admin/account/list';
-$tableView->exportUri = '{/api}admin/account/list/export';
+$tableView->exportUri = '{/api}admin/account/list/export?csrf={$CSRF}';
 $tableView->setObjects($accounts);
 
 $previous = $tableView->getPreviousLink(
@@ -106,6 +106,7 @@ echo $this->data['nav']->render(); ?>
                         <?php endif; ?>
             </table>
             </div>
+            <!--
             <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
             <div class="portlet-foot">
                 <?php if ($this->getData('hasPrevious')) : ?>
@@ -116,6 +117,7 @@ echo $this->data['nav']->render(); ?>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
+            -->
         </div>
     </div>
 </div>

@@ -50,7 +50,7 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
-                        <form id="fGroupEdit" action="<?= UriFactory::build('{/api}admin/group'); ?>" method="post">
+                        <form id="fGroupEdit" action="<?= UriFactory::build('{/api}admin/group?csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Group'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
@@ -59,7 +59,7 @@ echo $this->data['nav']->render(); ?>
                                 </div>
                                 <div class="form-group">
                                     <label for="iGname"><?= $this->getHtml('Name'); ?></label>
-                                    <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" placeholder="Guest" value="<?= $this->printHtml($group->name); ?>">
+                                    <input id="iGname" name="name" type="text" spellcheck="false" autocomplete="off" value="<?= $this->printHtml($group->name); ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="iGstatus"><?= $this->getHtml('Status'); ?></label>
@@ -96,7 +96,7 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <div class="portlet">
-                        <form id="iAddAccountToGroup" action="<?= UriFactory::build('{/api}admin/group/account'); ?>" method="put"
+                        <form id="iAddAccountToGroup" action="<?= UriFactory::build('{/api}admin/group/account?csrf={$CSRF}'); ?>" method="put"
                             data-ui-container="#accountTable tbody"
                             data-add-form="accountForm"
                             data-add-tpl="#accountTable tbody .oms-add-tpl-account">
@@ -175,7 +175,7 @@ echo $this->data['nav']->render(); ?>
                 <div class="col-xs-12 col-md-6">
                 <div class="portlet">
                         <form id="permissionForm"
-                            action="<?= UriFactory::build('{/api}admin/group/permission'); ?>"
+                            action="<?= UriFactory::build('{/api}admin/group/permission?csrf={$CSRF}'); ?>"
                             data-ui-container="#permissionTable tbody"
                             data-add-form="permissionForm"
                             data-add-tpl="#permissionTable tbody .oms-add-tpl-permission"
@@ -405,10 +405,12 @@ echo $this->data['nav']->render(); ?>
                                 <tr><td colspan="7" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                             <?php endif; ?>
                         </table>
+                        <!--
                         <div class="portlet-foot">
                             <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
                             <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
                         </div>
+                        -->
                     </div>
                 </div>
             </div>

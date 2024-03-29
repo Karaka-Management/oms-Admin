@@ -25,7 +25,7 @@ $memberCount = $this->data['memberCount'] ?? [];
 $tableView            = $this->data['tableView'];
 $tableView->id        = 'groupsList';
 $tableView->baseUri   = 'admin/group/list';
-$tableView->exportUri = '{/api}admin/group/list/export';
+$tableView->exportUri = '{/api}admin/group/list/export?csrf={$CSRF}';
 $tableView->setObjects($groups);
 
 $previous = $tableView->getPreviousLink(
@@ -103,6 +103,7 @@ echo $this->data['nav']->render(); ?>
                     <?php endif; ?>
             </table>
             </div>
+            <!--
             <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
             <div class="portlet-foot">
                 <?php if ($this->getData('hasPrevious')) : ?>
@@ -113,6 +114,7 @@ echo $this->data['nav']->render(); ?>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
+            -->
         </div>
     </div>
 </div>

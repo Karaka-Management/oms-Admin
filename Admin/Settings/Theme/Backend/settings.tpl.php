@@ -57,7 +57,7 @@ echo $this->data['nav']->render();
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <section class="portlet">
-                    <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                    <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/general?csrf={$CSRF}'); ?>" method="post">
                         <div class="portlet-head"><?= $this->getHtml('Settings'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -75,7 +75,7 @@ echo $this->data['nav']->render();
 
             <div class="col-xs-12 col-md-6">
                 <section class="portlet">
-                    <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                    <form id="iGeneralSettings" action="<?= UriFactory::build('{/api}admin/settings/general?csrf={$CSRF}'); ?>" method="post">
                         <div class="portlet-head"><?= $this->getHtml('ServerStatus'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -94,7 +94,7 @@ echo $this->data['nav']->render();
 
             <div class="col-xs-12 col-md-6">
                 <section class="portlet">
-                    <form id="iSecuritySettings" action="<?= UriFactory::build('{/api}admin/settings/general'); ?>" method="post">
+                    <form id="iSecuritySettings" action="<?= UriFactory::build('{/api}admin/settings/general?csrf={$CSRF}'); ?>" method="post">
                         <div class="portlet-head"><?= $this->getHtml('Security'); ?></div>
                         <div class="portlet-body">
                             <div class="form-group">
@@ -153,7 +153,7 @@ echo $this->data['nav']->render();
             <div class="col-xs-12 col-md-6">
                 <section class="portlet">
                     <form id="iLoggingSettings"
-                        action="<?= UriFactory::build('{/api}admin/settings/general'); ?>"
+                        action="<?= UriFactory::build('{/api}admin/settings/general?csrf={$CSRF}'); ?>"
                         method="post">
                         <div class="portlet-head"><?= $this->getHtml('Logging'); ?></div>
                         <div class="portlet-body">
@@ -185,7 +185,7 @@ echo $this->data['nav']->render();
                 <div class="portlet">
                     <form id="fLocalization"
                         name="fLocalization"
-                        action="<?= UriFactory::build('{/api}profile/settings/localization'); ?>"
+                        action="<?= UriFactory::build('{/api}profile/settings/localization?csrf={$CSRF}'); ?>"
                         method="post">
                         <div class="portlet-head"><?= $this->getHtml('Localization'); ?></div>
                         <div class="portlet-body">
@@ -199,7 +199,7 @@ echo $this->data['nav']->render();
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <div class="ipt-second"><input type="submit" name="loadDefaultLocalization" formaction="<?= UriFactory::build('{/api}profile/settings/localization?load=1'); ?>" value="<?= $this->getHtml('Load'); ?>"></div>
+                                    <div class="ipt-second"><input type="submit" name="loadDefaultLocalization" formaction="<?= UriFactory::build('{/api}profile/settings/localization?load=1&csrf={$CSRF}'); ?>" value="<?= $this->getHtml('Load'); ?>"></div>
                                 </div>
                             </div>
 
@@ -678,7 +678,7 @@ echo $this->data['nav']->render();
                                         {"key": 1, "type": "event.prevent"},
                                         {"key": 2, "type": "dom.click", "selector": "#iLoginImageUpload"}
                                     ]}]'><?= $this->getHtml('Change'); ?></a>
-                                    <form id="iLoginImageUploadForm" action="<?= UriFactory::build('{/api}admin/settings/design'); ?>" method="post">
+                                    <form id="iLoginImageUploadForm" action="<?= UriFactory::build('{/api}admin/settings/design?csrf={$CSRF}'); ?>" method="post">
                                         <input class="preview" data-action='[
                                             {"listener": "change", "key": 1, "action": [
                                                 {"key": 1, "type": "form.submit", "selector": "#iLoginImageUploadForm"}
@@ -790,8 +790,8 @@ echo $this->data['nav']->render();
                                 </label>
                         <tbody>
                         <?php $count          = 0;
-                            $previousSettings = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \reset($settings)->id . '&ptype=p';
-                            $nextSettings     = empty($settings) ? 'admin/settings/general' : 'admin/settings/general?{?}&sid=' . \end($settings)->id . '&ptype=n';
+                            $previousSettings = empty($settings) ? 'admin/settings/general?csrf={$CSRF}' : 'admin/settings/general?{?}&sid=' . \reset($settings)->id . '&ptype=p';
+                            $nextSettings     = empty($settings) ? 'admin/settings/general?csrf={$CSRF}' : 'admin/settings/general?{?}&sid=' . \end($settings)->id . '&ptype=n';
 
                             foreach ($settings as $key => $setting) : ++$count;
                         ?>

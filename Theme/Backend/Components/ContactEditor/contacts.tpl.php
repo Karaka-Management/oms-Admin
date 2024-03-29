@@ -26,7 +26,7 @@ $subtypes  = AddressType::getConstants();
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">
-            <form id="contactForm" action="<?= UriFactory::build('{api}account/contact'); ?>" method="post"
+            <form id="contactForm" action="<?= UriFactory::build('{api}account/contact?csrf={$CSRF}'); ?>" method="post"
                 data-ui-container="#contactTable tbody"
                 data-add-form="contactForm"
                 data-add-tpl="#contactTable tbody .oms-add-tpl-contact">

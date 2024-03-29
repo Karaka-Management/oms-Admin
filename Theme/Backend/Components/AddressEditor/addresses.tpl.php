@@ -24,7 +24,7 @@ $types     = AddressType::getConstants();
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">
-            <form id="addressForm" action="<?= UriFactory::build('{api}account/address'); ?>" method="post"
+            <form id="addressForm" action="<?= UriFactory::build('{api}account/address?csrf={$CSRF}'); ?>" method="post"
                 data-ui-container="#addressTable tbody"
                 data-add-form="addressForm"
                 data-add-tpl="#addressTable tbody .oms-add-tpl-address">

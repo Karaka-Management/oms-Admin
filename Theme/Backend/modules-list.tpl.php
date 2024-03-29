@@ -26,7 +26,7 @@ $installed = $this->data['installed'] ?? [];
 $tableView            = $this->data['tableView'];
 $tableView->id        = 'moduleList';
 $tableView->baseUri   = 'admin/module/list';
-$tableView->exportUri = '{/api}admin/module/list/export';
+$tableView->exportUri = '{/api}admin/module/list/export?csrf={$CSRF}';
 $tableView->setObjects($modules);
 ?>
 <div class="row">
