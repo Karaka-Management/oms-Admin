@@ -202,13 +202,13 @@ final class BackendController extends Controller
         /** @var \Modules\Admin\Models\AccountPermission[] $permissions */
         $permissions = AccountPermissionMapper::getAll()
             ->where('account', (int) $request->getData('id'))
-            ->execute();
+            ->executeGetArray();
 
         $view->data['permissions'] = $permissions;
 
-        $view->data['units']   = UnitMapper::getAll()->execute();
-        $view->data['apps']    = AppMapper::getAll()->execute();
-        $view->data['modules'] = ModuleMapper::getAll()->execute();
+        $view->data['units']   = UnitMapper::getAll()->executeGetArray();
+        $view->data['apps']    = AppMapper::getAll()->executeGetArray();
+        $view->data['modules'] = ModuleMapper::getAll()->executeGetArray();
 
         $accGrpSelector            = new \Modules\Admin\Theme\Backend\Components\GroupTagSelector\GroupTagSelectorView($this->app->l11nManager, $request, $response);
         $view->data['grpSelector'] = $accGrpSelector;
@@ -415,13 +415,13 @@ final class BackendController extends Controller
         /** @var \Modules\Admin\Models\GroupPermission[] $permissions */
         $permissions = GroupPermissionMapper::getAll()
             ->where('group', (int) $request->getData('id'))
-            ->execute();
+            ->executeGetArray();
 
         $view->data['permissions'] = $permissions;
 
-        $view->data['units']   = UnitMapper::getAll()->execute();
-        $view->data['apps']    = AppMapper::getAll()->execute();
-        $view->data['modules'] = ModuleMapper::getAll()->execute();
+        $view->data['units']   = UnitMapper::getAll()->executeGetArray();
+        $view->data['apps']    = AppMapper::getAll()->executeGetArray();
+        $view->data['modules'] = ModuleMapper::getAll()->executeGetArray();
 
         $accGrpSelector               = new \Modules\Profile\Theme\Backend\Components\AccountGroupSelector\BaseView($this->app->l11nManager, $request, $response);
         $view->data['accGrpSelector'] = $accGrpSelector;
@@ -715,7 +715,7 @@ final class BackendController extends Controller
         $id = $request->getDataString('id') ?? '';
 
         /** @var \Model\Setting[] $settings */
-        $settings = SettingMapper::getAll()->where('module', $id)->execute();
+        $settings = SettingMapper::getAll()->where('module', $id)->executeGetArray();
         if (empty($settings)) {
             $view->data['settings'] = $settings;
         }

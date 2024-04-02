@@ -21,8 +21,8 @@ use phpOMS\Uri\UriFactory;
  */
 $pages = $this->data['pages'] ?? [];
 
-$previous = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&id=' . \reset($pages)->id . '&ptype=p';
-$next     = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&id=' . \end($pages)->id . '&ptype=n';
+$previous = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&offset=' . \reset($pages)->id . '&ptype=p';
+$next     = empty($pages) ? 'admin/page/list' : '{/base}/admin/page/list?{?}&offset=' . \end($pages)->id . '&ptype=n';
 
 echo $this->data['nav']->render(); ?>
 

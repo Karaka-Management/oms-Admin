@@ -1426,7 +1426,7 @@ final class ApiController extends Controller
         /** @var \Modules\Admin\Models\Group[] $groups */
         $groups = GroupMapper::getAll()
             ->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
-            ->execute();
+            ->executeGetArray();
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
@@ -1477,7 +1477,7 @@ final class ApiController extends Controller
             ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
             ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
             ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-            ->execute();
+            ->executeGetArray();
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
@@ -1508,7 +1508,7 @@ final class ApiController extends Controller
             ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
             ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
             ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-            ->execute();
+            ->executeGetArray();
 
         $data = [];
 
@@ -1524,7 +1524,7 @@ final class ApiController extends Controller
         /** @var Group[] $groups */
         $groups = GroupMapper::getAll()
             ->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
-            ->execute();
+            ->executeGetArray();
 
         foreach ($groups as $group) {
             /** @var array $temp */
