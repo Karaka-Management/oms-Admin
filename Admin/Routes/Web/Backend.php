@@ -22,7 +22,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewForgot',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
             ],
         ],
@@ -32,7 +32,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleSettings',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -45,7 +45,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountList',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -57,7 +57,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountSettings',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -69,7 +69,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountCreate',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -81,7 +81,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupList',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -93,7 +93,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupSettings',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -105,7 +105,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupCreate',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -117,7 +117,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleList',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -129,7 +129,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleInfo',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -141,7 +141,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleLog',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -153,7 +153,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleRouteList',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
@@ -165,7 +165,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\BackendController:viewModuleHookList',
             'verb'       => RouteVerb::GET,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
