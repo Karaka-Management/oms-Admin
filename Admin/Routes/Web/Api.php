@@ -23,6 +23,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiDataChange',
             'verb'       => RouteVerb::ANY,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
             ],
         ],
@@ -32,6 +33,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiLogin',
             'verb'       => RouteVerb::SET,
+            'active' => true,
             'permission' => [
             ],
         ],
@@ -40,6 +42,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountRegister',
             'verb'       => RouteVerb::SET,
+            'active' => true,
             'permission' => [
             ],
         ],
@@ -50,6 +53,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiLogout',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
             ],
         ],
@@ -59,6 +63,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiForgot',
             'verb'       => RouteVerb::SET,
+            'active' => true,
             'permission' => [
             ],
         ],
@@ -67,6 +72,7 @@ return [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiResetPassword',
             'verb'       => RouteVerb::SET,
+            'active' => true,
             'permission' => [
             ],
         ],
@@ -77,6 +83,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsSet',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -87,6 +94,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsGet',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -100,6 +108,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsDesignSet',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -113,6 +122,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -123,6 +133,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -133,6 +144,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::DELETE,
@@ -143,6 +155,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupGet',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -156,6 +169,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountFind',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -168,6 +182,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupFind',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -180,6 +195,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountGroupFind',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -193,6 +209,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -203,6 +220,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -213,6 +231,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::DELETE,
@@ -223,6 +242,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountGet',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -235,6 +255,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsAccountLocalizationSet',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -248,6 +269,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiModuleStatusUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -261,6 +283,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddAccountToGroup',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -273,6 +296,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddGroupToAccount',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -286,6 +310,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupPermissionGet',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -296,6 +321,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddGroupPermission',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -306,6 +332,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupPermissionUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -316,6 +343,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupPermissionDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -328,6 +356,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountPermissionGet',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -338,6 +367,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddAccountPermission',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -348,6 +378,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountPermissionUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -358,6 +389,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountPermissionDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::PERMISSION,
@@ -370,6 +402,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiReInit',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -383,6 +416,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiUpdateFile',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -395,6 +429,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiCheckForUpdates',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -407,6 +442,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiCheckForUpdates',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -419,6 +455,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -429,6 +466,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -439,6 +477,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::DELETE,
@@ -451,6 +490,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::CREATE,
@@ -461,6 +501,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::MODIFY,
@@ -471,6 +512,7 @@ return [
             'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
+            'active' => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::DELETE,

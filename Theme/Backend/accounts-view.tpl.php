@@ -220,6 +220,7 @@ echo $this->data['nav']->render(); ?>
                                     <label for="iPermissionId"><?= $this->getHtml('ID', '0', '0'); ?></label>
                                     <input id="iPermissionId" name="permissionref" type="text" data-tpl-text="/id" data-tpl-value="/id" disabled>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="iPermissionUnit"><?= $this->getHtml('Unit'); ?></label>
                                     <select id="iPermissionUnit" name="permissionunit" data-tpl-text="/unit" data-tpl-value="/unit">
@@ -230,6 +231,7 @@ echo $this->data['nav']->render(); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="iPermissionApp"><?= $this->getHtml('App'); ?></label>
                                     <select id="iPermissionApp" name="permissionapp" data-tpl-text="/app" data-tpl-value="/app">
@@ -240,6 +242,7 @@ echo $this->data['nav']->render(); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="iPermissionModule"><?= $this->getHtml('Module'); ?></label>
                                     <select id="iPermissionModule" name="permissionmodule" data-tpl-text="/module" data-tpl-value="/module">
@@ -250,18 +253,22 @@ echo $this->data['nav']->render(); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="iPermissionType"><?= $this->getHtml('Type'); ?></label>
                                     <input id="iPermissionType" name="permissiontype" type="text" data-tpl-text="/type" data-tpl-value="/type">
                                 </div>
+
                                 <div class="form-group">
                                     <label for="iPermissionElement"><?= $this->getHtml('Element'); ?></label>
                                     <input id="iPermissionElement" name="permissionelement" type="text" data-tpl-text="/ele" data-tpl-value="/ele">
                                 </div>
+
                                 <div class="form-group">
                                     <label for="iPermissionComponent"><?= $this->getHtml('Component'); ?></label>
                                     <input id="iPermissionComponent" name="permissioncomponent" type="text" data-tpl-text="/comp" data-tpl-value="/comp">
                                 </div>
+
                                 <div class="form-group">
                                     <label><?= $this->getHtml('Permission'); ?></label>
                                     <span class="checkbox">

@@ -18,7 +18,7 @@ use phpOMS\DataStorage\Database\Connection\ConnectionAbstract;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
- * Mapper class.
+ * Permission mapper class.
  *
  * @package Modules\Admin\Models
  * @license OMS License 2.0
