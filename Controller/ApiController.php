@@ -1045,14 +1045,12 @@ final class ApiController extends Controller
      */
     public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        $uploadedFiles = $request->files;
-
-        if (!empty($uploadedFiles)) {
+        if (!empty($request->files)) {
             $upload                   = new UploadFile();
             $upload->preserveFileName = false;
             $upload->outputDir        = __DIR__ . '/../../../Web/Backend/img';
 
-            $status = $upload->upload($uploadedFiles, ['logo.png'], true);
+            $status = $upload->upload($request->files, ['logo.png'], true);
         }
 
         $this->createStandardUpdateResponse($request, $response, []);

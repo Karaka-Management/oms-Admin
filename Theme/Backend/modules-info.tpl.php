@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 use Modules\Admin\Models\ModuleStatusUpdateType;
+use phpOMS\Module\ModuleInfo;
 use phpOMS\Uri\UriFactory;
 
 /**
@@ -23,31 +24,35 @@ $active    = $this->data['active'];
 $installed = $this->data['installed'];
 $id        = $this->data['id'];
 
+$module = $modules[$id] ?? new ModuleInfo('');
+
 if (isset($installed[$id])) {
     echo $this->data['nav']->render();
 }
+
+// @todo If no id is specified in the url this page looks horrible. Either clean up or return 404 page or something similar.
 ?>
 
 <div class="row">
     <div class="col-xs-12 col-md-6 col-lg-4">
         <div class="portlet">
-            <div class="portlet-head"><?= $this->printHtml($modules[$id]->getExternalName()); ?></div>
+            <div class="portlet-head"><?= $this->printHtml($module->getExternalName()); ?></div>
 
             <div class="portlet-body">
                 <table class="list wf-100">
                     <tbody>
                     <tr>
                         <td><?= $this->getHtml('Name'); ?>
-                        <td><?= $this->printHtml($modules[$id]->getExternalName()); ?>
+                        <td><?= $this->printHtml($module->getExternalName()); ?>
                     <tr>
                         <td><?= $this->getHtml('Version'); ?>
-                        <td><?= $this->printHtml($modules[$id]->getVersion()); ?>
+                        <td><?= $this->printHtml($module->getVersion()); ?>
                     <tr>
                         <td><?= $this->getHtml('CreatedBy'); ?>
-                        <td><?= $this->printHtml($modules[$id]->get()['creator']['name']); ?>
+                        <td><?= $this->printHtml($module->get()['creator']['name'] ?? ''); ?>
                     <tr>
                         <td><?= $this->getHtml('Website'); ?>
-                        <td><?= $this->printHtml($modules[$id]->get()['creator']['website']); ?>
+                        <td><?= $this->printHtml($module->get()['creator']['website'] ?? ''); ?>
                 </table>
             </div>
             <div class="portlet-foot">
@@ -68,7 +73,7 @@ if (isset($installed[$id])) {
                             </form>
                         </div>
                     </div>
-                <?php elseif (isset($modules[$id])) : ?>
+                <?php elseif (isset($module)) : ?>
                     <div class="ipt-wrap">
                         <div class="ipt-first">
                             <form id="fModuleInstall" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST">

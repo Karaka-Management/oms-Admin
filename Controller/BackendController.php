@@ -24,7 +24,6 @@ use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
 use Modules\Organization\Models\UnitMapper;
-use phpOMS\Asset\AssetType;
 use phpOMS\Autoloader;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\OrderType;
