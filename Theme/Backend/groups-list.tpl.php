@@ -43,7 +43,7 @@ echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head">
                 <?= $tableView->renderTitle(
                     $this->getHtml('Groups')
@@ -115,6 +115,6 @@ echo $this->data['nav']->render(); ?>
             </div>
             <?php endif; ?>
             -->
-        </div>
+        </section>
     </div>
 </div>

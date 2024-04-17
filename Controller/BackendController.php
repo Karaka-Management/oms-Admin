@@ -27,6 +27,7 @@ use Modules\Organization\Models\UnitMapper;
 use phpOMS\Autoloader;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\OrderType;
+use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Utils\Parser\Markdown\Markdown;
@@ -518,14 +519,14 @@ final class BackendController extends Controller
      */
     public function viewModuleInfo(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
-        /*
-        $head  = $response->data['Content']->head;
-        $nonce = $this->app->appSettings->getOption('script-nonce');
-
-        $head->addAsset(AssetType::JSLATE, 'Resources/mermaid/mermaid.min.js?v=' . $this->app->version, ['nonce' => $nonce]);
-        */
-
         $view = new View($this->app->l11nManager, $request, $response);
+        if (!$request->hasData('id')) {
+            $response->header->status = RequestStatusCode::R_404;
+            $view->setTemplate('/Web/Backend/Error/404');
+
+            return $view;
+        }
+
         $view->setTemplate('/Modules/Admin/Theme/Backend/modules-info');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1000105001, $request, $response);
 

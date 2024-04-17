@@ -26,7 +26,7 @@ if ($this->hasData('settingsTpl')
 else : ?>
 <div class="row">
     <div class="col-xs-12">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="g-icon download btn end-xs">download</i></div>
             <div class="slider">
             <table id="settingsList" class="default sticky">
@@ -137,7 +137,7 @@ else : ?>
                 <?php endif; ?>
             </table>
             </div>
-        </div>
+        </section>
     </div>
 </div>
 <?php endif; ?>

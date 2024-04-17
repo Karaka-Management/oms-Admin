@@ -23,7 +23,7 @@ echo $this->data['nav']->render();
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Hooks'); ?><i class="g-icon download btn end-xs">download</i></div>
             <div class="slider">
             <table id="navElements" class="default sticky">
@@ -92,6 +92,6 @@ echo $this->data['nav']->render();
                         <tr><td colspan="4" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                     <?php endif; ?>
             </table>
-        </div>
+        </section>
     </div>
 </div>

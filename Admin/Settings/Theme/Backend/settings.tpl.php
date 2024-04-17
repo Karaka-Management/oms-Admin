@@ -182,7 +182,7 @@ echo $this->data['nav']->render();
     <div class="tab">
         <div class="row">
             <div class="col-xs-12 col-md-4">
-                <div class="portlet">
+                <section class="portlet">
                     <form id="fLocalization"
                         name="fLocalization"
                         action="<?= UriFactory::build('{/api}profile/settings/localization?csrf={$CSRF}'); ?>"
@@ -234,7 +234,7 @@ echo $this->data['nav']->render();
                             <input id="iSubmitLocalization" name="submitLocalization" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
                         </div>
                     </form>
-                </div>
+                </section>
             </div>
 
             <div class="col-xs-12 col-md-4">
@@ -694,10 +694,10 @@ echo $this->data['nav']->render();
     </div>
     <input type="radio" id="c-tab-5"
         name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-5' ? ' checked' : ''; ?>>
-    <div class="tab">
-        <div class="col-xs-12">
-            <div class="portlet">
-                <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="g-icon download btn end-xs">download</i></div>
+        <div class="tab">
+            <div class="col-xs-12">
+                <section class="portlet">
+                    <div class="portlet-head"><?= $this->getHtml('Settings'); ?><i class="g-icon download btn end-xs">download</i></div>
                     <div class="slider">
                     <table id="settingsList" class="default sticky">
                         <thead>
@@ -827,7 +827,7 @@ echo $this->data['nav']->render();
                         <a tabindex="0" class="button" href="<?= UriFactory::build($previousSettings); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
                         <a tabindex="0" class="button" href="<?= UriFactory::build($nextSettings); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     </div>

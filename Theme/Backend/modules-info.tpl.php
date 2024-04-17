@@ -35,7 +35,7 @@ if (isset($installed[$id])) {
 
 <div class="row">
     <div class="col-xs-12 col-md-6 col-lg-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->printHtml($module->getExternalName()); ?></div>
 
             <div class="portlet-body">
@@ -88,16 +88,16 @@ if (isset($installed[$id])) {
                     </div>
                 <?php endif; ?>
             </div>
-        </div>
+        </section>
     </div>
 
     <?php if (!empty($this->getData('introduction'))) : ?>
     <div class="col-xs-12 col-md-8">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-body">
                 <article><?= $this->data['introduction']; ?></article>
             </div>
-        </div>
+        </section>
     </div>
     <?php endif; ?>
 </div>

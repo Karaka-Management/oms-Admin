@@ -32,7 +32,7 @@ $temperatures = TemperatureType::getConstants();
 ?>
 <div class="row">
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <form id="fLocalization" name="fLocalization" action="<?= UriFactory::build('{/api}profile/settings/localization?csrf={$CSRF}'); ?>" method="post">
             <div class="portlet-head"><?= $this->getHtml('Localization'); ?></div>
             <div class="portlet-body">
@@ -82,11 +82,11 @@ $temperatures = TemperatureType::getConstants();
                 <input id="iSubmitLocalization" name="submitLocalization" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
             </div>
             </form>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Time'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -127,11 +127,11 @@ $temperatures = TemperatureType::getConstants();
                     <input form="fLocalization" id="iTimeformatVeryLong" name="settings_timeformat_vl" type="text" value="<?= $this->printHtml($l11n->getDatetime()['very_long']); ?>" placeholder="Y.m.d h:i:s" required>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Numeric'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -171,11 +171,11 @@ $temperatures = TemperatureType::getConstants();
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Precision'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -203,11 +203,11 @@ $temperatures = TemperatureType::getConstants();
                     <input form="fLocalization" id="iPrecisionVeryLong" name="settings_precision_vl" value="<?= $l11n->getPrecision()['very_long']; ?>" type="number">
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Weight'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -255,11 +255,11 @@ $temperatures = TemperatureType::getConstants();
                     </select>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Speed'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -316,11 +316,11 @@ $temperatures = TemperatureType::getConstants();
                     </select>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Length'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -377,11 +377,11 @@ $temperatures = TemperatureType::getConstants();
                     </select>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Area'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -429,11 +429,11 @@ $temperatures = TemperatureType::getConstants();
                     </select>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="col-xs-12 col-md-4">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Volume'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -508,6 +508,6 @@ $temperatures = TemperatureType::getConstants();
                     </select>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </div>

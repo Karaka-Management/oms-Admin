@@ -2840,6 +2840,8 @@ final class ApiController extends Controller
         $account = (int) $request->getData('account');
         $groups  = [$request->getDataInt('account-list') ?? 0];
 
+        // @todo Check if already in group
+
         $this->createModelRelation($request->header->account, $account, $groups, AccountMapper::class, 'groups', 'account-group', $request->getOrigin());
         $this->createStandardAddResponse($request, $response, $groups);
     }

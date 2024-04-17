@@ -49,7 +49,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <form id="fGroupEdit" action="<?= UriFactory::build('{/api}admin/group?csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Group'); ?></div>
                             <div class="portlet-body">
@@ -86,7 +86,7 @@ echo $this->data['nav']->render(); ?>
                                 <input id="groupSubmit" name="groupsubmit" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -95,7 +95,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <form id="iAddAccountToGroup" action="<?= UriFactory::build('{/api}admin/group/account?csrf={$CSRF}'); ?>" method="put"
                             data-ui-container="#accountTable tbody"
                             data-add-form="accountForm"
@@ -113,13 +113,13 @@ echo $this->data['nav']->render(); ?>
                                 <input id="bAccountAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Accounts'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <table id="accountTable" class="default sticky"
                             data-tag="form"
@@ -164,7 +164,7 @@ echo $this->data['nav']->render(); ?>
                                     <tr><td colspan="3" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                                 <?php endif; ?>
                         </table>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -173,7 +173,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                <div class="portlet">
+                    <section class="portlet">
                         <form id="permissionForm"
                             action="<?= UriFactory::build('{/api}admin/group/permission?csrf={$CSRF}'); ?>"
                             data-ui-container="#permissionTable tbody"
@@ -279,11 +279,11 @@ echo $this->data['nav']->render(); ?>
                                 <input type="submit" class="cancel-form vh button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                             <table id="permissionTable" class="default sticky"
@@ -368,7 +368,7 @@ echo $this->data['nav']->render(); ?>
                                     <?php endif; ?>
                             </table>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -377,7 +377,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <table class="default fixed">
                             <thead>
@@ -411,7 +411,7 @@ echo $this->data['nav']->render(); ?>
                             <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
                         </div>
                         -->
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>

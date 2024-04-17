@@ -61,7 +61,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <form id="account-edit" action="<?= UriFactory::build('{/api}admin/account?csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Account'); ?></div>
                             <div class="portlet-body">
@@ -147,7 +147,7 @@ echo $this->data['nav']->render(); ?>
                                 ]'><?= $this->getHtml('CreateProfile'); ?></button>
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -156,7 +156,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <form id="iAddGroupToAccount" action="<?= UriFactory::build('{/api}admin/account/group?csrf={$CSRF}'); ?>" method="put">
                             <div class="portlet-head"><?= $this->getHtml('Groups'); ?></div>
                             <div class="portlet-body">
@@ -170,11 +170,11 @@ echo $this->data['nav']->render(); ?>
                                 <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
 
                 <div class="col-xs-12">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <table id="groupTable" class="default sticky">
                             <thead>
@@ -198,7 +198,7 @@ echo $this->data['nav']->render(); ?>
                                     <tr><td colspan="3" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                                 <?php endif; ?>
                         </table>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -207,7 +207,7 @@ echo $this->data['nav']->render(); ?>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                <div class="portlet">
+                    <section class="portlet">
                         <form id="permissionForm"
                             action="<?= UriFactory::build('{/api}admin/account/permission?csrf={$CSRF}'); ?>"
                             data-ui-container="#permissionTable tbody"
@@ -320,11 +320,11 @@ echo $this->data['nav']->render(); ?>
                                 <input type="submit" class="cancel-form vh button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                             </div>
                         </form>
-                    </div>
+                    </section>
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Permissions'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                             <table id="permissionTable" class="default sticky"
@@ -409,7 +409,7 @@ echo $this->data['nav']->render(); ?>
                                     <?php endif; ?>
                             </table>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
@@ -421,71 +421,70 @@ echo $this->data['nav']->render(); ?>
 
         <input type="radio" id="c-tab-5" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-5' ? ' checked' : ''; ?>>
         <div class="tab">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="portlet">
-                    <div class="portlet-head"><?= $tableView->renderTitle($this->getHtml('Audits', 'Auditor', 'Backend')); ?></div>
-                    <div class="slider">
-                    <table id="<?= $tableView->id; ?>" class="default sticky">
-                        <thead>
-                        <tr>
-                            <td><?= $tableView->renderHeaderElement('id',  $this->getHtml('ID', '0', '0'), 'number'); ?>
-                            <td><?= $tableView->renderHeaderElement('module', $this->getHtml('Module', 'Auditor', 'Backend'), 'text'); ?>
-                            <td><?= $tableView->renderHeaderElement('action', $this->getHtml('Action', 'Auditor', 'Backend'), 'select',
-                                [
-                                    'create' => $this->getHtml('CREATE', 'Auditor', 'Backend'),
-                                    'modify' => $this->getHtml('UPDATE', 'Auditor', 'Backend'),
-                                    'delete' => $this->getHtml('DELETE', 'Auditor', 'Backend'),
-                                ],
-                                false // don't render sort
-                            ); ?>
-                            <td><?= $tableView->renderHeaderElement('type', $this->getHtml('Type', 'Auditor', 'Backend'), 'number'); ?>
-                            <td class="wf-100"><?= $tableView->renderHeaderElement('trigger', $this->getHtml('Trigger', 'Auditor', 'Backend'), 'text'); ?>
-                            <td><?= $tableView->renderHeaderElement('createdBy', $this->getHtml('By', 'Auditor', 'Backend'), 'text'); ?>
-                            <td><?= $tableView->renderHeaderElement('ref', $this->getHtml('Ref', 'Auditor', 'Backend'), 'text', [], true, true, false); ?>
-                            <td><?= $tableView->renderHeaderElement('createdAt', $this->getHtml('Date', 'Auditor', 'Backend'), 'date'); ?>
-                        <tbody>
-                        <?php
-                        $count = 0;
-                        foreach ($audits as $key => $audit) : ++$count;
-                            $url = UriFactory::build('{/base}/admin/audit/view?id=' . $audit->id); ?>
-                            <tr tabindex="0" data-href="<?= $url; ?>">
-                                <td><?= $audit->id; ?>
-                                <td><?= $this->printHtml($audit->module); ?>
-                                <td><?php if ($audit->old === null) : echo $this->getHtml('CREATE', 'Auditor', 'Backend'); ?>
-                                    <?php elseif ($audit->old !== null && $audit->new !== null) : echo $this->getHtml('UPDATE', 'Auditor', 'Backend'); ?>
-                                    <?php elseif ($audit->new === null) : echo $this->getHtml('DELETE', 'Auditor', 'Backend'); ?>
-                                    <?php else : echo $this->getHtml('UNKNOWN', 'Auditor', 'Backend'); ?>
-                                    <?php endif; ?>
-                                <td><?= $this->printHtml((string) $audit->type); ?>
-                                <td><?= $this->printHtml($audit->trigger); ?>
-                                <td><a class="content" href="<?= UriFactory::build('{/base}/admin/account/settings?id=' . $audit->createdBy->id); ?>"><?= $this->printHtml(
-                                        $this->renderUserName('%3$s %2$s %1$s', [$audit->createdBy->name1, $audit->createdBy->name2, $audit->createdBy->name3, $audit->createdBy->login])
-                                    ); ?></a>
-                                <td><?= $this->printHtml((string) $audit->ref); ?>
-                                <td><?= $audit->createdAt->format('Y-m-d H:i:s'); ?>
-                        <?php endforeach; ?>
-                        <?php if ($count === 0) : ?>
-                            <tr><td colspan="8" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                        <?php endif; ?>
-                    </table>
-                    </div>
-                    <!--
-                    <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
-                        <div class="portlet-foot">
-                            <?php if ($this->getData('hasPrevious')) : ?>
-                                <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><i class="g-icon">chevron_left</i></a>
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $tableView->renderTitle($this->getHtml('Audits', 'Auditor', 'Backend')); ?></div>
+                        <div class="slider">
+                        <table id="<?= $tableView->id; ?>" class="default sticky">
+                            <thead>
+                            <tr>
+                                <td><?= $tableView->renderHeaderElement('id',  $this->getHtml('ID', '0', '0'), 'number'); ?>
+                                <td><?= $tableView->renderHeaderElement('module', $this->getHtml('Module', 'Auditor', 'Backend'), 'text'); ?>
+                                <td><?= $tableView->renderHeaderElement('action', $this->getHtml('Action', 'Auditor', 'Backend'), 'select',
+                                    [
+                                        'create' => $this->getHtml('CREATE', 'Auditor', 'Backend'),
+                                        'modify' => $this->getHtml('UPDATE', 'Auditor', 'Backend'),
+                                        'delete' => $this->getHtml('DELETE', 'Auditor', 'Backend'),
+                                    ],
+                                    false // don't render sort
+                                ); ?>
+                                <td><?= $tableView->renderHeaderElement('type', $this->getHtml('Type', 'Auditor', 'Backend'), 'number'); ?>
+                                <td class="wf-100"><?= $tableView->renderHeaderElement('trigger', $this->getHtml('Trigger', 'Auditor', 'Backend'), 'text'); ?>
+                                <td><?= $tableView->renderHeaderElement('createdBy', $this->getHtml('By', 'Auditor', 'Backend'), 'text'); ?>
+                                <td><?= $tableView->renderHeaderElement('ref', $this->getHtml('Ref', 'Auditor', 'Backend'), 'text', [], true, true, false); ?>
+                                <td><?= $tableView->renderHeaderElement('createdAt', $this->getHtml('Date', 'Auditor', 'Backend'), 'date'); ?>
+                            <tbody>
+                            <?php
+                            $count = 0;
+                            foreach ($audits as $key => $audit) : ++$count;
+                                $url = UriFactory::build('{/base}/admin/audit/view?id=' . $audit->id); ?>
+                                <tr tabindex="0" data-href="<?= $url; ?>">
+                                    <td><?= $audit->id; ?>
+                                    <td><?= $this->printHtml($audit->module); ?>
+                                    <td><?php if ($audit->old === null) : echo $this->getHtml('CREATE', 'Auditor', 'Backend'); ?>
+                                        <?php elseif ($audit->old !== null && $audit->new !== null) : echo $this->getHtml('UPDATE', 'Auditor', 'Backend'); ?>
+                                        <?php elseif ($audit->new === null) : echo $this->getHtml('DELETE', 'Auditor', 'Backend'); ?>
+                                        <?php else : echo $this->getHtml('UNKNOWN', 'Auditor', 'Backend'); ?>
+                                        <?php endif; ?>
+                                    <td><?= $this->printHtml((string) $audit->type); ?>
+                                    <td><?= $this->printHtml($audit->trigger); ?>
+                                    <td><a class="content" href="<?= UriFactory::build('{/base}/admin/account/settings?id=' . $audit->createdBy->id); ?>"><?= $this->printHtml(
+                                            $this->renderUserName('%3$s %2$s %1$s', [$audit->createdBy->name1, $audit->createdBy->name2, $audit->createdBy->name3, $audit->createdBy->login])
+                                        ); ?></a>
+                                    <td><?= $this->printHtml((string) $audit->ref); ?>
+                                    <td><?= $audit->createdAt->format('Y-m-d H:i:s'); ?>
+                            <?php endforeach; ?>
+                            <?php if ($count === 0) : ?>
+                                <tr><td colspan="8" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                             <?php endif; ?>
-                            <?php if ($this->getData('hasNext')) : ?>
-                                <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><i class="g-icon">chevron_right</i></a>
-                            <?php endif; ?>
+                        </table>
                         </div>
-                    <?php endif; ?>
-                    -->
+                        <!--
+                        <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
+                            <div class="portlet-foot">
+                                <?php if ($this->getData('hasPrevious')) : ?>
+                                    <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><i class="g-icon">chevron_left</i></a>
+                                <?php endif; ?>
+                                <?php if ($this->getData('hasNext')) : ?>
+                                    <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><i class="g-icon">chevron_right</i></a>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
+                        -->
+                    </section>
                 </div>
             </div>
-        </div>
-
         </div>
     </div>
 </div>

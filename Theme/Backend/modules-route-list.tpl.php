@@ -25,7 +25,7 @@ echo $this->data['nav']->render();
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="portlet">
+        <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Routes'); ?><i class="g-icon download btn end-xs">download</i></div>
             <div class="slider">
             <table id="navElements" class="default sticky">
@@ -102,7 +102,11 @@ echo $this->data['nav']->render();
                         <td><?= $uri; ?>
                         <td><?= $route['dest']; ?>
                     <?php endforeach; endforeach; endforeach; ?>
+                    <?php if ($c === 0) : ?>
+                    <tr>
+                        <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                    <?php endif; ?>
             </table>
-        </div>
+        </section>
     </div>
 </div>

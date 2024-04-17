@@ -21,7 +21,7 @@ echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-12 col-md-6">
-        <div class="portlet">
+        <section class="portlet">
             <form id="fAccount" action="<?= UriFactory::build('{/api}admin/account?csrf={$CSRF}'); ?>" method="put">
                 <div class="portlet-head"><?= $this->getHtml('Account'); ?></div>
                 <div class="portlet-body">
@@ -95,6 +95,6 @@ echo $this->data['nav']->render(); ?>
                     <input id="account-create-submit" name="createSubmit" type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
                 </div>
             </form>
-        </div>
+        </section>
     </div>
 </div>

@@ -20,7 +20,7 @@ echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-12 col-md-6">
-        <div class="portlet">
+        <section class="portlet">
             <form id="fGroupCreate"
                 action="<?= UriFactory::build('{/api}admin/group?csrf={$CSRF}'); ?>"
                 method="put"
@@ -50,6 +50,6 @@ echo $this->data['nav']->render(); ?>
                     <input type="submit" id="iCreate" name="create" value="<?= $this->getHtml('Create', '0', '0'); ?>">
                 </div>
             </form>
-        </div>
+        </section>
     </div>
 </div>
