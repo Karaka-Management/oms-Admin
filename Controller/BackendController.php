@@ -556,9 +556,7 @@ final class BackendController extends Controller
         }
 
         $toParse = $path === false ? '' : \file_get_contents($path);
-        $content = Markdown::parse($toParse === false ? '' : $toParse);
-
-        $view->data['introduction'] = $content;
+        $view->data['introduction'] = Markdown::parse($toParse === false ? '' : $toParse);
 
         return $view;
     }
