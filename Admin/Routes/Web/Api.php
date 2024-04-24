@@ -250,7 +250,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/account/localization(\?.*|$)' => [
+    '^.*/admin/localization(\?.*|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiSettingsAccountLocalizationSet',
             'verb'       => RouteVerb::SET,

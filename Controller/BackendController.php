@@ -180,7 +180,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewAccountSettings(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    public function viewAccountView(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/accounts-view');
@@ -399,7 +399,7 @@ final class BackendController extends Controller
      *
      * @since 1.0.0
      */
-    public function viewGroupSettings(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    public function viewGroupView(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/Admin/Theme/Backend/groups-view');
@@ -714,9 +714,7 @@ final class BackendController extends Controller
 
         /** @var \Model\Setting[] $settings */
         $settings = SettingMapper::getAll()->where('module', $id)->executeGetArray();
-        if (empty($settings)) {
-            $view->data['settings'] = $settings;
-        }
+        $view->data['settings'] = $settings;
 
         $class = '\\Modules\\' . $request->getData('id') . '\\Models\\SettingsEnum';
         if (!Autoloader::exists($class)) {
@@ -738,7 +736,13 @@ final class BackendController extends Controller
         $generalSettings = $this->app->appSettings->get(
             names: [
                 SettingsEnum::PASSWORD_PATTERN, SettingsEnum::LOGIN_TIMEOUT, SettingsEnum::PASSWORD_INTERVAL, SettingsEnum::PASSWORD_HISTORY, SettingsEnum::LOGIN_TRIES, SettingsEnum::LOGGING_STATUS, SettingsEnum::LOGGING_PATH, SettingsEnum::DEFAULT_UNIT,
-                SettingsEnum::LOGIN_STATUS, SettingsEnum::MAIL_SERVER_ADDR,
+                SettingsEnum::LOGIN_STATUS,
+
+                SettingsEnum::MAIL_SERVER_OUT, SettingsEnum::MAIL_SERVER_PORT_OUT,
+                SettingsEnum::MAIL_SERVER_IN, SettingsEnum::MAIL_SERVER_PORT_IN,
+                SettingsEnum::MAIL_SERVER_TYPE,
+                SettingsEnum::MAIL_SERVER_USER, SettingsEnum::MAIL_SERVER_PASS,
+                SettingsEnum::MAIL_SERVER_ADDR,
             ],
             module: 'Admin'
         );

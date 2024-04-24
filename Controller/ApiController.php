@@ -89,6 +89,7 @@ use phpOMS\Utils\RnG\StringUtils as StringRng;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Validation\Network\Email as EmailValidator;
 use phpOMS\Version\Version;
+use Modules\Media\Models\UploadStatus;
 
 /**
  * Admin controller class.
@@ -661,6 +662,18 @@ final class ApiController extends Controller
     public function apiSettingsSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $dataSettings = $request->getDataJson('settings');
+        if (empty($dataSettings)) {
+            $tmp = $request->getLike('settings_(.*)');
+            foreach ($tmp as $idx => $value) {
+                $name = \substr($idx, 9);
+                $dataSettings[$name] = [
+                    'name' => $name,
+                    'content' => $value,
+                    'app' => $request->getDataInt('app'),
+                    'unit' => $request->getDataInt('unit'),
+                ];
+            }
+        }
 
         foreach ($dataSettings as $data) {
             $id        = isset($data['id']) && !empty($data['id']) ? (int) $data['id'] : null;
@@ -676,7 +689,12 @@ final class ApiController extends Controller
 
             /** @var \Model\Setting $old */
             $old = $this->app->appSettings->get($id, $name, $unit, $app, $module, $group, $account);
-            if ($old->id === 0) {
+            if ($old === false || $old->id === 0) {
+                continue;
+
+                /*
+                // @todo There might be situations where we want to create the setting if it doesn't exist?!
+                //      Maybe we should require a flag in the request in such a case?!
                 $internalResponse = new HttpResponse();
                 $internalRequest  = new HttpRequest($request->uri);
 
@@ -693,17 +711,20 @@ final class ApiController extends Controller
                 $internalRequest->setData('encrypted', $encrypted);
 
                 $this->apiSettingsCreate($internalRequest, $internalResponse, $data);
+                */
 
                 continue;
             }
 
             $new = clone $old;
 
-            $new->name        = $name ?? $new->name;
+            $new->name = $name ?? $new->name;
+
+            // @question Do we want to allow changes in encryption?!
             $new->isEncrypted = $encrypted ?? $new->isEncrypted;
             $new->content     = $new->isEncrypted && !empty($content) && !empty($_SERVER['OMS_PRIVATE_KEY_I'] ?? '')
                 ? EncryptionHelper::encryptShared($content, $_SERVER['OMS_PRIVATE_KEY_I'])
-                : $content ?? $new->content;
+                : ($content ?? $new->content);
             $new->unit    = $unit ?? $new->unit;
             $new->app     = $app ?? $new->app;
             $new->module  = $module ?? $new->module;
@@ -899,17 +920,21 @@ final class ApiController extends Controller
      */
     public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        $requestAccount = $request->header->account;
-        $accountId      = (int) $request->getData('account_id');
+        /** @var \Modules\Admin\Models\Account $account */
+        $account = AccountMapper::get()
+            ->with('l11n')
+            ->where('l11n/id', (int) $request->getData('id'))
+            ->execute();
 
-        if ($requestAccount !== $accountId
-            && !$this->app->accountManager->get($accountId)->hasPermission(
+        $requestAccount = $request->header->account;
+        if ($requestAccount !== $account->id
+            && !$this->app->accountManager->get($account->id)->hasPermission(
                 PermissionType::MODIFY,
                 $this->app->unitId,
                 $this->app->appId,
                 self::NAME,
                 PermissionCategory::ACCOUNT_SETTINGS,
-                $accountId
+                $account->id
             )
         ) {
             $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
@@ -918,34 +943,36 @@ final class ApiController extends Controller
             return;
         }
 
-        /** @var \Modules\Admin\Models\Account $account */
-        $account = AccountMapper::get()
-            ->with('l11n')
-            ->where('id', $accountId)
-            ->execute();
+        if ($account->l11n->id === 0) {
+            $l11n = LocalizationMapper::get()
+                ->where('id', (int) $request->getData('id'))
+                ->execute();
+        } else {
+            $l11n = $account->l11n;
+        }
 
         if (($request->getDataString('localization_load') ?? '-1') !== '-1') {
             $locale = \explode('_', $request->getDataString('localization_load') ?? '');
-            $old    = clone $account->l11n;
+            $old    = clone $l11n;
 
-            $account->l11n->loadFromLanguage($locale[0], $locale[1]);
+            $l11n->loadFromLanguage($locale[0], $locale[1]);
 
-            $this->updateModel($request->header->account, $old, $account->l11n, LocalizationMapper::class, 'l11n', $request->getOrigin());
-            $this->createStandardUpdateResponse($request, $response, $account->l11n);
+            $this->updateModel($request->header->account, $old, $l11n, LocalizationMapper::class, 'l11n', $request->getOrigin());
+            $this->createStandardUpdateResponse($request, $response, $l11n);
 
             return;
         }
 
-        $old = clone $account->l11n;
+        $old = clone $l11n;
 
         $dataSettings = $request->getLike('settings_(.*)');
 
-        $account->l11n->setCountry($dataSettings['settings_country']);
-        $account->l11n->language = $dataSettings['settings_language'];
-        $account->l11n->setTemperature($dataSettings['settings_temperature']);
+        $l11n->setCountry($dataSettings['settings_country']);
+        $l11n->language = $dataSettings['settings_language'];
+        $l11n->setTemperature($dataSettings['settings_temperature']);
 
-        $account->l11n->setTimezone($dataSettings['settings_timezone']);
-        $account->l11n->setDatetime(
+        $l11n->setTimezone($dataSettings['settings_timezone']);
+        $l11n->setDatetime(
             [
                 'very_short' => $dataSettings['settings_timeformat_vs'],
                 'short'      => $dataSettings['settings_timeformat_s'],
@@ -955,13 +982,13 @@ final class ApiController extends Controller
             ]
         );
 
-        $account->l11n->currency = $dataSettings['settings_currency'];
-        $account->l11n->setCurrencyFormat($dataSettings['settings_currencyformat']);
+        $l11n->currency = $dataSettings['settings_currency'];
+        $l11n->setCurrencyFormat($dataSettings['settings_currencyformat']);
 
-        $account->l11n->setDecimal($dataSettings['settings_decimal']);
-        $account->l11n->setThousands($dataSettings['settings_thousands']);
+        $l11n->setDecimal($dataSettings['settings_decimal']);
+        $l11n->setThousands($dataSettings['settings_thousands']);
 
-        $account->l11n->setPrecision(
+        $l11n->setPrecision(
             [
                 'very_short' => $dataSettings['settings_precision_vs'],
                 'short'      => $dataSettings['settings_precision_s'],
@@ -971,7 +998,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $account->l11n->setWeight(
+        $l11n->setWeight(
             [
                 'very_light' => $dataSettings['settings_weight_vl'],
                 'light'      => $dataSettings['settings_weight_l'],
@@ -981,7 +1008,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $account->l11n->setSpeed(
+        $l11n->setSpeed(
             [
                 'very_slow' => $dataSettings['settings_speed_vs'],
                 'slow'      => $dataSettings['settings_speed_s'],
@@ -992,7 +1019,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $account->l11n->setLength(
+        $l11n->setLength(
             [
                 'very_short' => $dataSettings['settings_length_vs'],
                 'short'      => $dataSettings['settings_length_s'],
@@ -1003,7 +1030,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $account->l11n->setArea(
+        $l11n->setArea(
             [
                 'very_small' => $dataSettings['settings_area_vs'],
                 'small'      => $dataSettings['settings_area_s'],
@@ -1013,7 +1040,7 @@ final class ApiController extends Controller
             ]
         );
 
-        $account->l11n->setVolume(
+        $l11n->setVolume(
             [
                 'very_small' => $dataSettings['settings_volume_vs'],
                 'small'      => $dataSettings['settings_volume_s'],
@@ -1026,8 +1053,8 @@ final class ApiController extends Controller
             ]
         );
 
-        $this->updateModel($request->header->account, $old, $account->l11n, LocalizationMapper::class, 'l11n', $request->getOrigin());
-        $this->createStandardUpdateResponse($request, $response, $account->l11n);
+        $this->updateModel($request->header->account, $old, $l11n, LocalizationMapper::class, 'l11n', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $l11n);
     }
 
     /**
@@ -1041,16 +1068,29 @@ final class ApiController extends Controller
      *
      * @api
      *
+     * @todo This should happen in the CMS module since we are modifying a CMS app
+     *
      * @since 1.0.0
      */
     public function apiSettingsDesignSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
-        if (!empty($request->files)) {
-            $upload                   = new UploadFile();
-            $upload->preserveFileName = false;
-            $upload->outputDir        = __DIR__ . '/../../../Web/Backend/img';
+        if (empty($request->files)) {
+            $response->header->status = RequestStatusCode::R_400;
 
-            $status = $upload->upload($request->files, ['logo.png'], true);
+            $this->createInvalidUpdateResponse($request, $response, []);
+            return;
+        }
+
+        $upload                   = new UploadFile();
+        $upload->preserveFileName = false;
+        $upload->outputDir        = __DIR__ . '/../../../Web/Backend/img';
+
+        $status = $upload->upload($request->files, ['logo.png'], true);
+        if ($status[0]['status'] !== UploadStatus::OK) {
+            $response->header->status = RequestStatusCode::R_400;
+
+            $this->createInvalidUpdateResponse($request, $response, []);
+            return;
         }
 
         $this->createStandardUpdateResponse($request, $response, []);

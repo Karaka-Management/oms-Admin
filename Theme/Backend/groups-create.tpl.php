@@ -41,13 +41,13 @@ echo $this->data['nav']->render(); ?>
                     </div>
 
                     <div class="form-group">
-                        <?= $this->getData('editor')->render('group-editor'); ?>
+                        <?= $this->data['editor']->render('group-editor'); ?>
                     </div>
 
-                    <?= $this->getData('editor')->getData('text')->render('group-editor', 'description', 'fGroupCreate'); ?>
+                    <?= $this->data['editor']->getData('text')->render('group-editor', 'description', 'fGroupCreate'); ?>
                 </div>
                 <div class="portlet-foot">
-                    <input type="submit" id="iCreate" name="create" value="<?= $this->getHtml('Create', '0', '0'); ?>">
+                    <input type="submit" id="iCreateGroup" name="create" value="<?= $this->getHtml('Create', '0', '0'); ?>">
                 </div>
             </form>
         </section>

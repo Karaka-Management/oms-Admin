@@ -21,7 +21,7 @@ $timezones       = TimeZoneEnumArray::getConstants();
 $timeformats     = ISO8601EnumArray::getConstants();
 $languages       = ISO639Enum::getConstants();
 $currencies      = ISO4217Enum::getConstants();
-$l11nDefinitions = Directory::list(__DIR__ . '/../../../../phpOMS/Localization/Defaults/Definitions');
+$l11nDefinitions = Directory::list(__DIR__ . '/../../../../../../phpOMS/Localization/Defaults/Definitions');
 
 $weights      = WeightType::getConstants();
 $speeds       = SpeedType::getConstants();
@@ -33,7 +33,7 @@ $temperatures = TemperatureType::getConstants();
 <div class="row">
     <div class="col-xs-12 col-md-4">
         <section class="portlet">
-            <form id="fLocalization" name="fLocalization" action="<?= UriFactory::build('{/api}profile/settings/localization?csrf={$CSRF}'); ?>" method="post">
+            <form id="fLocalization" name="fLocalization" action="<?= UriFactory::build('{/api}admin/localization?csrf={$CSRF}'); ?>" method="post">
             <div class="portlet-head"><?= $this->getHtml('Localization'); ?></div>
             <div class="portlet-body">
                 <div class="form-group">
@@ -46,7 +46,7 @@ $temperatures = TemperatureType::getConstants();
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="ipt-second"><input type="submit" name="loadDefaultLocalization" formaction="<?= UriFactory::build('{/api}profile/settings/localization?csrf={$CSRF}'); ?>" value="<?= $this->getHtml('Load'); ?>"></div>
+                        <div class="ipt-second"><input id="iLoadLocalization" type="submit" name="loadDefaultLocalization" formaction="<?= UriFactory::build('{/api}admin/localization?csrf={$CSRF}'); ?>" value="<?= $this->getHtml('Load'); ?>"></div>
                     </div>
                 </div>
 
@@ -78,7 +78,7 @@ $temperatures = TemperatureType::getConstants();
                 </div>
             </div>
             <div class="portlet-foot">
-                <input type="hidden" name="account_id" value="<?= $account->id; ?>">
+                <input type="hidden" name="id" value="<?= $l11n->id; ?>">
                 <input id="iSubmitLocalization" name="submitLocalization" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
             </div>
             </form>
@@ -99,7 +99,7 @@ $temperatures = TemperatureType::getConstants();
                 </div>
 
                 <div class="form-group">
-                <h2><?= $this->getHtml('Timeformat'); ?></h2>
+                    <h2><?= $this->getHtml('Timeformat'); ?></h2>
                 </div>
 
                 <div class="form-group">
@@ -152,9 +152,11 @@ $temperatures = TemperatureType::getConstants();
                 </div>
 
                 <div class="form-group">
-                <h2><?= $this->getHtml('Numberformat'); ?></h2>
+                    <h2><?= $this->getHtml('Numberformat'); ?></h2>
                 </div>
 
+                <!-- @question consider to change to input-control (/var/www/html/Karaka/Modules/Admin/Admin/Settings/Theme/Backend/settings.tpl.php)
+                            input-control seems to have less issues with smaller screen sizes -->
                 <div class="flex-line">
                     <div>
                         <div class="form-group">

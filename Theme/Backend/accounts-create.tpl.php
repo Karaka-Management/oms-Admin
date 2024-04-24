@@ -92,7 +92,7 @@ echo $this->data['nav']->render(); ?>
                     </div>
                 </div>
                 <div class="portlet-foot">
-                    <input id="account-create-submit" name="createSubmit" type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
+                    <input id="iCreateAccount" name="createSubmit" type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
                 </div>
             </form>
         </section>

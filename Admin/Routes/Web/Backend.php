@@ -53,9 +53,9 @@ return [
             ],
         ],
     ],
-    '^/admin/account/settings(\?.*$|$)' => [
+    '^/admin/account/view(\?.*$|$)' => [
         [
-            'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountSettings',
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewAccountView',
             'verb'       => RouteVerb::GET,
             'active'     => true,
             'permission' => [
@@ -89,9 +89,9 @@ return [
             ],
         ],
     ],
-    '^/admin/group/settings(\?.*$|$)' => [
+    '^/admin/group/view(\?.*$|$)' => [
         [
-            'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupSettings',
+            'dest'       => '\Modules\Admin\Controller\BackendController:viewGroupView',
             'verb'       => RouteVerb::GET,
             'active'     => true,
             'permission' => [

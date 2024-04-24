@@ -85,7 +85,7 @@ echo $this->data['nav']->render(); ?>
                 <tbody>
                     <?php $c = 0;
                         foreach ($groups as $key => $value) : ++$c;
-                            $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id);
+                            $url = UriFactory::build('{/base}/admin/group/view?{?}&id=' . $value->id);
 
                             $color = 'darkred';
                             if ($value->status === GroupStatus::ACTIVE) { $color = 'green'; }
