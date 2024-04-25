@@ -118,7 +118,7 @@ trait ApiControllerSettingsTrait
         $response = new HttpResponse();
         $request  = new HttpRequest();
 
-        $request->header->account = 2;
+        $request->header->account = 3;
         $request->setData('id', 1);
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 

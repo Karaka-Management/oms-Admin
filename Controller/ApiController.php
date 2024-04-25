@@ -906,6 +906,25 @@ final class ApiController extends Controller
     }
 
     /**
+     * Validate password update request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateLocalizationUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
      * Api method for modifying account localization
      *
      * @param RequestAbstract  $request  Request
@@ -920,6 +939,13 @@ final class ApiController extends Controller
      */
     public function apiSettingsAccountLocalizationSet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
+        if (!empty($val = $this->validateLocalizationUpdate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $val);
+
+            return;
+        }
+
         /** @var \Modules\Admin\Models\Account $account */
         $account = AccountMapper::get()
             ->with('l11n')
@@ -929,7 +955,7 @@ final class ApiController extends Controller
         $requestAccount = $request->header->account;
         if ($account->id !== 0
             && $requestAccount !== $account->id
-            && !$this->app->accountManager->get($account->id)->hasPermission(
+            && !$this->app->accountManager->get($requestAccount)->hasPermission(
                 PermissionType::MODIFY,
                 $this->app->unitId,
                 $this->app->appId,
