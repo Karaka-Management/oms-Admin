@@ -91,12 +91,13 @@ $tableView->setObjects($modules);
                     <td data-label="<?= $this->getHtml('Status'); ?>">
                         <span class="tag module-status-<?= $status; ?>">
                             <a href="<?= $url; ?>">
-                                <?php if ($status === ModuleStatus::ACTIVE)
+                                <?php if ($status === ModuleStatus::ACTIVE) {
                                     echo \mb_strtolower($this->getHtml('Active'));
-                                elseif ($status === ModuleStatus::INACTIVE)
+                                } elseif ($status === ModuleStatus::INACTIVE) {
                                     echo \mb_strtolower($this->getHtml('Inactive'));
-                                else
-                                    echo \mb_strtolower($this->getHtml('Available')); ?>
+                                } else {
+                                    echo \mb_strtolower($this->getHtml('Available'));
+                                } ?>
                             </a>
                             <?php endforeach; ?>
                         </span>
