@@ -970,6 +970,21 @@ final class ApiController extends Controller
             return;
         }
 
+        if ($account->id === 0
+            && !$this->app->accountManager->get($requestAccount)->hasPermission(
+                PermissionType::MODIFY,
+                $this->app->unitId,
+                $this->app->appId,
+                self::NAME,
+                PermissionCategory::SETTINGS
+            )
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
         if ($account->l11n->id === 0) {
             $l11n = LocalizationMapper::get()
                 ->where('id', (int) $request->getData('id'))
