@@ -151,7 +151,7 @@ final class CliController extends Controller
         foreach ($mapper->executeYield() as $setting) {
             $decrypted = empty($data['old']) || empty($setting->content)
                 ? $setting->content
-                : EncryptionHelper::decryptShared($setting->content ?? '', $data['old']);
+                : EncryptionHelper::decryptShared($setting->content, $data['old']);
 
             $encrypted = empty($data['new']) || empty($decrypted)
                 ? $decrypted
