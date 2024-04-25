@@ -968,91 +968,106 @@ final class ApiController extends Controller
 
         $dataSettings = $request->getLike('settings_(.*)');
 
-        $l11n->setCountry($dataSettings['settings_country']);
-        $l11n->language = $dataSettings['settings_language'];
-        $l11n->setTemperature($dataSettings['settings_temperature']);
+        $l11n->setCountry($dataSettings['settings_country'] ?? $l11n->country);
+        $l11n->language = $dataSettings['settings_language'] ?? $l11n->language;
+        $l11n->setTemperature($dataSettings['settings_temperature'] ?? $l11n->temperature);
 
-        $l11n->setTimezone($dataSettings['settings_timezone']);
-        $l11n->setDatetime(
-            [
-                'very_short' => $dataSettings['settings_timeformat_vs'],
-                'short'      => $dataSettings['settings_timeformat_s'],
-                'medium'     => $dataSettings['settings_timeformat_m'],
-                'long'       => $dataSettings['settings_timeformat_l'],
-                'very_long'  => $dataSettings['settings_timeformat_vl'],
-            ]
-        );
+        $l11n->setTimezone($dataSettings['settings_timezone'] ?? $l11n->timezone);
 
-        $l11n->currency = $dataSettings['settings_currency'];
-        $l11n->setCurrencyFormat($dataSettings['settings_currencyformat']);
+        if (isset($dataSettings['settings_timeformat_vs'])) {
+            $l11n->setDatetime(
+                [
+                    'very_short' => $dataSettings['settings_timeformat_vs'],
+                    'short'      => $dataSettings['settings_timeformat_s'],
+                    'medium'     => $dataSettings['settings_timeformat_m'],
+                    'long'       => $dataSettings['settings_timeformat_l'],
+                    'very_long'  => $dataSettings['settings_timeformat_vl'],
+                ]
+            );
+        }
 
-        $l11n->setDecimal($dataSettings['settings_decimal']);
-        $l11n->setThousands($dataSettings['settings_thousands']);
+        $l11n->currency = $dataSettings['settings_currency'] ?? $l11n->currency;
+        $l11n->setCurrencyFormat($dataSettings['settings_currencyformat'] ?? $l11n->currencyFormat);
 
-        $l11n->setPrecision(
-            [
-                'very_short' => $dataSettings['settings_precision_vs'],
-                'short'      => $dataSettings['settings_precision_s'],
-                'medium'     => $dataSettings['settings_precision_m'],
-                'long'       => $dataSettings['settings_precision_l'],
-                'very_long'  => $dataSettings['settings_precision_vl'],
-            ]
-        );
+        $l11n->setDecimal($dataSettings['settings_decimal'] ?? $l11n->decimal);
+        $l11n->setThousands($dataSettings['settings_thousands'] ?? $l11n->thousands);
 
-        $l11n->setWeight(
-            [
-                'very_light' => $dataSettings['settings_weight_vl'],
-                'light'      => $dataSettings['settings_weight_l'],
-                'medium'     => $dataSettings['settings_weight_m'],
-                'heavy'      => $dataSettings['settings_weight_h'],
-                'very_heavy' => $dataSettings['settings_weight_vh'],
-            ]
-        );
+        if (isset($dataSettings['settings_precision_vs'])) {
+            $l11n->setPrecision(
+                [
+                    'very_short' => $dataSettings['settings_precision_vs'],
+                    'short'      => $dataSettings['settings_precision_s'],
+                    'medium'     => $dataSettings['settings_precision_m'],
+                    'long'       => $dataSettings['settings_precision_l'],
+                    'very_long'  => $dataSettings['settings_precision_vl'],
+                ]
+            );
+        }
 
-        $l11n->setSpeed(
-            [
-                'very_slow' => $dataSettings['settings_speed_vs'],
-                'slow'      => $dataSettings['settings_speed_s'],
-                'medium'    => $dataSettings['settings_speed_m'],
-                'fast'      => $dataSettings['settings_speed_f'],
-                'very_fast' => $dataSettings['settings_speed_vf'],
-                'sea'       => $dataSettings['settings_speed_sea'],
-            ]
-        );
+        if (isset($dataSettings['settings_weight_vl'])) {
+            $l11n->setWeight(
+                [
+                    'very_light' => $dataSettings['settings_weight_vl'],
+                    'light'      => $dataSettings['settings_weight_l'],
+                    'medium'     => $dataSettings['settings_weight_m'],
+                    'heavy'      => $dataSettings['settings_weight_h'],
+                    'very_heavy' => $dataSettings['settings_weight_vh'],
+                ]
+            );
+        }
 
-        $l11n->setLength(
-            [
-                'very_short' => $dataSettings['settings_length_vs'],
-                'short'      => $dataSettings['settings_length_s'],
-                'medium'     => $dataSettings['settings_length_m'],
-                'long'       => $dataSettings['settings_length_l'],
-                'very_long'  => $dataSettings['settings_length_vl'],
-                'sea'        => $dataSettings['settings_length_sea'],
-            ]
-        );
+        if (isset($dataSettings['settings_speed_vs'])) {
+            $l11n->setSpeed(
+                [
+                    'very_slow' => $dataSettings['settings_speed_vs'],
+                    'slow'      => $dataSettings['settings_speed_s'],
+                    'medium'    => $dataSettings['settings_speed_m'],
+                    'fast'      => $dataSettings['settings_speed_f'],
+                    'very_fast' => $dataSettings['settings_speed_vf'],
+                    'sea'       => $dataSettings['settings_speed_sea'],
+                ]
+            );
+        }
 
-        $l11n->setArea(
-            [
-                'very_small' => $dataSettings['settings_area_vs'],
-                'small'      => $dataSettings['settings_area_s'],
-                'medium'     => $dataSettings['settings_area_m'],
-                'large'      => $dataSettings['settings_area_l'],
-                'very_large' => $dataSettings['settings_area_vl'],
-            ]
-        );
+        if (isset($dataSettings['settings_length_vs'])) {
+            $l11n->setLength(
+                [
+                    'very_short' => $dataSettings['settings_length_vs'],
+                    'short'      => $dataSettings['settings_length_s'],
+                    'medium'     => $dataSettings['settings_length_m'],
+                    'long'       => $dataSettings['settings_length_l'],
+                    'very_long'  => $dataSettings['settings_length_vl'],
+                    'sea'        => $dataSettings['settings_length_sea'],
+                ]
+            );
+        }
 
-        $l11n->setVolume(
-            [
-                'very_small' => $dataSettings['settings_volume_vs'],
-                'small'      => $dataSettings['settings_volume_s'],
-                'medium'     => $dataSettings['settings_volume_m'],
-                'large'      => $dataSettings['settings_volume_l'],
-                'very_large' => $dataSettings['settings_volume_vl'],
-                'tablespoon' => $dataSettings['settings_volume_tablespoon'],
-                'teaspoon'   => $dataSettings['settings_volume_teaspoon'],
-                'glass'      => $dataSettings['settings_volume_glass'],
-            ]
-        );
+        if (isset($dataSettings['settings_area_vs'])) {
+            $l11n->setArea(
+                [
+                    'very_small' => $dataSettings['settings_area_vs'],
+                    'small'      => $dataSettings['settings_area_s'],
+                    'medium'     => $dataSettings['settings_area_m'],
+                    'large'      => $dataSettings['settings_area_l'],
+                    'very_large' => $dataSettings['settings_area_vl'],
+                ]
+            );
+        }
+
+        if (isset($dataSettings['settings_volume_vs'])) {
+            $l11n->setVolume(
+                [
+                    'very_small' => $dataSettings['settings_volume_vs'],
+                    'small'      => $dataSettings['settings_volume_s'],
+                    'medium'     => $dataSettings['settings_volume_m'],
+                    'large'      => $dataSettings['settings_volume_l'],
+                    'very_large' => $dataSettings['settings_volume_vl'],
+                    'tablespoon' => $dataSettings['settings_volume_tablespoon'],
+                    'teaspoon'   => $dataSettings['settings_volume_teaspoon'],
+                    'glass'      => $dataSettings['settings_volume_glass'],
+                ]
+            );
+        }
 
         $this->updateModel($request->header->account, $old, $l11n, LocalizationMapper::class, 'l11n', $request->getOrigin());
         $this->createStandardUpdateResponse($request, $response, $l11n);
