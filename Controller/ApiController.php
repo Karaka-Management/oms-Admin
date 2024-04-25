@@ -711,9 +711,9 @@ final class ApiController extends Controller
                 $internalRequest->setData('encrypted', $encrypted);
 
                 $this->apiSettingsCreate($internalRequest, $internalResponse, $data);
-                */
 
                 continue;
+                */
             }
 
             $new = clone $old;
