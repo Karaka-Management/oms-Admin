@@ -70,7 +70,7 @@ trait ApiControllerSettingsTrait
         $request  = new HttpRequest();
 
         $request->header->account = 1;
-        $request->setData('account_id', 1);
+        $request->setData('id', 1);
         $request->setData('load', true);
         $request->setData('localization_load', 'de_DE');
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
@@ -95,7 +95,7 @@ trait ApiControllerSettingsTrait
         $request  = new HttpRequest();
 
         $request->header->account = 1;
-        $request->setData('account_id', 1);
+        $request->setData('id', 1);
 
         $data = \json_decode('{"settings_country":"US","settings_language":"en","settings_temperature":"celsius","settings_timezone":"America\/New_York","settings_timeformat_vs":"d.m","settings_timeformat_s":"m.y","settings_timeformat_m":"Y.m.d","settings_timeformat_l":"Y.m.d h:i","settings_timeformat_vl":"Y.m.d h:i:s","settings_currency":"EUR","settings_currencyformat":"0","settings_decimal":".","settings_thousands":",","settings_precision_vs":"0","settings_precision_s":"1","settings_precision_m":"2","settings_precision_l":"3","settings_precision_vl":"5","settings_weight_vl":"mg","settings_weight_l":"g","settings_weight_m":"kg","settings_weight_h":"t","settings_weight_vh":"t","settings_speed_vs":"mps","settings_speed_s":"ms","settings_speed_m":"kph","settings_speed_f":"kph","settings_speed_vf":"mach","settings_speed_sea":"mpd","settings_length_vs":"micron","settings_length_s":"mm","settings_length_m":"cm","settings_length_l":"m","settings_length_vl":"km","settings_length_sea":"mi","settings_area_vs":"micron","settings_area_s":"mm","settings_area_m":"cm","settings_area_l":"m","settings_area_vl":"km","settings_volume_vs":"mul","settings_volume_s":"ml","settings_volume_m":"l","settings_volume_l":"cm","settings_volume_vl":"m","settings_volume_teaspoon":"Metric tsp","settings_volume_tablespoon":"Metric tblsp","settings_volume_glass":"Metric cup"}', true);
 
@@ -119,7 +119,7 @@ trait ApiControllerSettingsTrait
         $request  = new HttpRequest();
 
         $request->header->account = 2;
-        $request->setData('account_id', 1);
+        $request->setData('id', 1);
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
         self::assertEquals(RequestStatusCode::R_403, $response->header->status);

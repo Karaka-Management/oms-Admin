@@ -927,7 +927,8 @@ final class ApiController extends Controller
             ->execute();
 
         $requestAccount = $request->header->account;
-        if ($requestAccount !== $account->id
+        if ($account->id !== 0
+            && $requestAccount !== $account->id
             && !$this->app->accountManager->get($account->id)->hasPermission(
                 PermissionType::MODIFY,
                 $this->app->unitId,
