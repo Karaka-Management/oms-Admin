@@ -452,7 +452,7 @@ return [
     ],
     '^.*/account/address$' => [
         [
-            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressCreate',
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiAddressCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
             'active'     => true,
@@ -463,7 +463,7 @@ return [
             ],
         ],
         [
-            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressUpdate',
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiAddressUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
             'active'     => true,
@@ -474,7 +474,7 @@ return [
             ],
         ],
         [
-            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiAddressDelete',
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiAddressDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
             'active'     => true,
@@ -487,7 +487,7 @@ return [
     ],
     '^.*/account/contact$' => [
         [
-            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactCreate',
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiContactCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
             'active'     => true,
@@ -498,7 +498,7 @@ return [
             ],
         ],
         [
-            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactUpdate',
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiContactUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
             'active'     => true,
@@ -509,7 +509,7 @@ return [
             ],
         ],
         [
-            'dest'       => '\Modules\Admin\Controller\ApiAttributeController:apiContactDelete',
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiContactDelete',
             'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
             'active'     => true,

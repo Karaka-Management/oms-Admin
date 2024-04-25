@@ -76,13 +76,13 @@ trait ApiControllerSettingsTrait
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
         $l11n = $response->getDataArray('')['response'];
-        self::assertEquals($l11n->language, 'de');
+        self::assertEquals('de', $l11n->language);
 
         $request->setData('localization_load', 'en_US', true);
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
         $l11n = $response->getDataArray('')['response'];
-        self::assertEquals($l11n->language, 'en');
+        self::assertEquals('en', $l11n->language);
     }
 
     /**
@@ -106,7 +106,7 @@ trait ApiControllerSettingsTrait
         $this->module->apiSettingsAccountLocalizationSet($request, $response);
 
         $l11n = $response->getDataArray('')['response'];
-        self::assertEquals($l11n->currency, 'EUR');
+        self::assertEquals('EUR', $l11n->currency);
     }
 
     /**
