@@ -60,6 +60,7 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
 
         $this->app->dbPool         = $GLOBALS['dbpool'];
         $this->app->unitId         = 1;
+        $this->app->appId          = 1;
         $this->app->accountManager = new AccountManager($GLOBALS['session']);
         $this->app->appSettings    = new CoreSettings();
         $this->app->moduleManager  = new ModuleManager($this->app, __DIR__ . '/../../../../Modules/');
@@ -74,7 +75,7 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
 
         $permission       = new AccountPermission();
         $permission->unit = 1;
-        $permission->app  = 2;
+        $permission->app  = 1;
         $permission->setPermission(
             PermissionType::READ
             | PermissionType::CREATE
