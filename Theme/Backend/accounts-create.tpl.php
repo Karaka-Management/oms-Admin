@@ -22,7 +22,10 @@ echo $this->data['nav']->render(); ?>
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">
-            <form id="fAccount" action="<?= UriFactory::build('{/api}admin/account?csrf={$CSRF}'); ?>" method="put">
+            <form id="fAccount"
+                action="<?= UriFactory::build('{/api}admin/account?csrf={$CSRF}'); ?>"
+                method="put"
+                data-redirect="<?= UriFactory::build('{/base}/admin/account/view'); ?>?id={/0/response/id}">
                 <div class="portlet-head"><?= $this->getHtml('Account'); ?></div>
                 <div class="portlet-body">
                     <div class="form-group">
@@ -47,7 +50,7 @@ echo $this->data['nav']->render(); ?>
                         <label for="iUsername"><?= $this->getHtml('Username'); ?></label>
                         <span class="input">
                             <button class="inactive" type="button"><i class="g-icon">person</i></button>
-                            <input id="iUsername" name="name" type="text" autocomplete="off" spellcheck="false">
+                            <input id="iUsername" name="user" type="text" autocomplete="off" spellcheck="false" required>
                         </span>
                     </div>
 

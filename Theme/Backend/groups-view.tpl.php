@@ -27,11 +27,11 @@ $accounts    = $group->getAccounts();
 $audits      = $this->data['auditlogs'] ?? [];
 
 $previous = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
-    : 'admin/group/settings?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
+    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/view?id={?id}#{\#}'
+    : 'admin/group/view?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
 $next = empty($audits)
-    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/settings?id={?id}#{\#}'
-    : 'admin/group/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
+    ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/group/view?id={?id}#{\#}'
+    : 'admin/group/view?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
 echo $this->data['nav']->render(); ?>
 
@@ -149,7 +149,7 @@ echo $this->data['nav']->render(); ?>
                                 <?php
                                     $c = 0;
                                 foreach ($accounts as $key => $value) : ++$c;
-                                    $url = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->id); ?>
+                                    $url = UriFactory::build('{/base}/admin/account/view?{?}&id=' . $value->id); ?>
                                 <tr data-id="<?= $value->id; ?>">
                                     <td><input id="accountTable-remove-<?= $value->id; ?>" type="checkbox" class="vh">
                                         <label for="accountTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>

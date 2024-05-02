@@ -24,6 +24,7 @@ use Modules\Admin\Models\ModuleMapper;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
 use Modules\Organization\Models\UnitMapper;
+use Modules\Profile\Models\ProfileMapper;
 use phpOMS\Autoloader;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\OrderType;
@@ -45,6 +46,9 @@ use Web\Backend\Views\TableView;
  * @link    https://jingga.app
  * @since   1.0.0
  * @codeCoverageIgnore
+ *
+ * @todo Create a view where it's possible to create/activate, change and delete/deactivate hooks for events.
+ *      https://github.com/Karaka-Management/oms-Admin/issues/12
  */
 final class BackendController extends Controller
 {
@@ -198,6 +202,10 @@ final class BackendController extends Controller
         }
 
         $view->data['account'] = $account;
+
+        $view->data['profile'] = ProfileMapper::get()
+            ->where('account', $account->id)
+            ->execute();
 
         /** @var \Modules\Admin\Models\AccountPermission[] $permissions */
         $permissions = AccountPermissionMapper::getAll()
@@ -604,6 +612,10 @@ final class BackendController extends Controller
      * @param array            $data     Generic data
      *
      * @return RenderableInterface Response can be rendered
+     *
+     * @todo Disable routing for front end. This way only the functionality is available (api)
+     *      This can be easily achieved by setting the route `active => false`
+     *      https://github.com/Karaka-Management/oms-Admin/issues/18
      *
      * @since 1.0.0
      */

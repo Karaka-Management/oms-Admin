@@ -72,7 +72,6 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
-use phpOMS\Model\Message\Reload;
 use phpOMS\Module\ModuleInfo;
 use phpOMS\Module\ModuleStatus;
 use phpOMS\Security\EncryptionHelper;
@@ -88,8 +87,6 @@ use phpOMS\Utils\Parser\Php\ArrayParser;
 use phpOMS\Utils\RnG\StringUtils as StringRng;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Validation\Network\Email as EmailValidator;
-use phpOMS\Version\Version;
-use Modules\Media\Models\UploadStatus;
 
 /**
  * Admin controller class.
@@ -106,6 +103,12 @@ use Modules\Media\Models\UploadStatus;
  *
  * @todo Split up the ApiController, it is doing way to much in one file.
  *      Consider to create one for: accounts+groups+permissions and one for general stuff like address+settings etc.
+ *
+ * @todo Create api key/token permissions for api interactions through tokens
+ *      Maybe we need to assign tokens to users but sometimes users want to give tokens limited permissions
+ *      https://github.com/Karaka-Management/oms-Admin/issues/24
+ *      https://github.com/Karaka-Management/oms-Admin/issues/25
+ *      https://github.com/Karaka-Management/oms-Admin/issues/26
  */
 final class ApiController extends Controller
 {
@@ -133,7 +136,7 @@ final class ApiController extends Controller
 
         if ($login > LoginReturnType::OK) {
             $this->app->sessionManager->set('UID', $login, true);
-            $response->set($request->uri->__toString(), new Reload());
+            $response->set($request->uri->__toString(), new \phpOMS\Model\Message\Redirect());
         } elseif ($login === LoginReturnType::NOT_ACTIVATED) {
             $response->header->status = RequestStatusCode::R_401;
             $this->fillJsonResponse(
@@ -372,7 +375,7 @@ final class ApiController extends Controller
             ]);
         }
 
-        $token     = (string) \random_bytes(64);
+        $token     = (string) \bin2hex(\random_bytes(32));
         $handler   = $this->setUpServerMailHandler();
         $resetLink = UriFactory::build('{/base}/reset?user=' . $account->id . '&token=' . $token);
 
@@ -1143,7 +1146,7 @@ final class ApiController extends Controller
         $upload->outputDir        = __DIR__ . '/../../../Web/Backend/img';
 
         $status = $upload->upload($request->files, ['logo.png'], true);
-        if ($status[0]['status'] !== UploadStatus::OK) {
+        if ($status[0]['status'] !== \Modules\Media\Models\UploadStatus::OK) {
             $response->header->status = RequestStatusCode::R_400;
 
             $this->createInvalidUpdateResponse($request, $response, []);
@@ -1521,6 +1524,7 @@ final class ApiController extends Controller
         /** @var \Modules\Admin\Models\Group[] $groups */
         $groups = GroupMapper::getAll()
             ->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->limit($request->getDataInt('limit') ?? 50)
             ->executeGetArray();
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
@@ -1648,7 +1652,8 @@ final class ApiController extends Controller
     private function validateAccountCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name1'] = !$request->hasData('name1'))
+        if (($val['user'] = !$request->hasData('user'))
+            || ($val['name1'] = !$request->hasData('name1'))
             || ($val['type'] = !AccountType::isValidValue((int) $request->getData('type')))
             || ($val['status'] = !AccountStatus::isValidValue((int) $request->getData('status')))
             || ($val['email'] = $request->hasData('email') && !EmailValidator::isValid((string) $request->getData('email')))
@@ -1749,7 +1754,7 @@ final class ApiController extends Controller
             '',
             \str_replace(
                 '{url}',
-                UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $account->id),
+                UriFactory::build('{/base}/admin/account/view?{?}&id=' . $account->id),
                 $this->app->l11nManager->getText($response->header->l11n->language, '0', '0', 'SuccessfulCreate'
             )),
             $account
@@ -3126,6 +3131,9 @@ final class ApiController extends Controller
      *
      * @api
      *
+     * @todo Create update logic for application, resources, modules
+     *      https://github.com/Karaka-Management/oms-Admin/issues/17
+     *
      * @since 1.0.0
      */
     public function apiCheckForUpdates(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
@@ -3157,10 +3165,10 @@ final class ApiController extends Controller
             $currentVersion = '';
             $remoteVersion  = \substr($file[1], 0, -5);
 
-            if (Version::compare($currentVersion, $remoteVersion) < 0) {
+            if (\phpOMS\Version\Version::compare($currentVersion, $remoteVersion) < 0) {
                 $toUpdate[$name[0]][$remoteVersion] = $file;
 
-                \uksort($toUpdate[$name[0]], [Version::class, 'compare']);
+                \uksort($toUpdate[$name[0]], [\phpOMS\Version\Version::class, 'compare']);
             }
         }
 
@@ -3960,6 +3968,9 @@ final class ApiController extends Controller
      * @return void
      *
      * @api
+     *
+     * @todo Find a way to hide some contact/address information for some modules
+     *      https://github.com/Karaka-Management/oms-Profile/issues/3
      *
      * @since 1.0.0
      */

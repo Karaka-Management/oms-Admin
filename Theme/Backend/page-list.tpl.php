@@ -90,7 +90,7 @@ echo $this->data['nav']->render(); ?>
                         </label>
                     <tbody>
                         <?php $c = 0; foreach ($accounts as $key => $value) : ++$c;
-                        $url     = UriFactory::build('{/base}/admin/account/settings?{?}&id=' . $value->id);
+                        $url     = UriFactory::build('{/base}/admin/account/view?{?}&id=' . $value->id);
                         $color   = 'darkred';
                         if ($value->status === AccountStatus::ACTIVE) { $color = 'green'; }
                         elseif ($value->status === AccountStatus::INACTIVE) { $color = 'darkblue'; }

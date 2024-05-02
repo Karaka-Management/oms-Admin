@@ -12,6 +12,7 @@
  */
 declare(strict_types=1);
 
+use Modules\Admin\Models\NullAccount;
 use phpOMS\Account\AccountStatus;
 use phpOMS\Account\AccountType;
 use phpOMS\Account\PermissionOwner;
@@ -21,7 +22,9 @@ use phpOMS\Uri\UriFactory;
 /**
  * @var \phpOMS\Views\View $this
  */
-$account     = $this->data['account'];
+$account = $this->data['account'] ?? new NullAccount();
+$isNew = $account->id === 0;
+
 $permissions = $this->data['permissions'];
 $l11n        = $account->l11n;
 
@@ -29,7 +32,7 @@ $audits = $this->data['audits'] ?? [];
 
 $tableView            = $this->data['tableView'];
 $tableView->id        = 'auditList';
-$tableView->baseUri   = '{/base}/admin/account/settings?id=' . $account->id;
+$tableView->baseUri   = '{/base}/admin/account/view?id=' . $account->id;
 $tableView->exportUri = '{/api}auditor/list/export?csrf={$CSRF}';
 $tableView->setObjects($audits);
 
@@ -89,7 +92,7 @@ echo $this->data['nav']->render(); ?>
                                     <label for="iUsername"><?= $this->getHtml('Username'); ?></label>
                                     <span class="input">
                                         <button class="inactive" type="button"><i class="g-icon">person</i></button>
-                                        <input id="iUsername" name="name" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->login); ?>">
+                                        <input id="iUsername" name="user" type="text" autocomplete="off" spellcheck="false" value="<?= $this->printHtml($account->login); ?>" required>
                                     </span>
                                 </div>
                                 <div class="form-group">
@@ -135,16 +138,19 @@ echo $this->data['nav']->render(); ?>
                             </div>
                             <div class="portlet-foot">
                                 <input id="account-edit-submit" name="editSubmit" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                                <?php if ($account->id !== 0 && $this->data['profile']->id === 0) : ?>
                                 <button id="account-profile-create" data-action='[
                                     {
                                         "key": 1, "listener": "click", "action": [
                                             {"key": 1, "type": "event.prevent"},
-                                            {"key": 2, "type": "dom.getvalue", "base": "", "selector": "#iId"},
-                                            {"key": 3, "type": "message.request", "uri": "{/base}/{/lang}/api/view", "method": "PUT", "request_type": "json"},
-                                            {"key": 4, "type": "message.log"}
+                                            {"key": 2, "type": "dom.get", "base": "", "selector": "#iId"},
+                                            {"key": 3, "type": "message.request", "uri": "<?= UriFactory::build('{/api}profile?csrf={$CSRF}') ?>", "method": "PUT", "request_type": "json"},
+                                            {"key": 4, "type": "message.log"},
+                                            {"key": 5, "type": "redirect", "uri": "{%}", "target": "self"}
                                         ]
                                     }
                                 ]'><?= $this->getHtml('CreateProfile'); ?></button>
+                                <?php endif; ?>
                             </div>
                         </form>
                     </section>
@@ -162,7 +168,20 @@ echo $this->data['nav']->render(); ?>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iGroup"><?= $this->getHtml('Name'); ?></label>
-                                    <?= $this->getData('grpSelector')->render('iGroup', true); ?>
+                                    <div id="iGroupSelector" class="smart-input-wrapper" data-src="<?= UriFactory::build('{/api}admin/group/find?csrf={$CSRF}'); ?>">
+                                        <div
+                                            data-value=""
+                                            data-name="search"
+                                            data-limit="10"
+                                            data-container=""
+                                            class="input-div"
+                                            contenteditable="true"></div>
+                                        <template class="input-data-tpl">
+                                            <div data-value="" data-tpl-value="/id" data-tpl-text="/name"></div>
+                                        </template>
+                                        <div class="input-datalist input-datalist-body vh" data-active="true">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="portlet-foot">
@@ -187,7 +206,7 @@ echo $this->data['nav']->render(); ?>
                                     $c      = 0;
                                     $groups = $account->getGroups();
                                     foreach ($groups as $key => $value) : ++$c;
-                                        $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id);
+                                        $url = UriFactory::build('{/base}/admin/group/view?{?}&id=' . $value->id);
                                 ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="g-icon">close</i></a>
@@ -459,7 +478,7 @@ echo $this->data['nav']->render(); ?>
                                         <?php endif; ?>
                                     <td><?= $this->printHtml((string) $audit->type); ?>
                                     <td><?= $this->printHtml($audit->trigger); ?>
-                                    <td><a class="content" href="<?= UriFactory::build('{/base}/admin/account/settings?id=' . $audit->createdBy->id); ?>"><?= $this->printHtml(
+                                    <td><a class="content" href="<?= UriFactory::build('{/base}/admin/account/view?id=' . $audit->createdBy->id); ?>"><?= $this->printHtml(
                                             $this->renderUserName('%3$s %2$s %1$s', [$audit->createdBy->name1, $audit->createdBy->name2, $audit->createdBy->name3, $audit->createdBy->login])
                                         ); ?></a>
                                     <td><?= $this->printHtml((string) $audit->ref); ?>

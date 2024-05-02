@@ -117,7 +117,7 @@ return [
         ],
     ],
 
-    '^.*/admin/group$' => [
+    '^.*/admin/group(\?.*|$)$' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupCreate',
             'verb'       => RouteVerb::PUT,
@@ -164,7 +164,7 @@ return [
         ],
     ],
 
-    '^.*/admin/find/account(\?.*|$)' => [
+    '^.*/admin/account/find(\?.*|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountFind',
             'verb'       => RouteVerb::GET,
@@ -177,7 +177,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/find/group(\?.*$|$)' => [
+    '^.*/admin/group/find(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiGroupFind',
             'verb'       => RouteVerb::GET,
@@ -450,7 +450,7 @@ return [
             ],
         ],
     ],
-    '^.*/account/address$' => [
+    '^.*/account/address(\?.*|$)$' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddressCreate',
             'verb'       => RouteVerb::PUT,
@@ -485,7 +485,7 @@ return [
             ],
         ],
     ],
-    '^.*/account/contact$' => [
+    '^.*/account/contact(\?.*|$)$' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiContactCreate',
             'verb'       => RouteVerb::PUT,
