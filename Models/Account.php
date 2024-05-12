@@ -91,4 +91,50 @@ class Account extends \phpOMS\Account\Account
 
         return new NullContact();
     }
+
+    public static function fromJson(array $account) : self
+    {
+        $new = new self();
+        $new->from($account);
+
+        $new->tries = $account['tries'] ?? 0;
+
+        foreach (($account['addresses'] ?? []) as $address) {
+            $new->addresses[] = \phpOMS\Stdlib\Base\Address::fromJson($address);
+        }
+
+        foreach (($account['contacts'] ?? []) as $contact) {
+            $new->contacts[] = Contact::fromJson($contact);
+        }
+
+        foreach (($account['parents'] ?? []) as $parent) {
+            $new->parents[] = self::fromJson($parent);
+        }
+
+        return $new;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray() : array
+    {
+        return \array_merge(
+            parent::toArray(),
+            [
+                'tries'       => $this->tries,
+                'addresses'       => $this->addresses,
+                'contacts'       => $this->contacts,
+                'parents'       => $this->parents,
+            ]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize() : mixed
+    {
+        return $this->toArray();
+    }
 }

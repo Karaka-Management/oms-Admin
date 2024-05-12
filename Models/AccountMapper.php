@@ -174,8 +174,7 @@ class AccountMapper extends DataMapperFactory
             where `group`.group_status = 1;
         */
 
-        /** @var \Modules\Admin\Models\Account $account */
-        $account = self::get()
+        return self::get()
             ->with('groups')
             ->with('groups/permissions')
             ->with('permissions')
@@ -184,8 +183,6 @@ class AccountMapper extends DataMapperFactory
             ->where('permissions/element', null)
             ->where('groups/permissions/element', null)
             ->execute();
-
-        return $account;
     }
 
     /**
@@ -234,6 +231,7 @@ class AccountMapper extends DataMapperFactory
             }
 
             if (\password_verify($password, $result['account_password'] ?? '')) {
+                $query = new Builder(self::$db);
                 $query->update('account')
                     ->set([
                         'account_lactive' => new \DateTime('now'),
@@ -250,6 +248,7 @@ class AccountMapper extends DataMapperFactory
                 && (new \DateTime('now'))->getTimestamp() < (new \DateTime($result['account_password_temp_limit']))->getTimestamp()
                 && \password_verify($password, $result['account_password_temp'] ?? '')
             ) {
+                $query = new Builder(self::$db);
                 $query->update('account')
                     ->set([
                         'account_password_temp' => '',
@@ -262,6 +261,7 @@ class AccountMapper extends DataMapperFactory
                 return $result['account_id'];
             }
 
+            $query = new Builder(self::$db);
             $query->update('account')
                 ->set([
                     'account_tries' => $result['account_tries'] + 1,

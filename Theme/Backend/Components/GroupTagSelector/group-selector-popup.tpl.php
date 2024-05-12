@@ -21,7 +21,7 @@
                         <th data-name="name"><?= $this->getHtml('Name'); ?>
                         <th data-name="address"><?= $this->getHtml('Address'); ?>
                         <th data-name="city"><?= $this->getHtml('City'); ?>
-                        <th data-name="zip"><?= $this->getHtml('Zip'); ?>
+                        <th data-name="zip"><?= $this->getHtml('Postal'); ?>
                         <th data-name="country"><?= $this->getHtml('Country'); ?>
                 <tbody data-action='[
                     {

@@ -59,4 +59,38 @@ class Contact
      * @since 1.0.0
      */
     public string $content = '';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize() : mixed
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'subtype'  => $this->subtype,
+            'title'  => $this->title,
+            'content'  => $this->content,
+        ];
+    }
+
+    public static function fromJson(array $address) : self
+    {
+        $new = new self();
+        $new->id = $address['id'];
+        $new->type = $address['type'];
+        $new->subtype = $address['subtype'];
+        $new->title = $address['title'];
+        $new->content = $address['content'];
+
+        return $new;
+    }
 }

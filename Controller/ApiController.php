@@ -1569,14 +1569,37 @@ final class ApiController extends Controller
      */
     public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
+        $fullName = $request->getDataString('search') ?? '';
+        $names = \explode(' ', $fullName);
+
+        $limit = $request->getDataInt('limit') ?? 50;
+
         /** @var \Modules\Admin\Models\Account[] $accounts */
         $accounts = AccountMapper::getAll()
-            ->where('login', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
-            ->where('email', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-            ->where('name1', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-            ->where('name2', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
-            ->where('name3', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE', 'OR')
+            ->where('login', '%' . $fullName . '%', 'LIKE')
+            ->where('email', '%' . $fullName . '%', 'LIKE', 'OR')
+            ->where('name1', '%' . $fullName . '%', 'LIKE', 'OR')
+            ->where('name2', '%' . $fullName . '%', 'LIKE', 'OR')
+            ->where('name3', '%' . $fullName . '%', 'LIKE', 'OR')
+            ->limit($limit)
             ->executeGetArray();
+
+        if (($count = \count($accounts)) < $limit) {
+            $mapper = AccountMapper::getAll();
+            foreach ($names as $name) {
+                $mapper->where('login', '%' . $name . '%', 'LIKE', 'OR')
+                    ->where('email', '%' . $name . '%', 'LIKE', 'OR')
+                    ->where('name1', '%' . $name . '%', 'LIKE', 'OR')
+                    ->where('name2', '%' . $name . '%', 'LIKE', 'OR')
+                    ->where('name3', '%' . $name . '%', 'LIKE', 'OR');
+            }
+
+            /** @var \Modules\Admin\Models\Account[] $parts */
+            $parts = $mapper->limit($limit - $count)
+                ->executeGetArray();
+
+            $accounts += $parts;
+        }
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(

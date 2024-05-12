@@ -198,7 +198,7 @@ return ['Admin' => [
     'Warnings'                 => 'Warnungen',
     'Website'                  => 'Webseite',
     'Weight'                   => 'Gewicht',
-    'Zip'                      => 'Reißverschluss',
+    'Postal'                      => 'Reißverschluss',
     'active'                   => 'aktiv',
     'available'                => 'verfügbar',
     'i:LoginRetries'           => 'Betrag der erlaubten Wiederholungen (-1 = unbegrenzt)',

@@ -198,7 +198,7 @@ return ['Admin' => [
     'Warnings'                 => 'Warnings',
     'Website'                  => 'Website',
     'Weight'                   => 'Weight',
-    'Zip'                      => 'Zip',
+    'Postal'                      => 'Postal',
     'active'                   => 'active',
     'available'                => 'available',
     'i:LoginRetries'           => 'Amount of allowed retries (-1 = unlimited)',
