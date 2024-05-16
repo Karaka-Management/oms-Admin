@@ -17,7 +17,7 @@ An account can be either a:
 * `Person`
 * or a `Organization`
 
-Both types can have the same permissions and functionality. This can be helpful for a lot of modules that rely on organizations or companies (e.g. a sales module that handles people as customers but also companies as customers).
+Both types can have the same permissions and functionality. The benefit of `Organization` is that you can allow other accounts to access your data. One example is a customer account who wants to allow their employees to access their data such as invoices.
 
 ### Status
 
@@ -106,7 +106,7 @@ This allows a user to change permissions. Usually a user should also have (C, R,
 
 ![General Settings](Modules/Admin/Docs/Help/img/accounts/accounts_groups.png)
 
-In the groups section you can see all groups that this account is assigned to  and you can also add or remove the account to other groups. If you would like to add the account to the same groups as a different account just select the account whose groups you would like to copy and the account will be added to the same groups (one time only, there will be **no relation** between the two accounts.
+In the groups section you can see all groups that this account is assigned to and you can also add or remove the account to other groups.
 
 ## Audit Log
 

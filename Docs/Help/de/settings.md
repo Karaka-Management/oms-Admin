@@ -1,105 +1,81 @@
-# Settings
+# Einstellungen
 
-## Genral
+## Allgemein
 
-In the admin module under `General` the global settings can be set.
+Im Admin-Modul unter `Allgemein` können die globalen Einstellungen vorgenommen werden.
 
-### Security
+### Organisation
 
-In the security section it's possible to define and modify the global security settings. These settings will be used for every user.
+Standard-Einheit.
 
-![General Settings](Modules/Admin/Docs/Help/img/general/settings_security.png)
+![Allgemeine Einstellungen](Modules/Admin/Docs/Help/img/settings/settings.png)
 
-#### Password Regex
+### Sicherheit
 
-In this field the password structure can be defined that is required by every account. Examples are:
+Im Bereich Sicherheit können Sie die globalen Sicherheitseinstellungen definieren und ändern. Diese Einstellungen werden für jeden Benutzer verwendet.
 
-##### Password Example 1
+![Allgemeine Einstellungen](Modules/Admin/Docs/Help/img/settings/settings_security.png)
 
-At least 8 characters including at least one numeric value, one lower letter, one upper letter, one special char
+#### Passwort Regex
+
+In diesem Feld kann die Passwortstruktur definiert werden, die für jedes Konto erforderlich ist. Beispiele sind:
+
+##### Passwort Beispiel 1
+
+Mindestens 8 Zeichen, davon mindestens ein numerischer Wert, ein Kleinbuchstabe, ein Großbuchstabe, ein Sonderzeichen
 
 ```
 ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
 ```
 
-##### Password Example 2
+##### Passwort Beispiel 2
 
-At least 8 characters including at least one numeric value, one upper letter, one special char
+Mindestens 8 Zeichen, davon mindestens ein numerischer Wert, ein Großbuchstabe, ein Sonderzeichen
 
 ```
 ^(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
 ```
 
-##### Password Example 3
+##### Passwort Beispiel 3
 
-At least 8 characters including at least one numeric value, one special char
+Mindestens 8 Zeichen, davon mindestens ein numerischer Wert, ein Sonderzeichen
 
 ```
 ^(?=.*\d)(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
 ```
 
-##### Password Example 4
+##### Passwort Beispiel 4
 
-At least 8 characters including at least one special char
+Mindestens 8 Zeichen einschließlich mindestens eines Sonderzeichens
 
 ```
 ^(?=.*[$@$!%*?&;:\(\)\[\]=\{\}\+\-])[.]{8,}
 ```
 
-##### Password Example 5
+##### Passwort Beispiel 5
 
-At least 8 characters
+Mindestens 8 Zeichen
 
 ```
 ^[.]{8,}
 ```
 
-##### Password Example 6
+##### Passwort Beispiel 6
 
-At least 12 characters
+Mindestens 12 Zeichen
 
 ```
 ^[.]{12,}
 ```
 
-#### Login Retries
+## Lokalisierung
 
-In this field the amount of retries can be defined until the user login receives a timeout. During this timeout period no login is possible even if the correct password is entered. Infinite amount of retries can be activated by setting the value to `-1`
+Auf der Registerkarte „Lokalisierung“ können Sie die Standardeinstellungen für die Lokalisierung festlegen. Beachten Sie, dass die Benutzer möglicherweise andere Lokalisierungseinstellungen haben als die Standardeinstellungen. Diese Lokalisierungseinstellungen sind nur wichtig, um einen Fallback zu bieten, wenn die Benutzer-Lokalisierungseinstellungen nicht funktionieren.
 
-**Recommended:** `3 times`
+[Lokalisierungseinstellungen](Module/Admin/Docs/Help/img/settings/localization.png)
 
-#### Timeout Period
+### Standardeinstellungen
 
-In this field the timeout period after inputting a incorrect password too often can be specified. During this period the user cannot login even if the password is correct.
+Im Feld Standardeinstellungen können Sie eine Standard-Lokalisierungskonfiguration auswählen, die Sie anschließend anpassen können.
 
-**Recommended:** `30 minutes`
-
-#### Password Change Interval
-
-In this field the interval in days can be set in which the password must be changed. If passwords don't have to be changed set the value to `-1`
-
-**Recommended:** `90 days`
-
-#### Password History
-
-In this field the relevant password history can be defined. If a password change interval is defined the new password has to be different from the last `x` passwords
-
-**Recommended:** `3 last passwords`
-
-### Logging
-
-In the logging section the logging settings can be defined. These settings don't include audit logs as they cannot be changed in order to prevent data manipulation.
-
-**Recommended:** `active and default path`
-
-![General Settings](Modules/Admin/Docs/Help/img/general/settings_logging.png)
-
-## Localization
-
-In the localization tab it's possible to define the default localization settings. Be aware that users may have localization settings different from the default settings. These localization settings are only important to provide a fallback if the user localization settings are not working.
-
-![Localization Settings](Modules/Admin/Docs/Help/img/general/settings_localization.png)
-
-### Defaults
-
-In the defaults field you can select a default localization configuration which you can adjust afterwards.
+[Localization Load](Module/Admin/Docs/Help/img/settings/localization_load.png)

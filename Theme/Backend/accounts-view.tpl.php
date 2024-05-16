@@ -23,7 +23,7 @@ use phpOMS\Uri\UriFactory;
  * @var \phpOMS\Views\View $this
  */
 $account = $this->data['account'] ?? new NullAccount();
-$isNew = $account->id === 0;
+$isNew   = $account->id === 0;
 
 $permissions = $this->data['permissions'];
 $l11n        = $account->l11n;
@@ -144,7 +144,7 @@ echo $this->data['nav']->render(); ?>
                                         "key": 1, "listener": "click", "action": [
                                             {"key": 1, "type": "event.prevent"},
                                             {"key": 2, "type": "dom.get", "base": "", "selector": "#iId"},
-                                            {"key": 3, "type": "message.request", "uri": "<?= UriFactory::build('{/api}profile?csrf={$CSRF}') ?>", "method": "PUT", "request_type": "json"},
+                                            {"key": 3, "type": "message.request", "uri": "<?= UriFactory::build('{/api}profile?csrf={$CSRF}'); ?>", "method": "PUT", "request_type": "json"},
                                             {"key": 4, "type": "message.log"},
                                             {"key": 5, "type": "redirect", "uri": "{%}", "target": "self"}
                                         ]

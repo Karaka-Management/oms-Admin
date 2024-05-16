@@ -22,7 +22,7 @@ use phpOMS\Uri\UriFactory;
 $generalSettings = $this->data['generalSettings'] ?? [];
 $settings        = $this->data['settings'] ?? [];
 
-$serverModes = ApplicationStatus::getConstants();
+$serverModes     = ApplicationStatus::getConstants();
 $mailServerModes = SubmitType::getConstants();
 
 $l11n = $this->data['default_localization'] ?? new NullLocalization();

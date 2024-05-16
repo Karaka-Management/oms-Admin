@@ -114,7 +114,7 @@ final class GroupMapper extends DataMapperFactory
             ->on(self::TABLE . '_d1.group_id', '=', GroupPermissionMapper::TABLE . '.group_permission_group')
             ->where(GroupPermissionMapper::TABLE . '.group_permission_module', '=', $module);
 
-        return self::getAll()->execute($query);
+        return self::getAll()->executeGetArray($query);
     }
 
     /**

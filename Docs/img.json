@@ -1,0 +1,65 @@
+[
+    [
+        "/admin/module/settings?id=Admin",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div/div[1]/section",
+        "/Admin/Docs/Help/img/settings/settings.png"
+    ],
+    [
+        "/admin/module/settings?id=Admin",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div/div[2]/section",
+        "/Admin/Docs/Help/img/settings/settings_server_status.png"
+    ],
+    [
+        "/admin/module/settings?id=Admin",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div/div[3]/section",
+        "/Admin/Docs/Help/img/settings/settings_security.png"
+    ],
+    [
+        "/admin/module/settings?id=Admin",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div/div[4]/section",
+        "/Admin/Docs/Help/img/settings/settings_email.png"
+    ],
+
+    [
+        "/admin/module/settings?id=Admin#c-tab-2",
+        "//*[@id=\"content\"]/div[2]/div[2]",
+        "/Admin/Docs/Help/img/settings/localization.png"
+    ],
+    [
+        "/admin/module/settings?id=Admin#c-tab-2",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[2]/div/div[1]/section",
+        "/Admin/Docs/Help/img/settings/localization_load.png"
+    ],
+
+    [
+        "/admin/account/view?id=1",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div/div/section",
+        "/Admin/Docs/Help/img/accounts/accounts_general.png"
+    ],
+    [
+        "/admin/account/view?id=1#c-tab-2",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[2]/div",
+        "/Admin/Docs/Help/img/accounts/accounts_groups.png"
+    ],
+    [
+        "/admin/account/view?id=1#c-tab-3",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[3]/div/div[1]/section",
+        "/Admin/Docs/Help/img/accounts/accounts_permissions.png"
+    ],
+
+    [
+        "/admin/group/view?id=1",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[1]/div/div/section",
+        "/Admin/Docs/Help/img/groups/groups_general.png"
+    ],
+    [
+        "/admin/group/view?id=1#c-tab-2",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[2]/div",
+        "/Admin/Docs/Help/img/groups/groups_accounts.png"
+    ],
+    [
+        "/admin/group/view?id=1#c-tab-3",
+        "//*[@id=\"content\"]/div[2]/div[2]/div[3]/div/div[1]/section",
+        "/Admin/Docs/Help/img/groups/groups_permissions.png"
+    ]
+]

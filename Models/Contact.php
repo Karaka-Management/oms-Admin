@@ -74,22 +74,27 @@ class Contact
     public function toArray() : array
     {
         return [
-            'id' => $this->id,
-            'type' => $this->type,
-            'subtype'  => $this->subtype,
-            'title'  => $this->title,
-            'content'  => $this->content,
+            'id'      => $this->id,
+            'type'    => $this->type,
+            'subtype' => $this->subtype,
+            'title'   => $this->title,
+            'content' => $this->content,
         ];
     }
 
-    public static function fromJson(array $address) : self
+    /**
+     * Create object from array
+     *
+     * @param array{id:int, type:int, subtype:int, title:string, content:string} $contact Contact data
+     */
+    public static function fromJson(array $contact) : self
     {
-        $new = new self();
-        $new->id = $address['id'];
-        $new->type = $address['type'];
-        $new->subtype = $address['subtype'];
-        $new->title = $address['title'];
-        $new->content = $address['content'];
+        $new          = new self();
+        $new->id      = $contact['id'];
+        $new->type    = $contact['type'];
+        $new->subtype = $contact['subtype'];
+        $new->title   = $contact['title'];
+        $new->content = $contact['content'];
 
         return $new;
     }

@@ -92,6 +92,15 @@ class Account extends \phpOMS\Account\Account
         return new NullContact();
     }
 
+    /**
+     * Create object from array
+     *
+     * @param array{id:int, name:array{0:string, 1:string, 2:string}, email:string, login:string, type:int, status:int, groups:array, permissions:array, tries:?int, addresses?:array, contacts?:array, parents?:array, l11n:array} $account Account data
+     *
+     * @return self
+     *
+     * @since 1.0.0
+     */
     public static function fromJson(array $account) : self
     {
         $new = new self();
@@ -122,10 +131,10 @@ class Account extends \phpOMS\Account\Account
         return \array_merge(
             parent::toArray(),
             [
-                'tries'       => $this->tries,
-                'addresses'       => $this->addresses,
-                'contacts'       => $this->contacts,
-                'parents'       => $this->parents,
+                'tries'     => $this->tries,
+                'addresses' => $this->addresses,
+                'contacts'  => $this->contacts,
+                'parents'   => $this->parents,
             ]
         );
     }

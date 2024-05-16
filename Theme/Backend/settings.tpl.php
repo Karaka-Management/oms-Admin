@@ -1,6 +1,7 @@
 <?php
 
 use phpOMS\Uri\UriFactory;
+
 ?>
 <div class="row">
     <div class="col-xs-12">

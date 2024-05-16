@@ -25,4 +25,4 @@ if ($this->hasData('settingsTpl')
     include $this->data['settingsTpl'];
 else :
     include __DIR__ . '/settings.tpl.php';
-endif; ?>
+endif;

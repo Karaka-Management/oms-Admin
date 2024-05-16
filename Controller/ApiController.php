@@ -668,12 +668,12 @@ final class ApiController extends Controller
         if (empty($dataSettings)) {
             $tmp = $request->getLike('settings_(.*)');
             foreach ($tmp as $idx => $value) {
-                $name = \substr($idx, 9);
+                $name                = \substr($idx, 9);
                 $dataSettings[$name] = [
-                    'name' => $name,
+                    'name'    => $name,
                     'content' => $value,
-                    'app' => $request->getDataInt('app'),
-                    'unit' => $request->getDataInt('unit'),
+                    'app'     => $request->getDataInt('app'),
+                    'unit'    => $request->getDataInt('unit'),
                 ];
             }
         }
@@ -694,7 +694,6 @@ final class ApiController extends Controller
             $old = $this->app->appSettings->get($id, $name, $unit, $app, $module, $group, $account);
             if ($old === false || $old->id === 0) {
                 continue;
-
                 /*
                 // @todo There might be situations where we want to create the setting if it doesn't exist?!
                 //      Maybe we should require a flag in the request in such a case?!
@@ -1570,7 +1569,7 @@ final class ApiController extends Controller
     public function apiAccountFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $fullName = $request->getDataString('search') ?? '';
-        $names = \explode(' ', $fullName);
+        $names    = \explode(' ', $fullName);
 
         $limit = $request->getDataInt('limit') ?? 50;
 
@@ -2043,7 +2042,14 @@ final class ApiController extends Controller
             $this->apiAccountCreate($request, $response, $data);
 
             /** @var Account $account */
-            $account = $response->getDataArray($request->uri->__toString())['response'];
+            $account = $response->getDataArray($request->uri->__toString())['response'] ?? null;
+
+            if ($account === null) {
+                $response->header->status = RequestStatusCode::R_400;
+                $this->createInvalidUpdateResponse($request, $response, $account);
+
+                return;
+            }
 
             // Create confirmation pending entry
             $dataChange            = new DataChange();

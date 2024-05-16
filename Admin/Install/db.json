@@ -194,13 +194,13 @@
                 "null": false
             },
             "address_attr_type_required": {
-                "description": "Every address must have this attribute type if set to true.",
+                "comment": "Every address must have this attribute type if set to true.",
                 "name": "address_attr_type_required",
                 "type": "TINYINT(1)",
                 "null": false
             },
             "address_attr_type_pattern": {
-                "description": "This is a regex validation pattern.",
+                "comment": "This is a regex validation pattern.",
                 "name": "address_attr_type_pattern",
                 "type": "VARCHAR(255)",
                 "null": false
@@ -882,13 +882,13 @@
                 "null": false
             },
             "unit_attr_type_required": {
-                "description": "Every unit must have this attribute type if set to true.",
+                "comment": "Every unit must have this attribute type if set to true.",
                 "name": "unit_attr_type_required",
                 "type": "TINYINT(1)",
                 "null": false
             },
             "unit_attr_type_pattern": {
-                "description": "This is a regex validation pattern.",
+                "comment": "This is a regex validation pattern.",
                 "name": "unit_attr_type_pattern",
                 "type": "VARCHAR(255)",
                 "null": false
@@ -1187,11 +1187,12 @@
                 "foreignKey": "unit_id"
             },
             "group_permission_app": {
-                "description": "@todo: consider to use int as value and create foreign key",
                 "name": "group_permission_app",
                 "type": "INT",
                 "default": null,
-                "null": true
+                "null": true,
+                "foreignTable": "app",
+                "foreignKey": "app_id"
             },
             "group_permission_module": {
                 "name": "group_permission_module",
@@ -1236,7 +1237,7 @@
                 "null": true
             },
             "group_permission_defaultcperm": {
-                "description": "Default permissions a user receives when creating (only relevant if hascreate is true, if null => CRU)",
+                "comment": "Default permissions a user receives when creating (only relevant if hascreate is true, if null => CRU)",
                 "name": "group_permission_defaultcperm",
                 "type": "VARCHAR(5)",
                 "default": null,
@@ -1261,7 +1262,7 @@
                 "null": true
             },
             "group_permission_defaultpperm": {
-                "description": "Default permissions a user is allowed to change (only relevant if haspermission is true, if null => all)",
+                "comment": "Default permissions a user is allowed to change (only relevant if haspermission is true, if null => all)",
                 "name": "group_permission_defaultpperm",
                 "type": "TEXT",
                 "default": null,
@@ -1415,13 +1416,13 @@
                 "null": false
             },
             "account_attr_type_required": {
-                "description": "Every account must have this attribute type if set to true.",
+                "comment": "Every account must have this attribute type if set to true.",
                 "name": "account_attr_type_required",
                 "type": "TINYINT(1)",
                 "null": false
             },
             "account_attr_type_pattern": {
-                "description": "This is a regex validation pattern.",
+                "comment": "This is a regex validation pattern.",
                 "name": "account_attr_type_pattern",
                 "type": "VARCHAR(255)",
                 "null": false
@@ -1806,7 +1807,7 @@
         }
     },
     "account_account_rel": {
-        "description": "Accounts can belong to other accounts. E.g. a user can belong to a company account",
+        "comment": "Accounts can belong to other accounts. E.g. a user can belong to a company account",
         "name": "account_account_rel",
         "fields": {
             "account_account_rel_id": {
@@ -1885,7 +1886,9 @@
                 "name": "account_permission_app",
                 "type": "INT",
                 "default": null,
-                "null": true
+                "null": true,
+                "foreignTable": "app",
+                "foreignKey": "app_id"
             },
             "account_permission_module": {
                 "name": "account_permission_module",
@@ -1930,7 +1933,7 @@
                 "null": true
             },
             "account_permission_defaultcperm": {
-                "description": "Default permissions a user receives when creating (only relevant if hascreate is true, if null => CRU)",
+                "comment": "Default permissions a user receives when creating (only relevant if hascreate is true, if null => CRU)",
                 "name": "account_permission_defaultcperm",
                 "type": "VARCHAR(5)",
                 "default": null,
@@ -1955,7 +1958,7 @@
                 "null": true
             },
             "account_permission_defaultpperm": {
-                "description": "Default permissions a user is allowed to change (only relevant if haspermission is true, if null => all)",
+                "comment": "Default permissions a user is allowed to change (only relevant if haspermission is true, if null => all)",
                 "name": "account_permission_defaultpperm",
                 "type": "TEXT",
                 "default": null,

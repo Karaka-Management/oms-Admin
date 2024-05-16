@@ -1,83 +1,83 @@
-# Introduction
+# Einleitung
 
-The **Admin** module is one of the essential core modules that is always required. This module handles basic account, group and module management.
+Das **Admin**-Modul ist eines der unverzichtbaren Kernmodule, das immer benötigt wird. Dieses Modul verwaltet grundlegende Konten-, Gruppen- und Modulverwaltungsaufgaben.
 
-## Target Group
+## Zielgruppe
 
-The target group for this module is everyone, since every application must have this module. However mainly administrators should have access permissions to this module since core application settings can be changed.
+Die Zielgruppe für dieses Modul ist jeder, da jede Anwendung dieses Modul haben muss. Allerdings sollten hauptsächlich Administratoren Zugriffsberechtigungen für dieses Modul haben, da grundlegende Anwendungseinstellungen geändert werden können.
 
 # Setup
 
-This module doesn't have any additional setup requirements since it is installed during the application install process. This module cannot be uninstalled if it is manually deleted from the hard drive please manually download the module from the page and put it into the `Modules/` directory.
+Für dieses Modul sind keine zusätzlichen Einrichtungsanforderungen erforderlich, da es während des Anwendungsinstallationsprozesses installiert wird. Dieses Modul kann nicht deinstalliert werden, wenn es manuell von der Festplatte gelöscht wird. Bitte laden Sie das Modul manuell von der Seite herunter und legen Sie es in das `Modules/`-Verzeichnis.
 
 # Features
 
-## Application Settings
+## Anwendungseinstellungen
 
-The module provides basic application settings such as:
+Das Modul bietet grundlegende Anwendungseinstellungen wie:
 
-### Security
+### Sicherheit
 
-The following are only the customizable security settings. Many security settings are fixed within the application and in addition security settings (e.g. iptables) should be done on the server-side.
+Die folgenden Sicherheitseinstellungen sind nur anpassbar. Viele Sicherheitseinstellungen sind innerhalb der Anwendung festgelegt, und zusätzliche Sicherheitseinstellungen (z. B. iptables) sollten auf Serverseite vorgenommen werden.
 
-* Password structure
-* Password change interval
-* Auto updates for modules
+* Passwortstruktur
+* Intervall für Passwortänderungen
+* Automatische Updates für Module
 
-### Localization
+### Lokalisierung
 
-The localization settings are only for the server, accounts can have their own localization settings which is especially important for international use.
+Die Lokalisierungseinstellungen gelten nur für den Server. Benutzerkonten können ihre eigenen Lokalisierungseinstellungen haben, was besonders wichtig für den internationalen Gebrauch ist.
 
-* Location
-* Language
-* Time format
-* Numeric (number and currency format)
-* Units (weight, speed, length, temperature, etc.)
+* Standort
+* Sprache
+* Zeitformat
+* Numerisch (Zahlen- und Währungsformat)
+* Einheiten (Gewicht, Geschwindigkeit, Länge, Temperatur usw.)
 
-## Account Management
+## Kontoverwaltung
 
-The account management allows to create, modify and delete accounts. Accounts can get assigned to groups and individual permissions. It's easy to see which groups and permissions one account is assigned to. Every account has a numeric ID larger 0.
+Die Kontoverwaltung ermöglicht das Erstellen, Ändern und Löschen von Konten. Konten können Gruppen und individuellen Berechtigungen zugewiesen werden. Es ist einfach zu sehen, welchen Gruppen und Berechtigungen ein Konto zugewiesen ist. Jedes Konto hat eine numerische ID größer als 0.
 
-### Account Type
+### Kontotyp
 
-Accounts can have the following types:
+Konten können die folgenden Typen haben:
 
 * Person
-* Organization
+* Organisation
 
-This allows organizations to have an account and also normal users. It's also possible to assign an account to an organization which allows for permission management in one organization.
+Dies ermöglicht es Organisationen, ein Konto zu haben, und auch normale Benutzer. Es ist auch möglich, ein Konto einer Organisation zuzuweisen, was die Berechtigungsverwaltung in einer Organisation ermöglicht.
 
-The use case for this could be one customer account for a company and user accounts assigned to the company which each have different permissions within the company. The purchase department of a company e.g. could be able to see their orders while only the financial department of that company is allowed to see the accounts payable of their company.
+Der Anwendungsfall hierfür könnte ein Kundenkonto für ein Unternehmen sein und Benutzerkonten, die dem Unternehmen zugewiesen sind und jeweils unterschiedliche Berechtigungen innerhalb des Unternehmens haben. Die Einkaufsabteilung eines Unternehmens könnte z. B. ihre Bestellungen sehen können, während nur die Finanzabteilung dieses Unternehmens die Verbindlichkeiten ihres Unternehmens sehen darf.
 
-### Account Status
+### Kontostatus
 
-Accounts can have the following status:
+Konten können die folgenden Status haben:
 
-* Active (login possible)
-* Inactive (login not possible)
-* Banned (login not possible)
-* Timeout (login possible in x-minutes)
+* Aktiv (Anmeldung möglich)
+* Inaktiv (Anmeldung nicht möglich)
+* Gesperrt (Anmeldung nicht möglich)
+* Timeout (Anmeldung möglich in x Minuten)
 
-The status doesn't represent account activity it's only purpose is to allow or disallow the login to the application. Only active accounts can login to the application. It is often necessary to create accounts in the system for interaction but disallow them to login to the system, this can be achieved by simply assigning the inactive status.
+Der Status repräsentiert nicht die Kontenaktivität, sondern dient nur dazu, die Anmeldung bei der Anwendung zu erlauben oder zu verhindern. Nur aktive Konten können sich bei der Anwendung anmelden. Es ist oft erforderlich, Konten im System für Interaktionen zu erstellen, aber deren Anmeldung im System zu verhindern. Dies kann durch einfaches Zuweisen des inaktiven Status erreicht werden.
 
-## Group Management
+## Gruppenverwaltung
 
-The group management allows to create, modify and delete groups. Groups can get assigned to other groups which lets the group inherit permissions from the other groups. It is also possible to assign individual permissions to a group. In the group accounts can be added and it's easy to see which accounts are part of the group.
+Die Gruppenverwaltung ermöglicht das Erstellen, Ändern und Löschen von Gruppen. Gruppen können anderen Gruppen zugewiesen werden, wodurch die Gruppe Berechtigungen von den anderen Gruppen erbt. Es ist auch möglich, individuelle Berechtigungen einer Gruppe zuzuweisen. In der Gruppe können Konten hinzugefügt werden, und es ist einfach zu sehen, welche Konten Teil der Gruppe sind.
 
-Groups have a numeric ID larger 0. Every module has its own permission/group range. Modules can pre-define groups upon installation for easier use, every module can have up to 99,999 groups AND permissions.
+Gruppen haben eine numerische ID größer als 0. Jedes Modul hat seinen eigenen Berechtigungs-/Gruppenbereich. Module können bei der Installation Gruppen vordefinieren, um deren Verwendung zu erleichtern. Jedes Modul kann bis zu 99.999 Gruppen UND Berechtigungen haben.
 
-## Module Management
+## Modulverwaltung
 
-The module management allows to install, update, delete and configure modules. The configuration of every module can be different depending on the functionality of the module.
+Die Modulverwaltung ermöglicht das Installieren, Aktualisieren, Löschen und Konfigurieren von Modulen. Die Konfiguration jedes Moduls kann je nach Funktionalität des Moduls unterschiedlich sein.
 
-Modules can be installed either manually by uploading the module directly to the `Modules/` directory or via online installation. The online installation requires the php module `curl`.
+Module können entweder manuell durch Hochladen des Moduls direkt in das `Modules/`-Verzeichnis oder über die Online-Installation installiert werden. Die Online-Installation erfordert das PHP-Modul `curl`.
 
-In the module you can see which groups have permissions belonging to the module, which permissions are available for the module and what their effect is.
+Im Modul können Sie sehen, welche Gruppen Berechtigungen für das Modul haben, welche Berechtigungen für das Modul verfügbar sind und welche Auswirkungen sie haben.
 
-# Recommendation
+# Empfehlung
 
-Other modules that work great with this one together are:
+Andere Module, die gut mit diesem Modul zusammenarbeiten, sind:
 
-* [Job](Job)
-* [Monitoring](Monitoring)
-* [Backup](Backup)
+* [Job]({/}?id=Job)
+* [Monitoring]({/}?id=Monitoring)
+* [Backup]({/}?id=Backup)

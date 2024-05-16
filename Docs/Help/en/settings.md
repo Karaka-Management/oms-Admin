@@ -1,14 +1,20 @@
 # Settings
 
-## Genral
+## General
 
 In the admin module under `General` the global settings can be set.
+
+### Organization
+
+Default unit.
+
+![General Settings](Modules/Admin/Docs/Help/img/settings/settings.png)
 
 ### Security
 
 In the security section it's possible to define and modify the global security settings. These settings will be used for every user.
 
-![General Settings](Modules/Admin/Docs/Help/img/general/settings_security.png)
+![General Settings](Modules/Admin/Docs/Help/img/settings/settings_security.png)
 
 #### Password Regex
 
@@ -62,44 +68,14 @@ At least 12 characters
 ^[.]{12,}
 ```
 
-#### Login Retries
-
-In this field the amount of retries can be defined until the user login receives a timeout. During this timeout period no login is possible even if the correct password is entered. Infinite amount of retries can be activated by setting the value to `-1`
-
-**Recommended:** `3 times`
-
-#### Timeout Period
-
-In this field the timeout period after inputting a incorrect password too often can be specified. During this period the user cannot login even if the password is correct.
-
-**Recommended:** `30 minutes`
-
-#### Password Change Interval
-
-In this field the interval in days can be set in which the password must be changed. If passwords don't have to be changed set the value to `-1`
-
-**Recommended:** `90 days`
-
-#### Password History
-
-In this field the relevant password history can be defined. If a password change interval is defined the new password has to be different from the last `x` passwords
-
-**Recommended:** `3 last passwords`
-
-### Logging
-
-In the logging section the logging settings can be defined. These settings don't include audit logs as they cannot be changed in order to prevent data manipulation.
-
-**Recommended:** `active and default path`
-
-![General Settings](Modules/Admin/Docs/Help/img/general/settings_logging.png)
-
 ## Localization
 
 In the localization tab it's possible to define the default localization settings. Be aware that users may have localization settings different from the default settings. These localization settings are only important to provide a fallback if the user localization settings are not working.
 
-![Localization Settings](Modules/Admin/Docs/Help/img/general/settings_localization.png)
+![Localization Settings](Modules/Admin/Docs/Help/img/settings/localization.png)
 
 ### Defaults
 
 In the defaults field you can select a default localization configuration which you can adjust afterwards.
+
+![Localization Load](Modules/Admin/Docs/Help/img/settings/localization_load.png)

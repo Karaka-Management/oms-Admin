@@ -91,13 +91,61 @@ if (isset($installed[$id])) {
         </section>
     </div>
 
-    <?php if (!empty($this->getData('introduction'))) : ?>
+    <?php if (!empty($this->data['introduction'])) : ?>
     <div class="col-xs-12 col-md-8">
         <section class="portlet">
             <div class="portlet-body">
                 <article><?= $this->data['introduction']; ?></article>
             </div>
         </section>
+
+        <?php if (!empty($this->data['info']) && !empty($this->data['info']['dependencies'])) : ?>
+            <section class="portlet">
+                <div class="portlet-head"><?= $this->getHtml('Dependencies'); ?></div>
+                <div class="portlet-body">
+                    <ul>
+                        <?php foreach ($this->data['info']['dependencies'] as $name => $version) :
+                            $length = \strlen($name);
+                            $result = '';
+
+                            for ($i = 0; $i < $length; ++$i) {
+                                if ($i > 0 && \ctype_upper($name[$i]) && \ctype_lower($name[$i - 1])) {
+                                    $result .= ' ';
+                                }
+
+                                $result .= $name[$i];
+                            }
+                        ?>
+                        <li><a class="content" href="<?= UriFactory::build('{%}?id=' . $name); ?>"><?= $this->printHtml($result); ?></a>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </section>
+        <?php endif; ?>
+
+        <?php if (!empty($this->data['info']) && !empty($this->data['info']['providing'])) : ?>
+            <section class="portlet">
+                <div class="portlet-head"><?= $this->getHtml('Providing'); ?></div>
+                <div class="portlet-body">
+                    <ul>
+                        <?php foreach ($this->data['info']['providing'] as $name => $version) :
+                            $length = \strlen($name);
+                            $result = '';
+
+                            for ($i = 0; $i < $length; ++$i) {
+                                if ($i > 0 && \ctype_upper($name[$i]) && \ctype_lower($name[$i - 1])) {
+                                    $result .= ' ';
+                                }
+
+                                $result .= $name[$i];
+                            }
+                        ?>
+                        <li><a class="content" href="<?= UriFactory::build('{%}?id=' . $name); ?>"><?= $this->printHtml($result); ?></a>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </section>
+        <?php endif; ?>
     </div>
     <?php endif; ?>
 </div>

@@ -542,7 +542,19 @@ final class BackendController extends Controller
         $view->data['modules']   = $this->app->moduleManager->getAllModules();
         $view->data['active']    = $this->app->moduleManager->getActiveModules();
         $view->data['installed'] = $this->app->moduleManager->getInstalledModules();
-        $view->data['id']        = $id;
+
+        if (\is_file(__DIR__ . '/../../' . $request->getData('id') . '/info.json')) {
+            $content = \file_get_contents(__DIR__ . '/../../' . $request->getData('id') . '/info.json');
+            if ($content === false) {
+                $content = '';
+            }
+
+            $view->data['info'] = \json_decode($content, true);
+        } else {
+            $view->data['info'] = [];
+        }
+
+        $view->data['id'] = $id;
 
         $type     = 'Help';
         $page     = 'introduction';
@@ -563,7 +575,7 @@ final class BackendController extends Controller
             $path = \realpath($basePath . '/introduction.md');
         }
 
-        $toParse = $path === false ? '' : \file_get_contents($path);
+        $toParse                    = $path === false ? '' : \file_get_contents($path);
         $view->data['introduction'] = Markdown::parse($toParse === false ? '' : $toParse);
 
         return $view;
@@ -725,7 +737,7 @@ final class BackendController extends Controller
         $id = $request->getDataString('id') ?? '';
 
         /** @var \Model\Setting[] $settings */
-        $settings = SettingMapper::getAll()->where('module', $id)->executeGetArray();
+        $settings               = SettingMapper::getAll()->where('module', $id)->executeGetArray();
         $view->data['settings'] = $settings;
 
         $class = '\\Modules\\' . $request->getData('id') . '\\Models\\SettingsEnum';

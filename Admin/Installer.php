@@ -163,7 +163,7 @@ final class Installer extends InstallerAbstract
             ->into('language');
 
         $querySqlite = new Builder($sqlite);
-        $languages   = $querySqlite->select('*')->from('language')->execute()->fetchAll();
+        $languages   = $querySqlite->select('*')->from('language')->execute()?->fetchAll();
 
         if ($languages === null) {
             return;

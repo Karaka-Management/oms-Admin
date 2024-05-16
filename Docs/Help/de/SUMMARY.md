@@ -1,5 +1,5 @@
-# User Content
+# Endnutzer
 
-* [Settings]({%}&page=Help/settings)
-* [Accounts]({%}&page=Help/accounts)
-* [Groups]({%}&page=Help/groups)
+* [Einstellungen]({%}&page=Help/settings)
+* [Benutzerkonto]({%}&page=Help/accounts)
+* [Gruppen]({%}&page=Help/groups)
