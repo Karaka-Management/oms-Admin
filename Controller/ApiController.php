@@ -3143,6 +3143,9 @@ final class ApiController extends Controller
             \file_put_contents($path, '<?php return [];');
         }
 
+        \phpOMS\Module\StatusAbstract::$routes = [];
+        \phpOMS\Module\StatusAbstract::$hooks = [];
+
         $installedModules = $this->app->moduleManager->getActiveModules();
         foreach ($installedModules as $name => $_) {
             $this->app->moduleManager->reInit($name);
