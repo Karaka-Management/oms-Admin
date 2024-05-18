@@ -226,7 +226,7 @@ trait ApiControllerAccountTrait
         $request->setData('pass', 'orange');
 
         $this->module->apiLogin($request, $response);
-        self::assertInstanceOf('\phpOMS\Model\Message\Reload', $response->getData(''));
+        self::assertInstanceOf('\phpOMS\Model\Message\Redirect', $response->getData(''));
     }
 
     /**
