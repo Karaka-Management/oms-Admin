@@ -6,7 +6,7 @@
  *
  * @package   Modules\Media
  * @copyright Dennis Eichhorn
- * @license   OMS License 2.0
+ * @license   OMS License 2.2
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -18,7 +18,7 @@ declare(strict_types=1);
  * The TCPDF class must be included previously in the parent code.
  *
  * @package Modules\Media
- * @license OMS License 2.0
+ * @license OMS License 2.2
  * @link    https://jingga.app
  * @since   1.0.0
  *

@@ -22,7 +22,7 @@ namespace Modules\Admin\Models;
  * @link    https://jingga.app
  * @since   1.0.0
  */
-final class NullAccountPermission extends AccountPermission
+final class NullApiKey extends ApiKey
 {
     /**
      * Constructor

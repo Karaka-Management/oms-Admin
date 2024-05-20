@@ -6,7 +6,7 @@
  *
  * @package   Modules\Admin\Models
  * @copyright Dennis Eichhorn
- * @license   OMS License 2.0
+ * @license   OMS License 2.2
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -20,7 +20,7 @@ namespace Modules\Admin\Models;
  * Information such as phone number, email, ...
  *
  * @package Modules\Admin\Models
- * @license OMS License 2.0
+ * @license OMS License 2.2
  * @link    https://jingga.app
  * @since   1.0.0
  */
