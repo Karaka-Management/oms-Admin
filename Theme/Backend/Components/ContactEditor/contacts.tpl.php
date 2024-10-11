@@ -26,13 +26,13 @@ $subtypes  = AddressType::getConstants();
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">
-            <form id="contactForm" action="<?= UriFactory::build('{api}account/contact?csrf={$CSRF}'); ?>" method="post"
+            <form id="contactForm" action="<?= UriFactory::build($this->endpoint); ?>" method="post"
                 data-ui-container="#contactTable tbody"
                 data-add-form="contactForm"
                 data-add-tpl="#contactTable tbody .oms-add-tpl-contact">
                 <div class="portlet-head"><?= $this->getHtml('Contact', 'Admin', 'Backend'); ?></div>
                 <div class="portlet-body">
-                    <input type="hidden" id="iContactRef" name="account" value="<?= $this->refId; ?>" disabled>
+                    <input type="hidden" id="iContactRef" name="<?= $this->refName; ?>" value="<?= $this->refId; ?>" disabled>
 
                     <div class="form-group">
                         <label for="iContactId"><?= $this->getHtml('ID', '0', '0'); ?></label>

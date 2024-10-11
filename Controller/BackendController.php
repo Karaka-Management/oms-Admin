@@ -255,7 +255,9 @@ final class BackendController extends Controller
         $pageLimit               = 25;
         $view->data['pageLimit'] = $pageLimit;
 
-        $mapper = AuditMapper::getAll()->with('createdBy');
+        $mapper = AuditMapper::getAll()
+            ->with('createdBy')
+            ->where('createdBy', $request->getDataInt('id'));
 
         /** @var \Modules\Auditor\Models\Audit[] $list */
         $list = AuditMapper::find(

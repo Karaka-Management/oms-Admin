@@ -163,7 +163,11 @@ echo $this->data['nav']->render(); ?>
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="iAddGroupToAccount" action="<?= UriFactory::build('{/api}admin/account/group?csrf={$CSRF}'); ?>" method="put">
+                        <form id="iAddGroupToAccount"
+                            action="<?= UriFactory::build('{/api}admin/account/group?csrf={$CSRF}'); ?>"
+                            method="put"
+                            data-redirect="<?= UriFactory::build('{%}'); ?>"
+                        >
                             <div class="portlet-head"><?= $this->getHtml('Groups'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
@@ -171,7 +175,7 @@ echo $this->data['nav']->render(); ?>
                                     <div id="iGroupSelector" class="smart-input-wrapper" data-src="<?= UriFactory::build('{/api}admin/group/find?csrf={$CSRF}'); ?>">
                                         <div
                                             data-value=""
-                                            data-name="search"
+                                            data-name="group"
                                             data-limit="10"
                                             data-container=""
                                             class="input-div"
@@ -195,13 +199,31 @@ echo $this->data['nav']->render(); ?>
                 <div class="col-xs-12">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="groupTable" class="default sticky">
+                        <table id="groupTable" class="default sticky"
+                            data-tag="form"
+                            data-ui-element="tr"
+                            data-add-tpl=".oms-add-tpl-group"
+                            data-delete-form="iAddGroupToAccount">
                             <thead>
                                 <tr>
                                     <td>
                                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                                     <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                             <tbody>
+                            <template class="oms-add-tpl-group">
+                                <tr data-id="" draggable="false">
+                                    <td>
+                                        <i class="g-icon btn remove-form">close</i>
+                                        <input id="groupTable-remove-0" type="checkbox" class="vh">
+                                        <label for="groupTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                        <span class="checked-visibility">
+                                            <label for="groupTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                            <label for="groupTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                        </span>
+                                    <td data-tpl-text="/id" data-tpl-value="/id"></td>
+                                    <td data-tpl-text="/name/0" data-tpl-value="/name/0"></td>
+                                </tr>
+                            </template>
                                 <?php
                                     $c      = 0;
                                     $groups = $account->getGroups();
@@ -209,7 +231,12 @@ echo $this->data['nav']->render(); ?>
                                         $url = UriFactory::build('{/base}/admin/group/view?{?}&id=' . $value->id);
                                 ?>
                                 <tr data-href="<?= $url; ?>">
-                                    <td><a href="#"><i class="g-icon">close</i></a>
+                                    <td><input id="groupTable-remove-<?= $value->id; ?>" type="checkbox" class="vh">
+                                        <label for="groupTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                        <span class="checked-visibility">
+                                            <label for="groupTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                            <label for="groupTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                        </span>
                                     <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                 <?php endforeach; ?>
@@ -237,7 +264,8 @@ echo $this->data['nav']->render(); ?>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iPermissionId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <input id="iPermissionId" name="permissionref" type="text" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                    <input id="iPermissionId" name="id" type="text" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                    <input id="iPermissionRef" name="permissionref" type="hidden" value="<?= $account->id; ?>">
                                 </div>
 
                                 <div class="form-group">
@@ -332,7 +360,7 @@ echo $this->data['nav']->render(); ?>
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="hidden" name="permissionowner" value="<?= PermissionOwner::GROUP; ?>">
+                                <input type="hidden" name="permissionowner" value="<?= PermissionOwner::ACCOUNT; ?>">
 
                                 <input id="bPermissionAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                                 <input id="bPermissionSave" formmethod="post" type="submit" class="save-form vh button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
@@ -350,7 +378,8 @@ echo $this->data['nav']->render(); ?>
                                 data-tag="form"
                                 data-ui-element="tr"
                                 data-add-tpl=".oms-add-tpl-permission"
-                                data-update-form="permissionForm">
+                                data-update-form="permissionForm"
+                                data-delete-form="permissionForm">
                                 <thead>
                                     <tr>
                                         <td>

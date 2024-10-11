@@ -90,7 +90,7 @@ final class Installer extends InstallerAbstract
             (OperatingSystem::getSystem() === SystemType::WIN
                 ? 'php.exe'
                 : 'php'
-            ) . ' ' . __DIR__ . '/../../../../cli.php -v'
+            ) . ' ' . __DIR__ . '/../../../cli.php -v'
         );
         $cmdResult = $cmdResult === null || $cmdResult === false ? '' : $cmdResult;
 

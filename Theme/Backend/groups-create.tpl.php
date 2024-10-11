@@ -24,6 +24,7 @@ echo $this->data['nav']->render(); ?>
             <form id="fGroupCreate"
                 action="<?= UriFactory::build('{/api}admin/group?csrf={$CSRF}'); ?>"
                 method="put"
+                data-redirect="<?= UriFactory::build('{/base}/admin/group/view'); ?>?id={/0/response/id}"
                 autocomplete="off">
                 <div class="portlet-head"><?= $this->getHtml('Group'); ?></div>
                 <div class="portlet-body">

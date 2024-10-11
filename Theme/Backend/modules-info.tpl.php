@@ -57,18 +57,21 @@ if (isset($installed[$id])) {
             </div>
             <div class="portlet-foot">
                 <?php if (isset($active[$id])) : ?>
-                    <form id="fModuleDeactivate" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST">
+                    <form id="fModuleDeactivate" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST"
+                                data-redirect="<?= UriFactory::build('{%}'); ?>">
                         <button id="fModuleDeactivateButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::DEACTIVATE; ?>"><?= $this->getHtml('Deactivate'); ?></button>
                     </form>
                 <?php elseif (isset($installed[$id])) : ?>
                     <div class="ipt-wrap">
                         <div class="ipt-first">
-                            <form id="fModuleUninstall" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST">
+                            <form id="fModuleUninstall" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST"
+                                data-redirect="<?= UriFactory::build('{%}'); ?>">
                                 <button id="fModuleUninstallButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::UNINSTALL; ?>"><?= $this->getHtml('Uninstall'); ?></button>
                             </form>
                         </div>
                         <div class="ipt-second">
-                            <form id="fModuleActivate" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST">
+                            <form id="fModuleActivate" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST"
+                                data-redirect="<?= UriFactory::build('{%}'); ?>">
                                 <button id="fModuleActivateButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::ACTIVATE; ?>"><?= $this->getHtml('Activate'); ?></button>
                             </form>
                         </div>
@@ -76,12 +79,17 @@ if (isset($installed[$id])) {
                 <?php elseif (isset($module)) : ?>
                     <div class="ipt-wrap">
                         <div class="ipt-first">
-                            <form id="fModuleInstall" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST">
-                                <button id="fModuleInstallButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::INSTALL; ?>"><?= $this->getHtml('Install'); ?></button>
+                            <form id="fModuleInstall" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>"
+                                method="POST"
+                                data-redirect="<?= UriFactory::build('{%}'); ?>">
+                                <button id="fModuleInstallButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::INSTALL; ?>">
+                                    <?= $this->getHtml('Install'); ?>
+                                </button>
                             </form>
                         </div>
                         <div class="ipt-second">
-                            <form id="fModuleDelete" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST">
+                            <form id="fModuleDelete" action="<?= UriFactory::build('{/api}admin/module/status?module=' . $id . '&csrf={$CSRF}'); ?>" method="POST"
+                                data-redirect="<?= UriFactory::build('{%}'); ?>">
                                 <button id="fModuleDeleteButton" name="status" type="submit" value="<?= ModuleStatusUpdateType::DELETE; ?>"><?= $this->getHtml('Delete'); ?></button>
                             </form>
                         </div>

@@ -125,7 +125,7 @@ echo $this->data['nav']->render(); ?>
                             data-tag="form"
                             data-ui-element="tr"
                             data-add-tpl=".oms-add-tpl-account"
-                            data-delete-form="accountForm">
+                            data-delete-form="iAddAccountToGroup">
                             <thead>
                                 <tr>
                                     <td>
@@ -184,7 +184,8 @@ echo $this->data['nav']->render(); ?>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iPermissionId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <input id="iPermissionId" name="permissionref" type="text" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                    <input id="iPermissionId" name="id" type="text" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                    <input id="iPermissionRef" name="permissionref" type="hidden" value="<?= $group->id; ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="iPermissionUnit"><?= $this->getHtml('Unit'); ?></label>
@@ -290,7 +291,8 @@ echo $this->data['nav']->render(); ?>
                                 data-tag="form"
                                 data-ui-element="tr"
                                 data-add-tpl=".oms-add-tpl-permission"
-                                data-update-form="permissionForm">
+                                data-update-form="permissionForm"
+                                data-delete-form="permissionForm">
                                 <thead>
                                     <tr>
                                         <td>

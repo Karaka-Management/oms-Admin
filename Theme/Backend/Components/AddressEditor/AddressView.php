@@ -60,7 +60,7 @@ class AddressView extends View
      * @var string
      * @since 1.0.0
      */
-    public string $name = '';
+    public string $refName = 'account';
 
     /**
      * API Uri for attribute actions
@@ -68,7 +68,7 @@ class AddressView extends View
      * @var string
      * @since 1.0.0
      */
-    public string $apiUri = '';
+    public string $endpoint = '{/api}account/address?csrf={$CSRF}';
 
     /**
      * Reference id
@@ -96,6 +96,9 @@ class AddressView extends View
         $this->form        = $data[0];
         $this->virtualPath = $data[1] ?? $this->virtualPath;
         $this->addresses   = $data[2] ?? $this->addresses;
+        $this->refName    = $data[3] ?? $this->refName;
+        $this->refId    = $data[4] ?? $this->refId;
+        $this->endpoint    = $data[5] ?? $this->endpoint;
 
         return parent::render();
     }

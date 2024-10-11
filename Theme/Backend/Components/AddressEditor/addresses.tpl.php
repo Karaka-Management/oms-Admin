@@ -24,13 +24,13 @@ $types     = AddressType::getConstants();
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">
-            <form id="addressForm" action="<?= UriFactory::build('{api}account/address?csrf={$CSRF}'); ?>" method="post"
+            <form id="addressForm" action="<?= UriFactory::build($this->endpoint); ?>" method="post"
                 data-ui-container="#addressTable tbody"
                 data-add-form="addressForm"
                 data-add-tpl="#addressTable tbody .oms-add-tpl-address">
                 <div class="portlet-head"><?= $this->getHtml('Address', 'Admin', 'Backend'); ?></div>
                 <div class="portlet-body">
-                    <input type="hidden" id="iAddressRef" name="account" value="<?= $this->refId; ?>" disabled>
+                    <input type="hidden" id="iAddressRef" name="<?= $this->refName; ?>" value="<?= $this->refId; ?>" disabled>
 
                     <div class="form-group">
                         <label for="iAddressId"><?= $this->getHtml('ID', '0', '0'); ?></label>

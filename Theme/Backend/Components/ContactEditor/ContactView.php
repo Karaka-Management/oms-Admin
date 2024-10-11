@@ -60,7 +60,7 @@ class ContactView extends View
      * @var string
      * @since 1.0.0
      */
-    public string $name = '';
+    public string $refName = 'account';
 
     /**
      * API Uri for attribute actions
@@ -68,7 +68,7 @@ class ContactView extends View
      * @var string
      * @since 1.0.0
      */
-    public string $apiUri = '';
+    public string $endpoint = '{/api}account/contact?csrf={$CSRF}';
 
     /**
      * Reference id
@@ -96,6 +96,9 @@ class ContactView extends View
         $this->form        = $data[0];
         $this->virtualPath = $data[1] ?? $this->virtualPath;
         $this->contacts    = $data[2] ?? $this->contacts;
+        $this->refName    = $data[3] ?? $this->refName;
+        $this->refId    = $data[4] ?? $this->refId;
+        $this->endpoint    = $data[5] ?? $this->endpoint;
 
         return parent::render();
     }

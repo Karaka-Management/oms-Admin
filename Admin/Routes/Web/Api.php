@@ -190,7 +190,7 @@ return [
             ],
         ],
     ],
-    '^.*/admin/find/accgrp(\?.*$|$)' => [
+    '^.*/admin/accgrp/find(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAccountGroupFind',
             'verb'       => RouteVerb::GET,
@@ -290,11 +290,33 @@ return [
                 'state'  => PermissionCategory::MODULE,
             ],
         ],
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiDeleteAccountFromGroup',
+            'verb'       => RouteVerb::DELETE,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionCategory::MODULE,
+            ],
+        ],
     ],
     '^.*/admin/account/group(\?.*$|$)' => [
         [
             'dest'       => '\Modules\Admin\Controller\ApiController:apiAddGroupToAccount',
             'verb'       => RouteVerb::PUT,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionCategory::MODULE,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\Admin\Controller\ApiController:apiDeleteGroupFromAccount',
+            'verb'       => RouteVerb::DELETE,
             'csrf'       => true,
             'active'     => true,
             'permission' => [

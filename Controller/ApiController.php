@@ -135,6 +135,7 @@ final class ApiController extends Controller
         );
 
         if ($login > LoginReturnType::OK) {
+            $this->app->sessionManager->sessionStart();
             $this->app->sessionManager->set('UID', $login, true);
             $response->set($request->uri->__toString(), new \phpOMS\Model\Message\Redirect());
         } elseif ($login === LoginReturnType::NOT_ACTIVATED) {
@@ -187,6 +188,7 @@ final class ApiController extends Controller
     {
         $response->header->set('Content-Type', MimeType::M_JSON . '; charset=utf-8', true);
 
+        $this->app->sessionManager->sessionStart();
         $this->app->sessionManager->remove('UID');
         $this->app->sessionManager->save();
 
@@ -839,7 +841,7 @@ final class ApiController extends Controller
 
         // request account is valid
         if ($requestAccount <= 0) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, '', 'Invalid account', []);
             $response->header->status = RequestStatusCode::R_403;
 
             return;
@@ -854,7 +856,7 @@ final class ApiController extends Controller
         if ($account->login === null
             || AccountMapper::login($account->login, (string) $request->getData('oldpass')) !== $requestAccount
         ) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, '', 'Invalid old password', []);
             $response->header->status = RequestStatusCode::R_403;
 
             return;
@@ -862,7 +864,7 @@ final class ApiController extends Controller
 
         // test password repetition
         if (((string) $request->getData('newpass')) !== ((string) $request->getData('reppass'))) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, '', 'Invalid password repetition', []);
             $response->header->status = RequestStatusCode::R_403;
 
             return;
@@ -872,7 +874,7 @@ final class ApiController extends Controller
         /** @var \Model\Setting $complexity */
         $complexity = $this->app->appSettings->get(names: SettingsEnum::PASSWORD_PATTERN, module: 'Admin');
         if (\preg_match($complexity->content, (string) $request->getData('newpass')) !== 1) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, '', 'Invalid password complexity', []);
             $response->header->status = RequestStatusCode::R_403;
 
             return;
@@ -1522,7 +1524,7 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Admin\Models\Group[] $groups */
         $groups = GroupMapper::getAll()
-            ->where('name', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->where('name', '%' . ($request->getDataString('group') ?? '') . '%', 'LIKE')
             ->limit($request->getDataInt('limit') ?? 50)
             ->executeGetArray();
 
@@ -1534,7 +1536,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to get an accoung
+     * Api method to get an account
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -2757,17 +2759,16 @@ final class ApiController extends Controller
     public function apiAddAccountPermission(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validatePermissionCreate($request))) {
-            $response->header->status = RequestStatusCode::R_400;
             $this->createInvalidCreateResponse($request, $response, $val);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $permission = $this->createPermissionFromRequest($request);
-
         if (!($permission instanceof AccountPermission)) {
-            $response->data['permission_create'] = new FormValidation($val);
-            $response->header->status            = RequestStatusCode::R_400;
+            // @todo Create a response text
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
@@ -2969,7 +2970,7 @@ final class ApiController extends Controller
         }
 
         $account = (int) $request->getData('account');
-        $groups  = [$request->getDataInt('account-list') ?? 0];
+        $groups  = [$request->getDataInt('group') ?? 0];
 
         // @todo Check if already in group
 
@@ -2990,7 +2991,7 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['account'] = !$request->hasData('account'))
-            || ($val['accountlist'] = !$request->hasData('account-list'))
+            || ($val['group'] = !$request->hasData('group'))
         ) {
             return $val;
         }
@@ -3965,8 +3966,7 @@ final class ApiController extends Controller
         $hasLocationChange = ($request->getDataString('address') ?? $address->address) !== $address->address
             || ($request->getDataString('postal') ?? $address->postal) !== $address->postal
             || ($request->getDataString('city') ?? $address->city) !== $address->city
-            || ($request->getDataString('state') ?? $address->state) !== $address->state
-            || ($request->getDataString('country') ?? $address->country) !== $address->country;
+            || ($request->getDataString('state') ?? $address->state) !== $address->state;
 
         $address->name            = $request->getDataString('name') ?? $address->name;
         $address->fao             = $request->getDataString('fao') ?? $address->fao;
@@ -3975,7 +3975,10 @@ final class ApiController extends Controller
         $address->postal          = $request->getDataString('postal') ?? $address->postal;
         $address->city            = $request->getDataString('city') ?? $address->city;
         $address->state           = $request->getDataString('state') ?? $address->state;
-        $address->setCountry($request->getDataString('country') ?? $address->country);
+
+        if (ISO3166TwoEnum::isValidValue($request->getDataString('country') ?? ISO3166TwoEnum::_XXX)) {
+            $address->setCountry($request->getDataString('country') ?? $address->country);
+        }
 
         if ($hasLocationChange) {
             $geocoding = Nominatim::geocoding($address->country, $address->city, $address->address);
@@ -4067,7 +4070,10 @@ final class ApiController extends Controller
         $address->postal  = $request->getDataString('postal') ?? '';
         $address->city    = $request->getDataString('city') ?? '';
         $address->state   = $request->getDataString('state') ?? '';
-        $address->setCountry($request->getDataString('country') ?? ISO3166TwoEnum::_XXX);
+
+        if (ISO3166TwoEnum::isValidValue($request->getDataString('country') ?? ISO3166TwoEnum::_XXX)) {
+            $address->setCountry($request->getDataString('country') ?? ISO3166TwoEnum::_XXX);
+        }
 
         $geocoding = Nominatim::geocoding($address->country, $address->city, $address->address);
         if ($geocoding === ['lat' => 0.0, 'lon' => 0.0]) {
