@@ -29,7 +29,6 @@ $l11n = $this->data['default_localization'] ?? new NullLocalization();
 
 echo $this->data['nav']->render();
 ?>
-
 <div id="iSettings" class="tabview tab-2 url-rewrite">
     <div class="box">
         <ul class="tab-links">

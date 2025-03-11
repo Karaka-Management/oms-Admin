@@ -20,7 +20,6 @@ $address   = $this->addresses;
 $languages = ISO639Enum::getConstants();
 $types     = AddressType::getConstants();
 ?>
-
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">

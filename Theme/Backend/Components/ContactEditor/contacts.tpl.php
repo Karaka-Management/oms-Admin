@@ -22,7 +22,6 @@ $languages = ISO639Enum::getConstants();
 $types     = ContactType::getConstants();
 $subtypes  = AddressType::getConstants();
 ?>
-
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">

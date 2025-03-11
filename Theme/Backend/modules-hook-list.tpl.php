@@ -20,7 +20,6 @@ $module = $this->getData('module') ?? '';
 
 echo $this->data['nav']->render();
 ?>
-
 <div class="row">
     <div class="col-xs-12">
         <section class="portlet">
