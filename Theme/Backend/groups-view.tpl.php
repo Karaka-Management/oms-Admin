@@ -71,10 +71,10 @@ echo $this->data['nav']->render(); ?>
                                 </div>
 
                                 <div class="form-group">
-                                    <?= $this->getData('editor')->render('group-editor'); ?>
+                                    <?= $this->data['editor']->render('group-editor'); ?>
                                 </div>
 
-                                <?= $this->getData('editor')->getData('text')->render(
+                                <?= $this->data['editor']->data['text']->render(
                                     'group-editor',
                                     'description',
                                     'fGroupEdit',
@@ -105,8 +105,8 @@ echo $this->data['nav']->render(); ?>
                                 <input id="iGroupId" name="group" type="hidden" value="<?= $group->id; ?>" disabled>
 
                                 <div class="form-group">
-                                    <label for="iAccount"><?= $this->getHtml('Name'); ?></label>
-                                    <?= $this->getData('accGrpSelector')->render('iAccount', 'group', true); ?>
+                                    <label for="iiAccount"><?= $this->getHtml('Name'); ?></label>
+                                    <?= $this->data['accGrpSelector']->render('iAccount', 'group', true); ?>
                                 </div>
                             </div>
                             <div class="portlet-foot">

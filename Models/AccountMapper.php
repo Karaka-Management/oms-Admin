@@ -296,6 +296,7 @@ class AccountMapper extends DataMapperFactory
     {
         $accounts = [];
 
+        // Find accounts with permission
         $sql = <<<SQL
         SELECT account_permission_account as account
         FROM account_permission
@@ -313,6 +314,7 @@ class AccountMapper extends DataMapperFactory
             $accounts[] = (int) $result['account'];
         }
 
+        // Find groups with permission and return all of their accounts
         $sql = <<<SQL
         SELECT account_group_account as account
         FROM account_group
@@ -322,6 +324,67 @@ class AccountMapper extends DataMapperFactory
             AND (group_permission_category = {$category} OR group_permission_category IS NULL)
             AND (group_permission_element = {$element} OR group_permission_element IS NULL)
             AND group_permission_hasread = 1;
+        SQL;
+
+        $query   = new Builder(self::$db);
+        $results = $query->raw($sql)->execute()?->fetchAll(\PDO::FETCH_ASSOC) ?? [];
+
+        foreach ($results as $result) {
+            $accounts[] = (int) $result['account'];
+        }
+
+        return \array_unique($accounts);
+    }
+
+    /**
+     * Find accounts that have read permission
+     *
+     * @param int    $unitId   Unit id
+     * @param string $module   Module name
+     * @param int    $category Category
+     * @param int    $element  Element id
+     *
+     * @return int[] Account ids
+     *
+     * @since 1.0.0
+     */
+    public static function findCreatePermission(
+        int $unitId,
+        string $module,
+        int $category,
+        int $element,
+    ) : array
+    {
+        $accounts = [];
+
+        // Find accounts with permission
+        $sql = <<<SQL
+        SELECT account_permission_account as account
+        FROM account_permission
+        WHERE (account_permission_unit = {$unitId} OR account_permission_unit IS NULL)
+            AND (account_permission_module = "{$module}" OR account_permission_module IS NULL)
+            AND (account_permission_category = {$category} OR account_permission_category IS NULL)
+            AND (account_permission_element = {$element} OR account_permission_element IS NULL)
+            AND account_permission_hascreate = 1;
+        SQL;
+
+        $query   = new Builder(self::$db);
+        $results = $query->raw($sql)->execute()?->fetchAll(\PDO::FETCH_ASSOC) ?? [];
+
+        foreach ($results as $result) {
+            $accounts[] = (int) $result['account'];
+        }
+
+        // Find groups with permission and return all of their accounts
+        $sql = <<<SQL
+        SELECT account_group_account as account
+        FROM account_group
+        LEFT JOIN group_permission ON account_group.account_group_group = group_permission.group_permission_group
+        WHERE (group_permission_unit = {$unitId} OR group_permission_unit IS NULL)
+            AND (group_permission_module = "{$module}" OR group_permission_module IS NULL)
+            AND (group_permission_category = {$category} OR group_permission_category IS NULL)
+            AND (group_permission_element = {$element} OR group_permission_element IS NULL)
+            AND group_permission_hascreate = 1;
         SQL;
 
         $query   = new Builder(self::$db);

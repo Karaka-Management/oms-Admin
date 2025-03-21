@@ -20,7 +20,7 @@ $settings = $this->data['settings'] ?? [];
 echo $this->data['nav']->render();
 
 if ($this->hasData('settingsTpl')
-    && \is_file($this->getData('settingsTpl'))
+    && \is_file($this->data['settingsTpl'])
 ) :
     include $this->data['settingsTpl'];
 else :

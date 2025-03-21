@@ -16,7 +16,7 @@ declare(strict_types=1);
  * @var \phpOMS\Views\View $this
  */
 $hooks  = $this->data['hooks'] ?? [];
-$module = $this->getData('module') ?? '';
+$module = $this->data['module'] ?? '';
 
 echo $this->data['nav']->render();
 ?>

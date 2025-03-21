@@ -45,7 +45,7 @@ echo $this->data['nav']->render(); ?>
                         <?= $this->data['editor']->render('group-editor'); ?>
                     </div>
 
-                    <?= $this->data['editor']->getData('text')->render('group-editor', 'description', 'fGroupCreate'); ?>
+                    <?= $this->data['editor']->data['text']->render('group-editor', 'description', 'fGroupCreate'); ?>
                 </div>
                 <div class="portlet-foot">
                     <input type="submit" id="iCreateGroup" name="create" value="<?= $this->getHtml('Create', '0', '0'); ?>">

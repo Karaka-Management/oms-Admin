@@ -38,13 +38,13 @@ $tableView->setObjects($audits);
 
 $previous = $tableView->getPreviousLink(
     $this->request,
-    empty($tableView->objects) || !$this->getData('hasPrevious') ? null : \reset($tableView->objects)
+    empty($tableView->objects) || !($this->data['hasPrevious'] ?? false) ? null : \reset($tableView->objects)
 );
 
 $next = $tableView->getNextLink(
     $this->request,
     empty($tableView->objects) ? null : \end($tableView->objects),
-    $this->getData('hasNext') ?? false
+    $this->data['hasNext'] ?? false
 );
 
 echo $this->data['nav']->render(); ?>
@@ -519,12 +519,12 @@ echo $this->data['nav']->render(); ?>
                         </table>
                         </div>
                         <!--
-                        <?php if ($this->getData('hasPrevious') || $this->getData('hasNext')) : ?>
+                        <?php if (($this->data['hasPrevious'] ?? false) || ($this->data['hasNext'] ?? false)) : ?>
                             <div class="portlet-foot">
-                                <?php if ($this->getData('hasPrevious')) : ?>
+                                <?php if ($this->data['hasPrevious']) : ?>
                                     <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><i class="g-icon">chevron_left</i></a>
                                 <?php endif; ?>
-                                <?php if ($this->getData('hasNext')) : ?>
+                                <?php if ($this->data['hasNext']) : ?>
                                     <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><i class="g-icon">chevron_right</i></a>
                                 <?php endif; ?>
                             </div>

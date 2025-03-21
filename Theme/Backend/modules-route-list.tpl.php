@@ -18,7 +18,7 @@ use phpOMS\Router\RouteVerb;
  * @var \phpOMS\Views\View $this
  */
 $routes = $this->data['routes'] ?? [];
-$module = $this->getData('module') ?? '';
+$module = $this->data['module'] ?? '';
 
 echo $this->data['nav']->render();
 ?>

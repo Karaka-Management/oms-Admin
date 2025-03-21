@@ -194,7 +194,7 @@ final class BackendController extends Controller
         $account = AccountMapper::get()
             ->with('groups')
             ->with('l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         if ($account->l11n->id === 0) {
@@ -209,7 +209,7 @@ final class BackendController extends Controller
 
         /** @var \Modules\Admin\Models\AccountPermission[] $permissions */
         $permissions = AccountPermissionMapper::getAll()
-            ->where('account', (int) $request->getData('id'))
+            ->where('account', $request->getDataInt('id') ?? 0)
             ->executeGetArray();
 
         $view->data['permissions'] = $permissions;
@@ -419,12 +419,12 @@ final class BackendController extends Controller
 
         $view->data['group'] = GroupMapper::get()
             ->with('accounts')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         /** @var \Modules\Admin\Models\GroupPermission[] $permissions */
         $permissions = GroupPermissionMapper::getAll()
-            ->where('group', (int) $request->getData('id'))
+            ->where('group', $request->getDataInt('id') ?? 0)
             ->executeGetArray();
 
         $view->data['permissions'] = $permissions;

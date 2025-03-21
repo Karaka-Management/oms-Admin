@@ -124,8 +124,8 @@ use phpOMS\Uri\UriFactory;
                         <?php
                         $name = $setting->name;
 
-                        if ($this->getData('settings_class') !== null) {
-                            $name = $this->getData('settings_class')::getName($setting->name);
+                        if ($this->data['settings_class'] !== null) {
+                            $name = $this->data['settings_class']::getName($setting->name);
 
                             if (!\is_string($name)) {
                                 $name = $setting->name;

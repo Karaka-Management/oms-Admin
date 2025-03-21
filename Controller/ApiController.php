@@ -357,8 +357,8 @@ final class ApiController extends Controller
     {
         /** @var \Modules\Admin\Models\Account $account */
         $account = $request->hasData('user')
-            ? AccountMapper::get()->where('login', (string) $request->getData('user'))->execute()
-            : AccountMapper::get()->where('email', (string) $request->getData('email'))->execute();
+            ? AccountMapper::get()->where('login', $request->getDataString('user') ?? '')->execute()
+            : AccountMapper::get()->where('email', $request->getDataString('email') ?? '')->execute();
 
         /** @var \Model\Setting[] $forgotten */
         $forgotten = $this->app->appSettings->get(
@@ -486,7 +486,7 @@ final class ApiController extends Controller
         $forgotten = $this->app->appSettings->get(
             names: [SettingsEnum::LOGIN_FORGOTTEN_DATE, SettingsEnum::LOGIN_FORGOTTEN_TOKEN],
             module: self::NAME,
-            account: (int) $request->getData('user')
+            account: $request->getDataInt('user') ?? 0
         );
 
         $date  = new \DateTime($forgotten[SettingsEnum::LOGIN_FORGOTTEN_DATE]->content);
@@ -508,7 +508,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Admin\Models\Account $account */
-        $account = AccountMapper::get()->where('id', (int) $request->getData('user'))->execute();
+        $account = AccountMapper::get()->where('id', $request->getDataInt('user') ?? 0)->execute();
 
         $account->generatePassword($pass = StringRng::generateString(10, 14, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_-+=/\\{}<>?'));
 
@@ -854,7 +854,7 @@ final class ApiController extends Controller
 
         // test old password is correct
         if ($account->login === null
-            || AccountMapper::login($account->login, (string) $request->getData('oldpass')) !== $requestAccount
+            || AccountMapper::login($account->login, $request->getDataString('oldpass') ?? '') !== $requestAccount
         ) {
             $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, '', 'Invalid old password', []);
             $response->header->status = RequestStatusCode::R_403;
@@ -863,7 +863,7 @@ final class ApiController extends Controller
         }
 
         // test password repetition
-        if (((string) $request->getData('newpass')) !== ((string) $request->getData('reppass'))) {
+        if ($request->getDataString('newpass') !== $request->getDataString('reppass')) {
             $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, '', 'Invalid password repetition', []);
             $response->header->status = RequestStatusCode::R_403;
 
@@ -873,14 +873,14 @@ final class ApiController extends Controller
         // test password complexity
         /** @var \Model\Setting $complexity */
         $complexity = $this->app->appSettings->get(names: SettingsEnum::PASSWORD_PATTERN, module: 'Admin');
-        if (\preg_match($complexity->content, (string) $request->getData('newpass')) !== 1) {
+        if (\preg_match($complexity->content, $request->getDataString('newpass') ?? '') !== 1) {
             $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, '', 'Invalid password complexity', []);
             $response->header->status = RequestStatusCode::R_403;
 
             return;
         }
 
-        $account->generatePassword((string) $request->getData('newpass'));
+        $account->generatePassword($request->getDataString('newpass') ?? '');
 
         AccountMapper::update()->execute($account);
 
@@ -953,7 +953,7 @@ final class ApiController extends Controller
         /** @var \Modules\Admin\Models\Account $account */
         $account = AccountMapper::get()
             ->with('l11n')
-            ->where('l11n/id', (int) $request->getData('id'))
+            ->where('l11n/id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         $requestAccount = $request->header->account;
@@ -991,7 +991,7 @@ final class ApiController extends Controller
 
         if ($account->l11n->id === 0) {
             $l11n = LocalizationMapper::get()
-                ->where('id', (int) $request->getData('id'))
+                ->where('id', $request->getDataInt('id') ?? 0)
                 ->execute();
         } else {
             $l11n = $account->l11n;
@@ -1338,7 +1338,7 @@ final class ApiController extends Controller
     public function apiGroupGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Group $group */
-        $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $group = GroupMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->createStandardReturnResponse($request, $response, $group);
     }
 
@@ -1358,7 +1358,7 @@ final class ApiController extends Controller
     public function apiGroupUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var \Modules\Admin\Models\Group $old */
-        $old = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = GroupMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateGroupFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, GroupMapper::class, 'group', $request->getOrigin());
@@ -1475,7 +1475,7 @@ final class ApiController extends Controller
             return;
         }
 
-        if (((int) $request->getData('id')) === 3) {
+        if (($request->getDataInt('id') ?? 0) === 3) {
             // admin group cannot be deleted
             $this->createInvalidDeleteResponse($request, $response, []);
 
@@ -1483,7 +1483,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Admin\Models\Group $group */
-        $group = GroupMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $group = GroupMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $group, GroupMapper::class, 'group', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $group);
     }
@@ -1551,7 +1551,7 @@ final class ApiController extends Controller
     public function apiAccountGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var Account $account */
-        $account = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $account = AccountMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->createStandardReturnResponse($request, $response, $account);
     }
 
@@ -2344,7 +2344,7 @@ final class ApiController extends Controller
     public function apiAccountDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var Account $account */
-        $account = AccountMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $account = AccountMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $account, AccountMapper::class, 'account', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $account);
     }
@@ -2366,7 +2366,7 @@ final class ApiController extends Controller
     {
         /** @var Account $old */
         $old = AccountMapper::get()
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         $new = $this->updateAccountFromRequest($request, clone $old);
@@ -2438,7 +2438,7 @@ final class ApiController extends Controller
         $old = ModuleMapper::get()->where('id', $module)->execute();
 
         $this->app->eventManager->triggerSimilar(
-            'PRE:Module:Admin-module-status-update', '',
+            'PRE:Admin-module-status-update', '',
             [
                 $request->header->account,
                 ['status' => $status, 'module' => $module],
@@ -2572,7 +2572,7 @@ final class ApiController extends Controller
             $new = ModuleMapper::get()->where('id', $module)->execute();
 
             $this->app->eventManager->triggerSimilar(
-                'POST:Module:Admin-module-status-update', '',
+                'POST:Admin-module-status-update', '',
                 [
                     $request->header->account,
                     $old, $new,
@@ -2613,7 +2613,7 @@ final class ApiController extends Controller
     public function apiAccountPermissionGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var AccountPermission $account */
-        $account = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $account = AccountPermissionMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->createStandardReturnResponse($request, $response, $account);
     }
 
@@ -2633,7 +2633,7 @@ final class ApiController extends Controller
     public function apiGroupPermissionGet(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var GroupPermission $group */
-        $group = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $group = GroupPermissionMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->createStandardReturnResponse($request, $response, $group);
     }
 
@@ -2660,7 +2660,7 @@ final class ApiController extends Controller
         }
 
         /** @var GroupPermission $permission */
-        $permission = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $permission = GroupPermissionMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
 
         if ($permission->getGroup() === 3) {
             // admin group cannot be deleted
@@ -2696,7 +2696,7 @@ final class ApiController extends Controller
         }
 
         /** @var AccountPermission $permission */
-        $permission = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $permission = AccountPermissionMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $permission, AccountPermissionMapper::class, 'user-permission', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $permission);
     }
@@ -2872,7 +2872,7 @@ final class ApiController extends Controller
         }
 
         /** @var AccountPermission $old */
-        $old = AccountPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = AccountPermissionMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
 
         /** @var AccountPermission $new */
         $new = $this->updatePermissionFromRequest($request, clone $old);
@@ -2904,7 +2904,7 @@ final class ApiController extends Controller
         }
 
         /** @var GroupPermission $old */
-        $old = GroupPermissionMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = GroupPermissionMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
 
         if ($old->getGroup() === 3) {
             // admin group cannot be deleted
@@ -3385,7 +3385,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $settings = SettingMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $settings = SettingMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $settings, SettingMapper::class, 'settings', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $settings);
     }
@@ -3432,7 +3432,7 @@ final class ApiController extends Controller
         }
 
         /** @var App $old */
-        $old = AppMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = AppMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateApplicationFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, AppMapper::class, 'application', $request->getOrigin());
@@ -3498,7 +3498,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Admin\Models\App $application */
-        $application = AppMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $application = AppMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $application, AppMapper::class, 'application', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $application);
     }
@@ -3642,7 +3642,7 @@ final class ApiController extends Controller
         }
 
         /** @var Contact $old */
-        $old = ContactMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ContactMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateContactFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ContactMapper::class, 'contact', $request->getOrigin());
@@ -3712,7 +3712,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Admin\Models\Contact $contact */
-        $contact = ContactMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $contact = ContactMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModelRelation($request->header->account, (int) $request->getData('account'), [$contact->id], AccountMapper::class, 'contacts', 'account-contact', $request->getOrigin());
         $this->deleteModel($request->header->account, $contact, ContactMapper::class, 'contact', $request->getOrigin());
 
@@ -3825,7 +3825,7 @@ final class ApiController extends Controller
         }
 
         /** @var \Modules\Admin\Models\DataChange $data */
-        $data = DataChangeMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $data = DataChangeMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $data, DataChangeMapper::class, 'data', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $data);
     }
@@ -3872,7 +3872,7 @@ final class ApiController extends Controller
         }
 
         /** @var \phpOMS\Stdlib\Base\Address $address */
-        $address = AddressMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $address = AddressMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModelRelation($request->header->account, (int) $request->getData('account'), [$address->id], AccountMapper::class, 'addresses', 'account-address', $request->getOrigin());
         $this->deleteModel($request->header->account, $address, AddressMapper::class, 'address', $request->getOrigin());
 
@@ -3923,7 +3923,7 @@ final class ApiController extends Controller
         }
 
         /** @var Address $old */
-        $old = AddressMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = AddressMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateAddressFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, AddressMapper::class, 'address', $request->getOrigin());
